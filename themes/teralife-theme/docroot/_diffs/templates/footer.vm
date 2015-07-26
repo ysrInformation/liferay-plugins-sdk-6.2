@@ -1,0 +1,63 @@
+<div class="row-fluid">
+	<div data-wow-delay="600ms" data-wow-duration="500ms" class="span4 wow fadeInUp animated" style="visibility: visible; animation-duration: 500ms; animation-delay: 600ms; animation-name: fadeInUp;">
+		<div class="footer-single">
+			<h5>Popular Links </h5>
+			<ul>
+				<li><a href="/home">Home </a></li>
+				<li><a href="/contact-us">Contact Us </a></li>
+				<li><a href="/why-teralife">Why TeraLife </a></li>
+			</ul>
+		</div>
+	</div>
+	
+	<div data-wow-delay="900ms" data-wow-duration="500ms" class="span4 wow fadeInUp animated" style="visibility: visible; animation-duration: 500ms; animation-delay: 900ms; animation-name: fadeInUp;">
+		<div class="footer-single">
+			<h5>Health Benefits </h5>
+			<ul>
+				<li><a href="javascript:void(0)">Health Screening </a></li>
+				<li><a href="javascript:void(0)">Health Promotion </a></li>
+				<li><a href="javascript:void(0)">Health Records </a></li>
+				<li><a href="javascript:void(0)">Communication </a></li>
+			</ul>
+		</div>
+	</div>
+	
+	<div data-wow-delay="900ms" data-wow-duration="500ms" class="span4 wow fadeInUp animated" style="visibility: visible; animation-duration: 500ms; animation-delay: 900ms; animation-name: fadeInUp;">
+		<div class="footer-single">
+			<h5>School </h5>
+			<ul>
+				<li><a href="/benefits">Benefits </a></li>
+				<li><a href="/hmo">Health Management OutSourcing </a></li>
+				<li><a href="/packages">Packages </a></li>
+				<li><a href="/faqs">FAQ's </a></li>
+			</ul>
+		</div>
+	</div>	
+</div>
+<div class="text-center row-fluid copyrights">
+	<div class="socialsicons">
+		<ul class="text-center contact">
+			<li class="socials-icons">
+				<a class="facebook" title="Share in Facebook" data-toggle="tooltip" href="#"><i class="fa fa-facebook"></i></a>
+			</li>
+			<li class="socials-icons">
+				<a class="twitter" title="Share in Twitter" data-toggle="tooltip" href="#"><i class="fa fa-twitter"></i></a>
+			</li>
+			<li class="socials-icons">
+				<a class="google-plus" title="Share in Google +" data-toggle="tooltip" href="#"><i class="fa fa-google-plus"></i></a>
+			</li>
+			<li class="socials-icons">
+				<a class="instagram" title="Share in Instagram" data-toggle="tooltip" href="#"><i class="fa fa-instagram"></i></a>
+			</li>
+			<li class="socials-icons">
+				<a class="pinterest" title="Share in Pinterest" data-toggle="tooltip" href="#"><i class="fa fa-pinterest"></i></a>
+			</li>
+			<li class="socials-icons">
+				<a class="skype" title="Connect with Skype" data-toggle="tooltip" href="#"><i class="fa fa-skype"></i></a>
+			</li>
+		</ul>
+	</div>
+	<div class="">
+		Copyrights 2014: TeraLife
+	</div>
+</div>

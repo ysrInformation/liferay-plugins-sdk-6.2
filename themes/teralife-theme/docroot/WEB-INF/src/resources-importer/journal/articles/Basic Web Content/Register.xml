@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US" default-locale="en_US">
+	<dynamic-element name="content" type="text_area" index-type="keyword" index="0">
+		<dynamic-content language-id="en_US">
+			<![CDATA[
+				<img alt="" height="95px" src="http://teralife.in/teralife/img/new.png" style="margin-left:50px" width="270px" />
+				<p>
+					<font color="black">
+						To provide a new occupational health strategy with a unique opportunity to promote good health as well as to cope with the consequences of poor health.
+					</font>
+				</p>
+			]]>
+		</dynamic-content>
+	</dynamic-element>
+</root>

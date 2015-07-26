@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US" default-locale="en_US">
+	<dynamic-element name="content" type="text_area" index-type="keyword" index="0">
+		<dynamic-content language-id="en_US">
+			<![CDATA[
+				Dear [$USER_NAME$],
+				<p>We wish to remind you that your [$ORGN_DETAILS$] MOU will be expiring in [$NO_OF_DAYS$] days Please let us know at the earliest whether you would like to renew the policy.</p>
+			]]>
+		</dynamic-content>
+	</dynamic-element>
+</root>

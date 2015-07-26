@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE look-and-feel PUBLIC "-//Liferay//DTD Look and Feel 6.2.0//EN" "http://www.liferay.com/dtd/liferay-look-and-feel_6_2_0.dtd">
+
+<look-and-feel>
+	<compatibility>
+		<version>6.2.3+</version>
+	</compatibility>
+	<theme id="htmsd" name="Htmsd" >
+	    <settings>
+			<setting configurable="true" type="checkbox" key="portlet-setup-show-borders-default" value="false"></setting>
+		</settings>	
+		<layout-templates>
+	        <custom>
+				<layout-template id="homelayout" name="htmsd-homeLayout">
+					<template-path>/layout/hometemplate/homelayout.tpl</template-path>
+					<wap-template-path>/layout/hometemplate/homelayout.wap.tpl</wap-template-path>
+					<thumbnail-path>/layout/hometemplate/homelayout.png</thumbnail-path>
+				</layout-template>
+			</custom>
+	    </layout-templates>
+	</theme>
+</look-and-feel>

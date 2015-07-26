@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="ivy-report.xsl"?>
+<ivy-report version="1.0">
+	<info
+		organisation="com.liferay"
+		module="com.liferay.sdk.dependencies.org.freemarker"
+		revision="working@Khan-PC"
+		conf="internal"
+		confs="default, internal"
+		date="20150608213122"/>
+	<dependencies>
+	</dependencies>
+</ivy-report>

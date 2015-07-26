@@ -1,0 +1,42 @@
+.aui .dockbar .navbar-inner, .aui .dockbar-split .dockbar .navbar-inner
+	{
+	background-color: #000000;
+	background-image: linear-gradient(to bottom, #000000 0%, #303030 50%, #000000 100%);
+}
+
+.aui .dockbar .navbar-inner .nav>li, .aui .dockbar-split .dockbar .navbar-inner .nav>li
+	{
+	background-color: #000000;
+	background-image: linear-gradient(to bottom, #000000 0%, #303030 50%, #000000 100%);
+}
+
+.aui .dockbar .nav li.dropdown.open>.dropdown-toggle, .aui .dockbar .nav li.dropdown.active>.dropdown-toggle,
+	.aui .dockbar .nav li.dropdown.open.active>.dropdown-toggle {
+	background-color: #555555;
+	color: #FD0000;
+}
+
+.aui .dockbar .nav li.dropdown .dropdown-menu, .aui .dockbar .nav li.dropdown .site-administration-menu
+	{
+	background: #D8492D none repeat scroll 0 0;
+}
+
+.aui .navbar-fixed-top .navbar-inner, .aui .navbar-static-top .navbar-inner
+	{
+	border-width: 0 0 0px;
+}
+
+.aui .dockbar.navbar .nav>li>a:hover {
+	background: none repeat scroll 0 0 #555555;
+}
+
+.aui .dockbar .nav li.dropdown .dropdown-menu>li>a:focus, .aui .dockbar .nav li.dropdown .dropdown-menu>li>a:hover,
+	.aui .dockbar .nav li.dropdown .site-administration-menu>li>a:focus,
+	.aui .dockbar .nav li.dropdown .site-administration-menu>li>a:hover {
+	background: #62c000 none repeat scroll 0 0;
+}
+
+.aui .dockbar .nav li.dropdown .dropdown-menu li.active>a, .aui .dockbar .nav li.dropdown .site-administration-menu li.active>a
+	{
+	background: #D8492D none repeat scroll 0 0 !important;
+}

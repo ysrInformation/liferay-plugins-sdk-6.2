@@ -1,0 +1,5 @@
+#if (!$is_signed_in)
+	#set ($css_class = "${css_class} dockbar-split")
+#else
+	#set ($css_class = "${css_class} dockbar-vertical")
+#end

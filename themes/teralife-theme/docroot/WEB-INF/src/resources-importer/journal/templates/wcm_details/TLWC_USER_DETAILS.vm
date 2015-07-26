@@ -1,0 +1,27 @@
+<div id="userDetails" style="display: none;">
+	<h4>{{name}}</h4>
+    <div class="row-fluid">
+        <div class="span6">
+            <img alt="" class="avatar" src="$portalUtil.getPathImage()/{{portraitURL}}" style="width: 190px;"/>
+        </div>
+        <div class="span6">
+            <div>jobTitle: {{jobTitle}}</div>      
+        </div>
+    </div>
+    <div class="seperator"></div>
+    	<div class="row-fluid">
+	    <div class="span6">
+				
+	        <div>{{details.primaryAddress.street1}}</div> 
+	        <div>{{details.primaryAddress.street2}}</div>
+	        <div>{{details.primaryAddress.street3}}</div>
+	        <div>{{details.primaryAddress.city}}</div>
+	        <div>{{details.primaryAddress.zipCode}}</div>
+	    </div>
+	    <div class="span6">
+	        <div>Website: <a href="{{website}}">{{details.primaryWebsite}}</a></div>
+	        <div>Email Address: {{emailAddress}}</div>
+	        <div>Phone: {{details.primaryPhone}}</div>
+	    </div>
+	</div>
+</div>

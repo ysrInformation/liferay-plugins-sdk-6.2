@@ -1,0 +1,51 @@
+body {
+  background: url(../images/bg.png) !important; }
+
+#bg_top {
+  position: absolute;
+  background-position: center;
+  background-position: top;
+  background-repeat: no-repeat;
+  background-color: #6f8720;
+  width: 100%;
+  color: #e2e2e2; }
+
+#bg_footer {
+  background-image: url(../images/bg_bottom.jpg);
+  background-position: center top;
+  background-repeat: no-repeat;
+  padding-top: 30px;
+  background-color: #6F8720;
+  border-top: 1px solid #DDD;
+  color: #E2E2E2;
+  width: 100%; }
+
+/*------------Navigation CSS----------------*/
+.aui #navigation .navbar-inner {
+  background: transparent none repeat scroll 0 0;
+  background-color: transparent;
+  background-image: none; }
+
+.aui #navigation .navbar-inner div ul li {
+  background: #D8492D; }
+
+.nav_li {
+  margin-left: 2px; }
+
+.aui #navigation .navbar-inner div ul li:HOVER, .aui #navigation .navbar .nav > li > a:focus,
+.aui #navigation .navbar .nav > li > a:hover {
+  background: #62c000; }
+
+.aui #navigation .nav .dropdown-menu {
+  background: #D8492D none repeat scroll 0 0;
+  border-top: 1px solid #A2240B; }
+
+.aui #navigation .nav li.active a, .aui #navigation .nav li.open > a {
+  background: #62c000; }
+
+.aui .portlet-borderless-container {
+  padding: 0 !important; }
+
+#navigation .navbar-inner {
+  padding: 0 !important; }
+

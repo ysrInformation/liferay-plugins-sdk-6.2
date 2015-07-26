@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US" default-locale="en_US">
+	<dynamic-element name="Text" type="text" index-type="keyword" index="0">
+		<dynamic-element name="Icon" index="0" type="text" index-type="keyword">
+			<dynamic-content language-id="en_US"><![CDATA[medkit]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element name="Content" index="0" type="text_area" index-type="keyword">
+			<dynamic-content language-id="en_US"><![CDATA[Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed aliquet dolor in nulla ornare, ac placerat nunc finibus. Suspendisse id auctor ipsum. Fusce nisi dolor, auctor quis dictum tincidunt, ultricies eu ex. Nullam nisi ipsum, porta a est sed, tristique viverra ipsum Lorem ipsum dolor sit amet.]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element name="Pagelink" index="0" type="text" index-type="keyword">
+			<dynamic-content language-id="en_US"><![CDATA[/onboard?usrType=doctor]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-content language-id="en_US"><![CDATA[Doctor]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element name="Text" type="text" index-type="keyword" index="1">
+		<dynamic-element name="Icon" index="1" type="text" index-type="keyword">
+			<dynamic-content language-id="en_US"><![CDATA[medkit]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element name="Content" index="1" type="text_area" index-type="keyword">
+			<dynamic-content language-id="en_US"><![CDATA[Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed aliquet dolor in nulla ornare, ac placerat nunc finibus. Suspendisse id auctor ipsum. Fusce nisi dolor, auctor quis dictum tincidunt, ultricies eu ex. Nullam nisi ipsum, porta a est sed, tristique viverra ipsum Lorem ipsum dolor sit amet.]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element name="Pagelink" index="1" type="text" index-type="keyword">
+			<dynamic-content language-id="en_US"><![CDATA[/onboard?usrType=volunteer]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-content language-id="en_US"><![CDATA[Volunteer]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element name="Text" type="text" index-type="keyword" index="2">
+		<dynamic-element name="Icon" index="2" type="text" index-type="keyword">
+			<dynamic-content language-id="en_US"><![CDATA[medkit]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element name="Content" index="2" type="text_area" index-type="keyword">
+			<dynamic-content language-id="en_US"><![CDATA[Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed aliquet dolor in nulla ornare, ac placerat nunc finibus. Suspendisse id auctor ipsum. Fusce nisi dolor, auctor quis dictum tincidunt, ultricies eu ex. Nullam nisi ipsum, porta a est sed, tristique viverra ipsum Lorem ipsum dolor sit amet.]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element name="Pagelink" index="2" type="text" index-type="keyword">
+			<dynamic-content language-id="en_US"><![CDATA[/onboard?usrType=sponsor]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-content language-id="en_US"><![CDATA[Sponsor]]></dynamic-content>
+	</dynamic-element>
+</root>
