@@ -60,8 +60,8 @@
 	
 		<!-- Relationships -->
 		
-		<column name="tags" type="Collections" entity="Tag" mapping-table="ShoppingItem_Tag"/>
-		<column name="categories" type="Collections" entity="ShoppingCategory" mapping-table="ShopppingItem_ShoppingCategory"/>
+		<column name="tags" type="Collection" entity="Tag" mapping-table="ShoppingItem_Tag"/>
+		<column name="categories" type="Collection" entity="ShoppingCategory" mapping-table="ShopppingItem_ShoppingCategory"/>
 	
 		<!-- Finder methods -->
 
