@@ -163,6 +163,7 @@
 		<!-- Group instance -->
 
 		<column name="groupId" type="long" />
+		<column name="orderId" type="long"/>
 
 		<!-- Audit fields -->
 
