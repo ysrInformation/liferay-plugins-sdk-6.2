@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="ivy-report.xsl"?>
+<ivy-report version="1.0">
+	<info
+		organisation="com.liferay"
+		module="htmsd-portlet"
+		revision="working@Khan"
+		conf="runtime"
+		confs="default, internal, provided, runtime, test"
+		date="20150801154844"/>
+	<dependencies>
+	</dependencies>
+</ivy-report>

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+<service-builder package-path="com.htmsd.slayer">
+	<author>YSR</author>
+	<namespace>htmsd</namespace>
+	
+	<entity name="ShoppingCategory" remote-service="false" local-service="true">
+		
+		<!-- PK fields -->
+
+		<column name="categoryId" type="long" primary="true" />
+
+		<!-- Group instance -->
+
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		
+		<!-- Other fields -->
+		
+		<column name="parentCategoryId" type="long"/>
+		<column name="name" type="String"/>
+		<column name="description" type="String"/>	
+			
+	</entity>
+
+	<entity name="ShoppingItem" local-service="true" remote-service="false">
+
+		<!-- PK fields -->
+
+		<column name="itemId" type="long" primary="true" />
+
+		<!-- Group instance -->
+
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="productCode" type="String" />
+		<column name="name" type="String" />
+		<column name="description" type="String" />
+		<column name="sellerPrice" type="Double" />
+		<column name="totalPrice" type="Double" />
+		<column name="status" type="int" />
+		<column name="imageIds" type="String" />
+	
+		<!-- Relationships -->
+		
+		<column name="tags" type="Collections" entity="Tag" mapping-table="ShoppingItem_Tag"/>
+		<column name="categories" type="Collections" entity="ShoppingCategory" mapping-table="ShopppingItem_ShoppingCategory"/>
+	
+		<!-- Finder methods -->
+
+	</entity>
+	
+	<entity name="ShoppingCart" local-service="true" remote-service="false">
+
+		<!-- PK fields -->
+
+		<column name="cartId" type="long" primary="true" />
+
+		<!-- Group instance -->
+
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="itemIds" type="String" />
+	
+		<!-- Finder methods -->
+
+	</entity>
+
+	<entity name="ShoppingOrder" local-service="true" remote-service="false">
+
+		<!-- PK fields -->
+
+		<column name="orderId" type="long" primary="true" />
+
+		<!-- Group instance -->
+
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+		
+		<column name="orderStatus" type="int"/>
+		<column name="shippingFirstName" type="String" />
+		<column name="shippingLastName" type="String"/>
+		<column name="shippingEmailAddress" type="String"/>
+		<column name="shippingStreet" type="String"/>
+		<column name="shippingCity" type="String"/>
+		<column name="shippingState" type="String"/>
+		<column name="shippingCountry" type="String"/>
+		<column name="shippingZip" type="String"/>
+		<column name="shippingMoble" type="String"/>
+		<column name="shippingAltMoble" type="String"/>
+		
+		<!-- Finder methods -->
+
+	</entity>
+	
+	
+	
+	<entity name="Tag" local-service="true" remote-service="false">
+		<!-- PK fields -->
+
+		<column name="tagId" type="long" primary="true" />
+
+		<!-- Group instance -->
+
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		
+		<!-- Other fields -->
+		
+		<column name="name" type="String"/>
+		
+	</entity>
+	
+	<entity name="ShoppingOrderItem" local-service="true" remote-service="false">
+
+		<!-- PK fields -->
+
+		<column name="itemId" type="long" primary="true" />
+
+		<!-- Group instance -->
+
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="productCode" type="String" />
+		<column name="name" type="String" />
+		<column name="description" type="String" />
+		<column name="totalPrice" type="Double" />
+	
+		<!-- Finder methods -->
+
+	</entity>
+	
+</service-builder>
