@@ -20,3 +20,9 @@ AUI().ready(
 		}
 	}
 );
+
+//adding inline class to web form(Quick contact) home page
+$(function() {
+	$(".quick-contact .control-group").removeClass("lfr-textarea-container");
+	$(".quick-contact .control-group").addClass( "form-inline" );
+});

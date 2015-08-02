@@ -1,5 +1,5 @@
 {
-	"layoutTemplateId": "1_column",
+	"layoutTemplateId": "homelayout",
 	"publicPages": [
 		{
 			"columns": [
@@ -32,17 +32,17 @@
                         "portletPreferences": {
                         	"title" : "Quick Contact",
 							"description" : "",
-							"fieldLabel1": "Full Name",
+							"fieldLabel1": "Name",
 							"fieldType1": "text",
 							"fieldLabel2": "Email",
 							"fieldType2": "text",
 							"fieldLabel3": "Phone",
 							"fieldType3": "text",
 							"fieldLabel4":"Message",
-							"fieldType4": "textarea",
+							"fieldType4": "text",
 							"portletSetupCss": {
 								"advancedData": {
-									"customCSSClassName": "make-appointment"
+									"customCSSClassName": "quick-contact"
 								}
 							}
 						}

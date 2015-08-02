@@ -3,7 +3,7 @@ body {
 }
 
 #bg_top {
-	position : absolute;
+	position: absolute;
 	background-position: center;
 	background-position: top;
 	background-repeat: no-repeat;
@@ -58,4 +58,73 @@ body {
 
 #navigation .navbar-inner {
 	padding: 0 !important;
+}
+
+.aui .btn-primary:focus, .aui .btn-primary:active, .aui .btn-primary.active,
+	.aui .btn-primary.disabled, .aui .btn-primary[disabled] {
+	color: white;
+	background-color: #62C000;
+}
+
+.aui .btn-primary:hover {
+	color: white;
+	background-color: #dd3628;
+}
+
+/*******Quick Contact CSS**********/
+.quick-contact .portlet-borderless-container {
+	background: transparent url("../images/bg.png") repeat scroll 0% 0%;
+}
+
+.aui .btn-primary {
+	background-color: #d8492d;
+	background-image: linear-gradient(to bottom, #d8492d 0%, #d66c59 50%, #d8492d 100%,
+		#d8492d 100%);
+	background-repeat: repeat-x;
+	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+	color: white;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.quick-contact .control-group {
+	margin-bottom: 0;
+}
+
+.quick-contact .control-group {
+	margin-left: 5em;
+}
+
+.quick-contact .control-group label {
+	float: left;
+	width: 20%;
+	margin-right: 2.0em;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.quick-contact fieldset {
+	
+}
+
+.quick-contact button {
+	float: right;
+	margin-right: 45px;
+}
+
+.quick-contact legend {
+	text-align: center;
+	border-image: none;
+	border-style: none;
+	border-width: 0px;
+	color: #555555;
+	display: block;
+	font-size: 21px;
+	line-height: 40px;
+	margin-top: 10px;
+	margin-bottom: 20px;
+	padding: 0;
+	width: 100%;
+	font-size: 24.5px;
+	text-transform: uppercase;
 }
