@@ -63,7 +63,7 @@ body {
 .aui .btn-primary:focus, .aui .btn-primary:active, .aui .btn-primary.active,
 	.aui .btn-primary.disabled, .aui .btn-primary[disabled] {
 	color: white;
-	background-color: #62C000;
+	background-color: #dd3628;
 }
 
 .aui .btn-primary:hover {
@@ -100,7 +100,7 @@ body {
 }
 
 .quick-contact .control-group {
-	margin-left: 2em;
+	
 }
 
 .quick-contact .control-group label {
@@ -113,12 +113,11 @@ body {
 }
 
 .quick-contact fieldset {
-	
+	margin-left: 2em;
 }
 
-.quick-contact button {
-	float: right;
-	margin-right: 9%;
+.aboutus-btn {
+	margin-top: 17%;
 }
 
 .quick-contact legend {
@@ -136,4 +135,94 @@ body {
 	width: 100%;
 	font-size: 24.5px;
 	text-transform: uppercase;
+}
+
+/************Footer CSS***************/
+.footer_wrapper {
+	padding: 0 5em 0;
+	position: relative;
+}
+
+.footer_label {
+	color: #d8492d;
+	font-size: 18px;
+	font-weight: bold;
+	margin-left: 8%;
+	padding-bottom: 10px;
+}
+
+.text_align_center {
+	text-align: center;
+}
+
+.aui #bg_footer li {
+	list-style: outside none none;
+}
+
+.aui #bg_footer .socialsicons ul, .aui #footer ul {
+	margin: 0px;
+}
+
+.aui #bg_footer .socialsicons li {
+	display: inline-block;
+}
+
+/*****Social Icons******/
+.social-icons ul {
+	overflow: hidden;
+}
+
+.social-icons ul li {
+	list-style-type: none;
+	float: left;
+}
+
+.social-icons ul li a i {
+	background: #205D7A;
+	color: #fff;
+	width: 40px;
+	height: 30px;
+	border-radius: 20px;
+	font-size: 25px;
+	text-align: center;
+	margin-right: 10px;
+	padding-top: 21%;
+	transition: all 0.2s ease-in-out;
+}
+
+.social-icons .fa-facebook {
+	background: #3b5998
+}
+
+.social-icons .fa-youtube {
+	background: #EE3637
+}
+
+.social-icons .fa-twitter {
+	background: #00aced
+}
+
+.social-icons .fa-google-plus {
+	background: #dd4b39
+}
+
+.social-icons ul li a i:hover {
+	opacity: .7;
+}
+/*****Quick Links*****/
+
+.quick_links li a {
+	color: #e1e1e1;
+}
+
+.quick_links li a:HOVER {
+	color: #FFFFFF;
+}
+
+.visa_card {
+  text-align: center;
+}
+
+.visa_card .card {
+	margin-top: 10px;
 }

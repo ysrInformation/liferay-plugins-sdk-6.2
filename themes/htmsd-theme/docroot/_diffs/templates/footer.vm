@@ -1,3 +1,67 @@
 <footer id="bg_footer" role="contentinfo">
-	
+	<div class="footer_wrapper">
+		<div class="row-fluid">
+			<div class="span3 ">
+				<div class="footer_label">
+					Contact Us
+				</div>
+				<ul>
+					<li>Locaction : HTMSDPETS</li>
+					<li># 422, O.T.C. Road,Cottonpet</li>
+					<li>Bangalore-560 053</li>
+					<li>Phone : +91 94486 94482</li>
+					<li>+ 080-22874092</li>
+					<li>E-mail : info@brainos.in</li>
+				</ul>
+				<div class="row-fluid">
+					<div class="social-icons">
+						<ul class="contact">
+							<li class="socials-icons">
+								<a class="facebook" title="Share in Facebook" data-toggle="tooltip" href="#"><i class="fa fa-facebook fa-lg"></i></a>
+							</li>
+							<li class="socials-icons">
+								<a class="twitter" title="Share in Twitter" data-toggle="tooltip" href="#"><i class="fa fa-twitter fa-lg"></i></a>
+							</li>
+							<li class="socials-icons">
+								<a class="google-plus" title="Share in Google +" data-toggle="tooltip" href="#"><i class="fa fa-google-plus fa-lg"></i></a>
+							</li>
+							<li class="socials-icons">
+								<a class="youtube" title="Share in Instagram" data-toggle="tooltip" href="#"><i class="fa fa-youtube fa-lg"></i></a>
+							</li>
+							<!--<li class="socials-icons">
+								<a class="pinterest" title="Share in Pinterest" data-toggle="tooltip" href="#"><i class="fa fa-pinterest fa-2x"></i></a>
+							</li>
+							<li class="socials-icons">
+								<a class="skype" title="Connect with Skype" data-toggle="tooltip" href="#"><i class="fa fa-skype fa-2x"></i></a>
+							</li>-->
+						</ul>
+					</div>
+				</div>
+			</div>	
+			<div class="span3">
+			
+			</div>
+			<div class="span3">
+				<div class="footer_label">
+					Quick Links
+				</div>
+				<ul class="quick_links">
+					<li><a href="/home">Home </a></li>
+					<li><a href="/about-us">About US </a></li>
+					<li><a href="/contact-us">Contact US </a></li>
+					<li><a href="javascript:void(0)">Legal Notice </a></li>
+					<li><a href="javascript:void(0)">Terms And Conditions </a></li>
+					<li><a href="javascript:void(0)">Privacy Policy </a></li>
+				</ul>
+			</div>
+			<div class="span3">
+				<div class="visa_card">
+					<img class="visa" src="$images_folder/visa.png"/>
+				
+					<img class="card" src="$images_folder/card.png"/>
+				</div>
+				
+			</div>
+		</div>
+	</div>	
 </footer>
