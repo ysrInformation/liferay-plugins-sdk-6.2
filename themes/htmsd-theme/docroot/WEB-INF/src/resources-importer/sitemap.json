@@ -27,6 +27,28 @@
                     }
 				],
 				[
+                    {
+                        "portletId": "1_WAR_webformportlet_INSTANCE_${groupId}",
+                        "portletPreferences": {
+                        	"title" : "Quick Contact",
+							"description" : "",
+							"fieldLabel1": "Full Name",
+							"fieldType1": "text",
+							"fieldLabel2": "Email",
+							"fieldType2": "text",
+							"fieldLabel3": "Phone",
+							"fieldType3": "text",
+							"fieldLabel4":"Message",
+							"fieldType4": "textarea",
+							"portletSetupCss": {
+								"advancedData": {
+									"customCSSClassName": "make-appointment"
+								}
+							}
+						}
+                    }
+                ],
+				[
 					{
                         "portletId": "56",
                         "portletPreferences": {
