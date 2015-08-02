@@ -100,7 +100,7 @@ body {
 }
 
 .quick-contact .control-group {
-	margin-left: 5em;
+	margin-left: 2em;
 }
 
 .quick-contact .control-group label {
@@ -118,7 +118,7 @@ body {
 
 .quick-contact button {
 	float: right;
-	margin-right: 10%;
+	margin-right: 9%;
 }
 
 .quick-contact legend {

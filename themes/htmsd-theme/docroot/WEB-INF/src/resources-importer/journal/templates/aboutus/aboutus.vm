@@ -10,7 +10,7 @@
 					<p>$title.Content.getData()</p>
 				</div>
 				<div class="pull-right">
-				    <a href="$title.Pagelink.getData()"><button class="btn btn-primary" style="margin-top: 65px;">Read More</button></a>
+				    <a href="$title.Pagelink.getData()"><button class="btn btn-primary" style="margin-top: 40%;">Read More</button></a>
 				</div>
 			</div><!-- end service item -->
 		</div>
