@@ -16,6 +16,24 @@
                             }
                         }
                     }
+				],
+				[
+					{
+                        "portletId": "56",
+                        "portletPreferences": {
+                            "articleId": "ABOUT_US",
+                            "groupId": "${groupId}",
+                        }
+                    }
+				],
+				[
+					{
+                        "portletId": "56",
+                        "portletPreferences": {
+                            "articleId": "SHIPPING_DETAILS",
+                            "groupId": "${groupId}",
+                        }
+                    }
 				]
 			],
 			"friendlyURL": "/home",
