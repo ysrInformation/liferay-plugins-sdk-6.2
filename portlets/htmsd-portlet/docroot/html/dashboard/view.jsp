@@ -1,5 +1,10 @@
-<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
+<%@include file="/html/dashboard/init.jsp" %>
 
-<portlet:defineObjects />
-
-This is the <b>Dashboard</b> portlet in View mode.
+<c:choose>
+	<c:when test="<%=permissionChecker.isOmniadmin() %>">
+		<%@include file="/html/dashboard/user.jsp" %>
+	</c:when>
+	<c:otherwise>
+		<%@include file="/html/dashboard/user.jsp" %>
+	</c:otherwise>
+</c:choose>

@@ -4,7 +4,7 @@
 	<author>YSR</author>
 	<namespace>htmsd</namespace>
 	
-	<entity name="ShoppingCategory" remote-service="false" local-service="true">
+	<entity name="Category" remote-service="false" local-service="true">
 		
 		<!-- PK fields -->
 
@@ -18,7 +18,6 @@
 
 		<column name="companyId" type="long" />
 		<column name="userId" type="long" />
-		<column name="userName" type="String" />
 		<column name="createDate" type="Date" />
 		<column name="modifiedDate" type="Date" />
 		
@@ -27,7 +26,11 @@
 		<column name="parentCategoryId" type="long"/>
 		<column name="name" type="String"/>
 		<column name="description" type="String"/>	
-			
+		
+		<!-- Relationships 
+		
+ 	 	<column name="entries" type="Collection" entity="ShoppingItem" mapping-table="ShopppingItem_Category"/>
+ 	 	 -->
 	</entity>
 
 	<entity name="ShoppingItem" local-service="true" remote-service="false">
@@ -44,7 +47,6 @@
 
 		<column name="companyId" type="long" />
 		<column name="userId" type="long" />
-		<column name="userName" type="String" />
 		<column name="createDate" type="Date" />
 		<column name="modifiedDate" type="Date" />
 
@@ -61,10 +63,17 @@
 		<!-- Relationships -->
 		
 		<column name="tags" type="Collection" entity="Tag" mapping-table="ShoppingItem_Tag"/>
-		<column name="categories" type="Collection" entity="ShoppingCategory" mapping-table="ShopppingItem_ShoppingCategory"/>
+		<column name="categories" type="Collection" entity="Category" mapping-table="ShopppingItem_Category"/>
 	
 		<!-- Finder methods -->
+		
+		<finder return-type="Collection" name="Status">
+			<finder-column name="status" />
+		</finder>
 
+		<finder return-type="Collection" name="UserId">
+			<finder-column name="userId"></finder-column>
+		</finder>
 	</entity>
 	
 	<entity name="ShoppingCart" local-service="true" remote-service="false">
@@ -151,6 +160,14 @@
 		<!-- Other fields -->
 		
 		<column name="name" type="String"/>
+		
+		<!--  Relationships
+		
+		<column name="entries" type="Collection" entity="ShoppingItem" mapping-table="ShoppingItem_Tag"/>
+		 -->
+		<finder return-type="Collection" name="Name">
+			<finder-column name="name" />
+		</finder>
 		
 	</entity>
 	
