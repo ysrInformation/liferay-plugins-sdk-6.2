@@ -15,7 +15,12 @@
 </head>
 
 <body class="$css_class">
-<img id="bg_top" src="$images_folder/bg_top.jpg"/>
+#if("/home" == $layout.getFriendlyURL())
+	<img id="bg_top" src="$images_folder/bg_top.jpg"/>
+#else
+	<img id="bg_top_fixed_heigth" src="$images_folder/bg_inner.jpg"/>
+#end
+	
 <a href="#main-content" id="skip-to-content">#language ("skip-to-content")</a>
 
 $theme.include($body_top_include)
@@ -49,7 +54,9 @@ $theme.include($body_top_include)
 	</header>
 
 	<div id="content">
-		##<nav id="breadcrumbs">#breadcrumbs()</nav>
+		#if("/home" != $layout.getFriendlyURL())
+			#<nav id="breadcrumbs">#breadcrumbs()</nav>
+		#end	
 
 		#if ($selectable)
 			$theme.include($content_include)
@@ -67,7 +74,8 @@ $theme.include($body_top_include)
 $theme.include($body_bottom_include)
 
 $theme.include($bottom_include)
+
+#parse ("$full_templates_path/footer.vm")
 	
 </body>
-#parse ("$full_templates_path/footer.vm")
 </html>

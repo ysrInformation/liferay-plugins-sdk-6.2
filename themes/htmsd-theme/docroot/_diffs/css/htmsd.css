@@ -12,6 +12,17 @@ body {
 	color: #e2e2e2;
 }
 
+#bg_top_fixed_heigth {
+	position: absolute;
+	background-position: center;
+	background-position: top;
+	background-repeat: no-repeat;
+	background-color: #6f8720;
+	width: 100%;
+	color: #e2e2e2;
+	height: 40%;
+}
+
 #bg_footer {
 	background-image: url(../images/bg_bottom.jpg);
 	background-position: center top;
@@ -21,6 +32,7 @@ body {
 	border-top: 1px solid #DDD;
 	color: #E2E2E2;
 	width: 100%;
+	position: absolute;
 }
 
 /*------------Navigation CSS----------------*/
