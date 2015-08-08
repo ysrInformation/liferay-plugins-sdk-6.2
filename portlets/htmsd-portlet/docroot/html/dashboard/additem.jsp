@@ -1,9 +1,5 @@
-<%@page import="com.htmsd.slayer.service.CategoryLocalServiceUtil"%>
-<%@page import="com.htmsd.slayer.model.Category"%>
 <%@include file="/html/dashboard/init.jsp" %>
-<head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-</head>
+
 <portlet:actionURL name="addItem" var="addItemURL" />
 <%
 	List<Category> categories = CategoryLocalServiceUtil.getCategories(-1, -1);
@@ -27,17 +23,17 @@
 					</aui:column>
 					
 					<aui:column columnWidth="25">
-						<img id="image_upload_preview${i}" src="" alt="your image" height="50px" width="50px" />
+						<img id="image_upload_preview${i}" src=""  height="50px" width="50px" />
 					</aui:column>
 					
 					<aui:column columnWidth="15">
-						<img id="image_del${i}" src="" alt="delete" height="10px" width="10px"  onclick="deleteUpload(${i});"/>
+						<aui:a href="#" onclick="deleteUpload(${i});">Delete</aui:a>
 					</aui:column>
 			</c:forEach>
 		</aui:layout>
 		
 		<aui:input name="<%=HConstants.PRICE %>" required="true">
-			<aui:validator name="digits" />
+			<aui:validator name="number" />
 		</aui:input>
 		<aui:input name="<%=HConstants.TAG %>" />
 		<aui:button type="submit" value="add-item" />
@@ -60,7 +56,9 @@
 	}
 	
 	function deleteUpload(id) {
-		
+		var control = $('#<portlet:namespace/>image'+id);
+	    control.replaceWith( control = control.clone( true ) );
+	    $('#image_upload_preview'+id).attr("src","");
 	}
 
 </script>

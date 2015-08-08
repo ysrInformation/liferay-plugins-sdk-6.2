@@ -150,6 +150,30 @@ public class ShoppingItemLocalServiceImpl
 		return shoppingItems;
 	}
 	
+	public List<ShoppingItem> getByUserId(long userId, int start, int end) {
+		
+		List<ShoppingItem> shoppingItems = null;
+		
+		try {
+			shoppingItems = shoppingItemPersistence.findByUserId(userId, start, end);
+		} catch (SystemException e) {
+			_log.error(e);
+		}
+		
+		return shoppingItems;
+	}
+	
+	public int getByUserIdCount(long userId) {
+		
+		int count = 0;
+		try {
+			count =  shoppingItemPersistence.countByUserId(userId);
+		} catch (SystemException e) {
+			_log.error(e);
+		}
+		return count;
+	}
+	
 	public List<ShoppingItem> getByStatus(int status) {
 		
 		List<ShoppingItem> shoppingItems = null;
@@ -161,6 +185,29 @@ public class ShoppingItemLocalServiceImpl
 		}
 		return shoppingItems;
 	}
+	
+	public List<ShoppingItem> getByStatus(int status,int start, int end) {
+			
+			List<ShoppingItem> shoppingItems = null;
+			
+			try {
+				shoppingItems = shoppingItemPersistence.findByStatus(status, start, end);
+			} catch (SystemException e) {
+				_log.error(e);
+			}
+			return shoppingItems;
+		}
 
+	public int getByStatusCount(int status) {
+			
+			int count = 0;
+			try {
+				count =  shoppingItemPersistence.countByStatus(status);
+			} catch (SystemException e) {
+				_log.error(e);
+			}
+			return count;
+		}
+	
 	private Log _log = LogFactoryUtil.getLog(ShoppingItemLocalServiceImpl.class);
 }
