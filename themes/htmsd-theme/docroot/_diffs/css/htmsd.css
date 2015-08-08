@@ -1,4 +1,4 @@
-body {
+.bg {
 	background: url(../images/bg.png) !important;
 }
 
@@ -10,6 +10,10 @@ body {
 	background-color: #6f8720;
 	width: 100%;
 	color: #e2e2e2;
+}
+
+.text-color-white {
+	color: white;
 }
 
 #bg_top_fixed_heigth {

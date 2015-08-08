@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 
 #parse ($init)
-
+#set ($bg = "")
+#if("/home" == $layout.getFriendlyURL())
+	#set ($bg = "bg")
+#end
 <html class="$root_css_class" dir="#language ("lang.dir")" lang="$w3c_language_id">
 
 <head>
@@ -14,7 +17,7 @@
 	<script type="text/javascript" src="$javascript_folder/jquery-1.11.3.min.js"></script>
 </head>
 
-<body class="$css_class">
+<body class="$css_class $bg">
 #if("/home" == $layout.getFriendlyURL())
 	<img id="bg_top" src="$images_folder/bg_top.jpg"/>
 #else
@@ -35,7 +38,7 @@ $theme.include($body_top_include)
 					<img alt="$logo_description" height="$site_logo_height" src="$site_logo" width="$site_logo_width" />
 
 					#if ($show_site_name)
-						<span class="site-name" title="#language_format ("go-to-x", [$site_name])">
+						<span class="site-name text-color-white" title="#language_format ("go-to-x", [$site_name])">
 							$site_name
 						</span>
 					#end
