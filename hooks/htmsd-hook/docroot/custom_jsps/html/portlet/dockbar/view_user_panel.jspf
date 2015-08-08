@@ -26,11 +26,11 @@
 		</c:if>
 		
 		<li>
-			<a href="/sell"> Sell </a>
+			<a href="/group/guest/sell"> Sell </a>
 		</li>
 		<c:if test="<%= (themeDisplay.isShowControlPanelIcon() || themeDisplay.isShowSiteAdministrationIcon()) && (!layout.getGroup().isControlPanel() || (Validator.isNotNull(controlPanelCategory) && controlPanelCategory.startsWith(PortletCategoryKeys.CURRENT_SITE))) %>">
 			<li>
-				<a href="/system-admin"> System Admin </a>
+				<a href="/group/guest/system-admin"> System Admin </a>
 			</li>
 		</c:if>
 
