@@ -1,5 +1,12 @@
 {
 	"layoutTemplateId": "homelayout",
+	"privatePages": [
+	    {
+		    "friendlyURL": "/system-admin",
+		    "name": "System admin",
+		    "title": "System admin"
+	    }
+	],
 	"publicPages": [
 		{
 			"columns": [
@@ -101,6 +108,12 @@
 			"title": "Contact Us",
 			"name": "Contact Us",
 			"friendlyURL": "/contact-us"
+		},
+		{
+			"title": "Sell",
+			"name": "Sell",
+			"friendlyURL": "/sell",
+			"hidden": "true"
 		}
 	]
 }
