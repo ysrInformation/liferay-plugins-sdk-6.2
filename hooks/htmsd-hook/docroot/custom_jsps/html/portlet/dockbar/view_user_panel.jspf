@@ -26,7 +26,7 @@
 		</c:if>
 		
 		<li>
-			<a href="/group/guest/sell"> Sell </a>
+			<a href="/sell"> Sell </a>
 		</li>
 		<c:if test="<%= (themeDisplay.isShowControlPanelIcon() || themeDisplay.isShowSiteAdministrationIcon()) && (!layout.getGroup().isControlPanel() || (Validator.isNotNull(controlPanelCategory) && controlPanelCategory.startsWith(PortletCategoryKeys.CURRENT_SITE))) %>">
 			<li>
