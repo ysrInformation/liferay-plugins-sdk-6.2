@@ -65,79 +65,17 @@
 		{
 			"title": "Pet Foods",
 			"name": "Pet Foods",
-			"friendlyURL": "/pet-food",
-			"layouts": [
-                {
-                    "friendlyURL": "/dfa",
-                    "name": "Dog Food & Accessories",
-                    "title": "Dog Food & Accessories"
-                },
-                {
-                    "friendlyURL": "/cfa",
-                    "name": "Cat Food & Accessories",
-                    "title": "Cat Food & Accessories"
-                },
-                {
-                    "friendlyURL": "/bfa",
-                    "name": "Bird Food & Accessories",
-                    "title": "Bird Food & Accessories"
-                },
-                {
-                    "friendlyURL": "/sf",
-                    "name": "Small Animal Food & Accessories",
-                    "title": "Small Animal Food & Accessories"
-                }
-            ]
+			"friendlyURL": "/pet-food"
 		},
 		{
 			"title": "Exotic Pet Birds",
 			"name": "Exotic Pet Birds",
-			"friendlyURL": "/exotic-pet-birds",
-			"layouts": [
-                {
-                    "friendlyURL": "/parakeets",
-                    "name": "Parakeets",
-                    "title": "Parakeets"
-                },
-                {
-                    "friendlyURL": "/macaws",
-                    "name": "Macaws",
-                    "title": "Macaws"
-                },
-                {
-                    "friendlyURL": "/cockatoos",
-                    "name": "Cockatoos",
-                    "title": "Cockatoos"
-                },
-                {
-                    "friendlyURL": "/lorikeets",
-                    "name": "Lorikeets",
-                    "title": "Lorikeets"
-                },
-                {
-                    "friendlyURL": "/austarlian-parakeets",
-                    "name": "Austarlian Parakeets",
-                    "title": "Austarlian Parakeets"
-                },
-                {
-                    "friendlyURL": "/amazons",
-                    "name": "Amazons",
-                    "title": "Amazons"
-                }
-                
-            ]
+			"friendlyURL": "/exotic-pet-birds"
 		},
 		{
 			"title": "Exotic Pet Animals",
 			"name": "Exotic Pet Animals",
-			"friendlyURL": "/exotic-pet-animals",
-			"layouts": [
-                {
-                    "friendlyURL": "/bull-dog",
-                    "name": "Bull Dog",
-                    "title": "Bull Dog"
-                }
-            ]
+			"friendlyURL": "/exotic-pet-animals"
 		},
 		{
 			"title": "Accessories",
