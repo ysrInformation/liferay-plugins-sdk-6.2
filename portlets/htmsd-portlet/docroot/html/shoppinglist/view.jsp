@@ -11,7 +11,7 @@
 <ul id="shopping_list" class="row">
 	<%
 		for(int i = 0; i < shoppingItems.size(); i++ )  {
-		ShoppingItem shoppingItem = shoppingItems.get(i);	
+			ShoppingItem shoppingItem = shoppingItems.get(i);	
 			%>
 				<li class="span3" data-color="gray">
 					<div class="product">
