@@ -49,7 +49,12 @@
 						String imagesList [] =  StringUtil.split(item.getImageIds(), StringPool.COMMA) ;
 						int i = 1;
 						for(String imageEntryId : imagesList) {
-							documentFileEntry = DLFileEntryLocalServiceUtil.getDLFileEntry(Long.valueOf(imageEntryId));
+							try {
+								documentFileEntry = DLFileEntryLocalServiceUtil.getDLFileEntry(Long.valueOf(imageEntryId));	
+							}catch(Exception e) {
+								
+							}
+							if(Validator.isNull(documentFileEntry)) continue;
 							String readURL = "readURL(this,"+i+");";
 							String deleteURL = "deleteUpload("+i+");";
 							String image = HConstants.IMAGE+i;
@@ -66,7 +71,7 @@
 							</aui:column>
 							
 							<aui:column columnWidth="25" >
-								<img id="<%=image_upload_preview %>" src="<%= "/documents/" + documentFileEntry.getGroupId() + "/" + documentFileEntry.getFolderId() + "/" + documentFileEntry.getTitle()+"/"+documentFileEntry.getUuid()%>"  width="50px" height="50px"/>
+								<img id="<%=image_upload_preview %>"  src="<%= "/documents/" + documentFileEntry.getGroupId() + "/" + documentFileEntry.getFolderId() + "/" + documentFileEntry.getTitle()+"/"+documentFileEntry.getUuid()%>"  width="50px" height="50px"/>
 							</aui:column>
 							<c:if test="<%=isAdmin %>">
 								<aui:column columnWidth="15">
