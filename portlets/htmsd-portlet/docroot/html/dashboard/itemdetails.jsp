@@ -18,7 +18,7 @@
 		//List<Category> itemCategory = CategoryLocalServiceUtil.getShoppingItemCategories(itemId);
 		%>
 	
-		<aui:a href='<%=backURL %>'>BACK</aui:a>
+		<liferay-ui:header title="update-item" backLabel="go-back" backURL='<%=backURL%>'/>
 		
 		<aui:fieldset>
 			<aui:form action="<%=updateItemURL %>" enctype="multipart/form-data" method="POST" name="fm">

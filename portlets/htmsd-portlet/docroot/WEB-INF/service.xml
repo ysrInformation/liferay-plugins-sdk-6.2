@@ -27,10 +27,10 @@
 		<column name="name" type="String"/>
 		<column name="description" type="String"/>	
 		
-		<!-- Relationships 
+		<!-- Relationships -->
 		
- 	 	<column name="entries" type="Collection" entity="ShoppingItem" mapping-table="ShopppingItem_Category"/>
- 	 	 -->
+		<column name="categories" type="Collection" entity="ShoppingItem" mapping-table="ShopppingItem_Category"/>
+		
 	</entity>
 
 	<entity name="ShoppingItem" local-service="true" remote-service="false">
@@ -161,10 +161,10 @@
 		
 		<column name="name" type="String"/>
 		
-		<!--  Relationships
+		<!--  Relationships -->
 		
-		<column name="entries" type="Collection" entity="ShoppingItem" mapping-table="ShoppingItem_Tag"/>
-		 -->
+		<column name="tags" type="Collection" entity="ShoppingItem" mapping-table="ShoppingItem_Tag"/>
+		
 		<finder return-type="Collection" name="Name">
 			<finder-column name="name" />
 		</finder>
