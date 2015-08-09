@@ -2,6 +2,13 @@
 	"layoutTemplateId": "homelayout",
 	"privatePages": [
 	    {
+	    	"columns": [
+				[
+					{
+			            "portletId": "1_WAR_htmsdportlet"
+			        }
+			    ]
+			], 
 		    "friendlyURL": "/system-admin",
 		    "name": "System admin",
 		    "title": "System admin"
@@ -70,31 +77,73 @@
 			"title": "Home"
 		},
 		{
+			"columns": [
+				[
+					{
+			            "portletId": "3_WAR_htmsdportlet"
+			        }
+			    ]
+			],    
 			"title": "Pet Foods",
 			"name": "Pet Foods",
 			"friendlyURL": "/pet-food"
 		},
 		{
+			"columns": [
+				[
+					{
+			            "portletId": "3_WAR_htmsdportlet"
+			        }
+			    ]
+			], 
 			"title": "Exotic Pet Birds",
 			"name": "Exotic Pet Birds",
 			"friendlyURL": "/exotic-pet-birds"
 		},
 		{
+			"columns": [
+				[
+					{
+			            "portletId": "3_WAR_htmsdportlet"
+			        }
+			    ]
+			], 
 			"title": "Exotic Pet Animals",
 			"name": "Exotic Pet Animals",
 			"friendlyURL": "/exotic-pet-animals"
 		},
 		{
+			"columns": [
+				[
+					{
+			            "portletId": "3_WAR_htmsdportlet"
+			        }
+			    ]
+			], 
 			"title": "Accessories",
 			"name": "Accessories",
 			"friendlyURL": "/accessories"
 		},
 		{
+			"columns": [
+				[
+					{
+			            "portletId": "3_WAR_htmsdportlet"
+			        }
+			    ]
+			], 
 			"title": "Feed",
 			"name": "Feed",
 			"friendlyURL": "/feed"
 		},
 		{
+			"columns": [
+				[
+					{
+			            "portletId": "3_WAR_htmsdportlet"
+			        }
+			    ]
+			], 
 			"title": "Fish",
 			"name": "Fish",
 			"friendlyURL": "/fish"
@@ -109,7 +158,14 @@
 			"name": "Contact Us",
 			"friendlyURL": "/contact-us"
 		},
-		{
+		{	
+			"columns": [
+				[
+					{
+			            "portletId": "1_WAR_htmsdportlet"
+			        }
+			    ]
+			], 
 			"title": "Sell",
 			"name": "Sell",
 			"friendlyURL": "/sell",
