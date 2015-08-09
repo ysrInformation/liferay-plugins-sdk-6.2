@@ -1,15 +1,30 @@
-body {
+.bg {
 	background: url(../images/bg.png) !important;
 }
 
 #bg_top {
-	position : absolute;
+	position: absolute;
 	background-position: center;
 	background-position: top;
 	background-repeat: no-repeat;
 	background-color: #6f8720;
 	width: 100%;
 	color: #e2e2e2;
+}
+
+.text-color-white {
+	color: white;
+}
+
+#bg_top_fixed_heigth {
+	position: absolute;
+	background-position: center;
+	background-position: top;
+	background-repeat: no-repeat;
+	background-color: #6f8720;
+	width: 100%;
+	color: #e2e2e2;
+	height: 35%;
 }
 
 #bg_footer {
@@ -21,6 +36,7 @@ body {
 	border-top: 1px solid #DDD;
 	color: #E2E2E2;
 	width: 100%;
+	position: absolute;
 }
 
 /*------------Navigation CSS----------------*/
@@ -58,4 +74,166 @@ body {
 
 #navigation .navbar-inner {
 	padding: 0 !important;
+}
+
+.aui .btn-primary:focus, .aui .btn-primary:active, .aui .btn-primary.active,
+	.aui .btn-primary.disabled, .aui .btn-primary[disabled] {
+	color: white;
+	background-color: #dd3628;
+}
+
+.aui .btn-primary:hover {
+	color: white;
+	background-color: #dd3628;
+}
+
+/*******Quick Contact CSS**********/
+.quick-contact .portlet-borderless-container {
+	background: transparent url("../images/bg.png") repeat scroll 0% 0%;
+}
+
+.aui .btn-primary {
+	background-color: #d8492d;
+	background-image: linear-gradient(to bottom, #d8492d 0%, #d66c59 50%, #d8492d 100%,
+		#d8492d 100%);
+	background-repeat: repeat-x;
+	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+	color: white;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.quick-contact .control-group {
+	margin-bottom: 0;
+}
+
+.quick-contact .control-group {
+	
+}
+
+.quick-contact .control-group label {
+	float: left;
+	width: 20%;
+	margin-right: 2.0em;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.quick-contact fieldset {
+	margin-left: 2em;
+}
+
+.aboutus-btn {
+	margin-top: 17%;
+}
+
+.quick-contact legend {
+	text-align: center;
+	border-image: none;
+	border-style: none;
+	border-width: 0px;
+	color: #555555;
+	display: block;
+	font-size: 21px;
+	line-height: 40px;
+	margin-top: 10px;
+	margin-bottom: 20px;
+	padding: 0;
+	width: 100%;
+	font-size: 24.5px;
+	text-transform: uppercase;
+}
+
+.quick-contact input[type="text"] {
+	border: 1px solid #d8492d !important;
+}
+
+/************Footer CSS***************/
+.footer_wrapper {
+	padding: 0 5em 0;
+	position: relative;
+}
+
+.footer_label {
+	color: #d8492d;
+	font-size: 18px;
+	font-weight: bold;
+	margin-left: 8%;
+	padding-bottom: 10px;
+}
+
+.text_align_center {
+	text-align: center;
+}
+
+.aui #bg_footer li {
+	list-style: outside none none;
+}
+
+.aui #bg_footer .socialsicons ul, .aui #footer ul {
+	margin: 0px;
+}
+
+.aui #bg_footer .socialsicons li {
+	display: inline-block;
+}
+
+/*****Social Icons******/
+.social-icons ul {
+	overflow: hidden;
+}
+
+.social-icons ul li {
+	list-style-type: none;
+	float: left;
+}
+
+.social-icons ul li a i {
+	background: #205D7A;
+	color: #fff;
+	width: 40px;
+	height: 30px;
+	border-radius: 20px;
+	font-size: 25px;
+	text-align: center;
+	margin-right: 10px;
+	padding-top: 21%;
+	transition: all 0.2s ease-in-out;
+}
+
+.social-icons .fa-facebook {
+	background: #3b5998
+}
+
+.social-icons .fa-youtube {
+	background: #EE3637
+}
+
+.social-icons .fa-twitter {
+	background: #00aced
+}
+
+.social-icons .fa-google-plus {
+	background: #dd4b39
+}
+
+.social-icons ul li a i:hover {
+	opacity: .7;
+}
+/*****Quick Links*****/
+
+.quick_links li a {
+	color: #e1e1e1;
+}
+
+.quick_links li a:HOVER {
+	color: #FFFFFF;
+}
+
+.visa_card {
+  text-align: center;
+}
+
+.visa_card .card {
+	margin-top: 10px;
 }

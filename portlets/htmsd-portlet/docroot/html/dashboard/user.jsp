@@ -24,7 +24,7 @@
 		 <%
 		 
 		 	itemList = 	ShoppingItemLocalServiceUtil.getByUserId(userId, searchContainer.getStart(), searchContainer.getEnd());
-			 List<ShoppingItem> copy_itemList = new ArrayList<ShoppingItem>();
+			List<ShoppingItem> copy_itemList = new ArrayList<ShoppingItem>();
 			copy_itemList.addAll(itemList);
 		 	Comparator<ShoppingItem> beanComparator = new BeanComparator(orderByCol);
 			Collections.sort(copy_itemList, beanComparator);			

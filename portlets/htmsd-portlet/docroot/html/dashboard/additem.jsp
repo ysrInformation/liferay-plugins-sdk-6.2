@@ -4,7 +4,9 @@
 <%
 	List<Category> categories = CategoryLocalServiceUtil.getCategories(-1, -1);
 %>
-<liferay-ui:header title="back"  backURL="<%=ParamUtil.getString(renderRequest, "backURL")  %>" />
+
+<liferay-ui:header title="add-item" backLabel="go-back" backURL='<%=ParamUtil.getString(renderRequest, "backURL") %>'/>
+
 <aui:fieldset>
 	<aui:form action="<%=addItemURL %>" enctype="multipart/form-data" method="POST">
 		<aui:input name="<%=HConstants.NAME%>" required="true" />
@@ -16,18 +18,18 @@
 		<aui:input name="<%=HConstants.DESCRIPTION %>" type="textarea" required="true" />
 		<aui:layout>
 			<c:forEach var="i" begin="1" end="<%=HConstants.IMAGES_UPLOAD_LIMIT %>">
-					<aui:column columnWidth="60" >
-						<aui:input name='image${i}'  type="file" label="" onChange="readURL(this,${i});">
-						</aui:input>
-					</aui:column>
-					
-					<aui:column columnWidth="25">
-						<img id="image_upload_preview${i}" src=""  height="50px" width="50px" />
-					</aui:column>
-					
-					<aui:column columnWidth="15">
-						<aui:a href="#" onclick="deleteUpload(${i});">Delete</aui:a>
-					</aui:column>
+				<aui:column columnWidth="60" >
+					<aui:input name='image${i}'  type="file" label="" onChange="readURL(this,${i});">
+					</aui:input>
+				</aui:column>
+				
+				<aui:column columnWidth="25">
+					<img id="image_upload_preview${i}" src=""  height="50px" width="50px" />
+				</aui:column>
+				
+				<aui:column columnWidth="15">
+					<aui:a href="#" onclick="deleteUpload(${i});">Delete</aui:a>
+				</aui:column>
 			</c:forEach>
 		</aui:layout>
 		

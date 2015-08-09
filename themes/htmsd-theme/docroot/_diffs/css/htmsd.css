@@ -87,15 +87,6 @@
 	background-color: #dd3628;
 }
 
-.aui textarea, .aui input[type="text"], .aui input[type="password"],
-	.aui input[type="datetime"], .aui input[type="datetime-local"], .aui input[type="date"],
-	.aui input[type="month"], .aui input[type="time"], .aui input[type="week"],
-	.aui input[type="number"], .aui input[type="email"], .aui input[type="url"],
-	.aui input[type="search"], .aui input[type="tel"], .aui input[type="color"],
-	.aui .uneditable-input {
-	border: 1px solid #d8492d !important;
-}
-
 /*******Quick Contact CSS**********/
 .quick-contact .portlet-borderless-container {
 	background: transparent url("../images/bg.png") repeat scroll 0% 0%;
@@ -151,6 +142,10 @@
 	width: 100%;
 	font-size: 24.5px;
 	text-transform: uppercase;
+}
+
+.quick-contact input[type="text"] {
+	border: 1px solid #d8492d !important;
 }
 
 /************Footer CSS***************/
