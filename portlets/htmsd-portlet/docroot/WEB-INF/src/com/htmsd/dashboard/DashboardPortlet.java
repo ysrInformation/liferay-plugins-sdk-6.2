@@ -144,6 +144,7 @@ public class DashboardPortlet extends MVCPortlet {
 		ServiceContext serviceContext = null;
 		try {
 			serviceContext = ServiceContextFactory.getInstance(uploadRequest);
+			serviceContext.setAddGuestPermissions(true);
 		} catch (PortalException e) {
 			_log.error(e);
 		} catch (SystemException e) {
@@ -202,6 +203,7 @@ public class DashboardPortlet extends MVCPortlet {
 		ServiceContext serviceContext = null;
 		try {
 			serviceContext = ServiceContextFactory.getInstance(uploadRequest);
+			serviceContext.setAddGuestPermissions(true);;
 		} catch (PortalException e) {
 			_log.error(e);
 		} catch (SystemException e) {

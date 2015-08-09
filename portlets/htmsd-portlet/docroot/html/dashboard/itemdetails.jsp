@@ -16,10 +16,19 @@
 		//List<Tag> tagsList = TagLocalServiceUtil.getShoppingItemTags(itemId);
 		//String tags = StringUtil.merge(tagsList);
 		//List<Category> itemCategory = CategoryLocalServiceUtil.getShoppingItemCategories(itemId);
+		int status = item.getStatus();
+		String itemStatus = StringPool.BLANK;
+		if(status == HConstants.APPROVE) {
+			itemStatus = "item-approve";
+		}else if(status == HConstants.REJECT){
+			itemStatus = "item-reject";
+		}else{
+			itemStatus = "item-new";
+		}
 		%>
 	
-		<liferay-ui:header title="update-item" backLabel="go-back" backURL='<%=backURL%>'/>
-		
+		<liferay-ui:header title='<%=isAdmin ? "update-item" : "view-item" %>' backLabel="go-back" backURL='<%=backURL%>'/>
+		<liferay-ui:header title='<%=itemStatus%>'/>
 		<aui:fieldset>
 			<aui:form action="<%=updateItemURL %>" enctype="multipart/form-data" method="POST" name="fm">
 				<aui:input name="<%=HConstants.NAME%>" required="true" value="<%= item.getName()%>" />
