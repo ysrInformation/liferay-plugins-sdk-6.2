@@ -1,5 +1,2 @@
-<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
+<%@include file="/html/shoppinglist/init.jsp" %>
 
-<portlet:defineObjects />
-
-This is the <b>Shopping List</b> portlet in View mode.
