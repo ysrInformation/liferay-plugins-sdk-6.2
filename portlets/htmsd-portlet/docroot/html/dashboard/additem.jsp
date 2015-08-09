@@ -4,8 +4,7 @@
 <%
 	List<Category> categories = CategoryLocalServiceUtil.getCategories(-1, -1);
 %>
-<aui:a href='<%=ParamUtil.getString(renderRequest, "backURL") %>'>BACK</aui:a>
-
+<liferay-ui:header title="back"  backURL="<%=ParamUtil.getString(renderRequest, "backURL")  %>" />
 <aui:fieldset>
 	<aui:form action="<%=addItemURL %>" enctype="multipart/form-data" method="POST">
 		<aui:input name="<%=HConstants.NAME%>" required="true" />
