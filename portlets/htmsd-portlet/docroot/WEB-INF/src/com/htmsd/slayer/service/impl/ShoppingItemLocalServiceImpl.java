@@ -209,5 +209,15 @@ public class ShoppingItemLocalServiceImpl
 			return count;
 		}
 	
+	public List<ShoppingItem> getItemByCategoryId(long categoryId) {
+		
+		return shoppingItemFinder.getItemByCategoryId(categoryId);
+	}
+	
+	public List<ShoppingItem> getItemByTagId(long tagId) {
+		
+		return shoppingItemFinder.getItemByTagId(tagId);
+	}
+	
 	private Log _log = LogFactoryUtil.getLog(ShoppingItemLocalServiceImpl.class);
 }

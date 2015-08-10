@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
@@ -73,12 +74,17 @@ public class DashboardPortlet extends MVCPortlet {
 				StringUtil.merge(imageIds, StringPool.COMMA));
 		
 		//Adding Tag
-		tag = TagLocalServiceUtil.addTag(themeDisplay.getScopeGroupId(), themeDisplay.getCompanyId(), themeDisplay.getUserId(), tagName);
+		if(!tagName.isEmpty()) {
+			tag = TagLocalServiceUtil.addTag(themeDisplay.getScopeGroupId(), themeDisplay.getCompanyId(), themeDisplay.getUserId(), tagName);
+		}
 		
 		//Update Tag_Mapping and Category Mapping
 		try {
-			ShoppingItemLocalServiceUtil.addTagShoppingItem(tag.getTagId(), shoppingItem.getItemId());
 			ShoppingItemLocalServiceUtil.addCategoryShoppingItem(categoryId, shoppingItem.getItemId());	
+			if(Validator.isNotNull(tag)) {
+				ShoppingItemLocalServiceUtil.addTagShoppingItem(tag.getTagId(), shoppingItem.getItemId());
+			}
+			
 		} catch (SystemException e) {
 			_log.error(e);
 		}

@@ -94,5 +94,10 @@ public class TagLocalServiceImpl extends TagLocalServiceBaseImpl {
 		return tags;
 	}
 	
+	public List<Tag> getTagByItemId(long itemId) {
+		
+		return tagFinder.getTagByItemId(itemId);
+	}
+	
 	private Log _log = LogFactoryUtil.getLog(TagLocalServiceImpl.class);
 }

@@ -15,6 +15,7 @@
 package com.htmsd.slayer.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import com.htmsd.slayer.model.Category;
 import com.htmsd.slayer.service.base.CategoryLocalServiceBaseImpl;
@@ -86,6 +87,11 @@ public class CategoryLocalServiceImpl extends CategoryLocalServiceBaseImpl {
 		}
 		return category;
 		}
+	
+	public List<Category> getCategoryByItemId(long itemId) {
+		
+		return categoryFinder.getCategoryByItemId(itemId);
+	}
 	
 	private Log _log = LogFactoryUtil.getLog(CategoryLocalServiceImpl.class);
 
