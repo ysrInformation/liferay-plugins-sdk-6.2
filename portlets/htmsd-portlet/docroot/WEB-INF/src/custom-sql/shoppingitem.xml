@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<custom-sql>
+		<sql id = "com.htmsd.slayer.service.persistence.ShoppingItemFinderImpl.findItemByCategoryId">
+		   <![CDATA[
+			   SELECT 
+			   		s.* 
+			   FROM 
+			   		htmsd_ShopppingItem_Category sc
+			   INNER JOIN  
+			   		htmsd_ShoppingItem s 
+			   	ON s
+			   		c.itemId = s.itemId AND sc.categoryId = ?
+		 	]]>
+		</sql>
+		<sql id = "com.htmsd.slayer.service.persistence.ShoppingItemFinderImpl.findItemByTagId">
+		   <![CDATA[
+			   SELECT 
+			   		s.* 
+			   FROM 
+			   		htmsd_ShoppingItem_Tag st
+			   INNER JOIN 
+			   		htmsd_ShoppingItem s 
+			   	ON 
+			   		st.itemId = s.itemId AND st.tagId = ?
+		 	]]>
+	</sql>
+	</custom-sql>
+	

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<custom-sql>
+		<sql id = "com.htmsd.slayer.service.persistence.CategoryFinderImpl.findCategoryByItemId">
+	   <![CDATA[
+		    SELECT 
+		    	c.* 
+		    FROM 
+		    	htmsd_Shopppingitem_Category sc
+			INNER JOIN  
+				htmsd_Category c 
+			ON 
+				sc.categoryId = c.categoryId AND sc.itemId = ?	
+	 	]]>
+	</sql>
+	</custom-sql>
+	

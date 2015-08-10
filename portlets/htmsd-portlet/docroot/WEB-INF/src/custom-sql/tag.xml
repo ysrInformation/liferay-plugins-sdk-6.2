@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<custom-sql>
+		<sql id = "com.htmsd.slayer.service.persistence.TagFinderImpl.findtagByItemId">
+	   <![CDATA[
+	   		SELECT 
+	   			t.* 
+	   		FROM 
+	   			htmsd_ShoppingItem_Tag st
+			INNER JOIN 
+				htmsd_Tag t 
+			ON 
+				t.tagId = st.tagId AND st.itemId = ?
+	 	]]>
+	</sql>
+	</custom-sql>
+	
