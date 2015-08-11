@@ -41,19 +41,28 @@
 <div id="loader-icon" >
 	<img src="<%=request.getContextPath()%>/images/loader.gif" style="width: 100px; height: 100px"/>
 </div>
+<div onclick="javascript:loadProducts()" id="load-button">
+	<div id="loader-div">
+		<div>
+			View More
+		</div>
+		<div>
+			<i class="fa fa-chevron-down"></i>
+		</div>
+	</div>
+</div>
 <script>
 
 	$(function() {
 		window.onload = $("#<portlet:namespace/>len").val(8);
 		getShoppingItems(0, 8);
-		$(window).scroll(function() {
-			var len = $("#<portlet:namespace/>len").val();
-			var count = parseInt(len);
-			 if ($(window).scrollTop() == $(document).height() - $(window).height()-1) {
-				getShoppingItems(count, parseInt(count) + parseInt(4));
-			}
-		});
 	});
+	
+	function loadProducts() {
+		var len = $("#<portlet:namespace/>len").val();
+		var count = parseInt(len);
+		getShoppingItems(count, parseInt(count) + parseInt(4));
+	}
 	
 	function getShoppingItems(s, e) {
 		

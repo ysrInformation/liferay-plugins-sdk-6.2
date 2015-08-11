@@ -75,3 +75,13 @@
 	height: 100px !important;
 	width: 100px !important;
 }
+
+#load-button {
+	text-align: center;
+	background: #F5F4E7;
+}
+
+#loader-div {
+	padding: 10px;
+	text-transform: uppercase;
+}
