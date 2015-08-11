@@ -66,3 +66,12 @@
 .dynatable-active-page a {
 	color: #fff !important;
 }
+
+#loader-icon {
+	text-align: center;
+} 
+
+#loader_icon img {
+	height: 100px !important;
+	width: 100px !important;
+}

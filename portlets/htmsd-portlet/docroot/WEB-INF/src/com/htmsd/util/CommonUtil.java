@@ -21,7 +21,7 @@ public class CommonUtil {
 	 * @return
 	 */
 	public static String getThumbnailpath(long fileEntryId,
-			ThemeDisplay themeDisplay) {
+			long groupId) {
 
 		_log.info(" get Thumbnail ");
 
@@ -33,10 +33,8 @@ public class CommonUtil {
 			fileEntry = DLAppLocalServiceUtil.getFileEntry(fileEntryId);
 			/*thumbnail = DLUtil.getThumbnailSrc(fileEntry,
 					fileEntry.getFileVersion(), dlFileShortcut, themeDisplay);*/
-			thumbnail = themeDisplay.getPortalURL()
-					+ themeDisplay.getPathContext()
-					+ "/documents/"
-					+ themeDisplay.getScopeGroupId()
+			thumbnail = "/documents/"
+					+ groupId
 					+ StringPool.SLASH
 					+ fileEntry .getFolderId()
 					+ StringPool.SLASH

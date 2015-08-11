@@ -33,7 +33,7 @@
 		
 	</entity>
 
-	<entity name="ShoppingItem" local-service="true" remote-service="false">
+	<entity name="ShoppingItem" local-service="true" remote-service="true">
 
 		<!-- PK fields -->
 
