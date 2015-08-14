@@ -51,8 +51,8 @@
 		</div>
 	</div>
 </div>
-<script>
-
+<aui:script>
+	var portletId = '<%= themeDisplay.getPortletDisplay().getId() %>';
 	$(function() {
 		window.onload = $("#<portlet:namespace/>len").val(8);
 		getShoppingItems(0, 8);
@@ -95,19 +95,27 @@
 	}
 
 	function render(data) {
-		$.each(data, function(i, item) {
-			var cssClass = "span3", li;
-			if (i % 4 === 0) {
-				cssClass += ' first margin_left_zero';
-			}
-			li = '<li class="' + cssClass + '"><div class="product"><div class="product-image">'
-					+ '<a href="#">	<img src=' + item.image + ' /></a>'
-					+ '</div><div class="product-details">'
-					+ '<h4 class="text-color-red">' + item.name + '</h4>'
-					+ '<p>' + item.description + '</p>'
-					+ '<h6>' + item.totalPrice + '</h6>'
-					+ '</div></div></li>';
-			$("#shopping_list").append(li);		
+		AUI().use('liferay-portlet-url', function(A) {
+			$.each(data, function(i, item) {
+				var cssClass = "span3", li;
+				if (i % 4 === 0) {
+					cssClass += ' first margin_left_zero';
+				}
+				
+				var ajaxURL = Liferay.PortletURL.createRenderURL();
+				ajaxURL.setPortletId(portletId);
+				ajaxURL.setParameter('jspPage', "/html/shoppinglist/details.jsp");
+				ajaxURL.setParameter('itemId', item.itemId);
+				
+				li = '<li class="' + cssClass + '"><div class="product"><div class="product-image">'
+						+ '<a href="'+ajaxURL+'">	<img src=' + item.image + ' /></a>'
+						+ '</div><div class="product-details">'
+						+ '<h4 class="text-color-red">' + item.name + '</h4>'
+						+ '<p>' + item.description + '</p>'
+						+ '<h6>' + item.totalPrice + '</h6>'
+						+ '</div></div></li>';
+				$("#shopping_list").append(li);		
+			});
 		});
 	}
 	
@@ -152,4 +160,4 @@
 			records : 'items'
 		}
 	}); */
-</script>
+</aui:script>

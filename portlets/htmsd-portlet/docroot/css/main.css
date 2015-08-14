@@ -85,3 +85,19 @@
 	padding: 10px;
 	text-transform: uppercase;
 }
+
+/********Shopping Item Details********/
+.add-to-cart-item-price {
+	font-size: 27px;
+	padding: 20px 0;
+}
+
+.add-to-cart {
+	height: 40px;
+	width: 98%;
+	font-size: 15px;
+}
+
+.quantity {
+	width: 95% !important;
+}
