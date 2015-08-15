@@ -8,8 +8,8 @@
 			   		htmsd_ShopppingItem_Category sc
 			   INNER JOIN  
 			   		htmsd_ShoppingItem s 
-			   	ON s
-			   		c.itemId = s.itemId AND sc.categoryId = ?
+			   	ON 
+			   		s.itemId = s.itemId AND sc.categoryId = ?
 		 	]]>
 		</sql>
 		<sql id = "com.htmsd.slayer.service.persistence.ShoppingItemFinderImpl.findItemByTagId">

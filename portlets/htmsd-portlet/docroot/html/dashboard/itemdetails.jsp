@@ -1,4 +1,5 @@
 <%@include file="/html/dashboard/init.jsp" %>
+<portlet:resourceURL  var="getTagsURL"/>
 
 <%
 	boolean isAdmin = permissionChecker.isOmniadmin();
@@ -9,13 +10,22 @@
 		List<Category> categories = CategoryLocalServiceUtil.getCategories(-1, -1);
 		String backURL = ParamUtil.getString(renderRequest, "backURL");
 		PortletURL updateItemURL = renderResponse.createActionURL();
-		updateItemURL.setParameter(ActionRequest.ACTION_NAME, "updateItem");
+		updateItemURL.setParameter(ActionRequest.ACTION_NAME, "addItem");
 		updateItemURL.setParameter(HConstants.ITEM_ID, String.valueOf(itemId));
 		updateItemURL.setParameter("userId", String.valueOf(item.getUserId()));
 		updateItemURL.setParameter("backURL", backURL);
-		//List<Tag> tagsList = TagLocalServiceUtil.getShoppingItemTags(itemId);
-		//String tags = StringUtil.merge(tagsList);
-		//List<Category> itemCategory = CategoryLocalServiceUtil.getShoppingItemCategories(itemId);
+		List<Tag> tagsList = TagLocalServiceUtil.getTagByItemId(itemId);
+		String tagName = StringPool.BLANK;
+		long tagId = 0l;
+		if(tagsList.size()>=1) {
+			tagName = tagsList.get(0).getName();
+			tagId = tagsList.get(0).getTagId();
+		}
+		List<Category> itemCategory = CategoryLocalServiceUtil.getCategoryByItemId(itemId);
+		long categoryId = 0l;
+		if(itemCategory.size()>=1) {
+			categoryId = itemCategory.get(0).getCategoryId();
+		}
 		int status = item.getStatus();
 		String itemStatus = StringPool.BLANK;
 		if(status == HConstants.APPROVE) {
@@ -35,9 +45,9 @@
 				<aui:select name="<%=HConstants.CATEGORY_ID %>"   required="true" showEmptyOption="true">
 					<%
 						for(Category category : categories) {
-							//boolean showcategory = (itemCategory.size()>0 ) && (itemCategory.get(0).getCategoryId() == category.getCategoryId());
+							boolean showcategory = category.getCategoryId()== categoryId ? true : false;
 							%>
-								<aui:option label="<%=category.getName() %>"  value="<%=category.getCategoryId() %>"  />
+								<aui:option label="<%=category.getName() %>"  value="<%=category.getCategoryId() %>" selected="<%=showcategory %>" />
 							<%
 						}
 					%>   
@@ -92,7 +102,8 @@
 						<aui:validator name="number" />
 					</aui:input>
 				</c:if>
-				<aui:input name="<%=HConstants.TAG %>" />
+				<aui:input name="<%=HConstants.TAG %>"  value="<%=tagName %>"/>
+				<aui:input type="hidden" name="<%=HConstants.TAG_ID %>" value="<%=tagId%>"/>
 				
 				<c:if test="<%=isAdmin %>">
 					<aui:select name="<%=HConstants.status %>" showEmptyOption="true" required="true">
@@ -119,6 +130,7 @@
 	        $('#<portlet:namespace/>deleteImage'+id).val('false');
 	        reader.onload = function (e) {
 	            $('#image_upload_preview'+id).attr('src', e.target.result);
+	            $('#image_upload_preview'+id).show();
 	        }
 	        reader.readAsDataURL(input.files[0]);
 	    }
@@ -128,12 +140,44 @@
 		var control = $('#<portlet:namespace/>image'+id);
 	    control.replaceWith( control = control.clone( true ) );
 	    $('#image_upload_preview'+id).attr("src","");
+	    $('#image_upload_preview'+id).hide();
 	    $('#<portlet:namespace/>deleteImage'+id).val('true');
 	}
 	
 	function confirmSubmit(){
 		return confirm("Are you sure you want to update ?");
 	}
+	
+	AUI().use('autocomplete-list','aui-base','aui-io-request','autocomplete-filters','autocomplete-highlighters',function (A) {
+		var tagAuto
+		A.io.request('<%=getTagsURL%>',{
+			dataType: 'json',
+			method: 'GET',
+			on: {
+				success: function() {	
+					tags=this.get('responseData');
+					//console.log(tags);
+					tagAuto = new A.AutoCompleteList({
+								allowBrowserAutocomplete: 'false',
+								activateFirstItem: 'true',
+								inputNode: '#<portlet:namespace /><%=HConstants.TAG %>',
+								resultTextLocator: 'tagName',
+								render: 'true',
+								resultHighlighter: 'charMatch',
+								resultFilters:['phraseMatch'],
+								source:this.get('responseData'),
+							 })
+					
+					tagAuto.on('select',function(e)
+						     {
+						    var selected_key = e.result.raw.tagId;
+						  	console.log(selected_key);
+						    A.one("#<portlet:namespace /><%=HConstants.TAG_ID%>").set("value",selected_key);
+						     }); 
+				}
+			}
+		});
+	});
 </script>
 		<%
 	}else {

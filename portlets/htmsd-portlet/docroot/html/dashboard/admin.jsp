@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.kernel.util.Constants"%>
 <%@include file="/html/dashboard/init.jsp" %>
 
 <portlet:renderURL  var="addItemURL">
@@ -6,6 +7,14 @@
 </portlet:renderURL>
 
 <portlet:actionURL  var="deletSetURL" name="deleteItemSet"/>
+<portlet:actionURL  var="approveSetURL" name="updateItemSet">
+	<portlet:param name="<%=HConstants.status %>" value="<%=String.valueOf(HConstants.APPROVE)%>"/>
+</portlet:actionURL>
+<portlet:actionURL  var="rejectSetURL" name="updateItemSet">
+	<portlet:param name="<%=HConstants.status %>" value="<%=String.valueOf(HConstants.REJECT)%>"/>
+</portlet:actionURL>
+
+
 
 <%
 	String orderByCol = ParamUtil.getString(request, "orderByCol","createDate");
@@ -36,6 +45,8 @@
 %>    	
 <aui:form action="<%=deletSetURL.toString() %>" name="bookListForm" method="POST">
 <aui:button type="submit" value="delete"  />
+<aui:button type="button" value="approve" onClick="changeAction('approve');"/>
+<aui:button type="button" value="reject" onClick="changeAction('reject');"/>
 <aui:button type="button" value="add-item" href="<%=addItemURL.toString() %>"/>
 <liferay-ui:search-container delta="10"  orderByCol="<%=orderByCol %>" orderByType="<%=orderByType %>" emptyResultsMessage="No Items to display" iteratorURL="<%=iteratorURL %>"  rowChecker="<%= new RowChecker(renderResponse)%>">
 
@@ -87,3 +98,15 @@
 	<liferay-ui:search-iterator  searchContainer="<%=searchContainer %>"/>
 </liferay-ui:search-container>
 </aui:form>
+
+
+<script>
+	function changeAction(action) {
+		if(action == "approve") {
+			document.<portlet:namespace/>bookListForm.action = '<%= approveSetURL.toString()%>';	
+		} else if (action == "reject") {
+			document.<portlet:namespace/>bookListForm.action = '<%= rejectSetURL.toString()%>';
+		}
+		 document.<portlet:namespace/>bookListForm.submit();
+	}
+</script>

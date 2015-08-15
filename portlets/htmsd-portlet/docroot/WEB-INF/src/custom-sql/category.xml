@@ -1,16 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 	<custom-sql>
 		<sql id = "com.htmsd.slayer.service.persistence.CategoryFinderImpl.findCategoryByItemId">
-	   <![CDATA[
-		    SELECT 
-		    	c.* 
-		    FROM 
-		    	htmsd_Shopppingitem_Category sc
-			INNER JOIN  
-				htmsd_Category c 
-			ON 
-				sc.categoryId = c.categoryId AND sc.itemId = ?	
-	 	]]>
+		   <![CDATA[
+			    SELECT 
+			    	c.* 
+			    FROM 
+			    	htmsd_Shopppingitem_Category sc
+				INNER JOIN  
+					htmsd_Category c 
+				ON 
+					sc.categoryId = c.categoryId AND sc.itemId = ?	
+		 	]]>
+	</sql>
+	
+	<sql id = "com.htmsd.slayer.service.persistence.CategoryFinderImpl.deleteCatItemyByItemId">
+		   <![CDATA[
+			    DELETE FROM 
+			    	htmsd_Shopppingitem_Category 
+				WHERE	
+					itemId = ?	
+		 	]]>
+	</sql>
+	
+	<sql id = "com.htmsd.slayer.service.persistence.CategoryFinderImpl.deleteCatItemyBycategoryId">
+		   <![CDATA[
+			    DELETE FROM 
+			    	htmsd_Shopppingitem_Category 
+				WHERE	
+					categoryId = ?	
+		 	]]>
 	</sql>
 	</custom-sql>
 	

@@ -2,30 +2,37 @@ package com.htmsd.dashboard;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
+import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceResponse;
 
 import com.htmsd.slayer.model.ShoppingItem;
 import com.htmsd.slayer.model.Tag;
+import com.htmsd.slayer.service.CategoryLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingItemLocalServiceUtil;
 import com.htmsd.slayer.service.TagLocalServiceUtil;
 import com.htmsd.util.HConstants;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
+import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
@@ -56,43 +63,81 @@ public class DashboardPortlet extends MVCPortlet {
 		UploadPortletRequest uploadRequest = PortalUtil.getUploadPortletRequest(actionRequest);
 		ThemeDisplay themeDisplay=(ThemeDisplay)uploadRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		
+		long itemId = ParamUtil.getLong(uploadRequest, HConstants.ITEM_ID);
+		long userId  = ParamUtil.getLong(uploadRequest, "userId");
 		String name = ParamUtil.getString(uploadRequest, HConstants.NAME);
 		String description = ParamUtil.getString(uploadRequest, HConstants.DESCRIPTION);
 		Double sellerPrice = ParamUtil.getDouble(uploadRequest, HConstants.PRICE);
+		Double totalPrice = ParamUtil.getDouble(uploadRequest, HConstants.TOTAL_PRICE);
 		long categoryId = ParamUtil.getLong(uploadRequest, HConstants.CATEGORY_ID);
 		long tagId = ParamUtil.getLong(uploadRequest, HConstants.TAG_ID);
 		String tagName = ParamUtil.getString(uploadRequest, HConstants.TAG);
-		List<Long> imageIds = saveFiles(uploadRequest, HConstants.IMAGE, HConstants.ITEM_FOLDER_NAME);
-		Double totalPrice = 0.0;
+		List<Long> imageIds = new ArrayList<Long>();
 		ShoppingItem shoppingItem = null;
 		Tag tag = null;
-	
-		//Adding items 
-		shoppingItem = ShoppingItemLocalServiceUtil.addItem(themeDisplay.getScopeGroupId(),
-				themeDisplay.getCompanyId(), themeDisplay.getUserId(), null,
-				name, description, sellerPrice, totalPrice, HConstants.NEW,
-				StringUtil.merge(imageIds, StringPool.COMMA));
+		int status = ParamUtil.getInteger(uploadRequest, HConstants.status);
+
+		if (itemId == 0) {
 		
-		//Adding Tag
-		if(!tagName.isEmpty()) {
-			tag = TagLocalServiceUtil.addTag(themeDisplay.getScopeGroupId(), themeDisplay.getCompanyId(), themeDisplay.getUserId(), tagName);
+			//Adding items 
+			imageIds = saveFiles(uploadRequest, HConstants.IMAGE, HConstants.ITEM_FOLDER_NAME);
+			shoppingItem = ShoppingItemLocalServiceUtil.addItem(themeDisplay.getScopeGroupId(),
+					themeDisplay.getCompanyId(), themeDisplay.getUserId(), null,
+					name, description, sellerPrice, totalPrice, HConstants.NEW,
+					StringUtil.merge(imageIds, StringPool.COMMA));
+			
+		}else {
+			//Updating items 
+			if(status == HConstants.REJECT) {
+				ShoppingItemLocalServiceUtil.updateStatus(itemId, status);
+			}else {
+				imageIds = updateImages(uploadRequest, HConstants.IMAGE, HConstants.IMAGE_ID);
+				shoppingItem = ShoppingItemLocalServiceUtil.updateItem(itemId,
+						themeDisplay.getScopeGroupId(),
+						themeDisplay.getCompanyId(), userId, null, name,
+						description, sellerPrice, totalPrice, status,
+						StringUtil.merge(imageIds, StringPool.COMMA));
+			}
+		}
+		
+		//Adding New Tag
+		if(tagId == 0 && !tagName.isEmpty()) {
+			List<Tag> tagNames = TagLocalServiceUtil.getTagByName(tagName);
+			if(tagNames.size() > 0){
+				tag = tagNames.get(0);
+			}else {
+				tag = TagLocalServiceUtil.addTag(themeDisplay.getScopeGroupId(), themeDisplay.getCompanyId(), themeDisplay.getUserId(), tagName);
+			}
+			
+			tagId = tag.getTagId();
 		}
 		
 		//Update Tag_Mapping and Category Mapping
 		try {
+			CategoryLocalServiceUtil.removeMapping(itemId);
+			TagLocalServiceUtil.removeMapping(itemId);
 			ShoppingItemLocalServiceUtil.addCategoryShoppingItem(categoryId, shoppingItem.getItemId());	
-			if(Validator.isNotNull(tag)) {
-				ShoppingItemLocalServiceUtil.addTagShoppingItem(tag.getTagId(), shoppingItem.getItemId());
+			if (tagId != 0) {
+				ShoppingItemLocalServiceUtil.addTagShoppingItem(tagId, shoppingItem.getItemId());
 			}
 			
 		} catch (SystemException e) {
 			_log.error(e);
 		}
-		
 	}
 	
+	public void updateItemSet(ActionRequest actionRequest,
+			ActionResponse actionResponse) throws IOException, PortletException {
+		
+		String [] rowIds=ParamUtil.getParameterValues(actionRequest, "rowIds");
+		int status = ParamUtil.getInteger(actionRequest, HConstants.status);
+		for(String rowId : rowIds) {
+			System.out.println(rowId);
+			ShoppingItemLocalServiceUtil.updateStatus(Long.valueOf(rowId), status);
+		}
+	}
 	
-	public void updateItem(ActionRequest actionRequest,
+	/*public void updateItem(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortletException {
 		
 		_log.info("updateItem");
@@ -105,10 +150,13 @@ public class DashboardPortlet extends MVCPortlet {
 		String name = ParamUtil.getString(uploadRequest, HConstants.NAME);
 		String description = ParamUtil.getString(uploadRequest, HConstants.DESCRIPTION);
 		Double sellerPrice = ParamUtil.getDouble(uploadRequest, HConstants.PRICE);
+		long tagId = ParamUtil.getLong(uploadRequest, HConstants.TAG_ID);
+		String tagName = ParamUtil.getString(uploadRequest, HConstants.TAG);
 		Double totalPrice = ParamUtil.getDouble(uploadRequest, HConstants.TOTAL_PRICE);
 		long categoryId = ParamUtil.getLong(uploadRequest, HConstants.CATEGORY_ID);
-		long tagId = ParamUtil.getLong(uploadRequest, HConstants.TAG_ID);
 		int status = ParamUtil.getInteger(uploadRequest, HConstants.status);
+		Tag tag = null;
+		ShoppingItem shoppingItem = null;
 		
 		if(status == HConstants.REJECT) {
 			ShoppingItemLocalServiceUtil.updateStatus(itemId, status);
@@ -119,9 +167,27 @@ public class DashboardPortlet extends MVCPortlet {
 					themeDisplay.getCompanyId(), userId, null, name,
 					description, sellerPrice, totalPrice, status,
 					StringUtil.merge(imageIds, StringPool.COMMA));
+			
+			
+			//Adding Tag
+			if(tagId == 0 && !tagName.isEmpty()) {
+				tag = TagLocalServiceUtil.addTag(themeDisplay.getScopeGroupId(), themeDisplay.getCompanyId(), themeDisplay.getUserId(), tagName);
+				tagId = tag.getTagId();
+			}
+			
+			//Update Tag_Mapping and Category Mapping
+			try {
+				ShoppingItemLocalServiceUtil.addCategoryShoppingItem(categoryId, shoppingItem.getItemId());	
+				if (tagId != 0) {
+					ShoppingItemLocalServiceUtil.addTagShoppingItem(tagId, shoppingItem.getItemId());
+				}
+				
+			} catch (SystemException e) {
+				_log.error(e);
+			}
 		}
 		
-	}
+	}*/
 	
 	
 	public void deleteItemSet(ActionRequest actionRequest,
@@ -132,8 +198,6 @@ public class DashboardPortlet extends MVCPortlet {
 			System.out.println(rowId);
 			ShoppingItemLocalServiceUtil.deleteItem(Long.valueOf(rowId));
 		}
-		
-		
 	}
 	
 	/**
@@ -272,6 +336,29 @@ public class DashboardPortlet extends MVCPortlet {
 		}
     	return folder;
     }
+	
+	@Override
+	public void serveResource(ResourceRequest resourceRequest,
+			ResourceResponse resourceResponse) throws IOException,
+			PortletException {
+		
+		List<Tag> tags = null;;
+		try {
+			tags = TagLocalServiceUtil.getTags(0, TagLocalServiceUtil.getTagsCount());
+		} catch (SystemException e) {
+			_log.error(e);
+		}
+		JSONArray tagArray = JSONFactoryUtil.createJSONArray();
+		for(Tag tag : tags) {
+			JSONObject tagObject = JSONFactoryUtil.createJSONObject();
+			tagObject.put("tagId", tag.getTagId());
+			tagObject.put("tagName", tag.getName());
+			tagArray.put(tagObject);
+		}
+		PrintWriter out=resourceResponse.getWriter();
+		out.println(tagArray.toString());
+
+	}
 	
 	private Log _log = LogFactoryUtil.getLog(DashboardPortlet.class);
 }

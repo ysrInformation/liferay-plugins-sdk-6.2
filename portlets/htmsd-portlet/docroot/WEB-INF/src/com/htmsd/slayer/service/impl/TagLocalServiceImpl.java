@@ -17,8 +17,10 @@ package com.htmsd.slayer.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import com.htmsd.slayer.model.ShoppingItem;
 import com.htmsd.slayer.model.Tag;
 import com.htmsd.slayer.service.base.TagLocalServiceBaseImpl;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -99,5 +101,21 @@ public class TagLocalServiceImpl extends TagLocalServiceBaseImpl {
 		return tagFinder.getTagByItemId(itemId);
 	}
 	
+	public void removeTag(long tagId) {
+		
+		try {
+			tagFinder.deleteTagItemByTagId(tagId);
+			tagLocalService.deleteTag(tagId);
+		} catch (PortalException e) {
+			_log.error(e);
+		} catch (SystemException e) {
+			_log.error(e);
+		}
+	}
+
+	public void removeMapping(long itemId) {
+		tagFinder.deleteTagItemByItemId(itemId);
+	}
+
 	private Log _log = LogFactoryUtil.getLog(TagLocalServiceImpl.class);
 }

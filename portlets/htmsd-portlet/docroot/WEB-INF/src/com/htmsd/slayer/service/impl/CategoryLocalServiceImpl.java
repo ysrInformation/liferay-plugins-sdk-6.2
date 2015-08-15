@@ -18,7 +18,9 @@ import java.util.Date;
 import java.util.List;
 
 import com.htmsd.slayer.model.Category;
+import com.htmsd.slayer.model.ShoppingItem;
 import com.htmsd.slayer.service.base.CategoryLocalServiceBaseImpl;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -91,6 +93,24 @@ public class CategoryLocalServiceImpl extends CategoryLocalServiceBaseImpl {
 	public List<Category> getCategoryByItemId(long itemId) {
 		
 		return categoryFinder.getCategoryByItemId(itemId);
+	}
+	
+	public void removeCategory(long categoryId) {
+		
+		
+		try {
+			categoryFinder.deleteCatItemByCategoryId(categoryId);
+			categoryLocalService.deleteCategory(categoryId);
+		} catch (PortalException e) {
+			_log.error(e);
+		} catch (SystemException e) {
+			_log.error(e);
+		}
+	}
+	
+	public void removeMapping(long itemId) {
+		
+		categoryFinder.deleteCatItemByItemId(itemId);
 	}
 	
 	private Log _log = LogFactoryUtil.getLog(CategoryLocalServiceImpl.class);

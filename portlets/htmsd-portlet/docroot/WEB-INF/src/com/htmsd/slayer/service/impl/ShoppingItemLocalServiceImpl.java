@@ -121,6 +121,8 @@ public class ShoppingItemLocalServiceImpl
 		
 		try {
 			shoppingItemLocalService.deleteShoppingItem(itemId);
+			categoryFinder.deleteCatItemByItemId(itemId);
+			tagFinder.deleteTagItemByItemId(itemId);
 		} catch (SystemException e) {
 			_log.error(e);
 		} catch (PortalException e) {

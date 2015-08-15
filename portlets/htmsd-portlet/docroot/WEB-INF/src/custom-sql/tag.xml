@@ -12,5 +12,23 @@
 				t.tagId = st.tagId AND st.itemId = ?
 	 	]]>
 	</sql>
+	
+	<sql id = "com.htmsd.slayer.service.persistence.TagFinderImpl.deleteTagItemByItemId">
+		   <![CDATA[
+			    DELETE FROM 
+			    	htmsd_ShoppingItem_Tag 
+				WHERE	
+					itemId = ?	
+		 	]]>
+	</sql>
+	
+	<sql id = "com.htmsd.slayer.service.persistence.TagFinderImpl.deleteTagItemByTagId">
+		   <![CDATA[
+			    DELETE FROM 
+			    	htmsd_ShoppingItem_Tag 
+				WHERE	
+					tagId = ?	
+		 	]]>
+	</sql>
 	</custom-sql>
 	
