@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ivy-module version="2.0" xmlns:m2="http://ant.apache.org/ivy/maven" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
-	<info organisation="com.liferay" module="htmsd-portlet" revision="working@Khan" status="integration" publication="20150801154837">
+	<info organisation="com.liferay" module="htmsd-portlet" revision="working@Khan" status="integration" publication="20150809200904">
 		<extends extendType="configurations,description,info" location="../../ivy.xml" module="com.liferay.sdk" organisation="com.liferay" revision="latest.integration"/>
 	</info>
 

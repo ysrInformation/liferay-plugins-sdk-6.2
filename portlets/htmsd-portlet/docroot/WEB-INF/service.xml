@@ -76,7 +76,7 @@
 		</finder>
 	</entity>
 	
-	<entity name="ShoppingCart" local-service="true" remote-service="false">
+	<entity name="ShoppingCart" local-service="true" remote-service="true">
 
 		<!-- PK fields -->
 
@@ -140,8 +140,6 @@
 
 	</entity>
 	
-	
-	
 	<entity name="Tag" local-service="true" remote-service="false">
 		<!-- PK fields -->
 
@@ -200,7 +198,18 @@
 		<column name="totalPrice" type="Double" />
 	
 		<!-- Finder methods -->
+		<finder return-type="Collection" name="OrderId">
+			<finder-column name="orderId"/>
+		</finder>
 
+	</entity>
+	
+	<entity name="ShoppingItem_Cart" local-service="true" remote-service="false">
+	
+		<!-- PK fields -->
+		<column name="id" type="long" primary="true"/>
+		<column name="itemId" type="long"/>
+		<column name="cartId" type="long"/>
 	</entity>
 
 </service-builder>

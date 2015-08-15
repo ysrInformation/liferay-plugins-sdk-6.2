@@ -1,5 +1,8 @@
 package com.htmsd.util;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 public interface HConstants {
 
 	public static String ITEM_ID = "itemId";
@@ -29,6 +32,12 @@ public interface HConstants {
 	
 	//Pages
 	public static String PAGE_SHOPPING_LIST_DETAILS = "/html/shoppinglist/details.jsp";
+	
+	public static String PENDING_STATUS = "Pending";
+	public static String DELIVERED_STATUS = "Delivered";
+	public static String HTMSD = "HTMSD";
+	
+	public static DateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
 
 	public static final String JSP_PAGE = "jspPage";
 	public static final String BACK_URL = "backURL";

@@ -7,7 +7,7 @@
 	PortletURL addItemsToCartActionURL = renderResponse.createActionURL();
 	addItemsToCartActionURL.setParameter(ActionRequest.ACTION_NAME, "addItemToCart");
 	addItemsToCartActionURL.setParameter(HConstants.ITEM_ID, String.valueOf(itemId));
-%>
+%> 
 <aui:fieldset>
 	<aui:col width="70">
 		<div >

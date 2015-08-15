@@ -30,7 +30,7 @@
 #shopping_list tbody tr:hover {
 	background-color: unset;
 }
-
+ 
 #shopping_list .product:hover {
 	border-color: #e32945;
 	-webkit-box-shadow: 0px 0px 10px 0px rgba(227, 41, 69, 1);

@@ -1,21 +1,6 @@
 <%@page import="com.liferay.portal.kernel.util.Constants"%>
 <%@include file="/html/dashboard/init.jsp" %>
 
-<portlet:renderURL  var="addItemURL">
-	<portlet:param name="jspPage" value="/html/dashboard/additem.jsp"/>
-	<portlet:param name="backURL" value="<%=themeDisplay.getURLCurrent() %>"/>
-</portlet:renderURL>
-
-<portlet:actionURL  var="deletSetURL" name="deleteItemSet"/>
-<portlet:actionURL  var="approveSetURL" name="updateItemSet">
-	<portlet:param name="<%=HConstants.status %>" value="<%=String.valueOf(HConstants.APPROVE)%>"/>
-</portlet:actionURL>
-<portlet:actionURL  var="rejectSetURL" name="updateItemSet">
-	<portlet:param name="<%=HConstants.status %>" value="<%=String.valueOf(HConstants.REJECT)%>"/>
-</portlet:actionURL>
-
-
-
 <%
 	String orderByCol = ParamUtil.getString(request, "orderByCol","createDate");
  	String orderByType = ParamUtil.getString(request, "orderByType","asc");
@@ -27,6 +12,24 @@
 	iteratorURL.setParameter("jspPage", "/html/dashboard/admin.jsp");
 	iteratorURL.setParameter("tab1", tabs1);
 %>
+
+<portlet:renderURL  var="addItemURL">
+	<portlet:param name="jspPage" value="/html/dashboard/additem.jsp"/>
+	<portlet:param name="backURL" value="<%=themeDisplay.getURLCurrent() %>"/>
+	<portlet:param name="tab1" value="<%=tabs1 %>"/>
+</portlet:renderURL>
+
+<portlet:actionURL  var="deletSetURL" name="deleteItemSet">
+	<portlet:param name="tab1" value="<%=tabs1 %>"/>
+</portlet:actionURL>
+<portlet:actionURL  var="approveSetURL" name="updateItemSet">
+	<portlet:param name="<%=HConstants.status %>" value="<%=String.valueOf(HConstants.APPROVE)%>"/>
+	<portlet:param name="tab1" value="<%=tabs1 %>"/>
+</portlet:actionURL>
+<portlet:actionURL  var="rejectSetURL" name="updateItemSet">
+	<portlet:param name="<%=HConstants.status %>" value="<%=String.valueOf(HConstants.REJECT)%>"/>
+	<portlet:param name="tab1" value="<%=tabs1 %>"/>
+</portlet:actionURL>
 
 <liferay-ui:tabs names="<%=tabNames%>"  param="tab1" url="<%=mainURL.toString() %>" />
     
@@ -44,9 +47,9 @@
 	}
 %>    	
 <aui:form action="<%=deletSetURL.toString() %>" name="bookListForm" method="POST">
-<aui:button type="submit" value="delete"  />
-<aui:button type="button" value="approve" onClick="changeAction('approve');"/>
-<aui:button type="button" value="reject" onClick="changeAction('reject');"/>
+<aui:button name="deleteBtn" type="submit" value="delete" style="display:none"/>
+<aui:button name="approveBtn" type="button" value="approve" onClick="changeAction('approve');" style="display:none"/>
+<aui:button name="rejectBtn" type="button" value="reject" onClick="changeAction('reject');" style="display:none"/>
 <aui:button type="button" value="add-item" href="<%=addItemURL.toString() %>"/>
 <liferay-ui:search-container delta="10"  orderByCol="<%=orderByCol %>" orderByType="<%=orderByType %>" emptyResultsMessage="No Items to display" iteratorURL="<%=iteratorURL %>"  rowChecker="<%= new RowChecker(renderResponse)%>">
 
@@ -89,6 +92,7 @@
 				itemDetailURL.setParameter("jspPage", "/html/dashboard/itemdetails.jsp");
 				itemDetailURL.setParameter("itemId", String.valueOf(item.getItemId()));
 				itemDetailURL.setParameter("backURL", themeDisplay.getURLCurrent());
+				itemDetailURL.setParameter("tab1", tabs1);
 			%>
 			<aui:a href="<%=itemDetailURL.toString() %>">View</aui:a>
 		</liferay-ui:search-container-column-text>
@@ -100,7 +104,13 @@
 </aui:form>
 
 
-<script>
+<aui:script>
+	$(document).ready(function(){
+		 var btns = $("#<portlet:namespace/>deleteBtn,#<portlet:namespace/>approveBtn,#<portlet:namespace/>rejectBtn").hide();
+	 	 var checkBoxs  = $(":checkbox").on("click",function(){
+			btns.toggle(checkBoxs.is(":checked"));
+		});
+ 	});
 	function changeAction(action) {
 		if(action == "approve") {
 			document.<portlet:namespace/>bookListForm.action = '<%= approveSetURL.toString()%>';	
@@ -109,4 +119,4 @@
 		}
 		 document.<portlet:namespace/>bookListForm.submit();
 	}
-</script>
+</aui:script>

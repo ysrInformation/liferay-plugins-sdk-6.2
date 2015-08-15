@@ -34,7 +34,6 @@ public class ShoppingListPortlet extends MVCPortlet {
 		ShoppingCartLocalServiceUtil.insertShoppingCart(
 				themeDisplay.getUserId(), themeDisplay.getCompanyId(), 
 				themeDisplay.getScopeGroupId(), themeDisplay.getUser().getFullName(), String.valueOf(itemId));
-		System.out.println("Action:"+itemId);
 		actionResponse.setRenderParameter(HConstants.JSP_PAGE, HConstants.PAGE_SHOPPING_LIST_DETAILS);
 		actionResponse.setRenderParameter(HConstants.ITEM_ID, String.valueOf(itemId));
 	}

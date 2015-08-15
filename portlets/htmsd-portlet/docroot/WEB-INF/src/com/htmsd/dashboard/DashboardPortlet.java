@@ -28,7 +28,6 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
-import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
@@ -124,80 +123,38 @@ public class DashboardPortlet extends MVCPortlet {
 		} catch (SystemException e) {
 			_log.error(e);
 		}
+		actionResponse.setRenderParameter("tab1", ParamUtil.getString(uploadRequest, "tab1"));
 	}
 	
+	/**
+	 * Method updateItemSet to update set of items status
+	 * @param actionRequest
+	 * @param actionResponse
+	 */
 	public void updateItemSet(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortletException {
 		
 		String [] rowIds=ParamUtil.getParameterValues(actionRequest, "rowIds");
 		int status = ParamUtil.getInteger(actionRequest, HConstants.status);
 		for(String rowId : rowIds) {
-			System.out.println(rowId);
 			ShoppingItemLocalServiceUtil.updateStatus(Long.valueOf(rowId), status);
 		}
+		actionResponse.setRenderParameter("tab1", ParamUtil.getString(actionRequest, "tab1"));
 	}
 	
-	/*public void updateItem(ActionRequest actionRequest,
-			ActionResponse actionResponse) throws IOException, PortletException {
-		
-		_log.info("updateItem");
-		
-		UploadPortletRequest uploadRequest = PortalUtil.getUploadPortletRequest(actionRequest);
-		ThemeDisplay themeDisplay=(ThemeDisplay)uploadRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		
-		long itemId = ParamUtil.getLong(uploadRequest, HConstants.ITEM_ID);
-		long userId  = ParamUtil.getLong(uploadRequest, "userId");
-		String name = ParamUtil.getString(uploadRequest, HConstants.NAME);
-		String description = ParamUtil.getString(uploadRequest, HConstants.DESCRIPTION);
-		Double sellerPrice = ParamUtil.getDouble(uploadRequest, HConstants.PRICE);
-		long tagId = ParamUtil.getLong(uploadRequest, HConstants.TAG_ID);
-		String tagName = ParamUtil.getString(uploadRequest, HConstants.TAG);
-		Double totalPrice = ParamUtil.getDouble(uploadRequest, HConstants.TOTAL_PRICE);
-		long categoryId = ParamUtil.getLong(uploadRequest, HConstants.CATEGORY_ID);
-		int status = ParamUtil.getInteger(uploadRequest, HConstants.status);
-		Tag tag = null;
-		ShoppingItem shoppingItem = null;
-		
-		if(status == HConstants.REJECT) {
-			ShoppingItemLocalServiceUtil.updateStatus(itemId, status);
-		}else {
-			List<Long> imageIds = updateImages(uploadRequest, HConstants.IMAGE, HConstants.IMAGE_ID);
-			ShoppingItemLocalServiceUtil.updateItem(itemId,
-					themeDisplay.getScopeGroupId(),
-					themeDisplay.getCompanyId(), userId, null, name,
-					description, sellerPrice, totalPrice, status,
-					StringUtil.merge(imageIds, StringPool.COMMA));
-			
-			
-			//Adding Tag
-			if(tagId == 0 && !tagName.isEmpty()) {
-				tag = TagLocalServiceUtil.addTag(themeDisplay.getScopeGroupId(), themeDisplay.getCompanyId(), themeDisplay.getUserId(), tagName);
-				tagId = tag.getTagId();
-			}
-			
-			//Update Tag_Mapping and Category Mapping
-			try {
-				ShoppingItemLocalServiceUtil.addCategoryShoppingItem(categoryId, shoppingItem.getItemId());	
-				if (tagId != 0) {
-					ShoppingItemLocalServiceUtil.addTagShoppingItem(tagId, shoppingItem.getItemId());
-				}
-				
-			} catch (SystemException e) {
-				_log.error(e);
-			}
-		}
-		
-	}*/
-	
-	
+	/**
+	 * Method deleteItemSet delete set of items
+	 * @param actionRequest
+	 * @param action Response
+	*/
 	public void deleteItemSet(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortletException {
 		
 		String [] rowIds=ParamUtil.getParameterValues(actionRequest, "rowIds");
 		for(String rowId : rowIds) {
-			System.out.println(rowId);
 			ShoppingItemLocalServiceUtil.deleteItem(Long.valueOf(rowId));
 		}
+		actionResponse.setRenderParameter("tab1", ParamUtil.getString(actionRequest, "tab1"));
 	}
 	
 	/**

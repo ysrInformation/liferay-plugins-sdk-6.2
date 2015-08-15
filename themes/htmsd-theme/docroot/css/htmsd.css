@@ -119,10 +119,6 @@
 	text-overflow: ellipsis;
 }
 
-.quick-contact fieldset {
-	margin-left: 2em;
-}
-
 .aboutus-btn {
 	margin-top: 17%;
 }
@@ -236,4 +232,61 @@
 
 .visa_card .card {
 	margin-top: 10px;
+}
+
+/**********Light Gallery*************/
+
+#lg-outer {
+	background: transparent;
+}
+
+/*******Cart btn ***********/
+#cart-item-count {
+	background-color: #fff;
+	border-radius: 50px;
+	color: #d8492d;
+	font-weight: bold;
+	padding: 5px;
+}
+
+.cart-btn {
+	background: #d8492d none repeat scroll 0 0;
+	text-align: center;
+	padding: 4.5px;
+	
+}
+
+.cart-btn:HOVER {
+	background: #62C000;
+}
+
+.cart-btn a {
+	color: white;
+	text-transform: uppercase;
+}
+.cart-btn a:HOVER {
+	color:white;
+}
+
+.cart-icon, .cart-label {
+	padding-left: 2px;
+}
+
+/****Search Input****/
+#search {
+	border: 1px solid #d8492d;
+	height: 32px;
+	width: 300px;
+}
+
+.search-btn {
+	background: #d8492d none repeat scroll 0 0;
+	border: 0 none;
+	color: white;
+	height: 35px;
+	width: 50px;
+}
+
+.search-btn:HOVER {
+	background: #62C000;
 }

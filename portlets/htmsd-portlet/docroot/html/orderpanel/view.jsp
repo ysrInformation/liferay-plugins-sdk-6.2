@@ -1,5 +1,18 @@
-<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
+<%@ include file="/html/orderpanel/init.jsp"%>
 
-<portlet:defineObjects />
+<%
+	String tabs1 = ParamUtil.getString(request, "tab1", "Pending");
+    String tabNames = "Pending,Delivered";
+%>
 
-This is the <b>Order Panel</b> portlet in View mode.
+<portlet:renderURL var="tabsURL">
+	<portlet:param name="tabs1" value="<%= tabs1 %>" />
+</portlet:renderURL>
+
+<liferay-ui:tabs names="<%= tabNames %>" refresh="true" param="tab1"
+	url="<%= tabsURL.toString() %>">
+	<%@ include file="/html/orderpanel/list.jsp"%>
+</liferay-ui:tabs>
+
+
+
