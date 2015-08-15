@@ -21,7 +21,7 @@ public class CommonUtil {
 	 * @return
 	 */
 	public static String getThumbnailpath(long fileEntryId,
-			long groupId) {
+			long groupId, boolean isThumbnail) {
 
 		_log.info(" get Thumbnail ");
 
@@ -31,16 +31,19 @@ public class CommonUtil {
 
 		try {
 			fileEntry = DLAppLocalServiceUtil.getFileEntry(fileEntryId);
-			/*thumbnail = DLUtil.getThumbnailSrc(fileEntry,
-					fileEntry.getFileVersion(), dlFileShortcut, themeDisplay);*/
 			thumbnail = "/documents/"
 					+ groupId
 					+ StringPool.SLASH
 					+ fileEntry .getFolderId()
 					+ StringPool.SLASH
-					+ HttpUtil.encodeURL(HtmlUtil.unescape(String
-					.valueOf(fileEntry .getTitle()))) + "?version="
-					+ fileEntry .getVersion();
+					+ HttpUtil.encodeURL(HtmlUtil.unescape(String.valueOf(fileEntry .getTitle())))
+					+ StringPool.SLASH
+					+ fileEntry.getUuid()
+					+ "?version=" + fileEntry .getVersion()
+					+ "&t=" + fileEntry.getFileVersion().getModifiedDate().getTime();
+			if (isThumbnail) {
+				thumbnail+= "&imageThumbnail=1";
+			}
 
 		} catch (Exception e) {
 			_log.error("Exception occured when getting Thumbnail" + e);

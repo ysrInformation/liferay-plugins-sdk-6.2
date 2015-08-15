@@ -12,14 +12,15 @@
 <aui:fieldset>
 	<aui:col width="70">
 		<div >
-			<ul id="lightGallery">
+			<ul id="lightGallery" class="row" style="margin-left: 0px;">
 				<% 
 					for (String str : shoppingItem.getImageIds().split(",")) {
 						long imageId = Long.valueOf(str); 
-						String imageURL = CommonUtil.getThumbnailpath(imageId, themeDisplay.getScopeGroupId());
+						String imageURL = CommonUtil.getThumbnailpath(imageId, themeDisplay.getScopeGroupId(), false);
+						String thumbnailURL = CommonUtil.getThumbnailpath(imageId, themeDisplay.getScopeGroupId(), true);
 						%>
-							<li data-src="<%=imageURL%>">
-        						<img src="<%=imageURL%>" width="100px" height="100px"/>
+							<li data-src="<%=imageURL%>" class="span2">
+        						<img src="<%=thumbnailURL%>" class="thumbnail" width="300px" height="300px"/>
       						</li>
 						<%
 					}
@@ -63,7 +64,8 @@
 <script>
 	$(document).ready(function() {
 	    $("#lightGallery").lightGallery({
-	    	mode : 'fade'
+	    	mode : 'fade',
+	    	thumbnail : false
 	    }); 
 	});
 </script>

@@ -78,7 +78,7 @@ public class ShoppingItemServiceImpl extends ShoppingItemServiceBaseImpl {
 				imageId = (imageIds.split(",").length > 0) ? Long.valueOf(imageIds.split(",")[0]) : 0;
 			}
 			
-			jsonObject.put(HConstants.IMAGE, CommonUtil.getThumbnailpath(imageId, groupId));
+			jsonObject.put(HConstants.IMAGE, CommonUtil.getThumbnailpath(imageId, groupId, true));
 			jsonArray.put(jsonObject);
 		}
 		
