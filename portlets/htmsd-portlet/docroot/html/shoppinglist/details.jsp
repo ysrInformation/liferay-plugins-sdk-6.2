@@ -1,13 +1,12 @@
-<%@page import="com.htmsd.util.CommonUtil"%>
-<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
-<%@page import="java.text.DecimalFormat"%>
 <%@include file="/html/shoppinglist/init.jsp" %>
-<link type="text/css" rel="stylesheet" href="css/lightGallery.css" />                    
-<script src="js/lightGallery.js"></script>
 <%
-	long itemId = ParamUtil.getLong(request, "itemId");
+	long itemId = ParamUtil.getLong(request, HConstants.ITEM_ID);
 	ShoppingItem shoppingItem = ShoppingItemLocalServiceUtil.fetchShoppingItem(itemId);
 	DecimalFormat decimalFormat = new DecimalFormat("#.00");
+	
+	PortletURL addItemsToCartActionURL = renderResponse.createActionURL();
+	addItemsToCartActionURL.setParameter(ActionRequest.ACTION_NAME, "addItemToCart");
+	addItemsToCartActionURL.setParameter(HConstants.ITEM_ID, String.valueOf(itemId));
 %>
 <aui:fieldset>
 	<aui:col width="70">
@@ -38,7 +37,7 @@
 		</div>
 	</aui:col>
 	<aui:col width="30">
-		<aui:form>
+		<aui:form action="<%=addItemsToCartActionURL %>">
 			<div class="add-to-cart-item">
 				<div class="add-to-cart-item-label">
 					<h2><%=shoppingItem.getName() %></h2>
@@ -49,11 +48,11 @@
 				<div class="add-to-cart-item-price">
 					<%= "Rs."+decimalFormat.format(shoppingItem.getSellerPrice()+shoppingItem.getTotalPrice()) %>
 				</div>
-				<div class="add-to-cart-item-quantity" >
+				<%-- <div class="add-to-cart-item-quantity" >
 					<aui:input name="quantity" value="1" cssClass="quantity" required="true" showRequiredLabel="false">
 						<aui:validator name="digit"/>
 					</aui:input>
-				</div>
+				</div> --%>
 				<div class="add-to-cart-btn">
 					<aui:button name="add-to-cart" type="submit" cssClass="add-to-cart" value='<%= LanguageUtil.get(pageContext, "add-to-cart") %>'/>
 				</div>

@@ -26,5 +26,10 @@ public interface HConstants {
 	public static int SUCCESSFUL = 3;
 	public static int DELIVERED = 4;  
 	public static String RUPPEE_SYMBOL = "&#8377;";
+	
+	//Pages
+	public static String PAGE_SHOPPING_LIST_DETAILS = "/html/shoppinglist/details.jsp";
 
+	public static final String JSP_PAGE = "jspPage";
+	public static final String BACK_URL = "backURL";
 }
