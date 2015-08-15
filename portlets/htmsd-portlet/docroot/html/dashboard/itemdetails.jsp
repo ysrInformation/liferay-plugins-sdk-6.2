@@ -1,4 +1,5 @@
 <%@include file="/html/dashboard/init.jsp" %>
+
 <head>
   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
@@ -152,10 +153,10 @@
 		}
 	});
 	$("img").on("click",function(){
-		popupImage($(this).attr('src'));
 		$("#zoomImg").attr('src',$(this).attr('src'));
+		popupImage();
 	});
-	function popupImage(url){
+	function popupImage(){
 		 $(function() {
 			    $( "#zoomImg" ).dialog({
 			    	modal: true,

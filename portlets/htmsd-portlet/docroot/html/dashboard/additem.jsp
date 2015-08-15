@@ -4,6 +4,7 @@
 	<portlet:param name="tab1" value='<%=ParamUtil.getString(renderRequest, "tab1") %>'/>
 </portlet:actionURL>
 <portlet:resourceURL  var="getTagsURL"/>
+
 <%
 	List<Category> categories = CategoryLocalServiceUtil.getCategories(-1, -1);
 %>
@@ -96,7 +97,7 @@
 					tagAuto.on('select',function(e)
 						     {
 						    var selected_key = e.result.raw.tagId;
-						  	console.log(selected_key);
+						  	//console.log(selected_key);
 						    A.one("#<portlet:namespace /><%=HConstants.TAG_ID%>").set("value",selected_key);
 						     }); 
 				}

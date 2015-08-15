@@ -5,7 +5,6 @@
 	<portlet:param name="backURL" value="<%=themeDisplay.getURLCurrent() %>"/>
 </portlet:renderURL>
 
-
 <%
 	long userId = themeDisplay.getUserId();
 	List<ShoppingItem> itemList = new ArrayList<ShoppingItem>();
