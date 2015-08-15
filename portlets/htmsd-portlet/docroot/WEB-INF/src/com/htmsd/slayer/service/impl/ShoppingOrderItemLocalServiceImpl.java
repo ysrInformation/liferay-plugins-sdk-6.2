@@ -15,6 +15,7 @@
 package com.htmsd.slayer.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import com.htmsd.slayer.model.ShoppingOrderItem;
 import com.htmsd.slayer.model.impl.ShoppingOrderItemImpl;
@@ -41,7 +42,6 @@ public class ShoppingOrderItemLocalServiceImpl
 	 *
 	 * Never reference this interface directly. Always use {@link com.htmsd.slayer.service.ShoppingOrderItemLocalServiceUtil} to access the shopping order item local service.
 	 */
-	
 	
 	public ShoppingOrderItem insertShoppingOrderItem(double totalPrice, long userId, long companyId, 
 			long groupId, long orderId, String productName, String description, String productCode) {
@@ -74,6 +74,17 @@ public class ShoppingOrderItemLocalServiceImpl
 		}
 		
 		return shoppingOrderItem;
+	}
+	
+	public List<ShoppingOrderItem> getShoppingOrderItemsByOrderId(long orderId) {
+		
+		List<ShoppingOrderItem> shoppingOrderItems = null;
+		try {
+			shoppingOrderItems = shoppingOrderItemPersistence.findByOrderId(orderId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return shoppingOrderItems;
 	}
 
 }

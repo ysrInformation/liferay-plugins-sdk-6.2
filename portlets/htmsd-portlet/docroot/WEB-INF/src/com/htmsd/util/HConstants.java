@@ -1,5 +1,8 @@
 package com.htmsd.util;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 public interface HConstants {
 
 	public static String ITEM_ID = "itemId";
@@ -26,5 +29,10 @@ public interface HConstants {
 	public static int SUCCESSFUL = 3;
 	public static int DELIVERED = 4;  
 	public static String RUPPEE_SYMBOL = "&#8377;";
+	
+	public static String PENDING_STATUS = "Pending";
+	public static String DELIVERED_STATUS = "Delivered";
+	
+	public static DateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
 
 }
