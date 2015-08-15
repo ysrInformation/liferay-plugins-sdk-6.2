@@ -1,4 +1,3 @@
-<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@include file="/html/dashboard/init.jsp" %>
 
 <portlet:renderURL var="addItemsURL">

@@ -1,7 +1,7 @@
 <%@include file="/html/dashboard/init.jsp" %>
 
 <portlet:actionURL name="addItem" var="addItemURL" >
-	<portlet:param name="tab1" value="<%=ParamUtil.getString(renderRequest, "tab1") %>"/>
+	<portlet:param name="tab1" value='<%=ParamUtil.getString(renderRequest, "tab1") %>'/>
 </portlet:actionURL>
 <portlet:resourceURL  var="getTagsURL"/>
 <%

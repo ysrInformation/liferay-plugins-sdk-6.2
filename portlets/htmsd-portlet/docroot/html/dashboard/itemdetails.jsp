@@ -1,5 +1,19 @@
-<%@page import="java.text.DecimalFormat"%>
 <%@include file="/html/dashboard/init.jsp" %>
+<head>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <style>
+  .ui-widget-content{
+ 	 border : 0;
+ 	 background: transparent;
+  }
+   .ui-widget-header{
+ 	 background: transparent;
+ 	  border : 0;
+  }
+  </style>
+ </head> 
+ 
 <portlet:resourceURL  var="getTagsURL"/>
 
 <%
@@ -75,6 +89,14 @@
 							String image_upload_preview = HConstants.IMAGE_UPLOAD_PREVIEW+i;
 							String image_del = "image_del"+i;
 							String deleteImage = HConstants.DELETE_IMAGE+i;
+							String imgSrc = "/documents/"
+											+ documentFileEntry.getGroupId()
+											+ StringPool.FORWARD_SLASH
+											+ documentFileEntry.getFolderId()
+											+ StringPool.FORWARD_SLASH
+											+ documentFileEntry.getTitle()
+											+ StringPool.FORWARD_SLASH 
+											+ documentFileEntry.getUuid();
 							%>
 							<aui:column columnWidth="60" >
 								<aui:input name='<%=image%>'  type="file" label="" onChange="<%=readURL %>">
@@ -83,8 +105,8 @@
 								<aui:input name="<%=deleteImage %>"  type="hidden"  value="false"/>
 							</aui:column>
 							
-							<aui:column columnWidth="25" >
-								<img id="<%=image_upload_preview %>"  src="<%= "/documents/" + documentFileEntry.getGroupId() + "/" + documentFileEntry.getFolderId() + "/" + documentFileEntry.getTitle()+"/"+documentFileEntry.getUuid()%>"  width="50px" height="50px"/>
+							<aui:column columnWidth="25"  >
+								<img  id="<%=image_upload_preview%>" src="<%=imgSrc%>" width="100px" height="100px"  onMouseOver="this.style.cursor='pointer'" />
 							</aui:column>
 							<c:if test="<%=isAdmin %>">
 								<aui:column columnWidth="15">
@@ -119,14 +141,31 @@
 				</c:if>
 			</aui:form>
 		</aui:fieldset>
+		
+		<!-- Image for Modal -->
+    	<img id="zoomImg" src="" width="50px" height="50px"/> 
 
 <script>
 	$(document).ready(function(){
 		if(!<%=isAdmin%>) {
 			$('#<portlet:namespace/>fm input,input[type=textarea],select ').attr("disabled", true);	
 		}
-		
 	});
+	$("img").on("click",function(){
+		popupImage($(this).attr('src'));
+		$("#zoomImg").attr('src',$(this).attr('src'));
+	});
+	function popupImage(url){
+		 $(function() {
+			    $( "#zoomImg" ).dialog({
+			    	modal: true,
+			    	width : 500,
+			    	height : 500,
+			    	draggable: false,
+			    	resizable: false
+			    });
+			  });
+	}
 	function readURL(input,id) {
 	    if (input.files && input.files[0]) {
 	        var reader = new FileReader();
