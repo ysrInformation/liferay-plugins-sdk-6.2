@@ -60,7 +60,7 @@ public class ConfigurationPortlet extends MVCPortlet {
 	}
 	
 	public void addTag(ActionRequest actionRequest,
-			ActionResponse actionResponse) throws DuplicationNameException,IOException, PortletException {
+			ActionResponse actionResponse) throws IOException, PortletException {
 
 		String name = ParamUtil.getString(actionRequest, HConstants.TAG);
 		
