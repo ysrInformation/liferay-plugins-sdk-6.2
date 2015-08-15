@@ -1,13 +1,5 @@
 <%@ include file="/html/shoppingcart/init.jsp"%>
 
-<portlet:renderURL var="viewProductURL">
-	<portlet:param name="jspPage" value="/html/shoppingcart/list.jsp"/>
-</portlet:renderURL>
-
-<portlet:renderURL var="viewDetailsURL">
-	<portlet:param name="jspPage" value="/html/shoppingcart/details.jsp"/>
-</portlet:renderURL>
-
 <% 
 	PortletURL saveItemsURL = renderResponse.createActionURL();
 	saveItemsURL.setParameter(ActionRequest.ACTION_NAME, "saveShoppingItems");
@@ -18,12 +10,11 @@
 %>
 
 <c:choose>
-	<c:when test="">
+	<c:when test="<%= itemscount > 0 %>">
 		<%@ include file="/html/shoppingcart/details.jsp" %> 
 	</c:when>
 	<c:otherwise>
-		<liferay-ui:message key="no-itams-in-cart"/>
+		<liferay-ui:message key="no-items-in-cart"/>
 	</c:otherwise>
 </c:choose>
-<aui:a href="<%= viewDetailsURL %>">You have <%= itemscount %> items in your cart.</aui:a>
 
