@@ -15,6 +15,12 @@ public class TagFinderImpl extends BasePersistenceImpl<Tag> implements
 
 	public static String FIND_TAG_BY_ITEMID = TagFinderImpl.class.getName()
 			+ ".findtagByItemId";
+	
+	public static String DELETE_TAGITEM_BY_ITEMID = TagFinderImpl.class.getName()
+			+ ".deleteTagItemByItemId";
+	
+	public static String DELETE_TAGITEM_TAG_ID = TagFinderImpl.class.getName()
+			+ ".deleteTagItemByTagId";
 
 	@SuppressWarnings("unchecked")
 	public List<Tag> getTagByItemId(long itemId) {
@@ -34,5 +40,41 @@ public class TagFinderImpl extends BasePersistenceImpl<Tag> implements
 		queryPos.add(itemId);
 
 		return (List<Tag>) query.list();
+	}
+	
+	public void deleteTagItemByItemId(long itemId) {
+		
+		
+		Session session = openSession();
+
+		// 2. Get SQL statement from XML file with its name
+		String sql = CustomSQLUtil.get(DELETE_TAGITEM_BY_ITEMID);
+
+		System.out.println("The Query is >>>>>>>>>" + sql);
+
+		// 3. Transform the normal query to HQL query
+		SQLQuery query = session.createSQLQuery(sql);
+		QueryPos queryPos = QueryPos.getInstance(query);
+		queryPos.add(itemId);
+		
+		query.executeUpdate();
+	}
+	
+	public void deleteTagItemByTagId(long tagId) {
+		
+		
+		Session session = openSession();
+
+		// 2. Get SQL statement from XML file with its name
+		String sql = CustomSQLUtil.get(DELETE_TAGITEM_TAG_ID);
+
+		System.out.println("The Query is >>>>>>>>>" + sql);
+
+		// 3. Transform the normal query to HQL query
+		SQLQuery query = session.createSQLQuery(sql);
+		QueryPos queryPos = QueryPos.getInstance(query);
+		queryPos.add(tagId);
+		
+		query.executeUpdate();
 	}
 }
