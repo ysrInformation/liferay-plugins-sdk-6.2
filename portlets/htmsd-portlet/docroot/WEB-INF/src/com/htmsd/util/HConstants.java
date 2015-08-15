@@ -32,6 +32,7 @@ public interface HConstants {
 	
 	public static String PENDING_STATUS = "Pending";
 	public static String DELIVERED_STATUS = "Delivered";
+	public static String HTMSD = "HTMSD";
 	
 	public static DateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
 

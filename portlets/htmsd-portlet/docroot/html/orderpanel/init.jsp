@@ -2,6 +2,7 @@
 
 <%-- java imports --%>
 <%@page import="java.util.List"%>
+<%@page import="java.util.Calendar"%>
 <%@page import="javax.portlet.PortletURL"%>
 
 <%-- Custom Imports --%>
