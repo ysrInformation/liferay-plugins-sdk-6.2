@@ -28,7 +28,6 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
-import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
@@ -124,17 +123,23 @@ public class DashboardPortlet extends MVCPortlet {
 		} catch (SystemException e) {
 			_log.error(e);
 		}
+		actionResponse.setRenderParameter("tab1", ParamUtil.getString(uploadRequest, "tab1"));
 	}
 	
+	/**
+	 * Method updateItemSet to update set of items status
+	 * @param actionRequest
+	 * @param actionResponse
+	 */
 	public void updateItemSet(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortletException {
 		
 		String [] rowIds=ParamUtil.getParameterValues(actionRequest, "rowIds");
 		int status = ParamUtil.getInteger(actionRequest, HConstants.status);
 		for(String rowId : rowIds) {
-			System.out.println(rowId);
 			ShoppingItemLocalServiceUtil.updateStatus(Long.valueOf(rowId), status);
 		}
+		actionResponse.setRenderParameter("tab1", ParamUtil.getString(actionRequest, "tab1"));
 	}
 	
 	/*public void updateItem(ActionRequest actionRequest,
@@ -189,15 +194,19 @@ public class DashboardPortlet extends MVCPortlet {
 		
 	}*/
 	
-	
+	/**
+	 * Method deleteItemSet delete set of items
+	 * @param actionRequest
+	 * @param action Response
+	*/
 	public void deleteItemSet(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortletException {
 		
 		String [] rowIds=ParamUtil.getParameterValues(actionRequest, "rowIds");
 		for(String rowId : rowIds) {
-			System.out.println(rowId);
 			ShoppingItemLocalServiceUtil.deleteItem(Long.valueOf(rowId));
 		}
+		actionResponse.setRenderParameter("tab1", ParamUtil.getString(actionRequest, "tab1"));
 	}
 	
 	/**

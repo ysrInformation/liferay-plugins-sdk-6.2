@@ -1,3 +1,4 @@
+<%@page import="java.text.DecimalFormat"%>
 <%@include file="/html/dashboard/init.jsp" %>
 <portlet:resourceURL  var="getTagsURL"/>
 
@@ -6,6 +7,7 @@
 	long itemId = ParamUtil.getLong(renderRequest, "itemId");
 	ShoppingItem item = ShoppingItemLocalServiceUtil.fetchShoppingItem(itemId);
 	DLFileEntry documentFileEntry = null;
+	DecimalFormat decimalFormat = new DecimalFormat("#.00");
 	if(Validator.isNotNull(item)) {
 		List<Category> categories = CategoryLocalServiceUtil.getCategories(-1, -1);
 		String backURL = ParamUtil.getString(renderRequest, "backURL");
@@ -14,6 +16,7 @@
 		updateItemURL.setParameter(HConstants.ITEM_ID, String.valueOf(itemId));
 		updateItemURL.setParameter("userId", String.valueOf(item.getUserId()));
 		updateItemURL.setParameter("backURL", backURL);
+		updateItemURL.setParameter("tab1", ParamUtil.getString(renderRequest, "tab1"));
 		List<Tag> tagsList = TagLocalServiceUtil.getTagByItemId(itemId);
 		String tagName = StringPool.BLANK;
 		long tagId = 0l;
@@ -94,11 +97,11 @@
 					%>
 				</aui:layout>
 				
-				<aui:input name="<%=HConstants.PRICE %>" required="true" value="<%=item.getSellerPrice() %>">
+				<aui:input name="<%=HConstants.PRICE %>" required="true" value="<%=decimalFormat.format(item.getSellerPrice()) %>">
 					<aui:validator name="number" />
 				</aui:input>
 				<c:if test="<%=isAdmin%>">
-					<aui:input name="<%=HConstants.TOTAL_PRICE %>" required="true" value="<%=item.getTotalPrice() %>">
+					<aui:input name="<%=HConstants.TOTAL_PRICE %>" required="true" value="<%=decimalFormat.format(item.getTotalPrice()) %>">
 						<aui:validator name="number" />
 					</aui:input>
 				</c:if>
