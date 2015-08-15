@@ -107,7 +107,7 @@
 <aui:script>
 	$(document).ready(function(){
 		 var btns = $("#<portlet:namespace/>deleteBtn,#<portlet:namespace/>approveBtn,#<portlet:namespace/>rejectBtn").hide();
-		var checkBoxs  = $(":checkbox").on("click",function(){
+	 	 var checkBoxs  = $(":checkbox").on("click",function(){
 			btns.toggle(checkBoxs.is(":checked"));
 		});
  	});
