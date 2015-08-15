@@ -36,9 +36,4 @@ public class ShoppingCartServiceImpl extends ShoppingCartServiceBaseImpl {
 	 *
 	 * Never reference this interface directly. Always use {@link com.htmsd.slayer.service.ShoppingCartServiceUtil} to access the shopping cart remote service.
 	 */
-	
-	public int getShoppingCartCount(long userId) {
-		
-		return shoppingCartPersistence.findByUserId(userId)
-	}
 }
