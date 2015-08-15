@@ -14,7 +14,11 @@
 
 package com.htmsd.slayer.service.impl;
 
+import java.util.Date;
+
+import com.htmsd.slayer.model.ShoppingCart;
 import com.htmsd.slayer.service.base.ShoppingCartLocalServiceBaseImpl;
+import com.liferay.portal.kernel.exception.SystemException;
 
 /**
  * The implementation of the shopping cart local service.
@@ -37,4 +41,53 @@ public class ShoppingCartLocalServiceImpl
 	 *
 	 * Never reference this interface directly. Always use {@link com.htmsd.slayer.service.ShoppingCartLocalServiceUtil} to access the shopping cart local service.
 	 */
+	public ShoppingCart insertShoppingCart(long userId, long companyId, long groupId, String Username, String itemIds) {
+		
+		long cartId = 0L;
+		ShoppingCart shoppingCart = null;
+		try {
+			cartId = counterLocalService.increment(ShoppingCart.class.getName());
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		shoppingCart = shoppingCartLocalService.createShoppingCart(cartId);
+		shoppingCart.setCompanyId(companyId);
+		shoppingCart.setCreateDate(new Date());
+		shoppingCart.setUserId(userId);
+		shoppingCart.setGroupId(groupId);
+		shoppingCart.setUserName(Username); 
+		shoppingCart.setItemIds(itemIds); 
+		
+		try {
+			shoppingCart = shoppingCartLocalService.addShoppingCart(shoppingCart);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return shoppingCart;
+	}
+	
+	public ShoppingCart updateShoppingCartItems(long cartId, String itemIds) {
+		
+		ShoppingCart shoppingCart = null;
+		
+		try {
+			shoppingCart = shoppingCartLocalService.fetchShoppingCart(cartId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		shoppingCart.setItemIds(itemIds);
+		shoppingCart.setModifiedDate(new Date()); 
+		try {
+			shoppingCart = shoppingCartLocalService.updateShoppingCart(shoppingCart);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		return shoppingCart;
+	}
+	
+	public ShoppingCart getShoppingCartByUserId(long userId) throws SystemException {
+		return shoppingCartPersistence.fetchByUserId(userId);
+	}
 }

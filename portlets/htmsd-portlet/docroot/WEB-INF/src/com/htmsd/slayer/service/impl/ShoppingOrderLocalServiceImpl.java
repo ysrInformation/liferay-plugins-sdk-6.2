@@ -14,7 +14,12 @@
 
 package com.htmsd.slayer.service.impl;
 
+import java.util.Date;
+
+import com.htmsd.slayer.model.ShoppingOrder;
+import com.htmsd.slayer.model.impl.ShoppingOrderImpl;
 import com.htmsd.slayer.service.base.ShoppingOrderLocalServiceBaseImpl;
+import com.liferay.portal.kernel.exception.SystemException;
 
 /**
  * The implementation of the shopping order local service.
@@ -37,4 +42,43 @@ public class ShoppingOrderLocalServiceImpl
 	 *
 	 * Never reference this interface directly. Always use {@link com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil} to access the shopping order local service.
 	 */
+	public ShoppingOrder insertShoppingOrder(int orderStatus,long userId, long companyId, long groupId,
+			String shippingFirstName, String shippingLastName, String shippingStreet, String shippingCity,
+			String shippingZip, String shippingEmailAddress, String shippingState, String shippingCountry,
+			String shippingMoble, String shippingAltMoble){
+		
+		ShoppingOrder shoppingOrder = new ShoppingOrderImpl();
+		long orderId = 0L;
+		
+		try {
+			orderId = counterLocalService.increment();
+		} catch(Exception e){
+			e.printStackTrace();
+		}
+		shoppingOrder = shoppingOrderLocalService.createShoppingOrder(orderId);
+		
+		shoppingOrder.setUserId(userId);
+		shoppingOrder.setCompanyId(companyId);
+		shoppingOrder.setGroupId(groupId);
+		shoppingOrder.setCreateDate(new Date());
+		shoppingOrder.setOrderStatus(orderStatus);
+		shoppingOrder.setShippingFirstName(shippingFirstName);
+		shoppingOrder.setShippingLastName(shippingLastName);
+		shoppingOrder.setShippingStreet(shippingStreet);
+		shoppingOrder.setShippingCity(shippingCity);
+		shoppingOrder.setShippingZip(shippingZip);
+		shoppingOrder.setShippingEmailAddress(shippingEmailAddress);
+		shoppingOrder.setShippingState(shippingState);
+		shoppingOrder.setShippingCountry(shippingCountry);
+		shoppingOrder.setShippingMoble(shippingMoble);
+		shoppingOrder.setShippingAltMoble(shippingAltMoble);
+		
+		try {
+			shoppingOrder = shoppingOrderLocalService.addShoppingOrder(shoppingOrder);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return shoppingOrder;
+	}
 }

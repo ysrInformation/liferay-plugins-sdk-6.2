@@ -17,11 +17,14 @@ public interface HConstants {
 	public static String DELETE_IMAGE = "deleteImage";
 	public static String status = "status";
 	public static String ITEM_FOLDER_NAME = "Items Added";
+
 	public static int IMAGES_UPLOAD_LIMIT = 5;
 	public static int NEW = 0;
 	public static int APPROVE = 1;
 	public static int REJECT = 5;
 	public static int PENDING = 2;
-	
+	public static int SUCCESSFUL = 3;
+	public static int DELIVERED = 4;  
+	public static String RUPPEE_SYMBOL = "&#8377;";
 
 }
