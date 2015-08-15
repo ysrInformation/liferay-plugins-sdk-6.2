@@ -1,5 +1,20 @@
-<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
+<%@ include file="/html/shoppingcart/init.jsp"%>
 
-<portlet:defineObjects />
+<% 
+	PortletURL saveItemsURL = renderResponse.createActionURL();
+	saveItemsURL.setParameter(ActionRequest.ACTION_NAME, "saveShoppingItems");
+	
+	ShoppingCart shoppingCart = CommonUtil.getShoppingCartByUserId(themeDisplay.getUserId());
+	String[] userItemsArray = shoppingCart.getItemIds().split(StringPool.COMMA); 
+	int itemscount = userItemsArray.length;
+%>
 
-This is the <b>Shopping Cart</b> portlet in View mode.
+<c:choose>
+	<c:when test="<%= itemscount > 0 %>">
+		<%@ include file="/html/shoppingcart/details.jsp" %> 
+	</c:when>
+	<c:otherwise>
+		<liferay-ui:message key="no-items-in-cart"/>
+	</c:otherwise>
+</c:choose>
+

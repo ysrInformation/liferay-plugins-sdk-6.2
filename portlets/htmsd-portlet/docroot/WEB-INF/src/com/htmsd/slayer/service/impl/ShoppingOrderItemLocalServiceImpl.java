@@ -14,6 +14,10 @@
 
 package com.htmsd.slayer.service.impl;
 
+import java.util.Date;
+
+import com.htmsd.slayer.model.ShoppingOrderItem;
+import com.htmsd.slayer.model.impl.ShoppingOrderItemImpl;
 import com.htmsd.slayer.service.base.ShoppingOrderItemLocalServiceBaseImpl;
 
 /**
@@ -37,4 +41,39 @@ public class ShoppingOrderItemLocalServiceImpl
 	 *
 	 * Never reference this interface directly. Always use {@link com.htmsd.slayer.service.ShoppingOrderItemLocalServiceUtil} to access the shopping order item local service.
 	 */
+	
+	
+	public ShoppingOrderItem insertShoppingOrderItem(double totalPrice, long userId, long companyId, 
+			long groupId, long orderId, String productName, String description, String productCode) {
+		
+		ShoppingOrderItem shoppingOrderItem = new ShoppingOrderItemImpl();
+		
+		long itemId = 0L;
+		
+		try {
+			itemId = counterLocalService.increment();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		shoppingOrderItem = shoppingOrderItemLocalService.createShoppingOrderItem(itemId);
+		shoppingOrderItem.setUserId(userId);
+		shoppingOrderItem.setCompanyId(companyId);
+		shoppingOrderItem.setGroupId(groupId);
+		shoppingOrderItem.setName(productName);
+		shoppingOrderItem.setProductCode(productCode);
+		shoppingOrderItem.setCreateDate(new Date());
+		shoppingOrderItem.setOrderId(orderId);
+		shoppingOrderItem.setDescription(description);
+		shoppingOrderItem.setTotalPrice(totalPrice);
+		
+		try {
+			shoppingOrderItem = shoppingOrderItemLocalService.addShoppingOrderItem(shoppingOrderItem);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return shoppingOrderItem;
+	}
+
 }
