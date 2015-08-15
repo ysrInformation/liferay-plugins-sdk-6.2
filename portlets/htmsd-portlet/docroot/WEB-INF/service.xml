@@ -99,7 +99,9 @@
 		<column name="itemIds" type="String" />
 	
 		<!-- Finder methods -->
-
+		<finder return-type="ShoppingCart" name="UserId">
+			<finder-column name="userId"/>
+		</finder>
 	</entity>
 
 	<entity name="ShoppingOrder" local-service="true" remote-service="false">
