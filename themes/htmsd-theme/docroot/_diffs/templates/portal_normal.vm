@@ -94,7 +94,7 @@
 		Liferay.Service('/htmsd-portlet.shoppingcart/get-shopping-cart-item-count', {
 			userId: $user_id
 		}, function(obj) {
-			$('#cart-item-count').html(" "+obj+" ");
+			$('#cart-item-count').html("&nbsp;"+obj+"&nbsp;");
 		});
 	});
 </script>
