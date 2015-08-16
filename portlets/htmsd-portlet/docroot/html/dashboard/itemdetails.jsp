@@ -4,14 +4,20 @@
   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
   <style>
-  .ui-widget-content{
- 	 border : 0;
- 	 background: transparent;
-  }
-   .ui-widget-header{
- 	 background: transparent;
- 	  border : 0;
-  }
+	 .ui-widget-content{
+	 	 border : 0;
+	 	 background: transparent;
+	  }
+	   .ui-widget-header{
+	 	 background: transparent;
+	 	  border : 0;
+	  }
+	  .ui-button-icon-only .ui-button-text, .ui-button-icons-only .ui-button-text {
+	    padding: 0;
+	}
+	.ui-widget-overlay,.ui-dialog-content{
+		cursor:zoom-out;
+	}
   </style>
  </head> 
  
@@ -107,7 +113,7 @@
 							</aui:column>
 							
 							<aui:column columnWidth="25"  >
-								<img  id="<%=image_upload_preview%>" src="<%=imgSrc%>" width="100px" height="100px"  onMouseOver="this.style.cursor='pointer'" />
+								<img  id="<%=image_upload_preview%>" src="<%=imgSrc%>" width="60px" height="60px"  onMouseOver="this.style.cursor='zoom-in'" />
 							</aui:column>
 							<c:if test="<%=isAdmin %>">
 								<aui:column columnWidth="15">
@@ -163,7 +169,21 @@
 			    	width : 500,
 			    	height : 500,
 			    	draggable: false,
-			    	resizable: false
+			    	resizable: false,
+			    	closeOnEscape : true ,
+					show: {
+						effect: "fade",
+						duration: 1000
+					},
+					hide: {
+						effect: "explode",
+						duration: 1000
+					},
+				   open: function(){
+			              jQuery('.ui-widget-overlay,.ui-dialog-content').bind('click',function(){
+			                jQuery('#zoomImg').dialog('close');
+			             })
+			        }
 			    });
 			  });
 	}

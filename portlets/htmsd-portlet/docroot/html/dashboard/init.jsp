@@ -13,6 +13,7 @@
 <%@page import="com.liferay.portal.kernel.util.Validator"%>
 
 <%@page import="java.util.List"%>
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="java.util.Collections"%>
 <%@page import="java.util.Collection"%>
 <%@page import="java.util.Comparator"%>
