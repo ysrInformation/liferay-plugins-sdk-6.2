@@ -53,7 +53,7 @@
 						<a href="/cart">
 							<i class="fa fa-shopping-cart cart-icon"></i>
 							<span class="cart-label"> Cart </span>
-							<span id="cart-item-count">0</span>
+							<span id="cart-item-count"> 0 </span>
 						</a>
 					</div>
 				</li>

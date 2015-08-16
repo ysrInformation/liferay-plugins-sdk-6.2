@@ -58,7 +58,6 @@
 					<span>$the_title</span>
 				</h2>
 			</div>
-	
 			#if ($has_navigation || $is_signed_in)
 				#parse ("$full_templates_path/navigation.vm")
 			#end
@@ -89,4 +88,14 @@
 	#parse ("$full_templates_path/footer.vm")
 		
 </body>
+
+<script>
+	AUI().use('aui-base', function(A) {
+		Liferay.Service('/htmsd-portlet.shoppingcart/get-shopping-cart-item-count', {
+			userId: $user_id
+		}, function(obj) {
+			$('#cart-item-count').html(" "+obj+" ");
+		});
+	});
+</script>
 </html>
