@@ -3,9 +3,15 @@
 <%
 	String noOfItems  = portletPreferences.getValue("noOfItems", "8");
 	String categoryToDisplay  = portletPreferences.getValue("categoryToDisplay", "-1");
+	String sortBy = ParamUtil.getString(request, "sortBy", "0");
 %>
 
 <aui:input name="len" type="hidden"/>
+
+<aui:select name="sort-by" inlineLabel="true" >
+	<aui:option value="0" label="Price High To Low" selected="true"/>
+	<aui:option value="1" label="Price Low To High"/>
+</aui:select>
 
 <ul id="shopping_list" class="row">
 	<!-- item display -->
@@ -49,7 +55,8 @@
 				groupId : <%=themeDisplay.getScopeGroupId()%>,
 				status : <%=HConstants.APPROVE%>,
 				start : s,
-				end : e
+				end: e,
+				sortBy: <%=sortBy%>
 			},
 			beforeSend : function() {
 				$('#loader-icon').show();

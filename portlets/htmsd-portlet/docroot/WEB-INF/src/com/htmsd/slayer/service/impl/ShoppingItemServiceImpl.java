@@ -18,6 +18,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.beanutils.BeanComparator;
+
 import com.htmsd.slayer.model.ShoppingItem;
 import com.htmsd.slayer.service.base.ShoppingItemServiceBaseImpl;
 import com.htmsd.util.CommonUtil;
@@ -26,6 +28,8 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.security.ac.AccessControlled;
 
@@ -58,19 +62,29 @@ public class ShoppingItemServiceImpl extends ShoppingItemServiceBaseImpl {
 	 *@return  
 	 */
 	@AccessControlled(guestAccessEnabled=true)
-	public JSONArray getShoppingItems(long categoryId, long groupId, int status, int start, int end) {
+	public JSONArray getShoppingItems(long categoryId, long groupId, int status, int start, int end, int sortBy) {
 		
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
 		List<ShoppingItem> shoppingItems = new ArrayList<ShoppingItem>();
+		OrderByComparator orderByComparator = null;
+		
+		if (sortBy == HConstants.SORT_PRICE_HIGH_TO_LOW) {
+			orderByComparator = OrderByComparatorFactoryUtil.create("ShoppingItem", "sellerPrice", false);
+		} else if (sortBy == HConstants.SORT_PRICE_LOW_TO_HIGH) {
+			orderByComparator = OrderByComparatorFactoryUtil.create("ShoppingItem", "sellerPrice", true);
+		}
+
 		try {
 			if (categoryId > 0) {
-				shoppingItems = shoppingItemLocalService.getCategoryShoppingItems(categoryId, start, end);
+				//shoppingItems = shoppingItemLocalService.getCategoryShoppingItems(categoryId, start, end, orderByComparator);
+				shoppingItems = shoppingItemLocalService.getShoppingItems(start, end);
 			} else {
 				shoppingItems = shoppingItemLocalService.getShoppingItems(start, end);
 			}
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
+		
 		DecimalFormat decimalFormat = new DecimalFormat("#.00");
 		
 		for (ShoppingItem shoppingItem : shoppingItems) {
