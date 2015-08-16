@@ -1,7 +1,3 @@
-<%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
-<%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
-<%@page import="javax.portlet.PortletException"%>
-<%@page import="com.htmsd.configuration.DuplicationNameException"%>
 <%@include file="/html/configuration/init.jsp"%>
 
 <portlet:actionURL name="addTag"  var="addTagURL">

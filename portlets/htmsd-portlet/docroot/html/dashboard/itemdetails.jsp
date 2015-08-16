@@ -1,5 +1,26 @@
-<%@page import="java.text.DecimalFormat"%>
 <%@include file="/html/dashboard/init.jsp" %>
+
+<head>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <style>
+	 .ui-widget-content{
+	 	 border : 0;
+	 	 background: transparent;
+	  }
+	   .ui-widget-header{
+	 	 background: transparent;
+	 	  border : 0;
+	  }
+	  .ui-button-icon-only .ui-button-text, .ui-button-icons-only .ui-button-text {
+	    padding: 0;
+	}
+	.ui-widget-overlay,.ui-dialog-content{
+		cursor:zoom-out;
+	}
+  </style>
+ </head> 
+ 
 <portlet:resourceURL  var="getTagsURL"/>
 
 <%
@@ -75,6 +96,14 @@
 							String image_upload_preview = HConstants.IMAGE_UPLOAD_PREVIEW+i;
 							String image_del = "image_del"+i;
 							String deleteImage = HConstants.DELETE_IMAGE+i;
+							String imgSrc = "/documents/"
+											+ documentFileEntry.getGroupId()
+											+ StringPool.FORWARD_SLASH
+											+ documentFileEntry.getFolderId()
+											+ StringPool.FORWARD_SLASH
+											+ documentFileEntry.getTitle()
+											+ StringPool.FORWARD_SLASH 
+											+ documentFileEntry.getUuid();
 							%>
 							<aui:column columnWidth="60" >
 								<aui:input name='<%=image%>'  type="file" label="" onChange="<%=readURL %>">
@@ -83,8 +112,8 @@
 								<aui:input name="<%=deleteImage %>"  type="hidden"  value="false"/>
 							</aui:column>
 							
-							<aui:column columnWidth="25" >
-								<img id="<%=image_upload_preview %>"  src="<%= "/documents/" + documentFileEntry.getGroupId() + "/" + documentFileEntry.getFolderId() + "/" + documentFileEntry.getTitle()+"/"+documentFileEntry.getUuid()%>"  width="50px" height="50px"/>
+							<aui:column columnWidth="25"  >
+								<img  id="<%=image_upload_preview%>" src="<%=imgSrc%>" width="60px" height="60px"  onMouseOver="this.style.cursor='zoom-in'" />
 							</aui:column>
 							<c:if test="<%=isAdmin %>">
 								<aui:column columnWidth="15">
@@ -119,14 +148,45 @@
 				</c:if>
 			</aui:form>
 		</aui:fieldset>
+		
+		<!-- Image for Modal -->
+    	<img id="zoomImg" src="" width="50px" height="50px"/> 
 
 <script>
 	$(document).ready(function(){
 		if(!<%=isAdmin%>) {
 			$('#<portlet:namespace/>fm input,input[type=textarea],select ').attr("disabled", true);	
 		}
-		
 	});
+	$("img").on("click",function(){
+		$("#zoomImg").attr('src',$(this).attr('src'));
+		popupImage();
+	});
+	function popupImage(){
+		 $(function() {
+			    $( "#zoomImg" ).dialog({
+			    	modal: true,
+			    	width : 500,
+			    	height : 500,
+			    	draggable: false,
+			    	resizable: false,
+			    	closeOnEscape : true ,
+					show: {
+						effect: "fade",
+						duration: 1000
+					},
+					hide: {
+						effect: "explode",
+						duration: 1000
+					},
+				   open: function(){
+			              jQuery('.ui-widget-overlay,.ui-dialog-content').bind('click',function(){
+			                jQuery('#zoomImg').dialog('close');
+			             })
+			        }
+			    });
+			  });
+	}
 	function readURL(input,id) {
 	    if (input.files && input.files[0]) {
 	        var reader = new FileReader();

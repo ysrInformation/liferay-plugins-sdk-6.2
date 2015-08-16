@@ -1,11 +1,9 @@
-<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@include file="/html/dashboard/init.jsp" %>
 
 <portlet:renderURL var="addItemsURL">
 	<portlet:param name="jspPage" value="/html/dashboard/additem.jsp"/>
 	<portlet:param name="backURL" value="<%=themeDisplay.getURLCurrent() %>"/>
 </portlet:renderURL>
-
 
 <%
 	long userId = themeDisplay.getUserId();
