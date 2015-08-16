@@ -11,7 +11,9 @@
 <%@page import="com.htmsd.util.CommonUtil"%>
 <%@page import="com.htmsd.slayer.model.ShoppingItem"%>
 <%@page import="com.htmsd.slayer.model.ShoppingCart"%>
+<%@page import="com.htmsd.slayer.model.ShoppingItem_Cart"%>
 <%@page import="com.htmsd.slayer.service.ShoppingItemLocalServiceUtil"%>
+<%@page import="com.htmsd.slayer.service.ShoppingItem_CartLocalServiceUtil"%>
 
 <%--Liferay's imports --%>
 <%@page import="com.liferay.portal.kernel.util.ListUtil"%>

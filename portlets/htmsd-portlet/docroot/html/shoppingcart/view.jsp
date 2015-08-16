@@ -1,12 +1,7 @@
 <%@ include file="/html/shoppingcart/init.jsp"%>
 
 <% 
-	PortletURL saveItemsURL = renderResponse.createActionURL();
-	saveItemsURL.setParameter(ActionRequest.ACTION_NAME, "saveShoppingItems");
-	
-	ShoppingCart shoppingCart = CommonUtil.getShoppingCartByUserId(themeDisplay.getUserId());
-	String[] userItemsArray = shoppingCart.getItemIds().split(StringPool.COMMA); 
-	int itemscount = userItemsArray.length;
+	int itemscount = ShoppingItem_CartLocalServiceUtil.getItemsCountByCartId(themeDisplay.getUserId());
 %>
 
 <c:choose>

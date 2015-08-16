@@ -6,9 +6,11 @@ import java.util.List;
 
 import com.htmsd.slayer.model.ShoppingCart;
 import com.htmsd.slayer.model.ShoppingItem;
+import com.htmsd.slayer.model.ShoppingItem_Cart;
 import com.htmsd.slayer.model.ShoppingOrder;
 import com.htmsd.slayer.service.ShoppingCartLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingItemLocalServiceUtil;
+import com.htmsd.slayer.service.ShoppingItem_CartLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
@@ -117,7 +119,7 @@ public class CommonUtil {
 		return shoppingCart;
 	}
 	
-	public static String[] getUserItems(long userId) {
+	public static List<ShoppingItem_Cart> getUserCartItems(long userId) {
 		
 		ShoppingCart shoppingCart = null;
 		try {
@@ -126,14 +128,16 @@ public class CommonUtil {
 			e.printStackTrace();
 		}
 		
-		String[] userItemsArray = {};
+		List<ShoppingItem_Cart> shoppingItem_Carts = Collections.emptyList();
 		if (Validator.isNotNull(shoppingCart)) {
-			if (!shoppingCart.getItemIds().isEmpty()) {
-				userItemsArray = shoppingCart.getItemIds().split(StringPool.COMMA);
+			try {
+				shoppingItem_Carts = ShoppingItem_CartLocalServiceUtil.findByCartId(shoppingCart.getCartId());
+			} catch (SystemException e) {
+				e.printStackTrace();
 			}
 		}
 		
-		return userItemsArray;
+		return shoppingItem_Carts;
 	}
 	
 	public static ShoppingItem getShoppingItem(long itemId) {

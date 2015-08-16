@@ -14,13 +14,17 @@
 
 package com.htmsd.slayer.service.impl;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.htmsd.slayer.NoSuchShoppingItem_CartException;
+import com.htmsd.slayer.model.ShoppingCart;
 import com.htmsd.slayer.model.ShoppingItem_Cart;
+import com.htmsd.slayer.service.ShoppingCartLocalServiceUtil;
 import com.htmsd.slayer.service.base.ShoppingItem_CartLocalServiceBaseImpl;
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.Validator;
 
 /**
  * The implementation of the shopping item_ cart local service.
@@ -90,5 +94,34 @@ public class ShoppingItem_CartLocalServiceImpl
 	 */
 	public List<ShoppingItem_Cart> findByCartId(long cartId) throws SystemException {
 		return shoppingItem_CartPersistence.findByCartId(cartId);
+	}
+	
+	/**
+	 * Method for getting user's item count
+	 * @param userId
+	 * @param cartId
+	 * @return
+	 */
+	public int getItemsCountByCartId(long userId) {
+		
+		int itemsCount = 0;
+		ShoppingCart shoppingCart = null;
+		try {
+			shoppingCart = ShoppingCartLocalServiceUtil.getShoppingCartByUserId(userId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		List<ShoppingItem_Cart> shoppingItem_Carts = Collections.emptyList();
+		if (Validator.isNotNull(shoppingCart)) {
+			try {
+				shoppingItem_Carts = findByCartId(shoppingCart.getCartId());
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			itemsCount = shoppingItem_Carts.size();
+		}
+		
+		return itemsCount;
 	}
 }

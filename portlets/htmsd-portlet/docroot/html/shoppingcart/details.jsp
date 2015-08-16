@@ -2,7 +2,6 @@
 
 <%
 	double totalPrice = 0;
-	String[] userItemsArray = CommonUtil.getUserItems(themeDisplay.getUserId());
 
 	PortletURL backURL = renderResponse.createRenderURL();
 	backURL.setParameter("jspPage", "/html/shoppingcart/view.jsp");
@@ -10,9 +9,7 @@
 	PortletURL checkoutURL = renderResponse.createRenderURL();
 	checkoutURL.setParameter("jspPage", "/html/shoppingcart/checkout.jsp");
 	
-	int itemsCount = userItemsArray.length;
-	ShoppingCart shoppingCart = CommonUtil.getShoppingCartByUserId(themeDisplay.getUserId());
-	long cartId = Validator.isNotNull(shoppingCart) ? shoppingCart.getCartId() : 0L;
+	List<ShoppingItem_Cart> shoppingItem_Carts = CommonUtil.getUserCartItems(themeDisplay.getUserId());
 %>
 
 <portlet:resourceURL var="removeItemURL"> 
@@ -22,9 +19,9 @@
 <liferay-ui:header title="product-details" backURL="<%= backURL.toString() %>"/> 
 
 <% 
-if (itemsCount > 0) {
-	for (int i=0;i<userItemsArray.length;i++) {
-		long itemId = Long.parseLong(userItemsArray[i]);
+if (Validator.isNotNull(shoppingItem_Carts) && shoppingItem_Carts.size() > 0) {
+	for (ShoppingItem_Cart shoppingItem_Cart : shoppingItem_Carts) {
+		long itemId = shoppingItem_Cart.getItemId();
 		ShoppingItem shoppingItem = CommonUtil.getShoppingItem(itemId);
 		totalPrice += shoppingItem.getTotalPrice();
 		String removeCartItem = "javascript:removeItems('"+shoppingItem.getItemId()+"');";
