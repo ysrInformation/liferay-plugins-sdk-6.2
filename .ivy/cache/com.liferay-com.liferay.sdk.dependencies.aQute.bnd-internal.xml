@@ -4,10 +4,10 @@
 	<info
 		organisation="com.liferay"
 		module="com.liferay.sdk.dependencies.aQute.bnd"
-		revision="working@Khan-PC"
+		revision="working@Khan"
 		conf="internal"
 		confs="default, internal"
-		date="20150608211054"/>
+		date="20150809204018"/>
 	<dependencies>
 	</dependencies>
 </ivy-report>

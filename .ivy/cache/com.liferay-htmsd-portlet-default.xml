@@ -6,8 +6,8 @@
 		module="htmsd-portlet"
 		revision="working@Khan"
 		conf="default"
-		confs="default, internal, provided, runtime, test"
-		date="20150801154844"/>
+		confs="default, internal"
+		date="20150809204347"/>
 	<dependencies>
 	</dependencies>
 </ivy-report>

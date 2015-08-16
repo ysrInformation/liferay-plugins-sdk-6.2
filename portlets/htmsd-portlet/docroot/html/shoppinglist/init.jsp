@@ -11,12 +11,15 @@
 <%@page import="com.liferay.portal.kernel.util.StringUtil"%>
 <%@page import="com.liferay.portal.kernel.events.Action"%>
 <%@page import="com.liferay.portal.kernel.util.Validator"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 
 <%@page import="java.util.List"%>
 <%@page import="java.util.Collections"%>
 <%@page import="java.util.Collection"%>
 <%@page import="java.util.Comparator"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="java.text.DecimalFormat"%>
+
 <%@page import="javax.portlet.WindowState"%>
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="javax.portlet.ActionRequest"%>
@@ -29,6 +32,9 @@
 <%@page import="com.htmsd.slayer.service.TagLocalServiceUtil"%>
 <%@page import="com.htmsd.slayer.service.CategoryLocalServiceUtil"%>
 <%@page import="com.htmsd.slayer.model.Category"%>
+<%@page import="com.htmsd.util.CommonUtil"%>
 
 <%@page import="org.apache.commons.collections.ListUtils"%>
 <%@page import="org.apache.commons.beanutils.BeanComparator"%>
+ 
+

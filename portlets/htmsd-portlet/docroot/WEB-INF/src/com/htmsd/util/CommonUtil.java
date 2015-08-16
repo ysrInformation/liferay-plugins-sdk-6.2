@@ -6,8 +6,10 @@ import java.util.List;
 
 import com.htmsd.slayer.model.ShoppingCart;
 import com.htmsd.slayer.model.ShoppingItem;
+import com.htmsd.slayer.model.ShoppingOrder;
 import com.htmsd.slayer.service.ShoppingCartLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingItemLocalServiceUtil;
+import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
@@ -179,5 +181,35 @@ public class CommonUtil {
 
 		return userAddress;
 	}
-
+	
+	@SuppressWarnings("unchecked")
+	public static List<ShoppingOrder> getShoppingOrders(int orderStatus, long groupId) {
+		
+		List<ShoppingOrder> pendingOrderList = Collections.emptyList();
+		DynamicQuery orderQuery = DynamicQueryFactoryUtil.forClass(ShoppingOrder.class);
+		orderQuery.add(RestrictionsFactoryUtil.eq("orderStatus", orderStatus));
+		orderQuery.add(RestrictionsFactoryUtil.eq("groupId", groupId));
+		try {
+			pendingOrderList = ShoppingOrderLocalServiceUtil.dynamicQuery(orderQuery);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return pendingOrderList;
+	}
+	
+	public static List<ShoppingOrder> getShoppingOrderByTabNames(long groupId, String tabName) {
+		
+		List<ShoppingOrder> shoppingOrders = Collections.emptyList();
+		boolean isPendingOrderTab = tabName.equalsIgnoreCase("Pending");
+		
+		if (isPendingOrderTab) {
+			shoppingOrders = getShoppingOrders(HConstants.PENDING, groupId);
+		} else {
+			shoppingOrders = getShoppingOrders(HConstants.DELIVERED, groupId);
+		}
+		
+		return shoppingOrders;
+		
+	}
 }

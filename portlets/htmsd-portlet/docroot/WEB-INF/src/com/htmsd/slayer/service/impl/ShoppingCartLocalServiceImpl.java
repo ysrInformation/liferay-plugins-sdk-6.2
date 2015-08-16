@@ -19,6 +19,7 @@ import java.util.Date;
 import com.htmsd.slayer.model.ShoppingCart;
 import com.htmsd.slayer.service.base.ShoppingCartLocalServiceBaseImpl;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.Validator;
 
 /**
  * The implementation of the shopping cart local service.
@@ -41,12 +42,20 @@ public class ShoppingCartLocalServiceImpl
 	 *
 	 * Never reference this interface directly. Always use {@link com.htmsd.slayer.service.ShoppingCartLocalServiceUtil} to access the shopping cart local service.
 	 */
-	public ShoppingCart insertShoppingCart(long userId, long companyId, long groupId, String Username, String itemIds) {
+	public ShoppingCart insertShoppingCart(long userId, long companyId, long groupId, String Username) {
 		
 		long cartId = 0L;
 		ShoppingCart shoppingCart = null;
 		try {
-			cartId = counterLocalService.increment(ShoppingCart.class.getName());
+			shoppingCart = getShoppingCartByUserId(userId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+
+		if(Validator.isNotNull(shoppingCart)) return shoppingCart;
+		
+		try {
+			cartId = counterLocalService.increment();
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
@@ -57,33 +66,13 @@ public class ShoppingCartLocalServiceImpl
 		shoppingCart.setUserId(userId);
 		shoppingCart.setGroupId(groupId);
 		shoppingCart.setUserName(Username); 
-		shoppingCart.setItemIds(itemIds); 
 		
 		try {
 			shoppingCart = shoppingCartLocalService.addShoppingCart(shoppingCart);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
-		
-		return shoppingCart;
-	}
-	
-	public ShoppingCart updateShoppingCartItems(long cartId, String itemIds) {
-		
-		ShoppingCart shoppingCart = null;
-		
-		try {
-			shoppingCart = shoppingCartLocalService.fetchShoppingCart(cartId);
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		shoppingCart.setItemIds(itemIds);
-		shoppingCart.setModifiedDate(new Date()); 
-		try {
-			shoppingCart = shoppingCartLocalService.updateShoppingCart(shoppingCart);
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
+
 		return shoppingCart;
 	}
 	

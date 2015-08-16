@@ -170,6 +170,25 @@
 			"name": "Sell",
 			"friendlyURL": "/sell",
 			"hidden": "true"
+		},
+		{	
+			"columns": [
+				[
+					{
+			            "portletId": "4_WAR_htmsdportlet"
+			        }
+			    ]
+			], 
+			"title": "Cart",
+			"name": "Cart",
+			"friendlyURL": "/cart",
+			"hidden": "true"
+		},
+		{	
+			"title": "Search",
+			"name": "Search",
+			"friendlyURL": "/search",
+			"hidden": "true"
 		}
 	]
 }

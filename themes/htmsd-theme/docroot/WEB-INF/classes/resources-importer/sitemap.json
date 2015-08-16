@@ -1,22 +1,175 @@
 {
-	"layoutTemplateId": "2_columns_ii",
+	"layoutTemplateId": "homelayout",
 	"privatePages": [
+	    {
+	    	"columns": [
+				[
+					{
+			            "portletId": "1_WAR_htmsdportlet"
+			        }
+			    ]
+			], 
+		    "friendlyURL": "/system-admin",
+		    "name": "System admin",
+		    "title": "System admin"
+	    }
+	],
+	"publicPages": [
 		{
 			"columns": [
 				[
 					{
-						"portletId": "58"
-					}
+                        "portletId": "56",
+                        "portletPreferences": {
+                            "articleId": "MAIN_CAROUSEL",
+                            "groupId": "${groupId}",
+                            "portletSetupCss": {
+                            	"advancedData": {
+                            		"customCSSClassName": "main-carousel"
+                            	}
+                            }
+                        }
+                    }
 				],
 				[
 					{
-						"portletId": "47"
-					}
+                        "portletId": "56",
+                        "portletPreferences": {
+                            "articleId": "ABOUT_US",
+                            "groupId": "${groupId}",
+                        }
+                    }
+				],
+				[
+                    {
+                        "portletId": "1_WAR_webformportlet_INSTANCE_${groupId}",
+                        "portletPreferences": {
+                        	"title" : "Quick Contact",
+							"description" : "",
+							"fieldLabel1": "Name",
+							"fieldType1": "text",
+							"fieldLabel2": "Email",
+							"fieldType2": "text",
+							"fieldLabel3": "Phone",
+							"fieldType3": "text",
+							"fieldLabel4":"Message",
+							"fieldType4": "text",
+							"portletSetupCss": {
+								"advancedData": {
+									"customCSSClassName": "quick-contact"
+								}
+							}
+						}
+                    }
+                ],
+				[
+					{
+                        "portletId": "56",
+                        "portletPreferences": {
+                            "articleId": "SHIPPING_DETAILS",
+                            "groupId": "${groupId}",
+                        }
+                    }
 				]
 			],
 			"friendlyURL": "/home",
-			"name": "Welcome",
-			"title": "Welcome"
+			"name": "Home",
+			"title": "Home"
+		},
+		{
+			"columns": [
+				[
+					{
+			            "portletId": "3_WAR_htmsdportlet"
+			        }
+			    ]
+			],    
+			"title": "Pet Foods",
+			"name": "Pet Foods",
+			"friendlyURL": "/pet-food"
+		},
+		{
+			"columns": [
+				[
+					{
+			            "portletId": "3_WAR_htmsdportlet"
+			        }
+			    ]
+			], 
+			"title": "Exotic Pet Birds",
+			"name": "Exotic Pet Birds",
+			"friendlyURL": "/exotic-pet-birds"
+		},
+		{
+			"columns": [
+				[
+					{
+			            "portletId": "3_WAR_htmsdportlet"
+			        }
+			    ]
+			], 
+			"title": "Exotic Pet Animals",
+			"name": "Exotic Pet Animals",
+			"friendlyURL": "/exotic-pet-animals"
+		},
+		{
+			"columns": [
+				[
+					{
+			            "portletId": "3_WAR_htmsdportlet"
+			        }
+			    ]
+			], 
+			"title": "Accessories",
+			"name": "Accessories",
+			"friendlyURL": "/accessories"
+		},
+		{
+			"columns": [
+				[
+					{
+			            "portletId": "3_WAR_htmsdportlet"
+			        }
+			    ]
+			], 
+			"title": "Feed",
+			"name": "Feed",
+			"friendlyURL": "/feed"
+		},
+		{
+			"columns": [
+				[
+					{
+			            "portletId": "3_WAR_htmsdportlet"
+			        }
+			    ]
+			], 
+			"title": "Fish",
+			"name": "Fish",
+			"friendlyURL": "/fish"
+		},
+		{
+			"title": "About Us",
+			"name": "About Us",
+			"friendlyURL": "/about-us"
+		},
+		{
+			"title": "Contact Us",
+			"name": "Contact Us",
+			"friendlyURL": "/contact-us"
+		},
+		{	
+			"columns": [
+				[
+					{
+			            "portletId": "1_WAR_htmsdportlet"
+			        }
+			    ]
+			], 
+			"title": "Sell",
+			"name": "Sell",
+			"friendlyURL": "/sell",
+			"hidden": "true"
 		}
 	]
 }
