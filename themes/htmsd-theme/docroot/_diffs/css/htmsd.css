@@ -277,8 +277,8 @@
 
 #search {
 	border: 1px solid #d8492d;
-	box-shadow: 0 0 5px 0 inset;
-	height: 32px;
+	box-shadow: 0 0 2px 0 inset;
+	height: 33px;
 	padding: 0 10px;
 	width: 300px;
 }
