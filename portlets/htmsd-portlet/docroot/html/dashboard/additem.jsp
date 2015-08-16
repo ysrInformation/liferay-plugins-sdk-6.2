@@ -24,6 +24,10 @@
 			<c:forEach var="i" begin="1" end="<%=HConstants.IMAGES_UPLOAD_LIMIT %>">
 				<aui:column columnWidth="60" >
 					<aui:input name='image${i}'  type="file" label="" onChange="readURL(this,${i});">
+						<aui:validator name="acceptFiles" errorMessage="please-upload-the-jpg,png,gif">'jpg,png,gif'</aui:validator>
+						<c:if test="${i==1}">
+							<aui:validator name="required" errorMessage="please-upload-atleast-one-image" />
+						</c:if>	
 					</aui:input>
 				</aui:column>
 				
@@ -72,6 +76,7 @@
 	    control.replaceWith( control = control.clone( true ) );
 	    $('#image_upload_preview'+id).attr("src","");
 	    $('#image_upload_preview'+id).hide();
+	    control.focus();
 	}
 	
 	AUI().use('autocomplete-list','aui-base','aui-io-request','autocomplete-filters','autocomplete-highlighters',function (A) {
