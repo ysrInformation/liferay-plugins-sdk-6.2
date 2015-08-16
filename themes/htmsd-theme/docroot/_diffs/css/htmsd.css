@@ -10,6 +10,7 @@
 	background-color: #6f8720;
 	width: 100%;
 	color: #e2e2e2;
+	left: 0px;
 }
 
 .text-color-white {
@@ -24,7 +25,8 @@
 	background-color: #6f8720;
 	width: 100%;
 	color: #e2e2e2;
-	height: 35%;
+	height: 260px;
+	left: 0px;
 }
 
 #bg_footer {
@@ -37,6 +39,7 @@
 	color: #E2E2E2;
 	width: 100%;
 	position: absolute;
+	left: 0px;
 }
 
 /*------------Navigation CSS----------------*/
