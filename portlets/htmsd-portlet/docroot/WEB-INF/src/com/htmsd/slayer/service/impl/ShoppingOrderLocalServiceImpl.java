@@ -20,6 +20,7 @@ import com.htmsd.slayer.model.ShoppingOrder;
 import com.htmsd.slayer.model.impl.ShoppingOrderImpl;
 import com.htmsd.slayer.service.base.ShoppingOrderLocalServiceBaseImpl;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.Validator;
 
 /**
  * The implementation of the shopping order local service.
@@ -80,5 +81,31 @@ public class ShoppingOrderLocalServiceImpl
 		}
 		
 		return shoppingOrder;
+	}
+	
+	/**
+	 * Method for updating order status
+	 * @param orderStatus
+	 * @param orderId
+	 */
+	public void updateShoppingOrder(int orderStatus, long orderId) {
+		
+		ShoppingOrder shoppingOrder = null;
+		try {
+			shoppingOrder = shoppingOrderLocalService.fetchShoppingOrder(orderId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if (Validator.isNull(shoppingOrder)) return;
+		
+		shoppingOrder.setOrderStatus(orderStatus);
+		shoppingOrder.setModifiedDate(new Date());
+		
+		try {
+			shoppingOrderLocalService.updateShoppingOrder(shoppingOrder);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

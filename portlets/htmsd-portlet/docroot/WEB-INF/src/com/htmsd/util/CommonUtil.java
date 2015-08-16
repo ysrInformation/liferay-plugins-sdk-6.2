@@ -15,6 +15,7 @@ import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -23,10 +24,15 @@ import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.TextFormatter;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Address;
+import com.liferay.portal.model.Country;
 import com.liferay.portal.model.Phone;
+import com.liferay.portal.model.Region;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.CountryServiceUtil;
+import com.liferay.portal.service.RegionServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.model.DLFileShortcut;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
@@ -214,6 +220,38 @@ public class CommonUtil {
 		}
 		
 		return shoppingOrders;
+	}
+	
+	public static String getCountry(long countryId) {
 		
+		String countryName = StringPool.BLANK;
+		if (countryId >0l) {
+			Country country = null;
+			try {
+				country = CountryServiceUtil.fetchCountry(countryId);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			countryName = (Validator.isNotNull(country))?
+				TextFormatter.format(country.getName(), TextFormatter.J):StringPool.BLANK;
+		}
+		
+		return countryName;
+	}
+	
+	public static String getState(long regionId) {
+		
+		String state = StringPool.BLANK;
+		if (regionId >0l) {
+			Region region = null;
+			try {
+				region = RegionServiceUtil.getRegion(regionId);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			state = (Validator.isNotNull(region))?region.getName():StringPool.BLANK;
+		}
+		
+		return state;
 	}
 }
