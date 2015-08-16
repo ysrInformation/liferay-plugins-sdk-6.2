@@ -32,6 +32,7 @@ public interface HConstants {
 	
 	//Pages
 	public static String PAGE_SHOPPING_LIST_DETAILS = "/html/shoppinglist/details.jsp";
+	public static String PAGE_SHOPPING_CART_DETAILS = "/html/shoppingcart/view.jsp";
 	
 	public static String PENDING_STATUS = "Pending";
 	public static String DELIVERED_STATUS = "Delivered";
@@ -41,4 +42,6 @@ public interface HConstants {
 
 	public static final String JSP_PAGE = "jspPage";
 	public static final String BACK_URL = "backURL";
+	
+	
 }

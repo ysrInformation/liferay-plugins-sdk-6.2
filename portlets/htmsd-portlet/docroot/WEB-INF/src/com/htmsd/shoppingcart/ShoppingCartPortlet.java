@@ -18,8 +18,11 @@ import com.htmsd.slayer.service.ShoppingOrderItemLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
 import com.htmsd.util.CommonUtil;
 import com.htmsd.util.HConstants;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
@@ -64,6 +67,9 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		
 		_log.info("orderId is ==>"+shoppingOrder.getOrderId()); 
 		addShoppingOrderItem(themeDisplay, shoppingOrder);
+		
+		SessionMessages.add(actionRequest, "request_processed", "you-order-has-been-registered-you-may-get-email-shortly");
+		actionResponse.setRenderParameter(HConstants.JSP_PAGE, HConstants.PAGE_SHOPPING_CART_DETAILS); 
 	}
 
 	/**
@@ -73,16 +79,31 @@ public class ShoppingCartPortlet extends MVCPortlet {
 	 */
 	private void addShoppingOrderItem(ThemeDisplay themeDisplay, ShoppingOrder shoppingOrder) {
 		
+		double totalPrice = 0;
 		List<ShoppingItem_Cart> shoppingItem_Carts = CommonUtil.getUserCartItems(themeDisplay.getUserId());
 		
 		if (Validator.isNotNull(shoppingItem_Carts) && shoppingItem_Carts.size() > 0) {
 			for (ShoppingItem_Cart shoppingItem_Cart:shoppingItem_Carts) {
+				
 				ShoppingItem shoppingItem = CommonUtil.getShoppingItem(shoppingItem_Cart.getItemId()); 
+				
 				if (Validator.isNotNull(shoppingItem)) {
+					totalPrice = shoppingItem.getSellerPrice()+shoppingItem.getTotalPrice();
 					ShoppingOrderItem shoppingOrderItem = ShoppingOrderItemLocalServiceUtil
-						.insertShoppingOrderItem(shoppingItem.getTotalPrice(), themeDisplay.getUserId(), 
+						.insertShoppingOrderItem(totalPrice, themeDisplay.getUserId(), 
 						themeDisplay.getCompanyId(), themeDisplay.getScopeGroupId(), shoppingOrder.getOrderId(), 
 						shoppingItem.getName(), shoppingItem.getDescription(), StringPool.BLANK);
+					
+					_log.info("shopping order Item ==>"+shoppingOrderItem.getItemId());
+					
+					//deleting items from shoppingItem_Cart table. 
+					try {
+						ShoppingItem_CartLocalServiceUtil.deleteShoppingItem_Cart(shoppingItem_Cart.getId());
+					} catch (PortalException e) {
+						e.printStackTrace();
+					} catch (SystemException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}

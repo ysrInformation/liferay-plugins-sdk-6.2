@@ -26,16 +26,18 @@
 		<aui:validator name="required"/>
 	</aui:input>
 	
-	<aui:input type="text" name="email" value="<%= user.getEmailAddress() %>">
+	<aui:input type="email" name="email" value="<%= user.getEmailAddress() %>">
 		<aui:validator name="required"/>
 	</aui:input>
 	
-	<aui:input type="text" name="mobileNumber" label="mobile-number" value="<%= mobileNumber  %>">
-		<aui:validator name="required"/>
+	<aui:input type="text" name="mobileNumber" label="mobile-number" value="<%= mobileNumber  %>" required="true" maxLength="10">
+		<aui:validator name="digits"/>
+        <aui:validator name="rangeLength" errorMessage="please-enter-valid-mobile-number">[10,10]</aui:validator>
 	</aui:input>
 	
-	<aui:input type="text" name="altNumber" label="alt-number">
-		<aui:validator name="required"/>
+	<aui:input type="text" name="altNumber" label="alt-number" required="true" maxLength="10">
+		<aui:validator name="digits"/>
+        <aui:validator name="rangeLength" errorMessage="please-enter-valid-mobile-number">[10,10]</aui:validator>
 	</aui:input>
 	
 	<aui:input type="text" name="street" label="street" value="<%= street %>">
@@ -46,8 +48,9 @@
 		<aui:validator name="required"/>
 	</aui:input>
 	
-	<aui:input type="text" name="zip" label="post-code" value="<%= zip %>">
-		<aui:validator name="required"/>
+	<aui:input type="text" name="zip" label="post-code" required="true" value="<%= zip %>" maxLength="6">
+		<aui:validator name="digits" />
+        <aui:validator name="rangeLength" errorMessage="please-enter-valid-pincode-number">[6,6]</aui:validator>
 	</aui:input>
 	
 	<aui:select name="country" label="country" id="country" />

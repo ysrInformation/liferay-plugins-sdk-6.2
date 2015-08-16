@@ -21,7 +21,8 @@ if (Validator.isNotNull(shoppingItem_Carts) && shoppingItem_Carts.size() > 0) {
 	for (ShoppingItem_Cart shoppingItem_Cart : shoppingItem_Carts) {
 		long itemId = shoppingItem_Cart.getItemId();
 		ShoppingItem shoppingItem = CommonUtil.getShoppingItem(itemId);
-		totalPrice += shoppingItem.getTotalPrice();
+		double price = shoppingItem.getTotalPrice()+shoppingItem.getSellerPrice();
+		totalPrice += price;
 		String removeCartItem = "javascript:removeItems('"+shoppingItem.getItemId()+"','"+removeItemURL+"');";
 		String[] imageIdsList = Validator.isNotNull(shoppingItem) ? shoppingItem.getImageIds().split(StringPool.COMMA):new String[]{}; 
 		%> 
@@ -31,6 +32,7 @@ if (Validator.isNotNull(shoppingItem_Carts) && shoppingItem_Carts.size() > 0) {
 					<aui:column columnWidth="40">
 						<%
 						boolean imageExist = false;
+						
 						if (Validator.isNotNull(imageIdsList) && imageIdsList.length > 0) {
 							String image_upload_preview = HConstants.IMAGE_UPLOAD_PREVIEW+1;
 							String imageURL = CommonUtil.getThumbnailpath(Long.parseLong(imageIdsList[0]), themeDisplay.getScopeGroupId(), false);
@@ -50,7 +52,7 @@ if (Validator.isNotNull(shoppingItem_Carts) && shoppingItem_Carts.size() > 0) {
 					<aui:column columnWidth="60">  
 						<div><h3><%= (Validator.isNotNull(shoppingItem))? shoppingItem.getName():"NA" %></h3></div>
 						<div><p><%= (Validator.isNotNull(shoppingItem))?shoppingItem.getDescription():"NA" %></p></div>
-						<div><strong><%= (Validator.isNotNull(shoppingItem))? CommonUtil.getPriceFormat(shoppingItem.getTotalPrice()):0L %></strong></div>
+						<div><strong><%= (Validator.isNotNull(shoppingItem))? CommonUtil.getPriceFormat(price):0L %></strong></div>
 						<%-- <div><aui:input type="text" name="quantity" label="quantity" /></div> --%>
 						<div><aui:a href="<%= removeCartItem %>"><liferay-ui:message key="remove"/></aui:a></div>
 					</aui:column>
