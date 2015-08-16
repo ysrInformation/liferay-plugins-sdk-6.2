@@ -63,7 +63,11 @@ public class ShoppingItemServiceImpl extends ShoppingItemServiceBaseImpl {
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
 		List<ShoppingItem> shoppingItems = new ArrayList<ShoppingItem>();
 		try {
-			shoppingItems = shoppingItemLocalService.getCategoryShoppingItems(categoryId, start, end);
+			if (categoryId > 0) {
+				shoppingItems = shoppingItemLocalService.getCategoryShoppingItems(categoryId, start, end);
+			} else {
+				shoppingItems = shoppingItemLocalService.getShoppingItems(start, end);
+			}
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
