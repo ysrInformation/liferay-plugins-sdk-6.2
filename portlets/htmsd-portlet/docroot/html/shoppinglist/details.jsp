@@ -8,6 +8,7 @@
 	addItemsToCartActionURL.setParameter(ActionRequest.ACTION_NAME, "addItemToCart");
 	addItemsToCartActionURL.setParameter(HConstants.ITEM_ID, String.valueOf(itemId));
 %> 
+<liferay-ui:error key="item-exist" message="item-already-exist"/>
 <aui:fieldset>
 	<aui:col width="70">
 		<div >

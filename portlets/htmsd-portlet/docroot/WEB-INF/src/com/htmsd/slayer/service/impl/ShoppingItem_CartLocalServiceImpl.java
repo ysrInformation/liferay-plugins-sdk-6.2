@@ -14,7 +14,13 @@
 
 package com.htmsd.slayer.service.impl;
 
+import java.util.List;
+
+import com.htmsd.slayer.NoSuchShoppingItem_CartException;
+import com.htmsd.slayer.model.ShoppingItem_Cart;
 import com.htmsd.slayer.service.base.ShoppingItem_CartLocalServiceBaseImpl;
+import com.liferay.counter.service.CounterLocalServiceUtil;
+import com.liferay.portal.kernel.exception.SystemException;
 
 /**
  * The implementation of the shopping item_ cart local service.
@@ -37,4 +43,52 @@ public class ShoppingItem_CartLocalServiceImpl
 	 *
 	 * Never reference this interface directly. Always use {@link com.htmsd.slayer.service.ShoppingItem_CartLocalServiceUtil} to access the shopping item_ cart local service.
 	 */
+	
+	/**
+	 * 
+	 * @param cartId
+	 * @param itemId
+	 * @return
+	 */
+	public ShoppingItem_Cart insertItemsToCart(long cartId, long itemId) {
+		ShoppingItem_Cart shoppingItem_Cart = null;
+		
+		try {
+			shoppingItem_Cart = createShoppingItem_Cart(CounterLocalServiceUtil.increment());
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		shoppingItem_Cart.setCartId(cartId);
+		shoppingItem_Cart.setItemId(itemId);
+		
+		try {
+			addShoppingItem_Cart(shoppingItem_Cart);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return shoppingItem_Cart;
+	}
+	
+	/**
+	 * 
+	 * @param itemId
+	 * @return
+	 * @throws SystemException
+	 * @throws NoSuchShoppingItem_CartException
+	 */
+	public ShoppingItem_Cart findByItemId(long itemId) throws SystemException, NoSuchShoppingItem_CartException {
+		return shoppingItem_CartPersistence.findByItemId(itemId);
+	}
+	
+	/**
+	 * 
+	 * @param cartId
+	 * @return
+	 * @throws SystemException
+	 */
+	public List<ShoppingItem_Cart> findByCartId(long cartId) throws SystemException {
+		return shoppingItem_CartPersistence.findByCartId(cartId);
+	}
 }

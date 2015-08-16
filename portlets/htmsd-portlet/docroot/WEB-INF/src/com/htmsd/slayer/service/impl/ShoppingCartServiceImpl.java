@@ -14,7 +14,15 @@
 
 package com.htmsd.slayer.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.htmsd.slayer.NoSuchShoppingCartException;
+import com.htmsd.slayer.model.ShoppingCart;
+import com.htmsd.slayer.model.ShoppingItem_Cart;
 import com.htmsd.slayer.service.base.ShoppingCartServiceBaseImpl;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.security.ac.AccessControlled;
 
 /**
  * The implementation of the shopping cart remote service.
@@ -36,4 +44,33 @@ public class ShoppingCartServiceImpl extends ShoppingCartServiceBaseImpl {
 	 *
 	 * Never reference this interface directly. Always use {@link com.htmsd.slayer.service.ShoppingCartServiceUtil} to access the shopping cart remote service.
 	 */
+	
+	/**
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	@AccessControlled(guestAccessEnabled=true)
+	public int getShoppingCartItemCount(long userId) {
+		int count = 0;
+		ShoppingCart shoppingCart = null;
+		try {
+			shoppingCart = shoppingCartPersistence.findByUserId(userId);
+		} catch (NoSuchShoppingCartException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		List<ShoppingItem_Cart> shoppingItem_Carts = new ArrayList<>();
+		try {
+			shoppingItem_Carts = shoppingItem_CartPersistence.findByCartId(shoppingCart.getCartId());
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		count = shoppingItem_Carts.size();
+		
+		return count;
+	}
 }
