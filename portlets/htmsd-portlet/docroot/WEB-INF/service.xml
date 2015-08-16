@@ -210,7 +210,8 @@
 		
 		<!-- Finder methods -->
 		
-		<finder return-type="ShoppingItem_Cart" name="ItemId">
+		<finder return-type="ShoppingItem_Cart" name="CartIdAndItemId">
+			<finder-column name="cartId"/>
 			<finder-column name="itemId"/>
 		</finder>
 		

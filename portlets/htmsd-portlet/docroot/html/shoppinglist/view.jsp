@@ -1,5 +1,10 @@
 <%@include file="/html/shoppinglist/init.jsp" %>
 
+<%
+	String noOfItems  = portletPreferences.getValue("noOfItems", "8");
+	String categoryToDisplay  = portletPreferences.getValue("categoryToDisplay", "-1");
+%>
+
 <aui:input name="len" type="hidden"/>
 
 <ul id="shopping_list" class="row">
@@ -24,14 +29,14 @@
 <aui:script>
 	var portletId = '<%= themeDisplay.getPortletDisplay().getId() %>';
 	$(function() {
-		window.onload = $("#<portlet:namespace/>len").val(8);
-		getShoppingItems(0, 8);
+		window.onload = $("#<portlet:namespace/>len").val(<%=noOfItems%>);
+		getShoppingItems(0, <%=noOfItems%>);
 	});
 	
 	function loadProducts() {
 		var len = $("#<portlet:namespace/>len").val();
 		var count = parseInt(len);
-		getShoppingItems(count, parseInt(count) + parseInt(4));
+		getShoppingItems(count, parseInt(count) + parseInt(len));
 	}
 	
 	function getShoppingItems(s, e) {
@@ -40,6 +45,7 @@
 			url : '<%=themeDisplay.getPortalURL()+"/api/jsonws/htmsd-portlet.shoppingitem/get-shopping-items"%>',
 			type : "GET",
 			data : {
+				categoryId : <%=categoryToDisplay%>,
 				groupId : <%=themeDisplay.getScopeGroupId()%>,
 				status : <%=HConstants.APPROVE%>,
 				start : s,

@@ -22,6 +22,7 @@ import com.htmsd.slayer.model.ShoppingCart;
 import com.htmsd.slayer.model.ShoppingItem_Cart;
 import com.htmsd.slayer.service.base.ShoppingCartServiceBaseImpl;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.security.ac.AccessControlled;
 
 /**
@@ -61,6 +62,8 @@ public class ShoppingCartServiceImpl extends ShoppingCartServiceBaseImpl {
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
+		
+		if(Validator.isNull(shoppingCart)) return 0;
 		
 		List<ShoppingItem_Cart> shoppingItem_Carts = new ArrayList<>();
 		try {

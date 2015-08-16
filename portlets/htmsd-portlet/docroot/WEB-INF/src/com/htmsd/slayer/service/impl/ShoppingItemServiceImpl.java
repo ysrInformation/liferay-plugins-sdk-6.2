@@ -15,12 +15,14 @@
 package com.htmsd.slayer.service.impl;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.htmsd.slayer.model.ShoppingItem;
 import com.htmsd.slayer.service.base.ShoppingItemServiceBaseImpl;
 import com.htmsd.util.CommonUtil;
 import com.htmsd.util.HConstants;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -56,15 +58,21 @@ public class ShoppingItemServiceImpl extends ShoppingItemServiceBaseImpl {
 	 *@return  
 	 */
 	@AccessControlled(guestAccessEnabled=true)
-	public JSONArray getShoppingItems(long groupId, int status, int start, int end) {
+	public JSONArray getShoppingItems(long categoryId, long groupId, int status, int start, int end) {
 		
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
-		
-		List<ShoppingItem> shoppingItems = shoppingItemLocalService.getByStatus(status, start, end);
+		List<ShoppingItem> shoppingItems = new ArrayList<ShoppingItem>();
+		try {
+			shoppingItems = shoppingItemLocalService.getCategoryShoppingItems(categoryId, start, end);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
 		DecimalFormat decimalFormat = new DecimalFormat("#.00");
 		
 		for (ShoppingItem shoppingItem : shoppingItems) {
 
+			if(shoppingItem.getStatus() != HConstants.APPROVE) continue;
+			
 			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 			jsonObject.put(HConstants.ITEM_ID, shoppingItem.getItemId());
 			jsonObject.put(HConstants.NAME, shoppingItem.getName());

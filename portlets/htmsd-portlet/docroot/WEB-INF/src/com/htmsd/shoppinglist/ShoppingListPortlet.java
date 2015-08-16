@@ -46,7 +46,7 @@ public class ShoppingListPortlet extends MVCPortlet {
 		
 		ShoppingItem_Cart shoppingItem_Cart = null;
 		try {
-			shoppingItem_Cart = ShoppingItem_CartLocalServiceUtil.findByItemId(itemId);
+			shoppingItem_Cart = ShoppingItem_CartLocalServiceUtil.findByCartAndItemId(shoppingCart.getCartId(), itemId);
 		} catch (NoSuchShoppingItem_CartException e) {
 			e.printStackTrace();
 		} catch (SystemException e) {

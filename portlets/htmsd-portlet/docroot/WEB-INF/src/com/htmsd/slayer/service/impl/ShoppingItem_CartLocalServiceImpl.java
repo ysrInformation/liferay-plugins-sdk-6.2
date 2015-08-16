@@ -82,8 +82,8 @@ public class ShoppingItem_CartLocalServiceImpl
 	 * @throws SystemException
 	 * @throws NoSuchShoppingItem_CartException
 	 */
-	public ShoppingItem_Cart findByItemId(long itemId) throws SystemException, NoSuchShoppingItem_CartException {
-		return shoppingItem_CartPersistence.findByItemId(itemId);
+	public ShoppingItem_Cart findByCartAndItemId(long cartId, long itemId) throws SystemException, NoSuchShoppingItem_CartException {
+		return shoppingItem_CartPersistence.findByCartIdAndItemId(cartId, itemId);
 	}
 	
 	/**
