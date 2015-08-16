@@ -3,7 +3,7 @@
 
 <%
 	String orderByCol = ParamUtil.getString(request, "orderByCol","createDate");
- 	String orderByType = ParamUtil.getString(request, "orderByType","asc");
+ 	String orderByType = ParamUtil.getString(request, "orderByType","desc");
     String tabs1 = ParamUtil.getString(request, "tab1", "New Items");
 	PortletURL mainURL = renderResponse.createRenderURL();
 	mainURL.setWindowState(WindowState.MAXIMIZED);

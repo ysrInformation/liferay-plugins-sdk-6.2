@@ -9,7 +9,7 @@
 	long userId = themeDisplay.getUserId();
 	List<ShoppingItem> itemList = new ArrayList<ShoppingItem>();
 	String orderByCol = ParamUtil.getString(request, "orderByCol", "createDate");
-	String orderByType = ParamUtil.getString(request, "orderByType","asc");
+	String orderByType = ParamUtil.getString(request, "orderByType","desc");
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("jspPage", "/html/dashboard/user.jsp");
 %>
