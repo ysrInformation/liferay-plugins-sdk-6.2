@@ -101,3 +101,20 @@
 .quantity {
 	width: 95% !important;
 }
+
+/*********shopping cart **********/
+.product-total div {
+	display: inline-block;
+	font-family:serif;
+	font-size: large;
+}
+
+.images-disp {
+	padding: 10px;
+	width: 200px;
+	height: auto;
+}
+
+.mycart {
+    text-align: center;
+}

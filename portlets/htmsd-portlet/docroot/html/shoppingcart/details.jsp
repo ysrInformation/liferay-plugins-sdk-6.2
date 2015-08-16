@@ -3,8 +3,8 @@
 <%
 	double totalPrice = 0;
 
-	PortletURL backURL = renderResponse.createRenderURL();
-	backURL.setParameter("jspPage", "/html/shoppingcart/view.jsp");
+	PortletURL detailsURL = renderResponse.createRenderURL();
+	detailsURL.setParameter("jspPage", "/html/shoppinglist/details.jsp");
 	
 	PortletURL checkoutURL = renderResponse.createRenderURL();
 	checkoutURL.setParameter("jspPage", "/html/shoppingcart/checkout.jsp");
@@ -16,32 +16,31 @@
 	<portlet:param name="<%= Constants.CMD %>" value="remove-item"/> 
 </portlet:resourceURL>
 
-<liferay-ui:header title="product-details" backURL="<%= backURL.toString() %>"/> 
-
 <% 
 if (Validator.isNotNull(shoppingItem_Carts) && shoppingItem_Carts.size() > 0) {
 	for (ShoppingItem_Cart shoppingItem_Cart : shoppingItem_Carts) {
 		long itemId = shoppingItem_Cart.getItemId();
 		ShoppingItem shoppingItem = CommonUtil.getShoppingItem(itemId);
 		totalPrice += shoppingItem.getTotalPrice();
-		String removeCartItem = "javascript:removeItems('"+shoppingItem.getItemId()+"');";
-		String[] imageIdsList = Validator.isNotNull(shoppingItem) ? shoppingItem.getImageIds().split(StringPool.COMMA):new String[0]; 
+		String removeCartItem = "javascript:removeItems('"+shoppingItem.getItemId()+"','"+removeItemURL+"');";
+		String[] imageIdsList = Validator.isNotNull(shoppingItem) ? shoppingItem.getImageIds().split(StringPool.COMMA):new String[]{}; 
 		%> 
 		<div class="itemDetails"> 
 			<liferay-ui:panel-container accordion="false" extended="true"> 
 				<liferay-ui:panel title="<%= shoppingItem.getName() %>" defaultState="collapsed">
 					<aui:column columnWidth="40">
 						<%
-						int j=1;
 						boolean imageExist = false;
 						if (Validator.isNotNull(imageIdsList) && imageIdsList.length > 0) {
-							for (String imageEntryId :imageIdsList){
-								String image_upload_preview = HConstants.IMAGE_UPLOAD_PREVIEW+j;
-								String imageURL = CommonUtil.getThumbnailpath(Long.parseLong(imageEntryId), themeDisplay.getScopeGroupId(), false);
-								imageExist = (!imageURL.isEmpty())?true:false;
-								%><div class="images-disp"><img id="<%= image_upload_preview %>" src="<%= imageURL %>" /></div><%
-								j++;
-							} 
+							String image_upload_preview = HConstants.IMAGE_UPLOAD_PREVIEW+1;
+							String imageURL = CommonUtil.getThumbnailpath(Long.parseLong(imageIdsList[0]), themeDisplay.getScopeGroupId(), false);
+							imageExist = (!imageURL.isEmpty())?true:false;
+							detailsURL.setParameter(HConstants.IMAGE_ID, String.valueOf(itemId));
+							%>
+							<div class="images-disp">
+								<aui:a href="<%= detailsURL.toString() %>"><img id="<%= image_upload_preview %>" src="<%= imageURL %>" /></aui:a>
+							</div>
+							<%
 						}
 						%>
 						<c:if test='<%= !imageExist %>'>
@@ -49,9 +48,10 @@ if (Validator.isNotNull(shoppingItem_Carts) && shoppingItem_Carts.size() > 0) {
 						</c:if>
 					</aui:column>
 					<aui:column columnWidth="60">  
-						<div><%= (Validator.isNotNull(shoppingItem))? shoppingItem.getName():"NA" %></div>
-						<div><%= (Validator.isNotNull(shoppingItem))?shoppingItem.getDescription():"NA" %></div>
+						<div><h3><%= (Validator.isNotNull(shoppingItem))? shoppingItem.getName():"NA" %></h3></div>
+						<div><p><%= (Validator.isNotNull(shoppingItem))?shoppingItem.getDescription():"NA" %></p></div>
 						<div><strong><%= (Validator.isNotNull(shoppingItem))? CommonUtil.getPriceFormat(shoppingItem.getTotalPrice()):0L %></strong></div>
+						<%-- <div><aui:input type="text" name="quantity" label="quantity" /></div> --%>
 						<div><aui:a href="<%= removeCartItem %>"><liferay-ui:message key="remove"/></aui:a></div>
 					</aui:column>
 				</liferay-ui:panel>
@@ -60,6 +60,7 @@ if (Validator.isNotNull(shoppingItem_Carts) && shoppingItem_Carts.size() > 0) {
 	} 
 }
 %>
+
 <aui:fieldset>
 	<div class="product-total">
 		<div><strong><liferay-ui:message key="total"/></strong></div>
@@ -69,41 +70,29 @@ if (Validator.isNotNull(shoppingItem_Carts) && shoppingItem_Carts.size() > 0) {
 
 <aui:button-row>
 	<aui:button type="button" value='<%= LanguageUtil.get(portletConfig, locale, "checkout") %>' href="<%= checkoutURL.toString() %>"/>
-	<aui:button type="button" value='<%= LanguageUtil.get(portletConfig, locale, "cancel") %>' href="<%= backURL.toString() %>"/>
 </aui:button-row>
-	
-<style>
-.product-total div {
-	display: inline-block;
-	font-family:serif;
-	font-size: large;
-}
-.images-disp {
-	padding: 10px;
-	width: 200px;
-	height: auto;
-}
-</style>
 
 <aui:script>
-function removeItems(itemId) {
+function removeItems(itemId, url) {
 	
-	AUI().use('aui-base','aui-io-request', function(A){
-		A.io.request('<%= removeItemURL %>',{
-			dataType: 'json',
-			method: 'POST',
-			data: { 
-				 itemId :itemId
+	var A = AUI();
+	A.use('aui-io-request', function(A) {
+		A.io.request(url, {
+			method : 'POST',
+			dataType : 'html',
+			data : {
+				<portlet:namespace/>itemId:itemId,
 			},
-			on: {
-				success: function(obj) {
-					window.location.reload();
+			sync : false,
+			on : {
+	         	success : function() {
+	         		location.reload();
 				},
-				failure:function(){
-					alert('Internal Error Occured');
+	       		failure : function() {
+	        		alert("Something went wrong !!Please try again..");
 				}
 			}
-		});
+	 	});
 	});
 }
 </aui:script>
