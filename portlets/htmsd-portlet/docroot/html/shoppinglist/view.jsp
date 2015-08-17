@@ -4,6 +4,7 @@
 	String noOfItems  = portletPreferences.getValue("noOfItems", "8");
 	String categoryToDisplay  = portletPreferences.getValue("categoryToDisplay", "-1");
 	String sortBy = ParamUtil.getString(request, "sortBy", "totalPrice DESC");
+	int totalCount = ShoppingItemLocalServiceUtil.getItemByCategoryCount(Long.valueOf(categoryToDisplay));
 %>
 
 <aui:input name="len" type="hidden"/>
@@ -15,7 +16,14 @@
 	<aui:option value="totalPrice DESC" label="Price High To Low" />
 	<aui:option value="totalPrice ASC" label="Price Low To High"/>
 </aui:select>
-
+<div>
+	<liferay-ui:message key="showing"/>
+	<span id="current_count"></span> 
+	<liferay-ui:message key="of"/>
+	<span id="total_count">
+		<%=totalCount %>
+	</span>
+</div>	
 <ul id="shopping_list" class="row">
 	<!-- item display -->
 </ul>
@@ -38,8 +46,10 @@
 <aui:script>
 	var portletId = '<%= themeDisplay.getPortletDisplay().getId() %>';
 	$(function() {
+		
 		$('#<portlet:namespace/>sort-by option[value="<%=sortBy%>"').attr("selected", "selected")
 		window.onload = $("#<portlet:namespace/>len").val(<%=noOfItems%>);
+		$('#current_count').html($("#<portlet:namespace/>len").val());
 		getShoppingItems(0, <%=noOfItems%>);
 	});
 	
@@ -49,7 +59,7 @@
 		getShoppingItems(count, parseInt(count) + parseInt(len));
 	}
 	
-	function getShoppingItems(s, e, sort) {
+	function getShoppingItems(s, e) {
 		
 	$.ajax({
 			url : '<%=themeDisplay.getPortalURL()+"/api/jsonws/htmsd-portlet.shoppingitem/get-shopping-items"%>',
@@ -72,6 +82,7 @@
 				if (data.length > 0) {	
 					$("#<portlet:namespace/>len").val(e);
 					render(data);
+					$('#current_count').html($("#<portlet:namespace/>len").val());
 				} else {
 					$('#load-button').hide();
 					$("#<portlet:namespace/>len").val(s);
