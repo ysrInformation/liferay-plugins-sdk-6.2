@@ -46,7 +46,7 @@ public class ShoppingItemFinderImpl extends BasePersistenceImpl<ShoppingItem>
 
 		// 2. Get SQL statement from XML file with its name
 		String sql = CustomSQLUtil.get(FIND_ITEM_BY_CATEGORYID);
-		sql = sql.replace("[$sort]", sort);
+		sql = sql.replace("[$sort]", "ORDER BY "+sort);
 		
 		System.out.println("The Query is >>>>>>>>>" + sql);
 
@@ -56,7 +56,26 @@ public class ShoppingItemFinderImpl extends BasePersistenceImpl<ShoppingItem>
 
 		QueryPos queryPos = QueryPos.getInstance(query);
 		queryPos.add(categoryId);
-		
 		return (List<ShoppingItem>) QueryUtil.list(query, getDialect(), start, end);
+	}
+	
+	public int getItemByCategoryIdCount(long categoryId) {
+
+		Session session = openSession();
+
+		// 2. Get SQL statement from XML file with its name
+		String sql = CustomSQLUtil.get(FIND_ITEM_BY_CATEGORYID);
+		sql = sql.replace("[$sort]", "");
+		
+		System.out.println("The Query is >>>>>>>>>" + sql);
+
+		// 3. Transform the normal query to HQL query
+		SQLQuery query = session.createSQLQuery(sql);
+		query.addEntity("ShoppingItem", ShoppingItemImpl.class);
+
+		QueryPos queryPos = QueryPos.getInstance(query);
+		queryPos.add(categoryId);
+		List<ShoppingItem> shoppingItems = (List<ShoppingItem>) query.list();
+		return shoppingItems.size();
 	}
 }
