@@ -219,7 +219,7 @@ public class ShoppingItemLocalServiceImpl
 		return shoppingItemFinder.getItemByTagId(tagId);
 	}
 	
-	public int getItemByCategory(long categoryId) {
+	public int getItemByCategoryCount(long categoryId) {
 		return shoppingItemFinder.getItemByCategoryIdCount(categoryId);
 	}
 	
