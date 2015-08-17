@@ -9,7 +9,7 @@
 				        INNER JOIN
 				    htmsd_ShoppingItem s ON sc.itemId = s.itemId
 				        AND sc.categoryId = ?
-				ORDER BY [$sort]
+				[$sort]
 			   		
 		 	]]>
 		</sql>

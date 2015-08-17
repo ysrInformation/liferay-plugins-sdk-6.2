@@ -8,21 +8,28 @@
 %>
 
 <aui:input name="len" type="hidden"/>
-
-<aui:select name="sort-by" inlineLabel="true" onChange="javascript:refresh(this);" >
-	<aui:option value="createDate DESC" label="new"/>
-	<aui:option value="name ASC" label="Name(A - Z)" />
-	<aui:option value="name DESC" label="Name(Z - A)" />
-	<aui:option value="totalPrice DESC" label="Price High To Low" />
-	<aui:option value="totalPrice ASC" label="Price Low To High"/>
-</aui:select>
-<div>
-	<liferay-ui:message key="showing"/>
-	<span id="current_count"></span> 
-	<liferay-ui:message key="of"/>
-	<span id="total_count">
-		<%=totalCount %>
-	</span>
+<div class="row margin_left_zero">
+	<div class="span6">
+		<aui:select name="sort-by" inlineLabel="true" onChange="javascript:refresh(this);" >
+			<aui:option value="createDate DESC" label="new"/>
+			<aui:option value="name ASC" label="Name(A - Z)" />
+			<aui:option value="name DESC" label="Name(Z - A)" />
+			<aui:option value="totalPrice DESC" label="Price High To Low" />
+			<aui:option value="totalPrice ASC" label="Price Low To High"/>
+		</aui:select>
+	</div>
+	<div class="span6">
+		<div class="pull-right">
+			<h5>
+				<liferay-ui:message key="showing"/>
+				<span id="current_count"></span> 
+				<liferay-ui:message key="of"/>
+				<span id="total_count">
+					<%=totalCount %>
+				</span>
+			</h5>
+		</div>
+	</div>
 </div>	
 <ul id="shopping_list" class="row">
 	<!-- item display -->
@@ -44,6 +51,7 @@
 </div>
 
 <aui:script>
+	var dataLen = 0;
 	var portletId = '<%= themeDisplay.getPortletDisplay().getId() %>';
 	$(function() {
 		
@@ -56,7 +64,7 @@
 	function loadProducts() {
 		var len = $("#<portlet:namespace/>len").val();
 		var count = parseInt(len);
-		getShoppingItems(count, parseInt(count) + parseInt(len));
+		getShoppingItems(count, parseInt(count) + parseInt(<%=noOfItems%>));
 	}
 	
 	function getShoppingItems(s, e) {
@@ -82,7 +90,11 @@
 				if (data.length > 0) {	
 					$("#<portlet:namespace/>len").val(e);
 					render(data);
-					$('#current_count').html($("#<portlet:namespace/>len").val());
+					dataLen = parseInt(dataLen) + parseInt(data.length);
+					$('#current_count').html(dataLen);
+					if(dataLen == parseInt(<%=totalCount%>)) {
+						$('#load-button').hide();
+					}
 				} else {
 					$('#load-button').hide();
 					$("#<portlet:namespace/>len").val(s);
