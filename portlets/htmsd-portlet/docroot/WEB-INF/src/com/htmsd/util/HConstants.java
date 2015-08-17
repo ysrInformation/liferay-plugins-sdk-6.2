@@ -45,5 +45,6 @@ public interface HConstants {
 	public static final String JSP_PAGE = "jspPage";
 	public static final String BACK_URL = "backURL";
 	
-	
+	public static final int SORT_PRICE_HIGH_TO_LOW = 0;
+	public static final int SORT_PRICE_LOW_TO_HIGH = 1;
 }
