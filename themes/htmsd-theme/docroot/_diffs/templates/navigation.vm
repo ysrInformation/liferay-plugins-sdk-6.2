@@ -46,7 +46,7 @@
 					</li>
 				#end
 				<li class="lfr-nav-item nav_li">
-					<input id="search" placeholder="Search"/><button class="search-btn"><i class="fa fa-search"></i></button>
+					<input id="search" placeholder="Search"/><button class="search-btn" onClick="javascript:search();"><i class="fa fa-search"></i></button>
 				</li>
 				<li class="lfr-nav-item nav_li">
 					<div class="cart-btn">
@@ -62,5 +62,11 @@
 	</div>
 </nav>
 <script>
+	function search() {
+		var searchParam = $('#search').val();
+		if(searchParam) {
+			window.location.href = '/search?search-param=' + searchParam;
+		} 
+	}
 	Liferay.Data.NAV_LIST_SELECTOR = '.navbar-inner .nav-collapse > ul';
 </script>
