@@ -1,6 +1,7 @@
 <%@include file="/html/shoppinglist/init.jsp" %>
 <%
 	long itemId = ParamUtil.getLong(request, HConstants.ITEM_ID);
+System.out.println(itemId);
 	ShoppingItem shoppingItem = ShoppingItemLocalServiceUtil.fetchShoppingItem(itemId);
 	DecimalFormat decimalFormat = new DecimalFormat("#.00");
 	
@@ -15,7 +16,7 @@
 			<ul id="lightGallery" class="row" style="margin-left: 0px;">
 				<% 
 					for (String str : shoppingItem.getImageIds().split(",")) {
-						long imageId = Long.valueOf(str); 
+						long imageId = Long.valueOf(str.isEmpty() ? "0" : str); 
 						String imageURL = CommonUtil.getThumbnailpath(imageId, themeDisplay.getScopeGroupId(), false);
 						String thumbnailURL = CommonUtil.getThumbnailpath(imageId, themeDisplay.getScopeGroupId(), true);
 						%>

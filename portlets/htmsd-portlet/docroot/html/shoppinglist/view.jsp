@@ -3,14 +3,17 @@
 <%
 	String noOfItems  = portletPreferences.getValue("noOfItems", "8");
 	String categoryToDisplay  = portletPreferences.getValue("categoryToDisplay", "-1");
-	String sortBy = ParamUtil.getString(request, "sortBy", "0");
+	String sortBy = ParamUtil.getString(request, "sortBy", "totalPrice DESC");
 %>
 
 <aui:input name="len" type="hidden"/>
 
-<aui:select name="sort-by" inlineLabel="true" >
-	<aui:option value="0" label="Price High To Low" selected="true"/>
-	<aui:option value="1" label="Price Low To High"/>
+<aui:select name="sort-by" inlineLabel="true" onChange="javascript:refresh(this);" >
+	<aui:option value="createDate DESC" label="new"/>
+	<aui:option value="name ASC" label="Name(A - Z)" />
+	<aui:option value="name DESC" label="Name(Z - A)" />
+	<aui:option value="totalPrice DESC" label="Price High To Low" />
+	<aui:option value="totalPrice ASC" label="Price Low To High"/>
 </aui:select>
 
 <ul id="shopping_list" class="row">
@@ -35,6 +38,7 @@
 <aui:script>
 	var portletId = '<%= themeDisplay.getPortletDisplay().getId() %>';
 	$(function() {
+		$('#<portlet:namespace/>sort-by option[value="<%=sortBy%>"').attr("selected", "selected")
 		window.onload = $("#<portlet:namespace/>len").val(<%=noOfItems%>);
 		getShoppingItems(0, <%=noOfItems%>);
 	});
@@ -45,7 +49,7 @@
 		getShoppingItems(count, parseInt(count) + parseInt(len));
 	}
 	
-	function getShoppingItems(s, e) {
+	function getShoppingItems(s, e, sort) {
 		
 	$.ajax({
 			url : '<%=themeDisplay.getPortalURL()+"/api/jsonws/htmsd-portlet.shoppingitem/get-shopping-items"%>',
@@ -56,7 +60,7 @@
 				status : <%=HConstants.APPROVE%>,
 				start : s,
 				end: e,
-				sortBy: <%=sortBy%>
+				sortBy: '<%=sortBy%>'
 			},
 			beforeSend : function() {
 				$('#loader-icon').show();
@@ -100,6 +104,16 @@
 						+ '</div></div></li>';
 				$("#shopping_list").append(li);		
 			});
+		});
+	}
+	
+	function refresh(obj) {
+		AUI().use('liferay-portlet-url', function(A) {
+			var ajaxURL = Liferay.PortletURL.createRenderURL();
+			ajaxURL.setPortletId(portletId);
+			ajaxURL.setParameter('jspPage', "/html/shoppinglist/view.jsp");
+			ajaxURL.setParameter('sortBy', obj.value);
+			window.location.href = '<%=themeDisplay.getPortalURL()%>' + ajaxURL;
 		});
 	}
 </aui:script>

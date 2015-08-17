@@ -5,6 +5,7 @@ import java.util.List;
 import com.htmsd.slayer.model.ShoppingItem;
 import com.htmsd.slayer.model.impl.ShoppingItemImpl;
 import com.liferay.portal.kernel.dao.orm.QueryPos;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
@@ -32,20 +33,21 @@ public class ShoppingItemFinderImpl extends BasePersistenceImpl<ShoppingItem>
 		// 3. Transform the normal query to HQL query
 		SQLQuery query = session.createSQLQuery(sql);
 		query.addEntity("ShoppingItem", ShoppingItemImpl.class);
-		
+
 		QueryPos queryPos = QueryPos.getInstance(query);
 		queryPos.add(tagId);
 		return (List<ShoppingItem>) query.list();
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<ShoppingItem> getItemByCategoryId(long tagId) {
+	public List<ShoppingItem> getItemByCategoryId(String sort, long categoryId, int start, int end) {
 
 		Session session = openSession();
 
 		// 2. Get SQL statement from XML file with its name
 		String sql = CustomSQLUtil.get(FIND_ITEM_BY_CATEGORYID);
-
+		sql = sql.replace("[$sort]", sort);
+		
 		System.out.println("The Query is >>>>>>>>>" + sql);
 
 		// 3. Transform the normal query to HQL query
@@ -53,8 +55,8 @@ public class ShoppingItemFinderImpl extends BasePersistenceImpl<ShoppingItem>
 		query.addEntity("ShoppingItem", ShoppingItemImpl.class);
 
 		QueryPos queryPos = QueryPos.getInstance(query);
-		queryPos.add(tagId);
-
-		return (List<ShoppingItem>) query.list();
+		queryPos.add(categoryId);
+		
+		return (List<ShoppingItem>) QueryUtil.list(query, getDialect(), start, end);
 	}
 }
