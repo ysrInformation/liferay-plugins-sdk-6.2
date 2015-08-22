@@ -27,6 +27,7 @@
 		<icon>/icon.png</icon>
     	<configuration-action-class>com.liferay.portal.kernel.portlet.DefaultConfigurationAction</configuration-action-class>	
     	<header-portlet-css>/css/main.css</header-portlet-css>
+    	<footer-portlet-javascript>/js/accounting.min.js</footer-portlet-javascript>
 		<footer-portlet-javascript>
 			/js/main.js
 		</footer-portlet-javascript>
