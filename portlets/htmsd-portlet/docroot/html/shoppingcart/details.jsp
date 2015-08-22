@@ -40,7 +40,7 @@ if (Validator.isNotNull(shoppingItem_Carts) && shoppingItem_Carts.size() > 0) {
 							detailsURL.setParameter(HConstants.IMAGE_ID, String.valueOf(itemId));
 							%>
 							<div class="images-disp">
-								<aui:a href="<%= detailsURL.toString() %>"><img id="<%= image_upload_preview %>" src="<%= imageURL %>" /></aui:a>
+								<aui:a href="javascript:void(0);"><img id="<%= image_upload_preview %>" src="<%= imageURL %>" /></aui:a>
 							</div>
 							<%
 						}

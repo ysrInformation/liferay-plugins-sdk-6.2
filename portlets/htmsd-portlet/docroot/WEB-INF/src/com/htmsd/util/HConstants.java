@@ -47,4 +47,5 @@ public interface HConstants {
 	
 	public static final int SORT_PRICE_HIGH_TO_LOW = 0;
 	public static final int SORT_PRICE_LOW_TO_HIGH = 1;
+	public static final String CASH_ON_DELIVERY = "Cash On Delivery";
 }
