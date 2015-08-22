@@ -190,35 +190,37 @@ public class ShoppingItemLocalServiceImpl
 	
 	public List<ShoppingItem> getByStatus(int status,int start, int end) {
 			
-			List<ShoppingItem> shoppingItems = null;
-			
-			try {
-				shoppingItems = shoppingItemPersistence.findByStatus(status, start, end);
-			} catch (SystemException e) {
-				_log.error(e);
-			}
-			return shoppingItems;
+		List<ShoppingItem> shoppingItems = null;
+		
+		try {
+			shoppingItems = shoppingItemPersistence.findByStatus(status, start, end);
+		} catch (SystemException e) {
+			_log.error(e);
 		}
+		return shoppingItems;
+	}
 
 	public int getByStatusCount(int status) {
 			
-			int count = 0;
-			try {
-				count =  shoppingItemPersistence.countByStatus(status);
-			} catch (SystemException e) {
-				_log.error(e);
-			}
-			return count;
+		int count = 0;
+		try {
+			count =  shoppingItemPersistence.countByStatus(status);
+		} catch (SystemException e) {
+			_log.error(e);
 		}
+		return count;
+	}
 	
-	public List<ShoppingItem> getItemByCategoryId(long categoryId) {
-		
-		return shoppingItemFinder.getItemByCategoryId(categoryId);
+	public List<ShoppingItem> getItemByCategoryId(String sort, long categoryId, int start, int end) {
+		return shoppingItemFinder.getItemByCategoryId(sort, categoryId, start, end);
 	}
 	
 	public List<ShoppingItem> getItemByTagId(long tagId) {
-		
 		return shoppingItemFinder.getItemByTagId(tagId);
+	}
+	
+	public int getItemByCategoryCount(long categoryId) {
+		return shoppingItemFinder.getItemByCategoryIdCount(categoryId);
 	}
 	
 	private Log _log = LogFactoryUtil.getLog(ShoppingItemLocalServiceImpl.class);

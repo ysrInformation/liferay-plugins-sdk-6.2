@@ -65,7 +65,7 @@ public class ShoppingCartServiceImpl extends ShoppingCartServiceBaseImpl {
 		
 		if(Validator.isNull(shoppingCart)) return 0;
 		
-		List<ShoppingItem_Cart> shoppingItem_Carts = new ArrayList<>();
+		List<ShoppingItem_Cart> shoppingItem_Carts = new ArrayList<ShoppingItem_Cart>();
 		try {
 			shoppingItem_Carts = shoppingItem_CartPersistence.findByCartId(shoppingCart.getCartId());
 		} catch (SystemException e) {

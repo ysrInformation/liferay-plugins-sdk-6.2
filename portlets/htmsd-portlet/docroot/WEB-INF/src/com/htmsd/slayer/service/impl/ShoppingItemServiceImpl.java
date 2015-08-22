@@ -62,22 +62,13 @@ public class ShoppingItemServiceImpl extends ShoppingItemServiceBaseImpl {
 	 *@return  
 	 */
 	@AccessControlled(guestAccessEnabled=true)
-	public JSONArray getShoppingItems(long categoryId, long groupId, int status, int start, int end, int sortBy) {
+	public JSONArray getShoppingItems(long categoryId, long groupId, int status, int start, int end, String sortBy) {
 		
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
 		List<ShoppingItem> shoppingItems = new ArrayList<ShoppingItem>();
-		OrderByComparator orderByComparator = null;
-		
-		if (sortBy == HConstants.SORT_PRICE_HIGH_TO_LOW) {
-			orderByComparator = OrderByComparatorFactoryUtil.create("ShoppingItem", "sellerPrice", false);
-		} else if (sortBy == HConstants.SORT_PRICE_LOW_TO_HIGH) {
-			orderByComparator = OrderByComparatorFactoryUtil.create("ShoppingItem", "sellerPrice", true);
-		}
-
 		try {
 			if (categoryId > 0) {
-				//shoppingItems = shoppingItemLocalService.getCategoryShoppingItems(categoryId, start, end, orderByComparator);
-				shoppingItems = shoppingItemLocalService.getShoppingItems(start, end);
+				shoppingItems = shoppingItemLocalService.getItemByCategoryId(sortBy, categoryId, start, end);
 			} else {
 				shoppingItems = shoppingItemLocalService.getShoppingItems(start, end);
 			}

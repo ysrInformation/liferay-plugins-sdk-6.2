@@ -118,3 +118,9 @@
 .mycart {
     text-align: center;
 }
+.description {
+	text-align: justify;
+}
+.details-img {
+	height: 100px !important;
+}
