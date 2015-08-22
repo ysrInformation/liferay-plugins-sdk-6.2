@@ -5,6 +5,11 @@
 	String categoryToDisplay  = portletPreferences.getValue("categoryToDisplay", "-1");
 	String sortBy = ParamUtil.getString(request, "sortBy", "totalPrice DESC");
 	int totalCount = ShoppingItemLocalServiceUtil.getItemByCategoryCount(Long.valueOf(categoryToDisplay));
+	if(categoryToDisplay.equalsIgnoreCase("-1")) {
+		totalCount = ShoppingItemLocalServiceUtil.getShoppingItemsCount();
+	} else {
+		totalCount = ShoppingItemLocalServiceUtil.getItemByCategoryCount(Long.valueOf(categoryToDisplay));
+	}
 %>
 
 <aui:input name="len" type="hidden"/>
@@ -122,8 +127,8 @@
 						+ '<a href="'+ajaxURL+'">	<img src=' + item.image + ' /></a>'
 						+ '</div><div class="product-details">'
 						+ '<h4 class="text-color-red">' + item.name + '</h4>'
-						+ '<p>' + item.description + '</p>'
-						+ '<h6>' + item.totalPrice + '</h6>'
+						+ '<p class="description">' + item.description + '</p>'
+						+ '<h6 id="price">' + formatPrice(item.totalPrice); + '</h6>'
 						+ '</div></div></li>';
 				$("#shopping_list").append(li);		
 			});
@@ -139,4 +144,5 @@
 			window.location.href = '<%=themeDisplay.getPortalURL()%>' + ajaxURL;
 		});
 	}
+	
 </aui:script>
