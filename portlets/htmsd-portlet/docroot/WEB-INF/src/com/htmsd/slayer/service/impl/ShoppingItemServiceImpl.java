@@ -14,11 +14,8 @@
 
 package com.htmsd.slayer.service.impl;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.beanutils.BeanComparator;
 
 import com.htmsd.slayer.model.ShoppingItem;
 import com.htmsd.slayer.service.base.ShoppingItemServiceBaseImpl;
@@ -28,8 +25,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.util.OrderByComparator;
-import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.security.ac.AccessControlled;
 
@@ -75,9 +71,7 @@ public class ShoppingItemServiceImpl extends ShoppingItemServiceBaseImpl {
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
-		
-		DecimalFormat decimalFormat = new DecimalFormat("#.00");
-		
+				
 		for (ShoppingItem shoppingItem : shoppingItems) {
 
 			if(shoppingItem.getStatus() != HConstants.APPROVE) continue;
@@ -85,8 +79,8 @@ public class ShoppingItemServiceImpl extends ShoppingItemServiceBaseImpl {
 			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 			jsonObject.put(HConstants.ITEM_ID, shoppingItem.getItemId());
 			jsonObject.put(HConstants.NAME, shoppingItem.getName());
-			jsonObject.put(HConstants.DESCRIPTION, shoppingItem.getDescription());
-			jsonObject.put(HConstants.TOTAL_PRICE, decimalFormat.format(shoppingItem.getSellerPrice() + shoppingItem.getTotalPrice()));
+			jsonObject.put(HConstants.DESCRIPTION, StringUtil.shorten(shoppingItem.getDescription(), 50, "."));
+			jsonObject.put(HConstants.TOTAL_PRICE, shoppingItem.getTotalPrice());
 			
 			String imageIds = shoppingItem.getImageIds();
 			long imageId = 0l;
@@ -98,7 +92,6 @@ public class ShoppingItemServiceImpl extends ShoppingItemServiceBaseImpl {
 			jsonObject.put(HConstants.IMAGE, CommonUtil.getThumbnailpath(imageId, groupId, true));
 			jsonArray.put(jsonObject);
 		}
-		
 		return jsonArray;
 	}
 }

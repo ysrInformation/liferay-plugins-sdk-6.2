@@ -22,6 +22,8 @@ import com.htmsd.slayer.model.ShoppingCart;
 import com.htmsd.slayer.model.ShoppingItem_Cart;
 import com.htmsd.slayer.service.base.ShoppingCartServiceBaseImpl;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.security.ac.AccessControlled;
 
@@ -46,6 +48,8 @@ public class ShoppingCartServiceImpl extends ShoppingCartServiceBaseImpl {
 	 * Never reference this interface directly. Always use {@link com.htmsd.slayer.service.ShoppingCartServiceUtil} to access the shopping cart remote service.
 	 */
 	
+	private static final Log _log = LogFactoryUtil.getLog(ShoppingCartServiceImpl.class);
+	
 	/**
 	 * 
 	 * @param userId
@@ -58,9 +62,9 @@ public class ShoppingCartServiceImpl extends ShoppingCartServiceBaseImpl {
 		try {
 			shoppingCart = shoppingCartPersistence.findByUserId(userId);
 		} catch (NoSuchShoppingCartException e) {
-			e.printStackTrace();
+			_log.error("NoSuchShoppingCartException");
 		} catch (SystemException e) {
-			e.printStackTrace();
+			_log.error(e);
 		}
 		
 		if(Validator.isNull(shoppingCart)) return 0;
@@ -69,7 +73,7 @@ public class ShoppingCartServiceImpl extends ShoppingCartServiceBaseImpl {
 		try {
 			shoppingItem_Carts = shoppingItem_CartPersistence.findByCartId(shoppingCart.getCartId());
 		} catch (SystemException e) {
-			e.printStackTrace();
+			_log.error(e);
 		}
 		
 		count = shoppingItem_Carts.size();
