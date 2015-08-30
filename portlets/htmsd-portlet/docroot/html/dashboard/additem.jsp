@@ -83,7 +83,6 @@
 	            $('#image_upload_preview'+id).attr('src', e.target.result);
 	            $('#image_upload_preview'+id).show();
 	        }
-
 	        reader.readAsDataURL(input.files[0]);
 	    }
 	}

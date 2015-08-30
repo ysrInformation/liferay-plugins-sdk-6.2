@@ -159,7 +159,7 @@
 				</c:if>
 				<aui:input name="<%=HConstants.TAG %>"  value="<%=tagName %>"/>
 				<aui:input type="hidden" name="<%=HConstants.TAG_ID %>" value="<%=tagId%>"/>
-
+ 
 					
 				<c:if test="<%=isAdmin %>">
 					<aui:select name="<%=HConstants.status %>" showEmptyOption="true" required="true">
