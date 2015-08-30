@@ -80,7 +80,10 @@
 			"columns": [
 				[
 					{
-			            "portletId": "3_WAR_htmsdportlet"
+			            "portletId": "3_WAR_htmsdportlet",
+			            "portletPreferences": {
+			            	"noOfItems":"8"
+			            }
 			        }
 			    ]
 			], 
@@ -92,7 +95,10 @@
 			"columns": [
 				[
 					{
-			            "portletId": "3_WAR_htmsdportlet"
+			            "portletId": "3_WAR_htmsdportlet",
+			            "portletPreferences": {
+			            	"noOfItems":"8"
+			            }
 			        }
 			    ]
 			], 
@@ -104,7 +110,10 @@
 			"columns": [
 				[
 					{
-			            "portletId": "3_WAR_htmsdportlet"
+			            "portletId": "3_WAR_htmsdportlet",
+			            "portletPreferences": {
+			            	"noOfItems":"8"
+			            }
 			        }
 			    ]
 			], 
@@ -116,7 +125,10 @@
 			"columns": [
 				[
 					{
-			            "portletId": "3_WAR_htmsdportlet"
+			            "portletId": "3_WAR_htmsdportlet",
+			            "portletPreferences": {
+			            	"noOfItems":"8"
+			            }
 			        }
 			    ]
 			], 
@@ -128,7 +140,10 @@
 			"columns": [
 				[
 					{
-			            "portletId": "3_WAR_htmsdportlet"
+			            "portletId": "3_WAR_htmsdportlet",
+			            "portletPreferences": {
+			            	"noOfItems":"8"
+			            }
 			        }
 			    ]
 			], 
