@@ -35,10 +35,9 @@ public class ShoppingListPortlet extends MVCPortlet {
 		
 		_log.info("Adding Item to Cart");
 		
-		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY); 
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		
 		long itemId = ParamUtil.getLong(actionRequest, HConstants.ITEM_ID);
-		
 		
 		ShoppingCart shoppingCart = ShoppingCartLocalServiceUtil.insertShoppingCart(
 				themeDisplay.getUserId(), themeDisplay.getCompanyId(), 

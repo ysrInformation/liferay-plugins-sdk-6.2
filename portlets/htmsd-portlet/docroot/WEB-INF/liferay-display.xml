@@ -10,4 +10,7 @@
 		<portlet id="4"></portlet>
 		<portlet id="5"></portlet>
 	</category>
+	<category name="category.sample">
+		<portlet id="search"></portlet>
+	</category>
 </display>

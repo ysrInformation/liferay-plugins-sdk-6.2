@@ -6,12 +6,16 @@
 	String sortBy = ParamUtil.getString(request, "sortBy", "totalPrice DESC");
 	int totalCount = ShoppingItemLocalServiceUtil.getItemByCategoryCount(Long.valueOf(categoryToDisplay));
 	if(categoryToDisplay.equalsIgnoreCase("-1")) {
-		totalCount = ShoppingItemLocalServiceUtil.getShoppingItemsCount();
+		totalCount = ShoppingItemLocalServiceUtil.getByStatusCount(HConstants.APPROVE);
 	} else {
 		totalCount = ShoppingItemLocalServiceUtil.getItemByCategoryCount(Long.valueOf(categoryToDisplay));
 	}
 %>
-
+<style>
+	#no-item-display {
+		text-align: center;
+	}
+</style>
 <aui:input name="len" type="hidden"/>
 <div class="row margin_left_zero">
 	<div class="span6">
@@ -39,7 +43,9 @@
 <ul id="shopping_list" class="row">
 	<!-- item display -->
 </ul>
-
+<div id="no-item-display" >
+	<h2>No Items to Display</h2>
+</div>
 <div id="loader-icon" >
 	<img src="<%=request.getContextPath()%>/images/loader.gif" style="width: 100px; height: 100px"/>
 </div>
@@ -54,15 +60,17 @@
 		</div>
 	</div>
 </div>
-
+<%=sortBy%>
 <aui:script>
 	var dataLen = 0;
 	var portletId = '<%= themeDisplay.getPortletDisplay().getId() %>';
 	$(function() {
-		
+		if(<%=totalCount%> != 0) {
+			$('#no-item-display').hide();
+		}
 		$('#<portlet:namespace/>sort-by option[value="<%=sortBy%>"').attr("selected", "selected")
 		window.onload = $("#<portlet:namespace/>len").val(<%=noOfItems%>);
-		$('#current_count').html($("#<portlet:namespace/>len").val());
+		$('#current_count').html(dataLen);
 		getShoppingItems(0, <%=noOfItems%>);
 	});
 	
@@ -73,8 +81,8 @@
 	}
 	
 	function getShoppingItems(s, e) {
-		
-	$.ajax({
+		console.info("E1:"+e);
+		$.ajax({
 			url : '<%=themeDisplay.getPortalURL()+"/api/jsonws/htmsd-portlet.shoppingitem/get-shopping-items"%>',
 			type : "GET",
 			data : {
@@ -92,6 +100,7 @@
 				$('#loader-icon').hide();
 			},
 			success : function(data) {
+				console.info("E2:"+data.length);
 				if (data.length > 0) {	
 					$("#<portlet:namespace/>len").val(e);
 					render(data);
