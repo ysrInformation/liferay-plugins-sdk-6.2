@@ -122,7 +122,6 @@ public class ShoppingItemLocalServiceImpl
 			shoppingItem = fetchShoppingItem(itemId);
 			shoppingItem = setUpdateAudit(updateUserId, shoppingItem, updateUserName);
 			shoppingItem.setStatus(status);
-			
 			updateShoppingItem(shoppingItem);
 		} catch (SystemException e) {
 			_log.error(e);
