@@ -1,0 +1,25 @@
+@media screen and (max-width:768px) {
+	.sticky {
+		padding-left:1px;
+		.cart-btn {
+			width:95%;
+		}
+	
+		#search {
+			width: 70%;
+		}
+	}
+}
+
+@media screen and (max-width:1024px) {	
+	.sticky {
+		padding-left:1%;
+		.cart-btn {
+			width:95%;
+		}
+	
+		#search {
+			width: 70%;
+		}
+	}
+}
