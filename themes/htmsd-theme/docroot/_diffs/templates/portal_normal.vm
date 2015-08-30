@@ -40,24 +40,41 @@
 	
 	<div class="container-fluid" id="wrapper">
 		<header id="banner" role="banner">
-			<div id="heading">
-				<h1 class="site-title">
-					<a class="$logo_css_class" href="$site_default_url" title="#language_format ("go-to-x", [$site_name])">
-						<img alt="$logo_description" height="$site_logo_height" src="$site_logo" width="$site_logo_width" />
-	
-						#if ($show_site_name)
-							<span class="site-name text-color-white" title="#language_format ("go-to-x", [$site_name])">
-								$site_name
-							</span>
-						#end
+			<div id="search-div" class="row margin_left_zero">
+			
+				<div id="span4 heading" class="span4">
+					<h1 class="site-title">
+						<a class="$logo_css_class" href="$site_default_url" title="#language_format ("go-to-x", [$site_name])">
+							<img alt="$logo_description" height="65" src="$site_logo" width="65" />
+		
+							#if ($show_site_name)
+								<span class="site-name text-color-white" title="#language_format ("go-to-x", [$site_name])">
+									$site_name
+								</span>
+							#end
+						</a>
+		
+					</h1>
+		
+					<h2 class="page-title">
+						<span>$the_title</span>
+					</h2>
+				</div>
+				<div class="span6 center">
+					<input id="search" placeholder="Search"/><button class="search-btn" onClick="javascript:search();">
+						<i class="fa fa-search"></i> SEARCH
+					</button>
+				</div>
+				<div class="span2 center">
+					<a href="/cart">
+						<button class="cart-btn">
+							<i class="fa fa-shopping-cart cart-icon"></i>
+							<span class="cart-label"> Cart </span>
+							<span id="cart-item-count">&nbsp;0&nbsp;</span>
+						</button>	
 					</a>
-	
-				</h1>
-	
-				<h2 class="page-title">
-					<span>$the_title</span>
-				</h2>
-			</div>
+				</div>
+			</div>	
 			#if ($has_navigation || $is_signed_in)
 				#parse ("$full_templates_path/navigation.vm")
 			#end
@@ -90,6 +107,20 @@
 </body>
 
 <script>
+	
+	var elTop = $('#search-div').offset().top;
+	elTop = parseInt(elTop)+parseInt(100);
+   	$(window).scroll(function() {
+   		if($(window).scrollTop() > elTop) {
+   			$('#bg_top').fadeOut().hide();
+   			$('#bg_top_fixed_heigth').fadeOut().hide();
+   		} else {
+   			$('#bg_top').fadeIn().show();
+   			$('#bg_top_fixed_heigth').fadeIn().show();
+   		}
+        $('#search-div').toggleClass('sticky', $(window).scrollTop() > elTop);
+    });
+    
 	AUI().use('aui-base', function(A) {
 		Liferay.Service('/htmsd-portlet.shoppingcart/get-shopping-cart-item-count', {
 			userId: $user_id

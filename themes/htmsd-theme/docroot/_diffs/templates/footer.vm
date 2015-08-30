@@ -56,9 +56,7 @@
 			</div>
 			<div class="span3">
 				<div class="visa_card">
-					<img class="visa" src="$images_folder/visa.png"/>
-				
-					<img class="card" src="$images_folder/card.png"/>
+					<img class="visa" src="$images_folder/cod.jpg"/>
 				</div>
 				
 			</div>

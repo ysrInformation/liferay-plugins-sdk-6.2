@@ -83,18 +83,6 @@
 			            "portletId": "3_WAR_htmsdportlet"
 			        }
 			    ]
-			],    
-			"title": "Pet Foods",
-			"name": "Pet Foods",
-			"friendlyURL": "/pet-food"
-		},
-		{
-			"columns": [
-				[
-					{
-			            "portletId": "3_WAR_htmsdportlet"
-			        }
-			    ]
 			], 
 			"title": "Exotic Pet Birds",
 			"name": "Exotic Pet Birds",
@@ -147,6 +135,16 @@
 			"title": "Fish",
 			"name": "Fish",
 			"friendlyURL": "/fish"
+		},
+		{
+			"title": "Gallery",
+			"name": "Gallery",
+			"friendlyURL": "/gallery"
+		},
+		{
+			"title": "Videos",
+			"name": "Videos",
+			"friendlyURL": "/video"
 		},
 		{
 			"title": "About Us",

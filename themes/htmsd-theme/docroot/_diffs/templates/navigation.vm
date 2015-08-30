@@ -45,18 +45,6 @@
 						#end
 					</li>
 				#end
-				<li class="lfr-nav-item nav_li">
-					<input id="search" placeholder="Search"/><button class="search-btn" onClick="javascript:search();"><i class="fa fa-search"></i></button>
-				</li>
-				<li class="lfr-nav-item nav_li">
-					<div class="cart-btn">
-						<a href="/cart">
-							<i class="fa fa-shopping-cart cart-icon"></i>
-							<span class="cart-label"> Cart </span>
-							<span id="cart-item-count">&nbsp;0&nbsp;</span>
-						</a>
-					</div>
-				</li>
 			</ul>
 		</div>
 	</div>
