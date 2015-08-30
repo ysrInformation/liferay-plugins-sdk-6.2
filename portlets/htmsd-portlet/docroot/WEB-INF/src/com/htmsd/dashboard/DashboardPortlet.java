@@ -14,7 +14,6 @@ import javax.portlet.ResourceResponse;
 
 import com.htmsd.slayer.model.ShoppingItem;
 import com.htmsd.slayer.model.Tag;
-import com.htmsd.slayer.service.CategoryLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingItemLocalServiceUtil;
 import com.htmsd.slayer.service.TagLocalServiceUtil;
 import com.htmsd.util.HConstants;
@@ -64,39 +63,42 @@ public class DashboardPortlet extends MVCPortlet {
 		
 		long itemId = ParamUtil.getLong(uploadRequest, HConstants.ITEM_ID);
 		long userId  = ParamUtil.getLong(uploadRequest, "userId");
+		String userName = ParamUtil.getString(uploadRequest, "userName");
+		long currentUserId  = themeDisplay.getUserId();
+		String currentUserName = themeDisplay.getUser().getScreenName();
 		String name = ParamUtil.getString(uploadRequest, HConstants.NAME);
+		String productCode = ParamUtil.getString(uploadRequest, HConstants.PRODUCT_CODE);
 		String description = ParamUtil.getString(uploadRequest, HConstants.DESCRIPTION);
 		Double sellerPrice = ParamUtil.getDouble(uploadRequest, HConstants.PRICE);
 		Double totalPrice = ParamUtil.getDouble(uploadRequest, HConstants.TOTAL_PRICE);
+		boolean unlimitedQuantity = ParamUtil.getBoolean(uploadRequest, HConstants.UNILIMITED_QUANTITY);
+		long quantity = unlimitedQuantity ? -1 : ParamUtil.getLong(uploadRequest, HConstants.QUANTITY);
 		long categoryId = ParamUtil.getLong(uploadRequest, HConstants.CATEGORY_ID);
 		long tagId = ParamUtil.getLong(uploadRequest, HConstants.TAG_ID);
 		String tagName = ParamUtil.getString(uploadRequest, HConstants.TAG);
+		String vedioURL = ParamUtil.getString(uploadRequest, HConstants.VEDIO_URL);
 		List<Long> imageIds = new ArrayList<Long>();
 		ShoppingItem shoppingItem = null;
 		Tag tag = null;
 		int status = ParamUtil.getInteger(uploadRequest, HConstants.status);
-
+		String remark = ( status == HConstants.REJECT ) ? ParamUtil.getString(uploadRequest, HConstants.REMARK)  : StringPool.BLANK;
+		
 		if (itemId == 0) {
 		
 			//Adding items 
 			imageIds = saveFiles(uploadRequest, HConstants.IMAGE, HConstants.ITEM_FOLDER_NAME);
 			shoppingItem = ShoppingItemLocalServiceUtil.addItem(themeDisplay.getScopeGroupId(),
-					themeDisplay.getCompanyId(), themeDisplay.getUserId(), null,
-					name, description, sellerPrice, totalPrice, HConstants.NEW,
-					StringUtil.merge(imageIds, StringPool.COMMA));
-			
+					themeDisplay.getCompanyId(), currentUserId,currentUserName, currentUserId, StringPool.BLANK, productCode,
+					name, description, sellerPrice, totalPrice, quantity, HConstants.NEW,
+					StringUtil.merge(imageIds, StringPool.COMMA), vedioURL, StringPool.BLANK);
+			itemId = shoppingItem.getItemId();
 		}else {
 			//Updating items 
-			if(status == HConstants.REJECT) {
-				ShoppingItemLocalServiceUtil.updateStatus(itemId, status);
-			}else {
 				imageIds = updateImages(uploadRequest, HConstants.IMAGE, HConstants.IMAGE_ID);
 				shoppingItem = ShoppingItemLocalServiceUtil.updateItem(itemId,
-						themeDisplay.getScopeGroupId(),
-						themeDisplay.getCompanyId(), userId, null, name,
-						description, sellerPrice, totalPrice, status,
-						StringUtil.merge(imageIds, StringPool.COMMA));
-			}
+						themeDisplay.getScopeGroupId(), themeDisplay.getCompanyId(), userId, userName,currentUserId, currentUserName, productCode, name,
+						description, sellerPrice, totalPrice, quantity, status,
+						StringUtil.merge(imageIds, StringPool.COMMA), vedioURL, remark);
 		}
 		
 		//Adding New Tag
@@ -112,17 +114,8 @@ public class DashboardPortlet extends MVCPortlet {
 		}
 		
 		//Update Tag_Mapping and Category Mapping
-		try {
-			CategoryLocalServiceUtil.removeMapping(itemId);
-			TagLocalServiceUtil.removeMapping(itemId);
-			ShoppingItemLocalServiceUtil.addCategoryShoppingItem(categoryId, shoppingItem.getItemId());	
-			if (tagId != 0) {
-				ShoppingItemLocalServiceUtil.addTagShoppingItem(tagId, shoppingItem.getItemId());
-			}
-			
-		} catch (SystemException e) {
-			_log.error(e);
-		}
+			ShoppingItemLocalServiceUtil.updateCategory(itemId, categoryId, userId, userName);
+			ShoppingItemLocalServiceUtil.updateTag(itemId, tagId, userId, userName);
 		actionResponse.setRenderParameter("tab1", ParamUtil.getString(uploadRequest, "tab1"));
 	}
 	
@@ -134,10 +127,11 @@ public class DashboardPortlet extends MVCPortlet {
 	public void updateItemSet(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortletException {
 		
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		String [] rowIds=ParamUtil.getParameterValues(actionRequest, "rowIds");
 		int status = ParamUtil.getInteger(actionRequest, HConstants.status);
 		for(String rowId : rowIds) {
-			ShoppingItemLocalServiceUtil.updateStatus(Long.valueOf(rowId), status);
+			ShoppingItemLocalServiceUtil.updateStatus(Long.valueOf(rowId), status, themeDisplay.getUserId(),themeDisplay.getUser().getScreenName());
 		}
 		actionResponse.setRenderParameter("tab1", ParamUtil.getString(actionRequest, "tab1"));
 	}

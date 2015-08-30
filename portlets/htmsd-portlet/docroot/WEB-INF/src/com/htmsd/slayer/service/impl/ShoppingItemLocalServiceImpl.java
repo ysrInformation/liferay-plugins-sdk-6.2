@@ -47,27 +47,35 @@ public class ShoppingItemLocalServiceImpl
 	 */
 	
 	public ShoppingItem addItem(long groupId, long companyId, long userId,
+			String userName, long updateUserId, String updateUserName,
 			String productCode, String name, String description,
-			Double sellerPrice, Double totalPrice, int status, String imageIds) {
+			Double sellerPrice, Double totalPrice, long quantity, int status,
+			String imageIds, String vedioURL, String remark) {
 
 		ShoppingItem shoppingItem = null;
 		try {
-			shoppingItem = shoppingItemLocalService.createShoppingItem(counterLocalService.increment(ShoppingItem.class.getName()));
+			shoppingItem = createShoppingItem(counterLocalService.increment(ShoppingItem.class.getName()));
 			
 			shoppingItem.setGroupId(groupId);
 			shoppingItem.setCompanyId(companyId);
 			shoppingItem.setUserId(userId);
+			shoppingItem.setUserName(userName);
+			shoppingItem.setUpdateUserId(updateUserId);
+			shoppingItem.setUpdateUserName(updateUserName);
 			shoppingItem.setProductCode(productCode);
 			shoppingItem.setName(name);
 			shoppingItem.setDescription(description);
 			shoppingItem.setSellerPrice(sellerPrice);
 			shoppingItem.setTotalPrice(totalPrice);
+			shoppingItem.setQuantity(quantity);
 			shoppingItem.setStatus(status);
 			shoppingItem.setImageIds(imageIds);
+			shoppingItem.setVedioURL(vedioURL);
 			shoppingItem.setCreateDate(new Date());
 			shoppingItem.setModifiedDate(null);
+			shoppingItem.setRemark(remark);
 			
-			shoppingItemLocalService.addShoppingItem(shoppingItem);
+			addShoppingItem(shoppingItem);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
@@ -75,52 +83,202 @@ public class ShoppingItemLocalServiceImpl
 	}
 	
 	public ShoppingItem updateItem(long itemId, long groupId, long companyId,
-			long userId, String productCode, String name, String description,
-			Double sellerPrice, Double totalPrice, int status, String imageIds) {
+			long userId, String userName, long updateUserId, String updateUserName, String productCode, String name, String description,
+			Double sellerPrice, Double totalPrice, long quantity, int status, String imageIds, String vedioURL, String remark) {
 
 		ShoppingItem shoppingItem = null;
 		try {
-			shoppingItem = shoppingItemLocalService.fetchShoppingItem(itemId);
+			shoppingItem = fetchShoppingItem(itemId);
 			
 			shoppingItem.setGroupId(groupId);
 			shoppingItem.setCompanyId(companyId);
 			shoppingItem.setUserId(userId);
+			shoppingItem.setUserName(userName);
+			shoppingItem.setUpdateUserId(updateUserId);
+			shoppingItem.setUpdateUserName(updateUserName);
 			shoppingItem.setProductCode(productCode);
 			shoppingItem.setName(name);
 			shoppingItem.setDescription(description);
 			shoppingItem.setSellerPrice(sellerPrice);
 			shoppingItem.setTotalPrice(totalPrice);
+			shoppingItem.setQuantity(quantity);
 			shoppingItem.setStatus(status);
 			shoppingItem.setImageIds(imageIds);
+			shoppingItem.setVedioURL(vedioURL);
 			shoppingItem.setModifiedDate(new Date());
+			shoppingItem.setRemark(remark);
 			
-			shoppingItemLocalService.updateShoppingItem(shoppingItem);
+			updateShoppingItem(shoppingItem);
 		} catch (SystemException e) {
 			_log.error(e);
 		}
 		return shoppingItem;
 	}
 	
-	public ShoppingItem updateStatus(long itemId, int status) {
+	public ShoppingItem updateStatus(long itemId, int status, long updateUserId, String updateUserName) {
 		
 		ShoppingItem shoppingItem = null;
 		try {
-			shoppingItem = shoppingItemLocalService.fetchShoppingItem(itemId);
-			
+			shoppingItem = fetchShoppingItem(itemId);
+			shoppingItem = setUpdateAudit(updateUserId, shoppingItem, updateUserName);
 			shoppingItem.setStatus(status);
-			shoppingItem.setModifiedDate(new Date());
 			
-			shoppingItemLocalService.updateShoppingItem(shoppingItem);
+			updateShoppingItem(shoppingItem);
 		} catch (SystemException e) {
 			_log.error(e);
 		}
+		return shoppingItem;
+	}
+	
+	public ShoppingItem updateTitle(long itemId, String name, long updateUserId, String updateUserName) {
+			
+		ShoppingItem shoppingItem = null;
+		try {
+			shoppingItem = fetchShoppingItem(itemId);
+			shoppingItem = setUpdateAudit(updateUserId, shoppingItem, updateUserName);
+			shoppingItem.setName(name);
+			updateShoppingItem(shoppingItem);
+		} catch (SystemException e) {
+			_log.error(e);
+		}
+		return shoppingItem;
+		}
+	
+	public ShoppingItem updateDescription(long itemId, String description, long updateUserId, String updateUserName) {
+		
+		ShoppingItem shoppingItem = null;
+		try {
+			shoppingItem = fetchShoppingItem(itemId);
+			shoppingItem = setUpdateAudit(updateUserId, shoppingItem, updateUserName);
+			shoppingItem.setDescription(description);
+			updateShoppingItem(shoppingItem);
+		} catch (SystemException e) {
+			_log.error(e);
+		}
+		return shoppingItem;
+	}
+	
+	public ShoppingItem updateTotalPrice(long itemId, Double totalPrice, long updateUserId, String updateUserName) {
+		
+		ShoppingItem shoppingItem = null;
+		try {
+			shoppingItem = fetchShoppingItem(itemId);
+			shoppingItem = setUpdateAudit(updateUserId, shoppingItem, updateUserName);
+			shoppingItem.setTotalPrice(totalPrice);
+			updateShoppingItem(shoppingItem);
+		} catch (SystemException e) {
+			_log.error(e);
+		}
+		return shoppingItem;
+	}
+	
+	public ShoppingItem updateTag(long itemId, long tagId, long updateUserId, String updateUserName) {
+			
+		ShoppingItem shoppingItem = null;
+		if(tagId != 0 && itemId != 0) {
+			try {
+				shoppingItem = fetchShoppingItem(itemId);
+				shoppingItem = setUpdateAudit(updateUserId, shoppingItem, updateUserName);
+				updateShoppingItem(shoppingItem);
+				
+				tagLocalService.removeMapping(itemId);
+				addTagShoppingItem(tagId, itemId);
+				
+			} catch (SystemException e) {
+				_log.error(e);
+			}
+		}
+		return shoppingItem;
+		}
+	
+	public ShoppingItem updateCategory(long itemId, long categoryId, long updateUserId, String updateUserName) {
+		
+		ShoppingItem shoppingItem = null;
+		if(categoryId !=0 && itemId !=0 ) {
+			try {
+				shoppingItem = fetchShoppingItem(itemId);
+				shoppingItem = setUpdateAudit(updateUserId, shoppingItem, updateUserName);
+				updateShoppingItem(shoppingItem);
+				
+				categoryLocalService.removeMapping(itemId);
+				addCategoryShoppingItem(categoryId, itemId);
+				
+			} catch (SystemException e) {
+				_log.error(e);
+			}
+		}
+		return shoppingItem;
+	}
+	
+	public ShoppingItem updateImages(long itemId, String imageIds, long updateUserId, String updateUserName) {
+			
+		ShoppingItem shoppingItem = null;
+		try {
+			shoppingItem = fetchShoppingItem(itemId);
+			shoppingItem = setUpdateAudit(updateUserId, shoppingItem, updateUserName);
+			shoppingItem.setImageIds(imageIds);
+			updateShoppingItem(shoppingItem);
+		} catch (SystemException e) {
+			_log.error(e);
+		}
+		return shoppingItem;
+	}
+	
+	public ShoppingItem updateProductCode(long itemId, String productCode, long updateUserId, String updateUserName) {
+		
+		ShoppingItem shoppingItem = null;
+		try {
+			shoppingItem = fetchShoppingItem(itemId);
+			shoppingItem = setUpdateAudit(updateUserId, shoppingItem, updateUserName);
+			shoppingItem.setProductCode(productCode);
+			updateShoppingItem(shoppingItem);
+		} catch (SystemException e) {
+			_log.error(e);
+		}
+		return shoppingItem;
+	}
+	
+	public ShoppingItem updatevedioURL(long itemId, String vedioURL, long updateUserId, String updateUserName) {
+			
+		ShoppingItem shoppingItem = null;
+		try {
+			shoppingItem = fetchShoppingItem(itemId);
+			shoppingItem = setUpdateAudit(updateUserId, shoppingItem, updateUserName);
+			shoppingItem.setVedioURL(vedioURL);
+			updateShoppingItem(shoppingItem);
+		} catch (SystemException e) {
+			_log.error(e);
+		}
+		return shoppingItem;
+	}
+	
+	public ShoppingItem updateRemark(long itemId, String remark, long updateUserId, String updateUserName) {
+		
+		ShoppingItem shoppingItem = null;
+		try {
+			shoppingItem = fetchShoppingItem(itemId);
+			shoppingItem = setUpdateAudit(updateUserId, shoppingItem, updateUserName);
+			shoppingItem.setRemark(remark);
+			updateShoppingItem(shoppingItem);
+		} catch (SystemException e) {
+			_log.error(e);
+		}
+		return shoppingItem;
+	}
+		
+	public ShoppingItem setUpdateAudit(long updateUserId, ShoppingItem shoppingItem, String updateUserName) {
+
+		shoppingItem.setUpdateUserId(updateUserId);
+		shoppingItem.setUpdateUserName(updateUserName);
+		shoppingItem.setModifiedDate(new Date());
+			
 		return shoppingItem;
 	}
 	
 	public void deleteItem(long itemId) {
 		
 		try {
-			shoppingItemLocalService.deleteShoppingItem(itemId);
+			deleteShoppingItem(itemId);
 			categoryFinder.deleteCatItemByItemId(itemId);
 			tagFinder.deleteTagItemByItemId(itemId);
 		} catch (SystemException e) {

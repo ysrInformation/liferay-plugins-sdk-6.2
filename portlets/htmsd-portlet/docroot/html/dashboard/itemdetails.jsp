@@ -25,19 +25,20 @@
 
 <%
 	boolean isAdmin = permissionChecker.isOmniadmin();
+	String backURL = ParamUtil.getString(renderRequest, "backURL");
 	long itemId = ParamUtil.getLong(renderRequest, "itemId");
 	ShoppingItem item = ShoppingItemLocalServiceUtil.fetchShoppingItem(itemId);
 	DLFileEntry documentFileEntry = null;
 	DecimalFormat decimalFormat = new DecimalFormat("#.00");
 	if(Validator.isNotNull(item)) {
 		List<Category> categories = CategoryLocalServiceUtil.getCategories(-1, -1);
-		String backURL = ParamUtil.getString(renderRequest, "backURL");
 		PortletURL updateItemURL = renderResponse.createActionURL();
 		updateItemURL.setParameter(ActionRequest.ACTION_NAME, "addItem");
 		updateItemURL.setParameter(HConstants.ITEM_ID, String.valueOf(itemId));
 		updateItemURL.setParameter("userId", String.valueOf(item.getUserId()));
 		updateItemURL.setParameter("backURL", backURL);
 		updateItemURL.setParameter("tab1", ParamUtil.getString(renderRequest, "tab1"));
+		long quantity = item.getQuantity();
 		List<Tag> tagsList = TagLocalServiceUtil.getTagByItemId(itemId);
 		String tagName = StringPool.BLANK;
 		long tagId = 0l;
@@ -63,9 +64,15 @@
 	
 		<liferay-ui:header title='<%=isAdmin ? "update-item" : "view-item" %>' backLabel="go-back" backURL='<%=backURL%>'/>
 		<liferay-ui:header title='<%=itemStatus%>'/>
+		<c:if test="<%=status == HConstants.REJECT %>">
+			<liferay-ui:header title='<%=item.getRemark()%>'/>
+		</c:if>
 		<aui:fieldset>
 			<aui:form action="<%=updateItemURL %>" enctype="multipart/form-data" method="POST" name="fm">
+				<aui:input name="userId" type="hidden" value="<%=item.getUserId() %>" />
+				<aui:input name="userName" type="hidden" value="<%=item.getUserName() %>" />
 				<aui:input name="<%=HConstants.NAME%>" required="true" value="<%= item.getName()%>" />
+				<aui:input name="<%=HConstants.PRODUCT_CODE %>"  value="<%=item.getProductCode() %>"/>
 				<aui:select name="<%=HConstants.CATEGORY_ID %>"   required="true" showEmptyOption="true">
 					<%
 						for(Category category : categories) {
@@ -126,126 +133,170 @@
 					%>
 				</aui:layout>
 				
+				<aui:input name="<%=HConstants.VEDIO_URL %>" value="<%=item.getVedioURL() %>">
+					<aui:validator name="url" />
+				</aui:input>
+				
 				<aui:input name="<%=HConstants.PRICE %>" required="true" value="<%=decimalFormat.format(item.getSellerPrice()) %>">
 					<aui:validator name="number" />
 				</aui:input>
+				
+				<aui:layout>
+					<aui:column columnWidth="25">
+						<aui:input name="<%=HConstants.QUANTITY %>"  value="<%= quantity == -1 ? StringPool.BLANK : quantity%>" disabled="<%=( quantity == -1 ) %>">
+							<aui:validator name="number" />
+					</aui:input>
+					</aui:column>
+					<aui:column columnWidth="25">
+						<aui:input name="<%=HConstants.UNILIMITED_QUANTITY %>" type="checkbox" label="unlimited-quantity" checked="<%= quantity == -1 ? true : false %>"/>
+					</aui:column>
+				</aui:layout>
+				
 				<c:if test="<%=isAdmin%>">
-					<aui:input name="<%=HConstants.TOTAL_PRICE %>" required="true" value="<%=decimalFormat.format(item.getTotalPrice()) %>">
+					<aui:input name="<%=HConstants.TOTAL_PRICE %>"  value="<%=decimalFormat.format(item.getTotalPrice()) %>">
 						<aui:validator name="number" />
 					</aui:input>
 				</c:if>
 				<aui:input name="<%=HConstants.TAG %>"  value="<%=tagName %>"/>
 				<aui:input type="hidden" name="<%=HConstants.TAG_ID %>" value="<%=tagId%>"/>
-				
+
+					
 				<c:if test="<%=isAdmin %>">
 					<aui:select name="<%=HConstants.status %>" showEmptyOption="true" required="true">
 						<aui:option value="<%=HConstants.APPROVE%>" label="approve" />
 						<aui:option value="<%=HConstants.REJECT %>" label="reject" />
 					</aui:select>
-				
+					<div id="remarkDiv" style="display:none;">
+						<aui:input name="<%=HConstants.REMARK %>" type="textarea" value="<%=item.getRemark()%>"/>
+					</div>
 					<aui:button type="submit" value="update" onClick="return confirmSubmit();"/>
 					<aui:button type="button" href="<%=backURL %>" value="cancel" />
 				</c:if>
 			</aui:form>
-		</aui:fieldset>
-		
-		<!-- Image for Modal -->
-    	<img id="zoomImg" src="" width="50px" height="50px"/> 
+			</aui:fieldset>
+			
+			<!-- Image for Modal -->
+	    	<img id="zoomImg" src="" width="50px" height="50px" style="display:none;"/> 
 
-<script>
-	$(document).ready(function(){
-		if(!<%=isAdmin%>) {
-			$('#<portlet:namespace/>fm input,input[type=textarea],select ').attr("disabled", true);	
-		}
-	});
-	$("img").on("click",function(){
-		$("#zoomImg").attr('src',$(this).attr('src'));
-		popupImage();
-	});
-	function popupImage(){
-		 $(function() {
-			    $( "#zoomImg" ).dialog({
-			    	modal: true,
-			    	width : 500,
-			    	height : 500,
-			    	draggable: false,
-			    	resizable: false,
-			    	closeOnEscape : true ,
-					show: {
-						effect: "fade",
-						duration: 1000
-					},
-					hide: {
-						effect: "explode",
-						duration: 1000
-					},
-				   open: function(){
-			              jQuery('.ui-widget-overlay,.ui-dialog-content').bind('click',function(){
-			                jQuery('#zoomImg').dialog('close');
-			             })
-			        }
-			    });
-			  });
-	}
-	function readURL(input,id) {
-	    if (input.files && input.files[0]) {
-	        var reader = new FileReader();
-	        $('#<portlet:namespace/>deleteImage'+id).val('false');
-	        reader.onload = function (e) {
-	            $('#image_upload_preview'+id).attr('src', e.target.result);
-	            $('#image_upload_preview'+id).show();
-	        }
-	        reader.readAsDataURL(input.files[0]);
-	    }
-	}
-	
-	function deleteUpload(id) {
-		var control = $('#<portlet:namespace/>image'+id);
-	    control.replaceWith( control = control.clone( true ) );
-	    $('#image_upload_preview'+id).attr("src","");
-	    $('#image_upload_preview'+id).hide();
-	    $('#<portlet:namespace/>deleteImage'+id).val('true');
-	}
-	
-	function confirmSubmit(){
-		return confirm("Are you sure you want to update ?");
-	}
-	
-	AUI().use('autocomplete-list','aui-base','aui-io-request','autocomplete-filters','autocomplete-highlighters',function (A) {
-		var tagAuto
-		A.io.request('<%=getTagsURL%>',{
-			dataType: 'json',
-			method: 'GET',
-			on: {
-				success: function() {	
-					tags=this.get('responseData');
-					//console.log(tags);
-					tagAuto = new A.AutoCompleteList({
-								allowBrowserAutocomplete: 'false',
-								activateFirstItem: 'true',
-								inputNode: '#<portlet:namespace /><%=HConstants.TAG %>',
-								resultTextLocator: 'tagName',
-								render: 'true',
-								resultHighlighter: 'charMatch',
-								resultFilters:['phraseMatch'],
-								source:this.get('responseData'),
-							 })
-					
-					tagAuto.on('select',function(e)
-						     {
-						    var selected_key = e.result.raw.tagId;
-						  	//console.log(selected_key);
-						    A.one("#<portlet:namespace /><%=HConstants.TAG_ID%>").set("value",selected_key);
-						     }); 
+			<script>
+				$(document).ready(function(){
+					if(!<%=isAdmin%>) {
+						$('#<portlet:namespace/>fm input,input[type=textarea],select ').attr("disabled", true);	
+					}
+				});
+				$("img").on("click",function(){
+					$("#zoomImg").attr('src',$(this).attr('src'));
+					popupImage();
+				});
+				function popupImage(){
+					 $(function() {
+						    $( "#zoomImg" ).dialog({
+						    	modal: true,
+						    	width : 500,
+						    	height : 500,
+						    	draggable: false,
+						    	resizable: false,
+						    	closeOnEscape : true ,
+								show: {
+									effect: "fade",
+									duration: 1000
+								},
+								hide: {
+									effect: "explode",
+									duration: 1000
+								},
+							   open: function(){
+						              jQuery('.ui-widget-overlay,.ui-dialog-content').bind('click',function(){
+						                jQuery('#zoomImg').dialog('close');
+						             })
+						        }
+						    });
+						  });
 				}
-			}
-		});
-	});
-</script>
-		<%
-	}else {
-		%>
-		<h2>Item Not Exist</h2>
-		<%
+				function readURL(input,id) {
+				    if (input.files && input.files[0]) {
+				        var reader = new FileReader();
+				        $('#<portlet:namespace/>deleteImage'+id).val('false');
+				        reader.onload = function (e) {
+				            $('#image_upload_preview'+id).attr('src', e.target.result);
+				            $('#image_upload_preview'+id).show();
+				        }
+				        reader.readAsDataURL(input.files[0]);
+				    }
+				}
+				
+				function deleteUpload(id) {
+					var control = $('#<portlet:namespace/>image'+id);
+				    control.replaceWith( control = control.clone( true ) );
+				    $('#image_upload_preview'+id).attr("src","");
+				    $('#image_upload_preview'+id).hide();
+				    $('#<portlet:namespace/>deleteImage'+id).val('true');
+				}
+				
+				function confirmSubmit(){
+					return confirm("Are you sure you want to update ?");
+				}
+				
+				AUI().use('autocomplete-list','aui-base','aui-io-request','autocomplete-filters','autocomplete-highlighters',function (A) {
+					var tagAuto
+					A.io.request('<%=getTagsURL%>',{
+						dataType: 'json',
+						method: 'GET',
+						on: {
+							success: function() {	
+								//console.log("inside");
+								tags=this.get('responseData');
+								//console.log(tags);
+								tagAuto = new A.AutoCompleteList({
+											allowBrowserAutocomplete: 'false',
+											activateFirstItem: 'true',
+											inputNode: '#<portlet:namespace /><%=HConstants.TAG %>',
+											resultTextLocator: 'tagName',
+											render: 'true',
+											resultHighlighter: 'charMatch',
+											resultFilters:['phraseMatch'],
+											source:this.get('responseData'),
+										 })
+								
+								tagAuto.on('select',function(e)
+									     {
+									    var selected_key = e.result.raw.tagId;
+									    //console.log(selected_key);
+									    A.one("#<portlet:namespace /><%=HConstants.TAG_ID%>").set("value",selected_key);
+									     }); 
+							}
+						}
+					});
+					
+					A.one("#<portlet:namespace /><%=HConstants.TAG%>").on('change', function(e){
+						//console.log("clear tagid");
+					    A.one("#<portlet:namespace /><%=HConstants.TAG_ID%>").set("value",'');
+					});
+					
+					 A.one("#<portlet:namespace /><%=HConstants.UNILIMITED_QUANTITY%>Checkbox").on('change',function(e){
+						var quantity =  A.one("#<portlet:namespace /><%=HConstants.QUANTITY%>");
+						if(e.currentTarget.get('checked')) {
+							quantity.set('disabled', true);
+						 }else{
+						 	quantity.set('disabled', false);	
+						 }
+					});
+					 
+					 A.one("#<portlet:namespace /><%=HConstants.status%>").on('change',function(e){
+						var remarkDiv = A.one("#remarkDiv");
+						if(e.currentTarget.get('value') == <%=HConstants.REJECT%>) {
+							remarkDiv._node.attributes[1].nodeValue = 'display :block'
+						}else{
+							remarkDiv._node.attributes[1].nodeValue = 'display :none'
+						}
+					 });
+				});
+			</script>
+			<%
+		}else {
+			%>
+			<liferay-ui:header title='back'  backLabel="go-back" backURL='<%=backURL%>'/>
+			<h2>Item Not Exist</h2>
+			<%
 	}
 %>

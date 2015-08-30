@@ -17,7 +17,6 @@ package com.htmsd.slayer.service.impl;
 import java.util.Date;
 import java.util.List;
 
-import com.htmsd.slayer.model.ShoppingItem;
 import com.htmsd.slayer.model.Tag;
 import com.htmsd.slayer.service.base.TagLocalServiceBaseImpl;
 import com.liferay.portal.kernel.exception.PortalException;

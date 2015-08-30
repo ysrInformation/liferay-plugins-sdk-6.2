@@ -47,6 +47,9 @@
 
 		<column name="companyId" type="long" />
 		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="updateUserId" type="long" />
+		<column name="updateUserName" type="String" />
 		<column name="createDate" type="Date" />
 		<column name="modifiedDate" type="Date" />
 
@@ -57,8 +60,11 @@
 		<column name="description" type="String" />
 		<column name="sellerPrice" type="Double" />
 		<column name="totalPrice" type="Double" />
+		<column name="quantity" type="long" />
 		<column name="status" type="int" />
 		<column name="imageIds" type="String" />
+		<column name="vedioURL" type="String" />
+		<column name="remark" type="String" />
 	
 		<!-- Relationships -->
 		

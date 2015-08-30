@@ -14,6 +14,7 @@
 <aui:fieldset>
 	<aui:form action="<%=addItemURL %>" enctype="multipart/form-data" method="POST">
 		<aui:input name="<%=HConstants.NAME%>" required="true" />
+		<aui:input name="<%=HConstants.PRODUCT_CODE %>" />
 		<aui:select name="<%=HConstants.CATEGORY_ID %>"   required="true" showEmptyOption="true">
 			<c:forEach items="<%=categories %>" var="category">   
 				<aui:option label="${category.name}"  value="${category.categoryId}"/>
@@ -41,9 +42,25 @@
 			</c:forEach>
 		</aui:layout>
 		
+		<aui:input name="<%=HConstants.VEDIO_URL %>" >
+			<aui:validator name="url" />
+		</aui:input>
+		
 		<aui:input name="<%=HConstants.PRICE %>" required="true">
 			<aui:validator name="number" />
 		</aui:input>
+		<aui:layout>
+			<aui:column columnWidth="25">
+				<aui:input name="<%=HConstants.QUANTITY %>">
+					<aui:validator name="number" />
+				</aui:input>
+			</aui:column>
+			
+			<aui:column columnWidth="25">
+				<aui:input name="<%=HConstants.UNILIMITED_QUANTITY %>" type="checkbox" label="unlimited-quantity" />
+			</aui:column>
+		</aui:layout>
+		
 		<aui:input name="<%=HConstants.TAG %>" />
 		<aui:input name="<%=HConstants.TAG_ID %>" type="hidden" />
 		<aui:button type="submit" value="add-item" />
@@ -107,6 +124,14 @@
 						     }); 
 				}
 			}
+		});
+		 A.one("#<portlet:namespace /><%=HConstants.UNILIMITED_QUANTITY%>Checkbox").on('change',function(e){
+			 var quantity =  A.one("#<portlet:namespace /><%=HConstants.QUANTITY%>");
+			if(e.currentTarget.get('checked')) {
+				quantity.set('disabled', true);
+		 }else{
+			 quantity.set('disabled', false);
+		 }
 		});
 	});
 
