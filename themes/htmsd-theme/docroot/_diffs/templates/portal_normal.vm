@@ -103,11 +103,18 @@
 	$theme.include($bottom_include)
 	
 	#parse ("$full_templates_path/footer.vm")
+
+	<div class="scroll-top-wrapper ">
+		<span class="scroll-top-inner">
+			<i class="fa fa-2x fa-arrow-circle-up"></i>
+		</span>
+	</div>
 		
 </body>
 
 <script>
 	
+	//Search 
 	var elTop = $('#search-div').offset().top;
 	elTop = parseInt(elTop)+parseInt(100);
    	$(window).scroll(function() {
@@ -121,6 +128,27 @@
         $('#search-div').toggleClass('sticky', $(window).scrollTop() > elTop);
     });
     
+    //Scroll to Top
+	$(function(){
+	 
+		$(document).on( 'scroll', function(){
+	 
+			if ($(window).scrollTop() > 100) {
+				$('.scroll-top-wrapper').addClass('show');
+			} else {
+				$('.scroll-top-wrapper').removeClass('show');
+			}
+		});
+		$('.scroll-top-wrapper').on('click', scrollToTop);
+	});
+	 
+	function scrollToTop() {
+		verticalOffset = typeof(verticalOffset) != 'undefined' ? verticalOffset : 0;
+		element = $('body');
+		offset = element.offset();
+		offsetTop = offset.top;
+		$('html, body').animate({scrollTop: offsetTop}, 500, 'linear');
+	}
 	AUI().use('aui-base', function(A) {
 		Liferay.Service('/htmsd-portlet.shoppingcart/get-shopping-cart-item-count', {
 			userId: $user_id
