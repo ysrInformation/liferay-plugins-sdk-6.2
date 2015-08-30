@@ -35,7 +35,6 @@ public interface HConstants {
 	public static int DELIVERED = 4;
 	public static int NOT_DELIVERED = 6;
 	public static String RUPPEE_SYMBOL = "&#8377;";
-	
 
 	// Pages
 	public static String PAGE_SHOPPING_LIST_DETAILS = "/html/shoppinglist/details.jsp";
