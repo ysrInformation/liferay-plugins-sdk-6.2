@@ -99,7 +99,6 @@ public class DashboardPortlet extends MVCPortlet {
 						description, sellerPrice, totalPrice, quantity, status,
 						StringUtil.merge(imageIds, StringPool.COMMA), vedioURL, remark);
 		}
-		
 		//Adding New Tag
 		if(tagId == 0 && !tagName.isEmpty()) {
 			List<Tag> tagNames = TagLocalServiceUtil.getTagByName(tagName);
