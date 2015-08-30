@@ -67,7 +67,7 @@
 		<column name="remark" type="String" />
 	
 		<!-- Relationships -->
-		
+ 		
 		<column name="tags" type="Collection" entity="Tag" mapping-table="ShoppingItem_Tag"/>
 		<column name="categories" type="Collection" entity="Category" mapping-table="ShopppingItem_Category"/>
 	
