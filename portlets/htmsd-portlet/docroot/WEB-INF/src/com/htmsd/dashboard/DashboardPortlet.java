@@ -84,7 +84,6 @@ public class DashboardPortlet extends MVCPortlet {
 		String remark = ( status == HConstants.REJECT ) ? ParamUtil.getString(uploadRequest, HConstants.REMARK)  : StringPool.BLANK;
 		
 		if (itemId == 0) {
-		
 			//Adding items 
 			imageIds = saveFiles(uploadRequest, HConstants.IMAGE, HConstants.ITEM_FOLDER_NAME);
 			shoppingItem = ShoppingItemLocalServiceUtil.addItem(themeDisplay.getScopeGroupId(),
@@ -109,13 +108,12 @@ public class DashboardPortlet extends MVCPortlet {
 			}else {
 				tag = TagLocalServiceUtil.addTag(themeDisplay.getScopeGroupId(), themeDisplay.getCompanyId(), themeDisplay.getUserId(), tagName);
 			}
-			
 			tagId = tag.getTagId();
 		}
 		
 		//Update Tag_Mapping and Category Mapping
-			ShoppingItemLocalServiceUtil.updateCategory(itemId, categoryId, userId, userName);
-			ShoppingItemLocalServiceUtil.updateTag(itemId, tagId, userId, userName);
+		ShoppingItemLocalServiceUtil.updateCategory(itemId, categoryId, userId, userName);
+		ShoppingItemLocalServiceUtil.updateTag(itemId, tagId, userId, userName);
 		actionResponse.setRenderParameter("tab1", ParamUtil.getString(uploadRequest, "tab1"));
 	}
 	
