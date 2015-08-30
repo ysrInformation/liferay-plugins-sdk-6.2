@@ -42,6 +42,10 @@
 	left: 0px;
 }
 
+.margin_left_zero {
+	margin-left: 0px !important;
+}
+
 /*------------Navigation CSS----------------*/
 .aui #navigation .navbar-inner {
 	background: transparent none repeat scroll 0 0;
@@ -255,9 +259,12 @@
 .cart-btn {
 	background: #d8492d none repeat scroll 0 0;
 	text-align: center;
-	padding: 4.5px;
-	width: 110px;
-	
+	width: 100%;
+	height: 41px;
+	border: 0 none;
+	border-radius: 5px;
+	color: white;
+	text-transform: uppercase;
 }
 
 .cart-btn:HOVER {
@@ -281,19 +288,112 @@
 #search {
 	border: 1px solid #d8492d;
 	box-shadow: 0 0 2px 0 inset;
-	height: 35px;
+	height: 40px;
 	padding: 0 10px;
-	width: 300px;
+	width: 72%;
+	border-radius : 5px 0 0 5px;
 }
 
 .search-btn {
 	background: #d8492d none repeat scroll 0 0;
 	border: 0 none;
+	border-radius: 0 5px 5px 0 !important;
 	color: white;
-	height: 35px;
-	width: 50px;
+	height: 41px;
+	width: 20%;
+}
+.center {
+	text-align: center;
+	vertical-align: middle;
+	margin-top: 15px;
 }
 
 .search-btn:HOVER {
 	background: #62C000;
+}
+
+.sticky {
+	background: rgba(0, 0, 0, 0)
+		url("../images/bg_inner.jpg") repeat scroll 0 0;
+	padding-left: 4.5%;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 1000;
+	left:0;
+	right:0;
+	
+	-webkit-animation: fadein 0.5s; /* Safari, Chrome and Opera > 12.1 */
+	-moz-animation: fadein 0.5s; /* Firefox < 16 */
+	-ms-animation: fadein 0.5s; /* Internet Explorer */
+	-o-animation: fadein 0.5s; /* Opera < 12.1 */
+	animation: fadein 0.5s;
+}
+
+@keyframes fadein {
+    from { top:-85px;  }
+    to   { top:0px;  }
+}
+
+/* Firefox < 16 */
+@-moz-keyframes fadein {
+     from { top:-85px;  }
+    to   { top:0px;  }
+}
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadein {
+      from { top:-85px;  }
+    to   { top:0px;  }
+}
+
+/* Internet Explorer */
+@-ms-keyframes fadein {
+     from { top:-85px;  }
+    to   { top:0px;  }
+}
+
+/* Opera < 12.1 */
+@-o-keyframes fadein {
+   from { top:-85px;  }
+    to   { top:0px;  }
+}
+
+
+/*****Scroll to Top****/
+.scroll-top-wrapper {
+    position: fixed;
+	opacity: 0;
+	visibility: hidden;
+	overflow: hidden;
+	text-align: center;
+	z-index: 99999999;
+    background-color: #777777;
+	color: #eeeeee;
+	width: 50px;
+	height: 48px;
+	line-height: 48px;
+	right: 30px;
+	bottom: 30px;
+	padding-top: 2px;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	border-bottom-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+	-webkit-transition: all 0.5s ease-in-out;
+	-moz-transition: all 0.5s ease-in-out;
+	-ms-transition: all 0.5s ease-in-out;
+	-o-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
+}
+.scroll-top-wrapper:hover {
+	background-color: #888888;
+}
+.scroll-top-wrapper.show {
+    visibility:visible;
+    cursor:pointer;
+	opacity: 1.0;
+}
+.scroll-top-wrapper i.fa {
+	line-height: inherit;
 }

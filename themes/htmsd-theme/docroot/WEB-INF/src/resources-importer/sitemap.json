@@ -80,19 +80,10 @@
 			"columns": [
 				[
 					{
-			            "portletId": "3_WAR_htmsdportlet"
-			        }
-			    ]
-			],    
-			"title": "Pet Foods",
-			"name": "Pet Foods",
-			"friendlyURL": "/pet-food"
-		},
-		{
-			"columns": [
-				[
-					{
-			            "portletId": "3_WAR_htmsdportlet"
+			            "portletId": "3_WAR_htmsdportlet",
+			            "portletPreferences": {
+			            	"noOfItems":"8"
+			            }
 			        }
 			    ]
 			], 
@@ -104,7 +95,10 @@
 			"columns": [
 				[
 					{
-			            "portletId": "3_WAR_htmsdportlet"
+			            "portletId": "3_WAR_htmsdportlet",
+			            "portletPreferences": {
+			            	"noOfItems":"8"
+			            }
 			        }
 			    ]
 			], 
@@ -116,7 +110,10 @@
 			"columns": [
 				[
 					{
-			            "portletId": "3_WAR_htmsdportlet"
+			            "portletId": "3_WAR_htmsdportlet",
+			            "portletPreferences": {
+			            	"noOfItems":"8"
+			            }
 			        }
 			    ]
 			], 
@@ -128,7 +125,10 @@
 			"columns": [
 				[
 					{
-			            "portletId": "3_WAR_htmsdportlet"
+			            "portletId": "3_WAR_htmsdportlet",
+			            "portletPreferences": {
+			            	"noOfItems":"8"
+			            }
 			        }
 			    ]
 			], 
@@ -140,13 +140,26 @@
 			"columns": [
 				[
 					{
-			            "portletId": "3_WAR_htmsdportlet"
+			            "portletId": "3_WAR_htmsdportlet",
+			            "portletPreferences": {
+			            	"noOfItems":"8"
+			            }
 			        }
 			    ]
 			], 
 			"title": "Fish",
 			"name": "Fish",
 			"friendlyURL": "/fish"
+		},
+		{
+			"title": "Gallery",
+			"name": "Gallery",
+			"friendlyURL": "/gallery"
+		},
+		{
+			"title": "Videos",
+			"name": "Videos",
+			"friendlyURL": "/video"
 		},
 		{
 			"title": "About Us",
