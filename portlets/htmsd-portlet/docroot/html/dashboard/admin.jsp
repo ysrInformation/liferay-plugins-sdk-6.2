@@ -124,7 +124,7 @@
 </liferay-ui:search-container>
 </aui:form>
 
-
+ 
 <aui:script>
 	$(document).ready(function(){
 		 var btns = $("#<portlet:namespace/>deleteBtn,#<portlet:namespace/>approveBtn,#<portlet:namespace/>rejectBtn").hide();
