@@ -284,6 +284,25 @@ public class DashboardPortlet extends MVCPortlet {
 		}
     	return folder;
     }
+
+	/**
+	 * Method to updateStock update stock of particular product
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @return
+	 */
+	public void updateStock(ActionRequest actionRequest,
+			ActionResponse actionResponse) throws IOException, PortletException {
+		
+		long itemId = ParamUtil.getLong(actionRequest, HConstants.ITEM_ID);
+		boolean unlimitedQuantity = ParamUtil.getBoolean(actionRequest, HConstants.UNILIMITED_QUANTITY);
+		long quantity = unlimitedQuantity ? -1 : ParamUtil.getLong(actionRequest, HConstants.QUANTITY);
+		ThemeDisplay themeDisplay=(ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+
+		ShoppingItemLocalServiceUtil.updateStock(itemId, quantity, themeDisplay.getUserId(), themeDisplay.getUser().getScreenName());
+		
+		actionResponse.sendRedirect(ParamUtil.getString(actionRequest, "redirectURL"));
+	}
 	 
 	@Override
 	public void serveResource(ResourceRequest resourceRequest,
