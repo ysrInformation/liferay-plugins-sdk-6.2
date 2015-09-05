@@ -7,12 +7,12 @@ public interface HConstants {
 
 	public static String ITEM_ID = "itemId";
 	public static String NAME = "name";
-	public static String PRODUCT_CODE="productCode";
+	public static String PRODUCT_CODE = "productCode";
 	public static String DESCRIPTION = "description";
 	public static String PRICE = "price";
 	public static String TOTAL_PRICE = "totalPrice";
 	public static String QUANTITY = "quantity";
-	public static String UNILIMITED_QUANTITY="unlimitedQuanity";
+	public static String UNILIMITED_QUANTITY = "unlimitedQuanity";
 	public static String CATEGORY = "category";
 	public static String TAG = "tag";
 	public static String CATEGORY_ID = "categoryId";
@@ -25,6 +25,15 @@ public interface HConstants {
 	public static String REMARK = "remark";
 	public static String status = "status";
 	public static String ITEM_FOLDER_NAME = "Items Added";
+	public static String TITLE_REVIEWER = "Title Reviewer";
+	public static String DESCRIPTION_REVIEWER = "Description Reveiwer";
+	public static String IMAGE_REVIEWER = "Image Reviewer";
+	public static String PRICE_REVIEWER = "Price Reviewer";
+	public static String STOCK_REVIEWER = "Stock Reviewer";
+	public static String VIDEOURL_REVIEWER = "Video Reviewer";
+	public static String TAG_REVIEWER = "Tag Reviewer";
+	public static String CATEGORY_REVIEWER = "Category Reviewer";
+	public static String STAFF_ROLE = "Staff";
 
 	public static int IMAGES_UPLOAD_LIMIT = 5;
 	public static int NEW = 0;

@@ -1,5 +1,3 @@
-<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
-<%@page import="com.liferay.portal.kernel.util.Constants"%>
 <%@include file="/html/dashboard/init.jsp" %>
 
 <%

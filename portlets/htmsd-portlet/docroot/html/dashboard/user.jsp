@@ -1,7 +1,4 @@
-<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@include file="/html/dashboard/init.jsp" %>
-
-
 
 <%
 	long userId = themeDisplay.getUserId();

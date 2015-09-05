@@ -1,4 +1,5 @@
 <%@include file="/html/dashboard/init.jsp" %>
+
 <portlet:actionURL var="updateStockURL" name="updateStock" >
 	<portlet:param name="redirectURL" value='<%=ParamUtil.getString(renderRequest, "redirectURL") %>'/>
 </portlet:actionURL>
