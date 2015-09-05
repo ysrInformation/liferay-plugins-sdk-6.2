@@ -18,3 +18,4 @@
 		
 	<aui:button value="save" type="submit"/>	
 </aui:form>
+ 
