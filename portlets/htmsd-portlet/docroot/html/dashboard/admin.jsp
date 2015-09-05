@@ -1,7 +1,9 @@
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="com.liferay.portal.kernel.util.Constants"%>
 <%@include file="/html/dashboard/init.jsp" %>
 
 <%
+	String redirectURL = themeDisplay.getURLCurrent();
 	String orderByCol = ParamUtil.getString(request, "orderByCol","createDate");
  	String orderByType = ParamUtil.getString(request, "orderByType","desc");
     String tabs1 = ParamUtil.getString(request, "tab1", "New Items");
@@ -15,7 +17,7 @@
 
 <portlet:renderURL  var="addItemURL">
 	<portlet:param name="jspPage" value="/html/dashboard/additem.jsp"/>
-	<portlet:param name="backURL" value="<%=themeDisplay.getURLCurrent() %>"/>
+	<portlet:param name="backURL" value="<%=redirectURL %>"/>
 	<portlet:param name="tab1" value="<%=tabs1 %>"/>
 </portlet:renderURL>
 
@@ -86,12 +88,31 @@
 			<fmt:formatDate value="<%=item.getCreateDate() %>" pattern="dd/MM/yyyy" />
 		</liferay-ui:search-container-column-text>
 		
+		<liferay-ui:search-container-column-text name="item-added-by"  property="userName" />
+		
+		<liferay-ui:search-container-column-text name="last-update-by"  property="updateUserName" />
+		
+		<c:if test='<%=tabs1.equals("Approved Items") %>'>
+			<liferay-ui:search-container-column-text name="stock">
+				<%=item.getQuantity() == -1 ? LanguageUtil.get(portletConfig,themeDisplay.getLocale(),"unlimited") : item.getQuantity() %>
+			
+				<%
+					PortletURL showStockFormURL = renderResponse.createRenderURL();
+					showStockFormURL.setParameter("jspPage", "/html/dashboard/stockform.jsp");
+					showStockFormURL.setParameter(HConstants.ITEM_ID, String.valueOf(item.getItemId()));	
+					showStockFormURL.setParameter("redirectURL", redirectURL);
+					showStockFormURL.setWindowState(LiferayWindowState.POP_UP);
+				%>
+				<a href="#" onclick="showStockForm('<%=showStockFormURL%>');"><aui:icon image="edit"/></a> 
+			</liferay-ui:search-container-column-text>
+		</c:if>
+		
 		<liferay-ui:search-container-column-text name="">
 			<%
 				PortletURL itemDetailURL = renderResponse.createRenderURL();
 				itemDetailURL.setParameter("jspPage", "/html/dashboard/itemdetails.jsp");
 				itemDetailURL.setParameter("itemId", String.valueOf(item.getItemId()));
-				itemDetailURL.setParameter("backURL", themeDisplay.getURLCurrent());
+				itemDetailURL.setParameter("backURL", redirectURL);
 				itemDetailURL.setParameter("tab1", tabs1);
 			%>
 			<aui:a href="<%=itemDetailURL.toString() %>">View</aui:a>
@@ -118,5 +139,24 @@
 			document.<portlet:namespace/>bookListForm.action = '<%= rejectSetURL.toString()%>';
 		}
 		 document.<portlet:namespace/>bookListForm.submit();
+	}
+	
+	function showStockForm(url) {
+		
+		AUI().use('aui-modal', function(A) {
+				Liferay.Util.openWindow({
+					dialog: {
+					    centered: true,
+					    modal: true,
+					},
+					dialogIframe: {
+						id: 'showstockDialog',
+						uri: url
+					},
+					title: Liferay.Language.get('stock'),
+					uri: url
+				});
+				
+			}); 
 	}
 </aui:script>
