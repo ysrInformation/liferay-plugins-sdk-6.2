@@ -264,7 +264,7 @@ public class ShoppingItemLocalServiceImpl
 		}
 		return shoppingItem;
 	}
-	 
+	  
 	public ShoppingItem updateStock(long itemId, long quantity, long updateUserId, String updateUserName) {
 		
 		ShoppingItem shoppingItem = null;
