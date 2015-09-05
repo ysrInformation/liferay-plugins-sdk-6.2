@@ -264,6 +264,20 @@ public class ShoppingItemLocalServiceImpl
 		}
 		return shoppingItem;
 	}
+	
+	public ShoppingItem updateStock(long itemId, long quantity, long updateUserId, String updateUserName) {
+		
+		ShoppingItem shoppingItem = null;
+		try {
+			shoppingItem = fetchShoppingItem(itemId);
+			shoppingItem = setUpdateAudit(updateUserId, shoppingItem, updateUserName);
+			shoppingItem.setQuantity(quantity);
+			updateShoppingItem(shoppingItem);
+		} catch (SystemException e) {
+			_log.error(e);
+		}
+		return shoppingItem;
+	}
 		
 	public ShoppingItem setUpdateAudit(long updateUserId, ShoppingItem shoppingItem, String updateUserName) {
 
