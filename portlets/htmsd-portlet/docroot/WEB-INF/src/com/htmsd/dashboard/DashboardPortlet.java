@@ -284,7 +284,7 @@ public class DashboardPortlet extends MVCPortlet {
 		}
     	return folder;
     }
-	
+	 
 	@Override
 	public void serveResource(ResourceRequest resourceRequest,
 			ResourceResponse resourceResponse) throws IOException,
