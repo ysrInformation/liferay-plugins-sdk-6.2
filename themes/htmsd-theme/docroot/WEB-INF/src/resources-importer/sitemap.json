@@ -198,6 +198,13 @@
 			"hidden": "true"
 		},
 		{	
+			"columns": [
+				[
+					{
+			            "portletId": "6_WAR_htmsdportlet"
+			        }
+			    ]
+			], 
 			"title": "Search",
 			"name": "Search",
 			"friendlyURL": "/search",

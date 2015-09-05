@@ -394,5 +394,9 @@ public class ShoppingItemLocalServiceImpl
 		return shoppingItemFinder.getItemByCategoryIdCount(categoryId);
 	}
 	
+	public List<ShoppingItem> getItemByOrder(String sort, int start, int end) {
+		return shoppingItemFinder.getItemByOrder(sort, start, end);
+	}
+	
 	private Log _log = LogFactoryUtil.getLog(ShoppingItemLocalServiceImpl.class);
 }

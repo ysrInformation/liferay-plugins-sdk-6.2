@@ -19,6 +19,9 @@ public class ShoppingItemFinderImpl extends BasePersistenceImpl<ShoppingItem>
 
 	public static String FIND_ITEM_BY_CATEGORYID = ShoppingItemFinderImpl.class
 			.getName() + ".findItemByCategoryId";
+	
+	public static String FIND_ITEM_BY_ORDER = ShoppingItemFinderImpl.class
+			.getName() + ".getItemByOrder";
 
 	@SuppressWarnings("unchecked")
 	public List<ShoppingItem> getItemByTagId(long tagId) {
@@ -49,13 +52,31 @@ public class ShoppingItemFinderImpl extends BasePersistenceImpl<ShoppingItem>
 		sql = sql.replace("[$sort]", "ORDER BY "+sort);
 		
 		System.out.println("The Query is >>>>>>>>>" + sql);
-
+		
 		// 3. Transform the normal query to HQL query
 		SQLQuery query = session.createSQLQuery(sql);
 		query.addEntity("ShoppingItem", ShoppingItemImpl.class);
 
 		QueryPos queryPos = QueryPos.getInstance(query);
 		queryPos.add(categoryId);
+		return (List<ShoppingItem>) QueryUtil.list(query, getDialect(), start, end);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<ShoppingItem> getItemByOrder(String sort, int start, int end) {
+
+		Session session = openSession();
+
+		// 2. Get SQL statement from XML file with its name
+		String sql = CustomSQLUtil.get(FIND_ITEM_BY_ORDER);
+		sql = sql.replace("[$sort]", "ORDER BY "+sort);
+		
+		System.out.println("The Query is >>>>>>>>>" + sql);
+		
+		// 3. Transform the normal query to HQL query
+		SQLQuery query = session.createSQLQuery(sql);
+		query.addEntity("ShoppingItem", ShoppingItemImpl.class);
+
 		return (List<ShoppingItem>) QueryUtil.list(query, getDialect(), start, end);
 	}
 	
