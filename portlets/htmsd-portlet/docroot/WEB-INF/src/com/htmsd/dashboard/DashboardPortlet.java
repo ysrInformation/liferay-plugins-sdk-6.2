@@ -114,7 +114,7 @@ public class DashboardPortlet extends MVCPortlet {
 		ShoppingItemLocalServiceUtil.updateCategory(itemId, categoryId, userId, userName);
 		ShoppingItemLocalServiceUtil.updateTag(itemId, tagId, userId, userName);
 		actionResponse.setRenderParameter("tab1", ParamUtil.getString(uploadRequest, "tab1"));
-	}
+	} 
 	
 	/**
 	 * Method updateItemSet to update set of items status
