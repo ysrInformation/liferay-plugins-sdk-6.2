@@ -1,4 +1,3 @@
-<%@page import="sun.nio.cs.HistoricallyNamedCharset"%>
 <%@page import="com.htmsd.slayer.service.ItemHistoryLocalServiceUtil"%>
 <%@page import="com.htmsd.slayer.model.ItemHistory"%>
 <%@include file="/html/dashboard/init.jsp"%>
