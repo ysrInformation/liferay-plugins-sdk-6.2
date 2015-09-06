@@ -15,6 +15,7 @@
 package com.htmsd.slayer.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import com.htmsd.slayer.model.ShoppingOrder;
 import com.htmsd.slayer.model.impl.ShoppingOrderImpl;
@@ -107,5 +108,15 @@ public class ShoppingOrderLocalServiceImpl
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public List<ShoppingOrder> getShoppingOrderByUserId(long userId){
+		List<ShoppingOrder> shoppingOrders = null;
+		try {
+			shoppingOrders = shoppingOrderPersistence.findByUserId(userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return shoppingOrders;
 	}
 }

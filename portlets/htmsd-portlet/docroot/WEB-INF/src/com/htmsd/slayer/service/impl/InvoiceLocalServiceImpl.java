@@ -14,6 +14,10 @@
 
 package com.htmsd.slayer.service.impl;
 
+import java.util.Date;
+
+import com.htmsd.slayer.model.Invoice;
+import com.htmsd.slayer.model.impl.InvoiceImpl;
 import com.htmsd.slayer.service.base.InvoiceLocalServiceBaseImpl;
 
 /**
@@ -36,4 +40,38 @@ public class InvoiceLocalServiceImpl extends InvoiceLocalServiceBaseImpl {
 	 *
 	 * Never reference this interface directly. Always use {@link com.htmsd.slayer.service.InvoiceLocalServiceUtil} to access the invoice local service.
 	 */
+	
+	public Invoice insertInvoice(long userId, long orderId) {
+		
+		Invoice invoice = new InvoiceImpl();
+		long invoiceId = 0l;
+		try {
+			invoiceId = counterLocalService.increment(InvoiceLocalServiceImpl.class.getName());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		invoice = createInvoice(invoiceId);
+		invoice.setOrderId(orderId);
+		invoice.setUserId(userId);
+		invoice.setCreateDate(new Date());
+		
+		try {
+			invoice = addInvoice(invoice);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return invoice;
+	}
+	
+	public Invoice getInvoiceByOrderId(long orderId) {
+		
+		Invoice invoice = null;
+		try {
+			invoice = invoicePersistence.fetchByOrderId(orderId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return invoice;
+	}
 }

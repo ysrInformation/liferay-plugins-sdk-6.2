@@ -139,6 +139,9 @@
 		<column name="shippingAltMoble" type="String"/>
 		
 		<!-- Finder methods -->
+		<finder return-type="Collection" name="UserId">
+			<finder-column name="userId"/>
+		</finder>
 
 	</entity>
 	
@@ -198,6 +201,7 @@
 		<column name="name" type="String" />
 		<column name="description" type="String" />
 		<column name="totalPrice" type="Double" />
+		<column name="quantity" type="int"/>
 	
 		<!-- Finder methods -->
 		<finder return-type="Collection" name="OrderId">
@@ -234,6 +238,10 @@
 		<column name="orderId" type="long"/>
 		<column name="userId" type="long"/>
 		<column name="createDate" type="Date"/>
+		
+		<finder return-type="Invoice" name="OrderId">
+			<finder-column name="orderId"/>
+		</finder>
 	</entity>
 
 </service-builder>

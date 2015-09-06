@@ -43,7 +43,7 @@ public class ShoppingOrderItemLocalServiceImpl
 	 * Never reference this interface directly. Always use {@link com.htmsd.slayer.service.ShoppingOrderItemLocalServiceUtil} to access the shopping order item local service.
 	 */
 	
-	public ShoppingOrderItem insertShoppingOrderItem(double totalPrice, long userId, long companyId, 
+	public ShoppingOrderItem insertShoppingOrderItem(int quantity, double totalPrice, long userId, long companyId, 
 			long groupId, long orderId, String productName, String description, String productCode) {
 		
 		ShoppingOrderItem shoppingOrderItem = new ShoppingOrderItemImpl();
@@ -66,6 +66,7 @@ public class ShoppingOrderItemLocalServiceImpl
 		shoppingOrderItem.setOrderId(orderId);
 		shoppingOrderItem.setDescription(description);
 		shoppingOrderItem.setTotalPrice(totalPrice);
+		shoppingOrderItem.setQuantity(quantity);
 		
 		try {
 			shoppingOrderItem = shoppingOrderItemLocalService.addShoppingOrderItem(shoppingOrderItem);
