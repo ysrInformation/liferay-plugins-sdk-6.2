@@ -57,22 +57,21 @@
 			<%=LanguageUtil.get(portletConfig,themeDisplay.getLocale(),String.valueOf(item.getStatus())) %>
 		</liferay-ui:search-container-column-text>
 		
-		<c:if test='<%=item.getStatus() == HConstants.APPROVE %>'>
+		<liferay-ui:search-container-column-text name="stock">
+			<c:if test='<%=item.getStatus() == HConstants.APPROVE %>'>
+			<%=item.getQuantity() == -1 ? LanguageUtil.get(portletConfig,themeDisplay.getLocale(),"unlimited") : item.getQuantity() %>
 			
-			<liferay-ui:search-container-column-text name="stock">
-				<%=item.getQuantity() == -1 ? LanguageUtil.get(portletConfig,themeDisplay.getLocale(),"unlimited") : item.getQuantity() %>
-				
-				<%
-					PortletURL showStockFormURL = renderResponse.createRenderURL();
-					showStockFormURL.setParameter("jspPage", "/html/dashboard/stockform.jsp");
-					showStockFormURL.setParameter(HConstants.ITEM_ID, String.valueOf(item.getItemId()));	
-					showStockFormURL.setWindowState(LiferayWindowState.POP_UP);
-					showStockFormURL.setParameter("redirectURL", redirectURL);
-				%>
-				<a href="#" onclick="showStockForm('<%=showStockFormURL%>');"><aui:icon image="edit" /></a> 
-			
-			</liferay-ui:search-container-column-text>
-		</c:if>
+			<%
+				PortletURL showStockFormURL = renderResponse.createRenderURL();
+				showStockFormURL.setParameter("jspPage", "/html/dashboard/stockform.jsp");
+				showStockFormURL.setParameter(HConstants.ITEM_ID, String.valueOf(item.getItemId()));	
+				showStockFormURL.setWindowState(LiferayWindowState.POP_UP);
+				showStockFormURL.setParameter("redirectURL", redirectURL);
+			%>
+			<a href="#" onclick="showStockForm('<%=showStockFormURL%>');"><aui:icon image="edit" /></a> 
+			</c:if>
+		</liferay-ui:search-container-column-text>
+	
 		
 		<liferay-ui:search-container-column-text name="">
 			<%

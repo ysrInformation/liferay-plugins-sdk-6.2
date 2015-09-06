@@ -18,6 +18,9 @@
 	.ui-widget-overlay,.ui-dialog-content{
 		cursor:zoom-out;
 	}
+	.cke_reset {
+		width : 500px;
+	}
   </style>
  </head> 
  
@@ -68,7 +71,7 @@
 			<liferay-ui:header title='<%=item.getRemark()%>'/>
 		</c:if>
 		<aui:fieldset>
-			<aui:form action="<%=updateItemURL %>" enctype="multipart/form-data" method="POST" name="fm">
+			<aui:form action="<%=updateItemURL %>" enctype="multipart/form-data" method="POST" name="itemDetailForm">
 				<aui:input name="userId" type="hidden" value="<%=item.getUserId() %>" />
 				<aui:input name="userName" type="hidden" value="<%=item.getUserName() %>" />
 				<aui:input name="<%=HConstants.NAME%>" required="true" value="<%= item.getName()%>" />
@@ -82,9 +85,9 @@
 							<%
 						}
 					%>   
-					
 				</aui:select>
-				<aui:input name="<%=HConstants.DESCRIPTION %>" type="textarea" required="true" value="<%=item.getDescription()%>" />
+				<liferay-ui:input-editor />
+				<aui:input name="<%=HConstants.DESCRIPTION %>" value="<%=item.getDescription()%>"  type="hidden"/>
 				<aui:layout>
 					<%
 						String imagesList [] =  StringUtil.split(item.getImageIds(), StringPool.COMMA) ;
@@ -157,12 +160,12 @@
 						<aui:validator name="number" />
 					</aui:input>
 				</c:if>
+				
 				<aui:input name="<%=HConstants.TAG %>"  value="<%=tagName %>"/>
 				<aui:input type="hidden" name="<%=HConstants.TAG_ID %>" value="<%=tagId%>"/>
- 
 					
 				<c:if test="<%=isAdmin %>">
-					<aui:select name="<%=HConstants.status %>" showEmptyOption="true" required="true">
+					<aui:select name="<%=HConstants.status %>" showEmptyOption="true" required="true" >
 						<aui:option value="<%=HConstants.APPROVE%>" label="approve" />
 						<aui:option value="<%=HConstants.REJECT %>" label="reject" />
 					</aui:select>
@@ -234,6 +237,7 @@
 				}
 				
 				function confirmSubmit(){
+					extractCodeFromEditor();
 					return confirm("Are you sure you want to update ?");
 				}
 				
@@ -282,15 +286,27 @@
 						 }
 					});
 					 
-					 A.one("#<portlet:namespace /><%=HConstants.status%>").on('change',function(e){
-						var remarkDiv = A.one("#remarkDiv");
-						if(e.currentTarget.get('value') == <%=HConstants.REJECT%>) {
-							remarkDiv._node.attributes[1].nodeValue = 'display :block'
-						}else{
-							remarkDiv._node.attributes[1].nodeValue = 'display :none'
-						}
-					 });
+					 <c:if test='<%=isAdmin %>'>
+					 
+						 A.one("#<portlet:namespace /><%=HConstants.status%>").on('change',function(e){
+							var remarkDiv = A.one("#remarkDiv");
+							if(e.currentTarget.get('value') == <%=HConstants.REJECT%>) {
+								remarkDiv._node.attributes[1].nodeValue = 'display :block'
+							}else{
+								remarkDiv._node.attributes[1].nodeValue = 'display :none'
+							}
+						 });
+						 
+					 </c:if>
 				});
+				
+				function  <portlet:namespace />initEditor() {
+				    return document.getElementById('<portlet:namespace /><%=HConstants.DESCRIPTION%>').value;
+				}
+
+				function extractCodeFromEditor() {
+				 	 document.<portlet:namespace />itemDetailForm.<portlet:namespace /><%=HConstants.DESCRIPTION%>.value = window.<portlet:namespace />editor.getHTML();
+				}
 			</script>
 			<%
 		}else {
