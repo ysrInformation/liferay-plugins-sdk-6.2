@@ -12,8 +12,10 @@ import javax.portlet.PortletException;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
+import com.htmsd.slayer.model.ItemHistory;
 import com.htmsd.slayer.model.ShoppingItem;
 import com.htmsd.slayer.model.Tag;
+import com.htmsd.slayer.service.ItemHistoryLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingItemLocalServiceUtil;
 import com.htmsd.slayer.service.TagLocalServiceUtil;
 import com.htmsd.util.HConstants;
@@ -82,7 +84,7 @@ public class DashboardPortlet extends MVCPortlet {
 		Tag tag = null;
 		int status = ParamUtil.getInteger(uploadRequest, HConstants.status);
 		String remark = ( status == HConstants.REJECT ) ? ParamUtil.getString(uploadRequest, HConstants.REMARK)  : StringPool.BLANK;
-		 
+		
 		if (itemId == 0) {
 			//Adding items 
 			imageIds = saveFiles(uploadRequest, HConstants.IMAGE, HConstants.ITEM_FOLDER_NAME);
@@ -91,6 +93,7 @@ public class DashboardPortlet extends MVCPortlet {
 					name, description, sellerPrice, totalPrice, quantity, HConstants.NEW,
 					StringUtil.merge(imageIds, StringPool.COMMA), vedioURL, StringPool.BLANK);
 			itemId = shoppingItem.getItemId();
+			ItemHistoryLocalServiceUtil.addItemHstory(itemId, currentUserId, currentUserName, HConstants.ITEM_ADDED, StringPool.BLANK);
 		}else {
 			//Updating items 
 				imageIds = updateImages(uploadRequest, HConstants.IMAGE, HConstants.IMAGE_ID);
@@ -98,6 +101,7 @@ public class DashboardPortlet extends MVCPortlet {
 						themeDisplay.getScopeGroupId(), themeDisplay.getCompanyId(), userId, userName,currentUserId, currentUserName, productCode, name,
 						description, sellerPrice, totalPrice, quantity, status,
 						StringUtil.merge(imageIds, StringPool.COMMA), vedioURL, remark);
+				ItemHistoryLocalServiceUtil.addItemHstory(itemId, currentUserId, currentUserName, HConstants.ITEM_UPDATED, StringPool.BLANK);
 		}
 		//Adding New Tag
 		if(tagId == 0 && !tagName.isEmpty()) {
