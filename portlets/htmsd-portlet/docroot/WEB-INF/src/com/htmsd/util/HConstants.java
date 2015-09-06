@@ -44,6 +44,16 @@ public interface HConstants {
 	public static int DELIVERED = 4;
 	public static int NOT_DELIVERED = 6;
 	public static int SHIPPING = 7;
+	public static int CATEGORY_UPDATED = 11;
+	public static int TAG_UPDATED = 12;
+	public static int TITLE_UPDATED = 13;
+	public static int PRICE_UPDATED = 14;
+	public static int IMAGE_UPDATE = 15;
+	public static int STOCK_UPDATED = 16;
+	public static int DESCRIPTION_UPDATED = 17;
+	public static int VEDIO_UPDATED = 18;
+	public static int ITEM_UPDATED = 10;
+	public static int ITEM_ADDED = 9;
 	public static String RUPPEE_SYMBOL = "&#8377;";
  
 	// Pages
