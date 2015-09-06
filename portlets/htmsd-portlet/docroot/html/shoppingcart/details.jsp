@@ -3,8 +3,9 @@
 <%
 	int i=0;
 	double totalPrice = 0;
-
+	
 	PortletURL detailsURL = renderResponse.createRenderURL();
+	detailsURL.setWindowState(LiferayWindowState.POP_UP);
 	detailsURL.setParameter("jspPage", "/html/shoppinglist/details.jsp");
 	
 	PortletURL checkoutURL = renderResponse.createRenderURL();
@@ -17,7 +18,15 @@
 	<portlet:param name="<%= Constants.CMD %>" value="remove-item"/> 
 </portlet:resourceURL>
 
+<liferay-portlet:renderURL  var="loginURL" portletName="<%= PortletKeys.LOGIN %>">
+	<portlet:param name="struts_action" value="/login/login" />
+	<portlet:param name="redirect" value="<%= checkoutURL.toString() %>" />
+	<portlet:param name="portletResource" value="<%= portletDisplay.getId() %>" />
+	<portlet:param name="groupId" value="<%= String.valueOf(scopeGroupId) %>" />
+</liferay-portlet:renderURL>
+
 <% 
+String checkOutURL = (themeDisplay.isSignedIn())? checkoutURL.toString():loginURL;
 if (Validator.isNotNull(shoppingItem_Carts) && shoppingItem_Carts.size() > 0) {
 	for (ShoppingItem_Cart shoppingItem_Cart : shoppingItem_Carts) {
 		long itemId = shoppingItem_Cart.getItemId();
@@ -39,10 +48,12 @@ if (Validator.isNotNull(shoppingItem_Carts) && shoppingItem_Carts.size() > 0) {
 							String image_upload_preview = HConstants.IMAGE_UPLOAD_PREVIEW+1;
 							String imageURL = CommonUtil.getThumbnailpath(Long.parseLong(imageIdsList[0]), themeDisplay.getScopeGroupId(), false);
 							imageExist = (!imageURL.isEmpty())?true:false;
-							detailsURL.setParameter(HConstants.IMAGE_ID, String.valueOf(itemId));
+							detailsURL.setParameter(HConstants.ITEM_ID, String.valueOf(itemId));
+							detailsURL.setParameter(Constants.CMD, "itemsDetails");
+							String showInPopup = "javascript:showPopup('"+detailsURL.toString()+"','800','1200','Product Details');";
 							%>
 							<div class="images-disp">
-								<aui:a href="javascript:void(0);"><img id="<%= image_upload_preview %>" src="<%= imageURL %>" /></aui:a>
+								<aui:a href="<%= showInPopup %>"><img id="<%= image_upload_preview %>" src="<%= imageURL %>" /></aui:a>
 							</div>
 							<%
 						}
@@ -54,9 +65,9 @@ if (Validator.isNotNull(shoppingItem_Carts) && shoppingItem_Carts.size() > 0) {
 					<aui:column columnWidth="60">  
 						<div><h3><%= (Validator.isNotNull(shoppingItem))? shoppingItem.getName():"NA" %></h3></div>
 						<div><p><%= (Validator.isNotNull(shoppingItem))?shoppingItem.getDescription():"NA" %></p></div>
-						<div><strong><%= (Validator.isNotNull(shoppingItem))? CommonUtil.getPriceFormat(price):0L %></strong></div>
+						<div><h4><%= (Validator.isNotNull(shoppingItem))? CommonUtil.getPriceFormat(price):0L %></h4></div>
 						<%-- <div><aui:input type="text" name="quantity" label="quantity" /></div> --%>
-						<div><aui:a href="<%= removeCartItem %>"><liferay-ui:message key="remove"/></aui:a></div>
+						<div><h4><aui:a href="<%= removeCartItem %>"><liferay-ui:message key="remove"/></aui:a></h4></div>
 					</aui:column>
 				</liferay-ui:panel>
 			</liferay-ui:panel-container>
@@ -74,7 +85,7 @@ if (Validator.isNotNull(shoppingItem_Carts) && shoppingItem_Carts.size() > 0) {
 </aui:fieldset>
 
 <aui:button-row>
-	<aui:button type="button" value='<%= LanguageUtil.get(portletConfig, locale, "checkout") %>' href="<%= checkoutURL.toString() %>"/>
+	<aui:button type="button" value='<%= LanguageUtil.get(portletConfig, locale, "checkout") %>' href="<%= checkOutURL %>"/>
 </aui:button-row>
 
 <aui:script>
@@ -98,6 +109,30 @@ function removeItems(itemId, url) {
 				}
 			}
 	 	});
+	});
+}
+
+function showPopup(url, height, width, title){
+	
+	AUI().use('aui-base','liferay-util-window','aui-io-plugin-deprecated',function(A){
+		  
+    	var popup = Liferay.Util.Window.getWindow(
+                {
+                    dialog: {
+                        centered: true,
+                        constrain2view: true,
+                        modal: true,
+                        resizable: false,
+                        width: width
+                    }
+                }).plug(A.Plugin.DialogIframe,
+                     {
+                     autoLoad: true,
+                     iframeCssClass: 'dialog-iframe',
+                     uri:url
+                }).render();
+    		popup.show();
+    		popup.titleNode.html(title);
 	});
 }
 </aui:script>

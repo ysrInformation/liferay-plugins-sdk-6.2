@@ -93,15 +93,15 @@ public class DashboardPortlet extends MVCPortlet {
 					name, description, sellerPrice, totalPrice, quantity, HConstants.NEW,
 					StringUtil.merge(imageIds, StringPool.COMMA), vedioURL, StringPool.BLANK);
 			itemId = shoppingItem.getItemId();
-			ItemHistoryLocalServiceUtil.addItemHstory(itemId, currentUserId, currentUserName, HConstants.ITEM_ADDED, StringPool.BLANK);
-		}else {
+			ItemHistoryLocalServiceUtil.addItemHistory(itemId, currentUserId, currentUserName, HConstants.ITEM_ADDED, StringPool.BLANK);
+		} else {
 			//Updating items 
 				imageIds = updateImages(uploadRequest, HConstants.IMAGE, HConstants.IMAGE_ID);
 				shoppingItem = ShoppingItemLocalServiceUtil.updateItem(itemId,
 						themeDisplay.getScopeGroupId(), themeDisplay.getCompanyId(), userId, userName,currentUserId, currentUserName, productCode, name,
 						description, sellerPrice, totalPrice, quantity, status,
 						StringUtil.merge(imageIds, StringPool.COMMA), vedioURL, remark);
-				ItemHistoryLocalServiceUtil.addItemHstory(itemId, currentUserId, currentUserName, HConstants.ITEM_UPDATED, StringPool.BLANK);
+				ItemHistoryLocalServiceUtil.addItemHistory(itemId, currentUserId, currentUserName, HConstants.ITEM_UPDATED, StringPool.BLANK);
 		}
 		//Adding New Tag
 		if(tagId == 0 && !tagName.isEmpty()) {

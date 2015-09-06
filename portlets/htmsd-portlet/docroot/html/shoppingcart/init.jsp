@@ -20,6 +20,7 @@
 <%@page import="com.htmsd.slayer.service.ShoppingItem_CartLocalServiceUtil"%>
 
 <%--Liferay's imports --%>
+<%@page import="com.liferay.portal.util.PortletKeys"%>
 <%@page import="com.liferay.portal.model.User"%>
 <%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
 <%@page import="com.liferay.portal.kernel.util.ListUtil"%>
@@ -27,7 +28,10 @@
 <%@page import="com.liferay.portal.kernel.util.StringPool"%>
 <%@page import="com.liferay.portal.kernel.util.Validator"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="com.liferay.counter.service.CounterLocalServiceUtil"%>
 <%@page import="com.liferay.counter.service.persistence.CounterUtil"%>
 <%@page import="com.liferay.portal.service.UserLocalServiceUtil"%>
+
+
 

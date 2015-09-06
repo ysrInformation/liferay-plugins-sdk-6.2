@@ -6,6 +6,7 @@
 	PortletURL addItemsToCartActionURL = renderResponse.createActionURL();
 	addItemsToCartActionURL.setParameter(ActionRequest.ACTION_NAME, "addItemToCart");
 	addItemsToCartActionURL.setParameter(HConstants.ITEM_ID, String.valueOf(itemId));
+	String cmd = ParamUtil.getString(request, Constants.CMD);
 %> 
 <liferay-ui:error key="item-exist" message="item-already-exist"/>
 <aui:fieldset>
@@ -52,9 +53,11 @@
 						<aui:validator name="digit"/>
 					</aui:input>
 				</div> --%>
-				<div class="add-to-cart-btn">
-					<aui:button name="add-to-cart" type="submit" cssClass="add-to-cart" value='<%= LanguageUtil.get(pageContext, "add-to-cart") %>'/>
-				</div>
+				<c:if test='<%= !cmd.equalsIgnoreCase("itemsDetails") %>'>
+					<div class="add-to-cart-btn">
+						<aui:button name="add-to-cart" type="submit" cssClass="add-to-cart" value='<%= LanguageUtil.get(pageContext, "add-to-cart") %>'/>
+					</div>
+				</c:if>
 			</div>
 		</aui:form>
 	</aui:col>	
