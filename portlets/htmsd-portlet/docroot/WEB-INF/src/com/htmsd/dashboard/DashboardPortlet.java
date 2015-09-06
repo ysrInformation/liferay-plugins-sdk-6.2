@@ -82,7 +82,7 @@ public class DashboardPortlet extends MVCPortlet {
 		Tag tag = null;
 		int status = ParamUtil.getInteger(uploadRequest, HConstants.status);
 		String remark = ( status == HConstants.REJECT ) ? ParamUtil.getString(uploadRequest, HConstants.REMARK)  : StringPool.BLANK;
-		
+		 
 		if (itemId == 0) {
 			//Adding items 
 			imageIds = saveFiles(uploadRequest, HConstants.IMAGE, HConstants.ITEM_FOLDER_NAME);
