@@ -146,6 +146,8 @@
 					dialog: {
 					    centered: true,
 					    modal: true,
+					    width  : 300,
+					    height : 300
 					},
 					dialogIframe: {
 						id: 'showstockDialog',
