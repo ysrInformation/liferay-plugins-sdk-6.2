@@ -79,7 +79,12 @@
 		</liferay-ui:search-container-column-text>
 		
 		<liferay-ui:search-container-column-text name="item-title" >
-			<%=item.getName() %>
+			<portlet:renderURL var="historyURL">
+				<portlet:param name="jspPage" value="/html/dashboard/itemhistory.jsp"/>
+				<portlet:param name="backURL" value="<%=redirectURL %>"/>
+				<portlet:param name="<%=HConstants.ITEM_ID %>" value="<%=String.valueOf(item.getItemId())%>"/>
+			</portlet:renderURL>
+			<aui:a href="<%=historyURL %>"><%=item.getName() %></aui:a> 
 		</liferay-ui:search-container-column-text>
 		
 		<liferay-ui:search-container-column-text name="date" orderable="true" orderableProperty="createDate" >
