@@ -103,8 +103,8 @@
 				%>
 				<tr>
 					<td><%= StringPool.BLANK %></td>
-					<td colspan="2" class="heading"><liferay-ui:message key="total"/></td>
-					<td><%= CommonUtil.getPriceFormat(totalPrice) %></td>
+					<td colspan="2" class="heading text-center"><liferay-ui:message key="total"/></td>
+					<td class="heading text-center"><%= CommonUtil.getPriceFormat(totalPrice) %></td>
 				</tr>
 			</tbody>	
 		</table>
@@ -137,7 +137,7 @@ $(function()
 		$("#print-area").printElement(
 		{
 			leaveOpen:true,
-			printMode:'popup'
+			printMode:'popup',
 		});
 	});
  });
