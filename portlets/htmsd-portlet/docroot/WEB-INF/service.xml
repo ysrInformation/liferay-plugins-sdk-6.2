@@ -243,5 +243,29 @@
 			<finder-column name="orderId"/>
 		</finder>
 	</entity>
+	
+	<entity name="ItemHistory" local-service="true" remote-service="false">
+		
+		<!--PK Fields-->
+		<column name="historyId" type="long" primary="true"/>
+		<column name="itemId" type="long"/>
+		<column name="createDate" type="Date"/>
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="action" type="int" />
+		<column name="remark" type="String" />
+		
+		<finder return-type="Collection" name="ItemId">
+			<finder-column name="itemId" />
+		</finder>
+		
+		<finder return-type="Collection" name="UserId">
+			<finder-column name="userId"/>
+		</finder>
+		
+		<finder return-type="Collection" name="Action">
+			<finder-column name="action"/>
+		</finder>
+	</entity>
 
 </service-builder>
