@@ -1,6 +1,7 @@
 <%@ include file="/html/shoppingcart/init.jsp"%>
 
 <%
+	int i=0;
 	double totalPrice = 0;
 
 	PortletURL detailsURL = renderResponse.createRenderURL();
@@ -21,14 +22,15 @@ if (Validator.isNotNull(shoppingItem_Carts) && shoppingItem_Carts.size() > 0) {
 	for (ShoppingItem_Cart shoppingItem_Cart : shoppingItem_Carts) {
 		long itemId = shoppingItem_Cart.getItemId();
 		ShoppingItem shoppingItem = CommonUtil.getShoppingItem(itemId);
-		double price = shoppingItem.getTotalPrice()+shoppingItem.getSellerPrice();
+		double price = shoppingItem.getTotalPrice();
 		totalPrice += price;
+		String collapsed = (i==0) ? StringPool.BLANK:"collapsed";
 		String removeCartItem = "javascript:removeItems('"+shoppingItem.getItemId()+"','"+removeItemURL+"');";
 		String[] imageIdsList = Validator.isNotNull(shoppingItem) ? shoppingItem.getImageIds().split(StringPool.COMMA):new String[]{}; 
 		%> 
 		<div class="itemDetails"> 
 			<liferay-ui:panel-container accordion="false" extended="true"> 
-				<liferay-ui:panel title="<%= shoppingItem.getName() %>" defaultState="collapsed">
+				<liferay-ui:panel title="<%= shoppingItem.getName() %>" defaultState='<%= collapsed  %>'>
 					<aui:column columnWidth="40">
 						<%
 						boolean imageExist = false;
@@ -59,6 +61,7 @@ if (Validator.isNotNull(shoppingItem_Carts) && shoppingItem_Carts.size() > 0) {
 				</liferay-ui:panel>
 			</liferay-ui:panel-container>
 		</div><%
+		i++;
 	} 
 }
 %>

@@ -46,6 +46,8 @@
             
             <liferay-ui:search-container-column-text name="user-name" value="<%= userName %>" /> 
             
+            <liferay-ui:search-container-column-text name="seller-name" value="<%= userName %>" /> 
+            
             <liferay-ui:search-container-column-text name="order-date" value="<%= orderedDate %>"/>
             
             <liferay-ui:search-container-column-text name="status" value="<%= status %>"/>

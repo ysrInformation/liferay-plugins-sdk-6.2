@@ -43,6 +43,7 @@ public interface HConstants {
 	public static int SUCCESSFUL = 3;
 	public static int DELIVERED = 4;
 	public static int NOT_DELIVERED = 6;
+	public static int SHIPPING = 7;
 	public static String RUPPEE_SYMBOL = "&#8377;";
 
 	// Pages
@@ -53,6 +54,7 @@ public interface HConstants {
 	public static String DELIVERED_STATUS = "Delivered";
 	public static String HTMSD = "HTMSD";
 	public static String NOT_DELIVERED_STATUS = "Not Delivered";
+	public static String SHIPPING_STATUS = "Shipping";
 
 	public static DateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
 

@@ -4,13 +4,17 @@ import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.List;
 
+import com.htmsd.slayer.model.Invoice;
 import com.htmsd.slayer.model.ShoppingCart;
 import com.htmsd.slayer.model.ShoppingItem;
 import com.htmsd.slayer.model.ShoppingItem_Cart;
 import com.htmsd.slayer.model.ShoppingOrder;
+import com.htmsd.slayer.model.ShoppingOrderItem;
+import com.htmsd.slayer.service.InvoiceLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingCartLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingItemLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingItem_CartLocalServiceUtil;
+import com.htmsd.slayer.service.ShoppingOrderItemLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
@@ -253,5 +257,44 @@ public class CommonUtil {
 		}
 		
 		return state;
+	}
+	
+	public static List<ShoppingOrder> getMyOrders(long userId) {
+		return (ShoppingOrderLocalServiceUtil.getShoppingOrderByUserId(userId));
+	}
+	
+	public static int getItemsCount(long userId) {
+		
+		int itemsCount = 0;
+		try {
+			itemsCount = ShoppingItem_CartLocalServiceUtil.getItemsCountByCartId(userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return itemsCount;
+	}
+	
+	public static List<ShoppingOrderItem> getShoppingOrderItems(long orderId) {
+		
+		List<ShoppingOrderItem> shoppingOrderItems = Collections.emptyList();
+		try {
+			shoppingOrderItems = ShoppingOrderItemLocalServiceUtil.getShoppingOrderItemsByOrderId(orderId);
+		} catch (Exception e) {
+			_log.error("No order exist  ::"+e);
+		}
+		return shoppingOrderItems;
+	}
+	
+	public static String getBillNumber(long orderId) {
+		
+		String billNumber = StringPool.BLANK;
+		Invoice invoice = null;
+		try {
+			invoice = InvoiceLocalServiceUtil.getInvoiceByOrderId(orderId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		billNumber = (Validator.isNotNull(invoice))?String.valueOf(invoice.getInvoiceId()):"NA";
+		return billNumber;
 	}
 }

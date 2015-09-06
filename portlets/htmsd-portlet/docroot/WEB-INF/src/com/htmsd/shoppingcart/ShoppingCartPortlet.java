@@ -101,7 +101,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 					ShoppingOrderItem shoppingOrderItem = ShoppingOrderItemLocalServiceUtil
 						.insertShoppingOrderItem((int)shoppingItem.getQuantity(), totalPrice, themeDisplay.getUserId(), 
 						themeDisplay.getCompanyId(), themeDisplay.getScopeGroupId(), shoppingOrder.getOrderId(), 
-						shoppingItem.getName(), shoppingItem.getDescription(), StringPool.BLANK);
+						shoppingItem.getName(), shoppingItem.getDescription(), shoppingItem.getProductCode());
 					
 					_log.info("shopping order Item ==>"+shoppingOrderItem.getItemId());
 					
