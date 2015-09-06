@@ -226,5 +226,14 @@
 		</finder>
 		
 	</entity>
+	
+	<entity name="Invoice" local-service="true" remote-service="false">
+		
+		<!--PK Fields-->
+		<column name="invoiceId" type="long" primary="true"/>
+		<column name="orderId" type="long"/>
+		<column name="userId" type="long"/>
+		<column name="createDate" type="Date"/>
+	</entity>
 
 </service-builder>
