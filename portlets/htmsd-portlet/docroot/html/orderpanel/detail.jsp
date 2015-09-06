@@ -75,7 +75,7 @@
 			</tr>
 		</table>
 	</div>
-	<div class="product-details"> 
+	<div class="order-details"> 
 		<table style="width:100%;height: auto;">
 			<thead>
 				<tr>
@@ -129,37 +129,6 @@
 		</aui:form>
 	</c:if>
 </aui:fieldset>
-
-
-<style>
-.print-btn {
-	float: right;
-}
-
-#print-area {
-	border: 2px solid #000;
-	margin: 4% 2%;
-	padding: 3%;
-}
-
-.user-details {
-	padding: 5px;
-	text-decoration: none;
-	font-family: sans-serif;
-}
-
-.product-details table td, .product-details table th {
-	border: 2px solid grey;
-	padding: 10px;
-}
-
-.heading {
-	font-weight: bold;
-}
-.bill-no {
-	color:red;
-}
-</style>
 
 <script type="text/javascript"> 
 $(function()

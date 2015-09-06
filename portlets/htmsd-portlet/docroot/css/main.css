@@ -120,3 +120,33 @@
 .details-img {
 	height: 100px !important;
 }
+
+/**********Order panel *********/
+.print-btn {
+	float: right;
+}
+
+#print-area {
+	border: 2px solid #000;
+	margin: 4% 2%;
+	padding: 3%;
+}
+
+.user-details {
+	padding: 5px;
+	text-decoration: none;
+	font-family: sans-serif;
+}
+
+.order-details table td, .order-details table th {
+	border: 2px solid grey;
+	padding: 10px;
+}
+
+.heading {
+	font-weight: bold;
+}
+
+.bill-no {
+	color:red;
+}
