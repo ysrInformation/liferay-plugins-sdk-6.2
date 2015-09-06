@@ -10,10 +10,12 @@ import javax.portlet.PortletException;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
+import com.htmsd.slayer.model.Invoice;
 import com.htmsd.slayer.model.ShoppingItem;
 import com.htmsd.slayer.model.ShoppingItem_Cart;
 import com.htmsd.slayer.model.ShoppingOrder;
 import com.htmsd.slayer.model.ShoppingOrderItem;
+import com.htmsd.slayer.service.InvoiceLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingItem_CartLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingOrderItemLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
@@ -69,12 +71,14 @@ public class ShoppingCartPortlet extends MVCPortlet {
 				shippingEmailAddress, shippingState, shippingCountry, shippingMoble, shippingAltMoble);
 		
 		_log.info("orderId is ==>"+shoppingOrder.getOrderId()); 
+		Invoice invoice = InvoiceLocalServiceUtil.insertInvoice(themeDisplay.getUserId(), shoppingOrder.getOrderId());
 		addShoppingOrderItem(themeDisplay, shoppingOrder);
 		
 		PortletConfig portletConfig = (PortletConfig) actionRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
 		String successMessage = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "you-order-has-been-registered-you-may-get-email-shortly");
 		SessionMessages.add(actionRequest, "request_processed", successMessage);
 		actionResponse.setRenderParameter(HConstants.JSP_PAGE, HConstants.PAGE_SHOPPING_CART_DETAILS); 
+		actionResponse.setRenderParameter("tab1", "my-orders"); 
 	}
 
 	/**
@@ -95,7 +99,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 				if (Validator.isNotNull(shoppingItem)) {
 					totalPrice = shoppingItem.getSellerPrice()+shoppingItem.getTotalPrice();
 					ShoppingOrderItem shoppingOrderItem = ShoppingOrderItemLocalServiceUtil
-						.insertShoppingOrderItem(totalPrice, themeDisplay.getUserId(), 
+						.insertShoppingOrderItem((int)shoppingItem.getQuantity(), totalPrice, themeDisplay.getUserId(), 
 						themeDisplay.getCompanyId(), themeDisplay.getScopeGroupId(), shoppingOrder.getOrderId(), 
 						shoppingItem.getName(), shoppingItem.getDescription(), StringPool.BLANK);
 					
