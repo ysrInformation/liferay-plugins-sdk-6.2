@@ -74,6 +74,7 @@
 	$(function() {
 		if(<%=totalCount%> != 0) {
 			$('#no-item-display').hide();
+			$('#loader-icon').hide();
 		}
 		$('#<portlet:namespace/>sort-by option[value="<%=sortBy%>"').attr("selected", "selected")
 		window.onload = $("#<portlet:namespace/>len").val(<%=noOfItems%>);
