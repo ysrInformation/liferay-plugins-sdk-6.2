@@ -8,12 +8,17 @@ import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.util.dao.orm.CustomSQLUtil;
 
 public class ShoppingItemFinderImpl extends BasePersistenceImpl<ShoppingItem>
 		implements ShoppingItemFinder {
 
+	private final static Log _log = LogFactoryUtil.getLog(ShoppingItemFinderImpl.class);
+	
 	public static String FIND_ITEM_BY_TAGID = ShoppingItemFinderImpl.class
 			.getName() + ".findItemByTagId";
 
@@ -23,6 +28,11 @@ public class ShoppingItemFinderImpl extends BasePersistenceImpl<ShoppingItem>
 	public static String FIND_ITEM_BY_ORDER = ShoppingItemFinderImpl.class
 			.getName() + ".getItemByOrder";
 
+	public static String FIND_ITEM_BY_TAG_NAME = ShoppingItemFinderImpl.class
+			.getName() + ".findItemByTagName";
+	
+	
+	
 	@SuppressWarnings("unchecked")
 	public List<ShoppingItem> getItemByTagId(long tagId) {
 
@@ -31,7 +41,7 @@ public class ShoppingItemFinderImpl extends BasePersistenceImpl<ShoppingItem>
 		// 2. Get SQL statement from XML file with its name
 		String sql = CustomSQLUtil.get(FIND_ITEM_BY_TAGID);
 
-		System.out.println("The Query is >>>>>>>>>" + sql);
+		_log.info("The Query is >>>>>>>>>" + sql);
 
 		// 3. Transform the normal query to HQL query
 		SQLQuery query = session.createSQLQuery(sql);
@@ -51,7 +61,7 @@ public class ShoppingItemFinderImpl extends BasePersistenceImpl<ShoppingItem>
 		String sql = CustomSQLUtil.get(FIND_ITEM_BY_CATEGORYID);
 		sql = sql.replace("[$sort]", "ORDER BY "+sort);
 		
-		System.out.println("The Query is >>>>>>>>>" + sql);
+		_log.info("The Query is >>>>>>>>>" + sql);
 		
 		// 3. Transform the normal query to HQL query
 		SQLQuery query = session.createSQLQuery(sql);
@@ -71,7 +81,7 @@ public class ShoppingItemFinderImpl extends BasePersistenceImpl<ShoppingItem>
 		String sql = CustomSQLUtil.get(FIND_ITEM_BY_ORDER);
 		sql = sql.replace("[$sort]", "ORDER BY "+sort);
 		
-		System.out.println("The Query is >>>>>>>>>" + sql);
+		_log.info("The Query is >>>>>>>>>" + sql);
 		
 		// 3. Transform the normal query to HQL query
 		SQLQuery query = session.createSQLQuery(sql);
@@ -88,7 +98,7 @@ public class ShoppingItemFinderImpl extends BasePersistenceImpl<ShoppingItem>
 		String sql = CustomSQLUtil.get(FIND_ITEM_BY_CATEGORYID);
 		sql = sql.replace("[$sort]", "");
 		
-		System.out.println("The Query is >>>>>>>>>" + sql);
+		_log.info("The Query is >>>>>>>>>" + sql);
 
 		// 3. Transform the normal query to HQL query
 		SQLQuery query = session.createSQLQuery(sql);
@@ -98,5 +108,42 @@ public class ShoppingItemFinderImpl extends BasePersistenceImpl<ShoppingItem>
 		queryPos.add(categoryId);
 		List<ShoppingItem> shoppingItems = (List<ShoppingItem>) query.list();
 		return shoppingItems.size();
+	}
+	
+	public List<ShoppingItem> getItemsByTagName(String tagName, String sort, int start, int end) {
+		Session session = openSession();
+		
+		
+		System.out.println(tagName+ "  "+ start + " " + end);
+		
+		String sql = CustomSQLUtil.get(FIND_ITEM_BY_TAG_NAME);
+		sql = sql.replace("[$sort]", "ORDER BY "+sort);
+
+		_log.info("The Query is >>>>>>>>>" + sql);
+		
+		SQLQuery query = session.createSQLQuery(sql);
+		query.addEntity("ShoppingItem", ShoppingItemImpl.class);
+		
+		QueryPos queryPos = QueryPos.getInstance(query);
+		queryPos.add(StringPool.PERCENT + tagName+ StringPool.PERCENT);
+		
+		return (List<ShoppingItem>) QueryUtil.list(query, getDialect(), start, end);
+	}
+	
+	public int getItemsByTagNameCount(String tagName) {
+		Session session = openSession();
+		
+		String sql = CustomSQLUtil.get(FIND_ITEM_BY_TAG_NAME);
+		sql = sql.replace("[$sort]", "");
+		
+		_log.info("The Query is >>>>>>>>>" + sql);
+		
+		SQLQuery query = session.createSQLQuery(sql);
+		query.addEntity("ShoppingItem", ShoppingItemImpl.class);
+		
+		QueryPos queryPos = QueryPos.getInstance(query);
+		queryPos.add(StringPool.PERCENT + tagName+ StringPool.PERCENT );
+		
+		return query.list().size();
 	}
 }

@@ -60,7 +60,6 @@
 		</div>
 	</div>
 </div>
-<%=sortBy%>
 <aui:script>
 	var dataLen = 0;
 	var portletId = '<%= themeDisplay.getPortletDisplay().getId() %>';

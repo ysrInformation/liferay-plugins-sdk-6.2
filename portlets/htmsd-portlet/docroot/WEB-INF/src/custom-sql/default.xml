@@ -3,4 +3,5 @@
 		<sql  file  = "custom-sql/shoppingitem.xml"/>
 	    <sql  file  = "custom-sql/tag.xml"/>
 	    <sql  file  = "custom-sql/category.xml"/>
+	    <sql  file  = "custom-sql/search.xml"/>
 	</custom-sql>

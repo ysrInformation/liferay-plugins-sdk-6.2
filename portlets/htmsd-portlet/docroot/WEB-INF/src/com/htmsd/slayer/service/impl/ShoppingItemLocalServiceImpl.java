@@ -398,5 +398,13 @@ public class ShoppingItemLocalServiceImpl
 		return shoppingItemFinder.getItemByOrder(sort, start, end);
 	}
 	
+	public List<ShoppingItem> getItemByTagName(String tagName, String sort, int start, int end) {
+		return shoppingItemFinder.getItemsByTagName(tagName, sort, start, end);
+	}
+	
+	public int getItemByTagNameCount(String tagName) {
+		return shoppingItemFinder.getItemsByTagNameCount(tagName);
+	}
+	
 	private Log _log = LogFactoryUtil.getLog(ShoppingItemLocalServiceImpl.class);
 }

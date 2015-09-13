@@ -73,6 +73,32 @@ public class ShoppingItemServiceImpl extends ShoppingItemServiceBaseImpl {
 		} else {
 			shoppingItems = shoppingItemLocalService.getItemByOrder(sortBy, start, end);
 		}
+		getItemJSONArray(groupId, jsonArray, shoppingItems);
+		return jsonArray;
+	}
+	
+	/**
+	 * 
+	 * @param tagName
+	 * @param sortBy
+	 * @param groupId
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	@AccessControlled(guestAccessEnabled=true)
+	public JSONArray getShoppingItemsBtTagName(String tagName, String sortBy, long groupId, int start, int end) {
+		_log.info("Getting Shopping Item List Start:"+start+" End:"+end+" SortBy:"+sortBy);
+		
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+		List<ShoppingItem> shoppingItems = new ArrayList<ShoppingItem>();
+		shoppingItems = shoppingItemLocalService.getItemByTagName(tagName, sortBy, start, end);
+		getItemJSONArray(groupId, jsonArray, shoppingItems);
+		return jsonArray;
+	}
+
+	private void getItemJSONArray(long groupId, JSONArray jsonArray,
+			List<ShoppingItem> shoppingItems) {
 		for (ShoppingItem shoppingItem : shoppingItems) {
 
 			if(shoppingItem.getStatus() != HConstants.APPROVE) continue;
@@ -93,6 +119,5 @@ public class ShoppingItemServiceImpl extends ShoppingItemServiceBaseImpl {
 			jsonObject.put(HConstants.IMAGE, CommonUtil.getThumbnailpath(imageId, groupId, true));
 			jsonArray.put(jsonObject);
 		}
-		return jsonArray;
 	}
 }

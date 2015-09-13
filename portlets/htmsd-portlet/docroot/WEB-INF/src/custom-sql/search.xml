@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom-sql>
+	<sql
+		id="com.htmsd.slayer.service.persistence.ShoppingItemFinderImpl.findItemByTagName">
+		   <![CDATA[
+			    SELECT 
+					si.* 
+				FROM 
+					htmsd_tag t
+				INNER JOIN
+					htmsd_ShoppingItem_tag st 
+				ON
+					st.tagId = t.tagId 
+					AND t.name like ?
+				INNER JOIN  
+					htmsd_ShoppingItem si
+				ON 
+					st.itemId = si.itemId
+   				[$sort]
+		 	]]>
+	</sql>
+</custom-sql>
+	
