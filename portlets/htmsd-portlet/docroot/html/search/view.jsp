@@ -16,7 +16,6 @@
 		searchParam = StringPool.BLANK;
 	}
 %>
-<%=searchParam%>
 <style>
 	#no-item-display {
 		text-align: center;
@@ -72,7 +71,6 @@
 	
 	var dataLen = 0;
 	var portletId = '<%= themeDisplay.getPortletDisplay().getId() %>';
-	alert(portletId);
 	$(function() {
 		if(<%=totalCount%> != 0) {
 			$('#no-item-display').hide();
@@ -93,7 +91,6 @@
 		var searchParam = '<%=searchParam%>';
 		
 		if (searchParam) {
-			alert(searchParam);
 			$.ajax({
 				url : '<%=themeDisplay.getPortalURL()+"/api/jsonws/htmsd-portlet.shoppingitem/get-shopping-items-bt-tag-name"%>',
 				type : "GET",
