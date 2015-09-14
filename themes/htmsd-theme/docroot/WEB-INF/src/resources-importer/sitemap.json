@@ -201,7 +201,7 @@
 			"columns": [
 				[
 					{
-			            "portletId": "6_WAR_htmsdportlet"
+			            "portletId": "6_WAR_htmsdportlet",
 			            "portletPreferences": {
 			            	"noOfItems":"8"
 			            }
