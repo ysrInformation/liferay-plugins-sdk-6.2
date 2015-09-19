@@ -289,11 +289,12 @@
 					 <c:if test='<%=isAdmin %>'>
 					 
 						 A.one("#<portlet:namespace /><%=HConstants.status%>").on('change',function(e){
-							var remarkDiv = A.one("#remarkDiv");
+							var remarkDiv = document.getElementById("remarkDiv");
+							console.log(remarkDiv);
 							if(e.currentTarget.get('value') == <%=HConstants.REJECT%>) {
-								remarkDiv._node.attributes[1].nodeValue = 'display :block'
+								remarkDiv.style.display  = 'block';
 							}else{
-								remarkDiv._node.attributes[1].nodeValue = 'display :none'
+								remarkDiv.style.display  = 'none';
 							}
 						 });
 						 
