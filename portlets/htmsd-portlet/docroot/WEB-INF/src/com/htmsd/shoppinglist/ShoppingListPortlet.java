@@ -30,6 +30,13 @@ public class ShoppingListPortlet extends MVCPortlet {
 
 	private final static Log _log = LogFactoryUtil.getLog(ShoppingListPortlet.class);
 	
+	/**
+	 * Save Item To Shopping Cart 
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws IOException
+	 * @throws PortletException
+	 */
 	public void addItemToCart(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortletException {
 		

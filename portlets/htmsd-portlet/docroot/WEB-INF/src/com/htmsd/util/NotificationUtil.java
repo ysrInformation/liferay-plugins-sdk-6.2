@@ -24,6 +24,13 @@ public class NotificationUtil {
 	
 	private static Log _log = LogFactoryUtil.getLog(NotificationUtil.class);
 	
+	/**
+	 * Send Email Notification
+	 * @param groupId
+	 * @param userName
+	 * @param email
+	 * @param articleId
+	 */
 	public static void sendNotification(long groupId, String userName, String email, String articleId) {
 		_log.info("Sedning Email to:"+userName+"<"+email+">");
 		JournalArticle journalArticle = null;
@@ -48,6 +55,13 @@ public class NotificationUtil {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param userName
+	 * @param email
+	 * @param body
+	 * @param subject
+	 */
 	private static void sendMail(String userName, String email, String body, String subject) {
 		MailMessage mailMessage = new MailMessage();
 		mailMessage.setFrom(getInternetAddress("H.T.M.S.D PET'S", PropsUtil.get(PropsKeys.ADMIN_EMAIL_FROM_ADDRESS)));
@@ -58,6 +72,12 @@ public class NotificationUtil {
 		MailServiceUtil.sendEmail(mailMessage);
 	}
 
+	/**
+	 * 
+	 * @param personal
+	 * @param email
+	 * @return
+	 */
 	private static InternetAddress getInternetAddress(String personal, String email) {
 		InternetAddress internetAddress = new InternetAddress();
 		internetAddress.setAddress(email);
@@ -69,6 +89,12 @@ public class NotificationUtil {
 		return internetAddress;
 	}
 	
+	/**
+	 * 
+	 * @param document
+	 * @param name
+	 * @return
+	 */
 	private static String getValue(Document document,String name) {
 		Node node = document.selectSingleNode("/root/dynamic-element[@name='"  + name + "']/dynamic-content");
 		return node.getText();
