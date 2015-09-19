@@ -97,8 +97,6 @@
 		
 		<c:if test='<%=tabs1.equals("Approved Items") %>'>
 			<liferay-ui:search-container-column-text name="stock">
-				<%=item.getQuantity() == -1 ? LanguageUtil.get(portletConfig,themeDisplay.getLocale(),"unlimited") : item.getQuantity() %>
-			
 				<%
 					PortletURL showStockFormURL = renderResponse.createRenderURL();
 					showStockFormURL.setParameter("jspPage", "/html/dashboard/stockform.jsp");
@@ -107,6 +105,7 @@
 					showStockFormURL.setWindowState(LiferayWindowState.POP_UP);
 				%>
 				<a href="#" onclick="showStockForm('<%=showStockFormURL%>');"><aui:icon image="edit"/></a> 
+				<%=item.getQuantity() == -1 ? LanguageUtil.get(portletConfig,themeDisplay.getLocale(),"unlimited") : item.getQuantity() %>
 			</liferay-ui:search-container-column-text>
 		</c:if>
 		
