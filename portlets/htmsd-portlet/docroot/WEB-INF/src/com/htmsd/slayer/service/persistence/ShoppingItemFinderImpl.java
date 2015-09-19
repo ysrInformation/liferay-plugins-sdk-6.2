@@ -110,6 +110,21 @@ public class ShoppingItemFinderImpl extends BasePersistenceImpl<ShoppingItem>
 		return shoppingItems.size();
 	}
 	
+	public int getItemCount() {
+
+		Session session = openSession();
+
+		String sql = CustomSQLUtil.get(FIND_ITEM_BY_ORDER);
+		sql = sql.replace("[$sort]", "");
+		_log.info("The Query is >>>>>>>>>" + sql);
+
+		SQLQuery query = session.createSQLQuery(sql);
+		query.addEntity("ShoppingItem", ShoppingItemImpl.class);
+
+		List<ShoppingItem> shoppingItems = (List<ShoppingItem>) query.list();
+		return shoppingItems.size();
+	}
+	
 	public List<ShoppingItem> getItemsByTagName(String tagName, String sort, int start, int end) {
 		Session session = openSession();
 		

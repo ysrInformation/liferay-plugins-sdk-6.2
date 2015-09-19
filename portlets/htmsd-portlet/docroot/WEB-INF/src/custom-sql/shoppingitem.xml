@@ -8,6 +8,8 @@
 				    htmsd_ShopppingItem_Category sc
 				        INNER JOIN
 				    htmsd_ShoppingItem s ON sc.itemId = s.itemId
+				    	AND NOT s.quantity = 0 
+				    	AND s.status = 1
 				        AND sc.categoryId = ?
 				[$sort]
 			   		
@@ -20,7 +22,10 @@
 				FROM
 				    htmsd_ShopppingItem_Category sc
 				        INNER JOIN
-				    htmsd_ShoppingItem s ON sc.itemId = s.itemId
+				    htmsd_ShoppingItem s 
+				    ON sc.itemId = s.itemId
+				    	AND NOT s.quantity = 0 
+				    	AND s.status = 1
 				[$sort]
 			   		
 		 	]]>

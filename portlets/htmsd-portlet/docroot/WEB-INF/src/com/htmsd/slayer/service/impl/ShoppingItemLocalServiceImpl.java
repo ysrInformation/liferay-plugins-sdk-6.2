@@ -372,14 +372,7 @@ public class ShoppingItemLocalServiceImpl
 	}
 
 	public int getByStatusCount(int status) {
-			
-		int count = 0;
-		try {
-			count =  shoppingItemPersistence.countByStatus(status);
-		} catch (SystemException e) {
-			_log.error(e);
-		}
-		return count;
+		return shoppingItemFinder.getItemCount();
 	}
 	
 	public List<ShoppingItem> getItemByCategoryId(String sort, long categoryId, int start, int end) {
