@@ -56,7 +56,7 @@ public interface HConstants {
 	public static int ITEM_ADDED = 9;
 	public static String RUPPEE_SYMBOL = "&#8377;";
  
-	// Pages
+	// PAGES
 	public static String PAGE_SHOPPING_LIST_DETAILS = "/html/shoppinglist/details.jsp";
 	public static String PAGE_SHOPPING_CART_DETAILS = "/html/shoppingcart/view.jsp";
 
@@ -74,4 +74,9 @@ public interface HConstants {
 	public static final int SORT_PRICE_HIGH_TO_LOW = 0;
 	public static final int SORT_PRICE_LOW_TO_HIGH = 1;
 	public static final String CASH_ON_DELIVERY = "Cash On Delivery";
+	
+	//EMAIL NOTIFICATION 
+	public static final String EMAIL_SUBJECT ="Subject";
+	public static final String EMAIL_MESSAGE ="Message";
+	
 }

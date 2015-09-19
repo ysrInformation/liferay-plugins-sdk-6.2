@@ -16,6 +16,8 @@
 					htmsd_ShoppingItem si
 				ON 
 					st.itemId = si.itemId
+					AND NOT si.quantity = 0
+					AND si.status = 1
    				[$sort]
 		 	]]>
 	</sql>

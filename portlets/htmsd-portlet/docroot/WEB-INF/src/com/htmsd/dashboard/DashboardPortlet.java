@@ -19,6 +19,7 @@ import com.htmsd.slayer.service.ItemHistoryLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingItemLocalServiceUtil;
 import com.htmsd.slayer.service.TagLocalServiceUtil;
 import com.htmsd.util.HConstants;
+import com.htmsd.util.NotificationUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -118,6 +119,9 @@ public class DashboardPortlet extends MVCPortlet {
 		ShoppingItemLocalServiceUtil.updateCategory(itemId, categoryId, userId, userName);
 		ShoppingItemLocalServiceUtil.updateTag(itemId, tagId, userId, userName);
 		actionResponse.setRenderParameter("tab1", ParamUtil.getString(uploadRequest, "tab1"));
+		
+		NotificationUtil.sendNotification(themeDisplay.getScopeGroupId(), 
+				themeDisplay.getUser().getFullName(), themeDisplay.getUser().getEmailAddress(), "EMAIL_NOTIFICATION");
 	} 
 	
 	/**

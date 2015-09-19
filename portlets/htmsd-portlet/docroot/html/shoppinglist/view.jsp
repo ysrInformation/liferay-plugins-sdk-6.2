@@ -136,7 +136,7 @@
 						+ '<a href="'+ajaxURL+'">	<img src=' + item.image + ' /></a>'
 						+ '</div><div class="product-details">'
 						+ '<h4 class="text-color-red">' + item.name + '</h4>'
-						+ '<p class="description">' + item.description + '</p>'
+						/* + '<p class="description">' + item.description + '</p>' */
 						+ '<h6 id="price">' + formatPrice(item.totalPrice); + '</h6>'
 						+ '</div></div></li>';
 				$("#shopping_list").append(li);		

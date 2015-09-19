@@ -101,8 +101,6 @@ public class ShoppingItemServiceImpl extends ShoppingItemServiceBaseImpl {
 			List<ShoppingItem> shoppingItems) {
 		for (ShoppingItem shoppingItem : shoppingItems) {
 
-			if(shoppingItem.getStatus() != HConstants.APPROVE) continue;
-			
 			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 			jsonObject.put(HConstants.ITEM_ID, shoppingItem.getItemId());
 			jsonObject.put(HConstants.NAME, shoppingItem.getName());
