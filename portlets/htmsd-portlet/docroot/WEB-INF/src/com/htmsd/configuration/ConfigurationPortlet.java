@@ -1,25 +1,27 @@
 package com.htmsd.configuration;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Date;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 
-import com.htmsd.slayer.model.Tag;
+import com.htmsd.slayer.model.ShoppingItem;
 import com.htmsd.slayer.service.CategoryLocalServiceUtil;
-import com.htmsd.slayer.service.ShoppingItemLocalServiceUtil;
-import com.htmsd.slayer.service.TagLocalServiceUtil;
 import com.htmsd.util.HConstants;
+import com.liferay.counter.service.CounterLocalServiceUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
-import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portlet.asset.model.AssetTag;
+import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
+import com.liferay.portlet.asset.service.AssetTagLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 /**
@@ -66,13 +68,31 @@ public class ConfigurationPortlet extends MVCPortlet {
 		
 		ThemeDisplay themeDisplay=(ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		
-		List<Tag> tags =  TagLocalServiceUtil.getTagByName(name);
-		if(tags.size() == 0 ) {
-			TagLocalServiceUtil.addTag(themeDisplay.getScopeGroupId(), themeDisplay.getCompanyId(), themeDisplay.getUserId(), name);	
-		}else{
-			SessionErrors.add(actionRequest, "duplicateTagName");
+		try {
+			if(AssetTagLocalServiceUtil.hasTag(themeDisplay.getScopeGroupId(), name)) {
+				SessionErrors.add(actionRequest,"duplicateTagName");
+			} else{
+				
+				AssetTag assetTag = null;
+				assetTag = AssetTagLocalServiceUtil.createAssetTag(CounterLocalServiceUtil.increment(AssetTag.class.getName()));
+				
+				assetTag.setCompanyId(themeDisplay.getCompanyId());
+				assetTag.setGroupId(themeDisplay.getScopeGroupId());
+				assetTag.setCreateDate(new Date());
+				assetTag.setModifiedDate(new Date());
+				assetTag.setName(name);
+				assetTag.setAssetCount(0);
+				assetTag.setUserId(themeDisplay.getUserId());
+				assetTag.setUserName(themeDisplay.getUser().getScreenName());
+				
+				AssetTagLocalServiceUtil.addAssetTag(assetTag);
+			}
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
 		}
-		
+
 		actionResponse.setRenderParameter("tab1", "Tags");
 	}
 	
@@ -81,7 +101,14 @@ public class ConfigurationPortlet extends MVCPortlet {
 
 		long tagId = ParamUtil.getLong(actionRequest, HConstants.TAG_ID);
 
-		TagLocalServiceUtil.removeTag(tagId);
+		try {
+			AssetTagLocalServiceUtil.deleteTag(tagId);
+		} catch (PortalException e) {
+			_log.error(e);
+			e.printStackTrace();
+		} catch (SystemException e) {
+			_log.error(e);
+		}
 		
 		actionResponse.setRenderParameter("tab1", "Tags");
 	}
@@ -91,7 +118,14 @@ public class ConfigurationPortlet extends MVCPortlet {
 		
 		String [] rowIds=ParamUtil.getParameterValues(actionRequest, "rowIds");
 		for(String rowId : rowIds) {
-			TagLocalServiceUtil.removeTag(Long.valueOf(rowId));
+			try {
+				AssetTagLocalServiceUtil.deleteTag(Long.valueOf(rowId));
+			} catch (PortalException e) {
+				_log.error(e);
+				e.printStackTrace();
+			} catch (SystemException e) {
+				_log.error(e);
+			}
 		}
 		actionResponse.setRenderParameter("tab1", "Tags");
 	}	

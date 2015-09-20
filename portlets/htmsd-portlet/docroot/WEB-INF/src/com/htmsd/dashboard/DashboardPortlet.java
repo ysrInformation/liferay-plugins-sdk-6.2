@@ -2,29 +2,20 @@ package com.htmsd.dashboard;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
-import javax.portlet.ResourceRequest;
-import javax.portlet.ResourceResponse;
 
-import com.htmsd.slayer.model.ItemHistory;
 import com.htmsd.slayer.model.ShoppingItem;
-import com.htmsd.slayer.model.Tag;
 import com.htmsd.slayer.service.ItemHistoryLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingItemLocalServiceUtil;
-import com.htmsd.slayer.service.TagLocalServiceUtil;
 import com.htmsd.util.HConstants;
 import com.htmsd.util.NotificationUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.json.JSONArray;
-import com.liferay.portal.kernel.json.JSONFactoryUtil;
-import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
@@ -39,6 +30,7 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
@@ -77,13 +69,12 @@ public class DashboardPortlet extends MVCPortlet {
 		boolean unlimitedQuantity = ParamUtil.getBoolean(uploadRequest, HConstants.UNILIMITED_QUANTITY);
 		long quantity = unlimitedQuantity ? -1 : ParamUtil.getLong(uploadRequest, HConstants.QUANTITY);
 		long categoryId = ParamUtil.getLong(uploadRequest, HConstants.CATEGORY_ID);
-		long tagId = ParamUtil.getLong(uploadRequest, HConstants.TAG_ID);
-		String tagName = ParamUtil.getString(uploadRequest, HConstants.TAG);
 		String vedioURL = ParamUtil.getString(uploadRequest, HConstants.VEDIO_URL);
+		String staffRemark = ParamUtil.getString(uploadRequest, HConstants.STAFF_REMARKS, "Item Added");
 		List<Long> imageIds = new ArrayList<Long>();
 		ShoppingItem shoppingItem = null;
-		Tag tag = null;
 		int status = ParamUtil.getInteger(uploadRequest, HConstants.status);
+		
 		String remark = ( status == HConstants.REJECT ) ? ParamUtil.getString(uploadRequest, HConstants.REMARK)  : StringPool.BLANK;
 		
 		if (itemId == 0) {
@@ -102,28 +93,46 @@ public class DashboardPortlet extends MVCPortlet {
 						themeDisplay.getScopeGroupId(), themeDisplay.getCompanyId(), userId, userName,currentUserId, currentUserName, productCode, name,
 						description, sellerPrice, totalPrice, quantity, status,
 						StringUtil.merge(imageIds, StringPool.COMMA), vedioURL, remark);
-				ItemHistoryLocalServiceUtil.addItemHistory(itemId, currentUserId, currentUserName, HConstants.ITEM_UPDATED, StringPool.BLANK);
+				ItemHistoryLocalServiceUtil.addItemHistory(itemId, currentUserId, currentUserName, HConstants.ITEM_UPDATED, staffRemark);
 		}
-		//Adding New Tag
-		if(tagId == 0 && !tagName.isEmpty()) {
-			List<Tag> tagNames = TagLocalServiceUtil.getTagByName(tagName);
-			if(tagNames.size() > 0){
-				tag = tagNames.get(0);
-			}else {
-				tag = TagLocalServiceUtil.addTag(themeDisplay.getScopeGroupId(), themeDisplay.getCompanyId(), themeDisplay.getUserId(), tagName);
-			}
-			tagId = tag.getTagId();
-		}
+		// Tag
+			updateTags(uploadRequest, itemId, themeDisplay);
 		
-		//Update Tag_Mapping and Category Mapping
+		//Category 
 		ShoppingItemLocalServiceUtil.updateCategory(itemId, categoryId, userId, userName);
-		ShoppingItemLocalServiceUtil.updateTag(itemId, tagId, userId, userName);
 		actionResponse.setRenderParameter("tab1", ParamUtil.getString(uploadRequest, "tab1"));
 		
 		NotificationUtil.sendNotification(themeDisplay.getScopeGroupId(), 
 				themeDisplay.getUser().getFullName(), themeDisplay.getUser().getEmailAddress(), "EMAIL_NOTIFICATION");
+		
 	} 
 	
+	
+	/**
+	 * Method updateTags to update assesttags of items 
+	 * @param uploadRequest
+	 * @param itemId
+	 */
+	private void updateTags(UploadPortletRequest uploadRequest, long itemId,ThemeDisplay themeDisplay) {
+		
+		ServiceContext serviceContext = null;
+		try {
+			 serviceContext = ServiceContextFactory.getInstance(uploadRequest);
+		} catch (PortalException e) {
+			_log.error(e);
+		} catch (SystemException e) {
+			_log.error(e);
+		}
+		
+		try {
+			AssetEntryLocalServiceUtil.updateEntry(themeDisplay.getUserId(), themeDisplay.getScopeGroupId(), ShoppingItem.class.getName(), itemId, null, serviceContext.getAssetTagNames());
+		} catch (PortalException e) {
+			_log.error(e);
+		} catch (SystemException e) {
+			_log.error(e);
+		}
+	}
+
 	/**
 	 * Method updateItemSet to update set of items status
 	 * @param actionRequest
@@ -310,29 +319,6 @@ public class DashboardPortlet extends MVCPortlet {
 		ShoppingItemLocalServiceUtil.updateStock(itemId, quantity, themeDisplay.getUserId(), themeDisplay.getUser().getScreenName());
 		
 		actionResponse.sendRedirect(ParamUtil.getString(actionRequest, "redirectURL"));
-	}
-	 
-	@Override
-	public void serveResource(ResourceRequest resourceRequest,
-			ResourceResponse resourceResponse) throws IOException,
-			PortletException {
-		
-		List<Tag> tags = null;;
-		try {
-			tags = TagLocalServiceUtil.getTags(0, TagLocalServiceUtil.getTagsCount());
-		} catch (SystemException e) {
-			_log.error(e);
-		}
-		JSONArray tagArray = JSONFactoryUtil.createJSONArray();
-		for(Tag tag : tags) {
-			JSONObject tagObject = JSONFactoryUtil.createJSONObject();
-			tagObject.put("tagId", tag.getTagId());
-			tagObject.put("tagName", tag.getName());
-			tagArray.put(tagObject);
-		}
-		PrintWriter out=resourceResponse.getWriter();
-		out.println(tagArray.toString());
-
 	}
 	
 	private Log _log = LogFactoryUtil.getLog(DashboardPortlet.class);

@@ -1,9 +1,15 @@
+<%@page import="com.liferay.portal.util.PortalUtil"%>
+<%@page import="com.liferay.portlet.asset.service.AssetTagLocalServiceUtil"%>
+<%@page import="com.liferay.portlet.asset.service.persistence.AssetTagUtil"%>
+<%@page import="com.liferay.portlet.asset.model.AssetTag"%>
 <%@include file="/html/dashboard/init.jsp" %>
 
 <portlet:actionURL name="addItem" var="addItemURL" >
 	<portlet:param name="tab1" value='<%=ParamUtil.getString(renderRequest, "tab1") %>'/>
 </portlet:actionURL>
 <%
+	List<AssetTag> assetTags = AssetTagLocalServiceUtil.getTags(themeDisplay.getScopeGroupId(), PortalUtil.getClassNameId(ShoppingItem.class), null, -1, -1);
+	System.out.println(assetTags.size());
 	List<Category> categories = CategoryLocalServiceUtil.getCategories(-1, -1);
 %>
 
@@ -11,7 +17,6 @@
 
 <aui:fieldset>
 	<aui:form action="<%=addItemURL %>" enctype="multipart/form-data" method="POST" name="addItemForm">
-		<aui:input name="categories" type="assetCategories" model="<%=ShoppingItem.class %>"/>
 		<aui:input name="<%=HConstants.NAME%>" required="true" />
 		<aui:input name="<%=HConstants.PRODUCT_CODE %>" />
 		<aui:select name="<%=HConstants.CATEGORY_ID %>"   required="true" showEmptyOption="true">
@@ -19,6 +24,7 @@
 				<aui:option label="${category.name}"  value="${category.categoryId}"/>
 			</c:forEach>
 		</aui:select>
+		<liferay-ui:message key="description" />
 		<liferay-ui:input-editor />
 		<aui:input name="<%=HConstants.DESCRIPTION %>" value=""  type="hidden" />
 		<aui:layout>
@@ -66,8 +72,8 @@
 			<aui:input name="<%=HConstants.WHOLESALE_QUANTITY %>" />	
 			<aui:input name="<%=HConstants.WHOLESALE_PRICE %>" />
 		</div>
-		<aui:input name="tags" type="assetTags" model="<%= ShoppingItem.class %>" cssClass="customTagClass" />
-		
+		<liferay-ui:message key="tags" />
+		<liferay-ui:asset-tags-selector className="<%=ShoppingItem.class.getName() %>" />
 		<aui:input name="terms"  type="checkbox" required="true" label="" inlineField="true" />
 		<aui:a href="http://www.google.com">Terms of user</aui:a>
 		And

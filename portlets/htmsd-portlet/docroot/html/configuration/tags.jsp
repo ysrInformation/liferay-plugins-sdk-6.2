@@ -1,3 +1,8 @@
+<%@page import="com.htmsd.slayer.model.ShoppingItem"%>
+<%@page import="com.liferay.portal.util.PortalUtil"%>
+<%@page import="com.liferay.portal.util.Portal"%>
+<%@page import="com.liferay.portlet.asset.service.AssetTagLocalServiceUtil"%>
+<%@page import="com.liferay.portlet.asset.model.AssetTag"%>
 <%@include file="/html/configuration/init.jsp"%>
 
 <portlet:actionURL name="addTag"  var="addTagURL">
@@ -17,8 +22,6 @@
 
 <portlet:actionURL var="deleteSetURL" name="deleteTagSet" />
 
-			<liferay-ui:success key="product-image-delete-success" message="product-image-delete-success" />
-
 <aui:fieldset>
 	<aui:form action="<%=addTagURL %>" method="POST">
 		<aui:input name="<%=HConstants.TAG %>"  required="true"/>
@@ -33,16 +36,16 @@
 	
 		<liferay-ui:search-container-results>
 			 <%
-			 
-			 	List<Tag>  tags = TagLocalServiceUtil.getTags(searchContainer.getStart(),  searchContainer.getEnd());
-				total = TagLocalServiceUtil.getTagsCount();
+			
+			 	List<AssetTag>  assetTags =  AssetTagLocalServiceUtil.getTags();
+				total = assetTags.size();
 				
-				pageContext.setAttribute("results", tags);
+				pageContext.setAttribute("results", assetTags);
 				pageContext.setAttribute("total", total);
 			%>
 		</liferay-ui:search-container-results>			 
 		
-		<liferay-ui:search-container-row className="com.htmsd.slayer.model.Tag" modelVar="tag" indexVar="indexVar" keyProperty="tagId">
+		<liferay-ui:search-container-row className="com.liferay.portlet.asset.model.AssetTag" modelVar="tag" indexVar="indexVar" keyProperty="tagId">
 	
 			<liferay-ui:search-container-column-text name="no.">
 				<%=String.valueOf(searchContainer.getStart()+1+indexVar)%>
@@ -50,7 +53,7 @@
 			
 			<liferay-ui:search-container-column-text name="tag-name" property="name" />
 			
-			<liferay-ui:search-container-column-text name="date"  >
+			<liferay-ui:search-container-column-text name="createDate"  >
 				<fmt:formatDate value="<%=tag.getCreateDate() %>" pattern="dd/MM/yyyy" />
 			</liferay-ui:search-container-column-text>
 		

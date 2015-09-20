@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.util.PortalUtil"%>
 <%@include file="/html/dashboard/init.jsp" %>
 
 <head>
@@ -76,6 +77,7 @@
 						}
 					%>   
 				</aui:select>
+				<liferay-ui:message key="description" />
 				<liferay-ui:input-editor />
 				<aui:input name="<%=HConstants.DESCRIPTION %>" value="<%=item.getDescription()%>"  type="hidden"/>
 				<aui:layout>
@@ -151,8 +153,14 @@
 					</aui:input>
 				</c:if>
 				
-				<aui:input name="tags" type="assetTags" bean="<%=item %>" model="<%= ShoppingItem.class %>" cssClass="customTagClass" />
+				<aui:input name="<%=HConstants.WHOLESALE_DISCOUNT %>" type="checkbox"  inlineLabel="true" />
+				<div id="wholeSaleDiv" style="display:none;">
+					<aui:input name="<%=HConstants.WHOLESALE_QUANTITY %>" />	
+					<aui:input name="<%=HConstants.WHOLESALE_PRICE %>" />
+				</div>
 				
+				<liferay-ui:message key="tags" />
+				<liferay-ui:asset-tags-selector className="<%=ShoppingItem.class.getName() %>" classPK="<%=itemId %>" />		
 				<c:if test="<%=isAdmin%>">
 						<aui:select name="<%=HConstants.status %>" showEmptyOption="true" required="true" >
 							<aui:option value="<%=HConstants.APPROVE%>" label="approve" />
@@ -162,6 +170,7 @@
 							<aui:input name="<%=HConstants.REMARK %>" type="textarea" value="<%=item.getRemark()%>"/>
 						</div>
 					</c:if>
+					<aui:input name="<%=HConstants.STAFF_REMARKS %>" type="textarea"/>
 					<aui:button type="submit" value="update" onClick="return confirmSubmit();"/>
 					<aui:button type="button" href="<%=backURL %>" value="cancel" />
 			</aui:form>
@@ -240,6 +249,16 @@
 						 }
 					});
 					 
+					 
+				 A.one("#<portlet:namespace /><%=HConstants.WHOLESALE_DISCOUNT%>Checkbox").on('change',function(e){
+						var wholeSaleDiv = document.getElementById("wholeSaleDiv");
+
+						if(e.currentTarget.get('checked')) {
+							wholeSaleDiv.style.display = "block";
+					 }else{
+						 wholeSaleDiv.style.display = "none";	
+					 }
+					});  
 					 <c:if test='<%=isAdmin %>'>
 					 
 						 A.one("#<portlet:namespace /><%=HConstants.status%>").on('change',function(e){
