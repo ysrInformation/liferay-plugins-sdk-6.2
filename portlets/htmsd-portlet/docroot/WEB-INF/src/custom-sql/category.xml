@@ -5,7 +5,7 @@
 			    SELECT 
 			    	c.* 
 			    FROM 
-			    	htmsd_Shopppingitem_Category sc
+			    	htmsd_ShopppingItem_Category sc
 				INNER JOIN  
 					htmsd_Category c 
 				ON 
@@ -16,7 +16,7 @@
 	<sql id = "com.htmsd.slayer.service.persistence.CategoryFinderImpl.deleteCatItemyByItemId">
 		   <![CDATA[
 			    DELETE FROM 
-			    	htmsd_Shopppingitem_Category 
+			    	htmsd_ShopppingItem_Category 
 				WHERE	
 					itemId = ?	
 		 	]]>
@@ -25,7 +25,7 @@
 	<sql id = "com.htmsd.slayer.service.persistence.CategoryFinderImpl.deleteCatItemyBycategoryId">
 		   <![CDATA[
 			    DELETE FROM 
-			    	htmsd_Shopppingitem_Category 
+			    	htmsd_ShopppingItem_Category 
 				WHERE	
 					categoryId = ?	
 		 	]]>

@@ -6,9 +6,9 @@
 			    SELECT 
 					si.* 
 				FROM 
-					htmsd_tag t
+					htmsd_Tag t
 				INNER JOIN
-					htmsd_ShoppingItem_tag st 
+					htmsd_ShoppingItem_Tag st 
 				ON
 					st.tagId = t.tagId 
 					AND t.name like ?

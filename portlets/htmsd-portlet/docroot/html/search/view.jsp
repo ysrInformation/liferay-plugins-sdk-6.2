@@ -76,10 +76,10 @@
 			$('#no-item-display').hide();
 			$('#loader-icon').hide();
 		}
+		getShoppingItems(0, <%=noOfItems%>);
 		$('#<portlet:namespace/>sort-by option[value="<%=sortBy%>"').attr("selected", "selected")
 		window.onload = $("#<portlet:namespace/>len").val(<%=noOfItems%>);
 		$('#current_count').html(dataLen);
-		getShoppingItems(0, <%=noOfItems%>);
 	});
 	
 	function loadProducts() {
@@ -96,6 +96,7 @@
 				url : '<%=themeDisplay.getPortalURL()+"/api/jsonws/htmsd-portlet.shoppingitem/get-shopping-items-bt-tag-name"%>',
 				type : "GET",
 				data : {
+					p_auth: Liferay.authToken,
 					tagName : searchParam,
 					sortBy: '<%=sortBy%>',
 					groupId : <%=themeDisplay.getScopeGroupId()%>,
