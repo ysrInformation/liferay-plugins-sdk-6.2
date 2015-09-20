@@ -10,8 +10,32 @@
 			    ]
 			], 
 		    "friendlyURL": "/system-admin",
-		    "name": "System admin",
-		    "title": "System admin"
+		    "name": "Dashboard",
+		    "title": "Dashboard"
+	    },
+	    {
+	    	"columns": [
+				[
+					{
+			            "portletId": "5_WAR_htmsdportlet"
+			        }
+			    ]
+			], 
+		    "friendlyURL": "/order-panel",
+		    "name": "Order Panel",
+		    "title": "Order Panel"
+	    },
+	    {
+	    	"columns": [
+				[
+					{
+			            "portletId": "2_WAR_htmsdportlet"
+			        }
+			    ]
+			], 
+		    "friendlyURL": "/configuration",
+		    "name": "Configuration",
+		    "title": "Configuration"
 	    }
 	],
 	"publicPages": [
