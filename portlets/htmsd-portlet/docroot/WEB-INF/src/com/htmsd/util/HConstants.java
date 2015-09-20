@@ -34,6 +34,9 @@ public interface HConstants {
 	public static String TAG_REVIEWER = "Tag Reviewer";
 	public static String CATEGORY_REVIEWER = "Category Reviewer";
 	public static String STAFF_ROLE = "Staff";
+	public static String WHOLESALE_DISCOUNT="wholeSaleDiscount";
+	public static String WHOLESALE_QUANTITY="wholeSaleQuantity";
+	public static String WHOLESALE_PRICE="wholeSalePrice";
 
 	public static int IMAGES_UPLOAD_LIMIT = 5;
 	public static int NEW = 0;
