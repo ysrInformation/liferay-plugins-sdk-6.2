@@ -24,11 +24,8 @@
   </style>
  </head> 
  
-<portlet:resourceURL  var="getTagsURL"/>
-
 <%
-	boolean isAdmin = permissionChecker.isOmniadmin();
-	String backURL = ParamUtil.getString(renderRequest, "backURL");
+ 	String backURL = ParamUtil.getString(renderRequest, "backURL");
 	long itemId = ParamUtil.getLong(renderRequest, "itemId");
 	ShoppingItem item = ShoppingItemLocalServiceUtil.fetchShoppingItem(itemId);
 	DLFileEntry documentFileEntry = null;
@@ -42,13 +39,6 @@
 		updateItemURL.setParameter("backURL", backURL);
 		updateItemURL.setParameter("tab1", ParamUtil.getString(renderRequest, "tab1"));
 		long quantity = item.getQuantity();
-		List<Tag> tagsList = TagLocalServiceUtil.getTagByItemId(itemId);
-		String tagName = StringPool.BLANK;
-		long tagId = 0l;
-		if(tagsList.size()>=1) {
-			tagName = tagsList.get(0).getName();
-			tagId = tagsList.get(0).getTagId();
-		}
 		List<Category> itemCategory = CategoryLocalServiceUtil.getCategoryByItemId(itemId);
 		long categoryId = 0l;
 		if(itemCategory.size()>=1) {
@@ -161,20 +151,19 @@
 					</aui:input>
 				</c:if>
 				
-				<aui:input name="<%=HConstants.TAG %>"  value="<%=tagName %>"/>
-				<aui:input type="hidden" name="<%=HConstants.TAG_ID %>" value="<%=tagId%>"/>
-					
-				<c:if test="<%=isAdmin %>">
-					<aui:select name="<%=HConstants.status %>" showEmptyOption="true" required="true" >
-						<aui:option value="<%=HConstants.APPROVE%>" label="approve" />
-						<aui:option value="<%=HConstants.REJECT %>" label="reject" />
-					</aui:select>
-					<div id="remarkDiv" style="display:none;">
-						<aui:input name="<%=HConstants.REMARK %>" type="textarea" value="<%=item.getRemark()%>"/>
-					</div>
+				<aui:input name="tags" type="assetTags" bean="<%=item %>" model="<%= ShoppingItem.class %>" cssClass="customTagClass" />
+				
+				<c:if test="<%=isAdmin%>">
+						<aui:select name="<%=HConstants.status %>" showEmptyOption="true" required="true" >
+							<aui:option value="<%=HConstants.APPROVE%>" label="approve" />
+							<aui:option value="<%=HConstants.REJECT %>" label="reject" />
+						</aui:select>
+						<div id="remarkDiv" style="display:none;">
+							<aui:input name="<%=HConstants.REMARK %>" type="textarea" value="<%=item.getRemark()%>"/>
+						</div>
+					</c:if>
 					<aui:button type="submit" value="update" onClick="return confirmSubmit();"/>
 					<aui:button type="button" href="<%=backURL %>" value="cancel" />
-				</c:if>
 			</aui:form>
 			</aui:fieldset>
 			
@@ -241,42 +230,7 @@
 					return confirm("Are you sure you want to update ?");
 				}
 				
-				AUI().use('autocomplete-list','aui-base','aui-io-request','autocomplete-filters','autocomplete-highlighters',function (A) {
-					var tagAuto
-					A.io.request('<%=getTagsURL%>',{
-						dataType: 'json',
-						method: 'GET',
-						on: {
-							success: function() {	
-								//console.log("inside");
-								tags=this.get('responseData');
-								//console.log(tags);
-								tagAuto = new A.AutoCompleteList({
-											allowBrowserAutocomplete: 'false',
-											activateFirstItem: 'true',
-											inputNode: '#<portlet:namespace /><%=HConstants.TAG %>',
-											resultTextLocator: 'tagName',
-											render: 'true',
-											resultHighlighter: 'charMatch',
-											resultFilters:['phraseMatch'],
-											source:this.get('responseData'),
-										 })
-								
-								tagAuto.on('select',function(e)
-									     {
-									    var selected_key = e.result.raw.tagId;
-									    //console.log(selected_key);
-									    A.one("#<portlet:namespace /><%=HConstants.TAG_ID%>").set("value",selected_key);
-									     }); 
-							}
-						}
-					});
-					
-					A.one("#<portlet:namespace /><%=HConstants.TAG%>").on('change', function(e){
-						//console.log("clear tagid");
-					    A.one("#<portlet:namespace /><%=HConstants.TAG_ID%>").set("value",'');
-					});
-					
+				AUI().use('aui-base' ,function (A) {
 					 A.one("#<portlet:namespace /><%=HConstants.UNILIMITED_QUANTITY%>Checkbox").on('change',function(e){
 						var quantity =  A.one("#<portlet:namespace /><%=HConstants.QUANTITY%>");
 						if(e.currentTarget.get('checked')) {

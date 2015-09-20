@@ -3,8 +3,6 @@
 <portlet:actionURL name="addItem" var="addItemURL" >
 	<portlet:param name="tab1" value='<%=ParamUtil.getString(renderRequest, "tab1") %>'/>
 </portlet:actionURL>
-<portlet:resourceURL  var="getTagsURL"/>
-
 <%
 	List<Category> categories = CategoryLocalServiceUtil.getCategories(-1, -1);
 %>
@@ -13,6 +11,7 @@
 
 <aui:fieldset>
 	<aui:form action="<%=addItemURL %>" enctype="multipart/form-data" method="POST" name="addItemForm">
+		<aui:input name="categories" type="assetCategories" model="<%=ShoppingItem.class %>"/>
 		<aui:input name="<%=HConstants.NAME%>" required="true" />
 		<aui:input name="<%=HConstants.PRODUCT_CODE %>" />
 		<aui:select name="<%=HConstants.CATEGORY_ID %>"   required="true" showEmptyOption="true">
@@ -62,8 +61,12 @@
 			</aui:column>
 		</aui:layout>
 		
-		<aui:input name="<%=HConstants.TAG %>" />
-		<aui:input name="<%=HConstants.TAG_ID %>" type="hidden" />
+		<aui:input name="<%=HConstants.WHOLESALE_DISCOUNT %>" type="checkbox"  inlineLabel="true" />
+		<div id="wholeSaleDiv" style="display:none;">
+			<aui:input name="<%=HConstants.WHOLESALE_QUANTITY %>" />	
+			<aui:input name="<%=HConstants.WHOLESALE_PRICE %>" />
+		</div>
+		<aui:input name="tags" type="assetTags" model="<%= ShoppingItem.class %>" cssClass="customTagClass" />
 		
 		<aui:input name="terms"  type="checkbox" required="true" label="" inlineField="true" />
 		<aui:a href="http://www.google.com">Terms of user</aui:a>
@@ -102,35 +105,7 @@
 	    control.focus();
 	}
 	
-	AUI().use('autocomplete-list','aui-base','aui-io-request','autocomplete-filters','autocomplete-highlighters',function (A) {
-		var tagAuto
-		A.io.request('<%=getTagsURL%>',{
-			dataType: 'json',
-			method: 'GET',
-			on: {
-				success: function() {	
-					tags=this.get('responseData');
-					//console.log(tags);
-					tagAuto = new A.AutoCompleteList({
-								allowBrowserAutocomplete: 'false',
-								activateFirstItem: 'true',
-								inputNode: '#<portlet:namespace /><%=HConstants.TAG %>',
-								resultTextLocator: 'tagName',
-								render: 'true',
-								resultHighlighter: 'charMatch',
-								resultFilters:['phraseMatch'],
-								source:this.get('responseData'),
-							 })
-					
-					tagAuto.on('select',function(e)
-						     {
-						    var selected_key = e.result.raw.tagId;
-						  	//console.log(selected_key);
-						    A.one("#<portlet:namespace /><%=HConstants.TAG_ID%>").set("value",selected_key);
-						     }); 
-				}
-			}
-		});
+	AUI().use('aui-base' ,function (A) {	
 		 A.one("#<portlet:namespace /><%=HConstants.UNILIMITED_QUANTITY%>Checkbox").on('change',function(e){
 			 var quantity =  A.one("#<portlet:namespace /><%=HConstants.QUANTITY%>");
 			if(e.currentTarget.get('checked')) {
@@ -139,6 +114,16 @@
 			 quantity.set('disabled', false);
 		 }
 		});
+		 
+		 A.one("#<portlet:namespace /><%=HConstants.WHOLESALE_DISCOUNT%>Checkbox").on('change',function(e){
+			var wholeSaleDiv = document.getElementById("wholeSaleDiv");
+
+			if(e.currentTarget.get('checked')) {
+				wholeSaleDiv.style.display = "block";
+		 }else{
+			 wholeSaleDiv.style.display = "none";	
+		 }
+		}); 
 	});
 
 	function extractCodeFromEditor() {

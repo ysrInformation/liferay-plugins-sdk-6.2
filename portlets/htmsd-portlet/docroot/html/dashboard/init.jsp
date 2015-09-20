@@ -14,6 +14,8 @@
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="com.liferay.portal.kernel.util.Constants"%>
+<%@page import="com.liferay.portal.service.RoleLocalServiceUtil"%>
+
 
 <%@page import="java.util.List"%>
 <%@page import="java.text.DecimalFormat"%>
@@ -40,3 +42,8 @@
 <head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 </head>
+
+<%
+	boolean isAdmin = permissionChecker.isOmniadmin();
+	boolean isStaff = RoleLocalServiceUtil.hasUserRole(user.getUserId(), themeDisplay.getCompanyId(), HConstants.STAFF_ROLE, false);
+%>
