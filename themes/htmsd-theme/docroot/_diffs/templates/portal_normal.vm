@@ -18,7 +18,6 @@
 		$theme.include($top_head_include)
 		
 		<script type="text/javascript" src="$javascript_folder/jquery-1.11.3.min.js"></script>
-		<script type="text/javascript" src="$javascript_folder/jquery.dynatable.js"></script>
 		<script type="text/javascript" src="$javascript_folder/lightGallery.min.js"></script>
 
 	</head>
@@ -77,11 +76,10 @@
 				#parse ("$full_templates_path/navigation.vm")
 			#end
 		</header>
-	
 		<div id="content">
-			##if("/home" != $layout.getFriendlyURL())
-			##	<nav id="breadcrumbs">#breadcrumbs()</nav>
-			##end	
+			#if("/home" != $layout.getFriendlyURL())
+				<nav id="breadcrumbs">#breadcrumbs()</nav>
+			#end	
 	
 			#if ($selectable)
 				$theme.include($content_include)
