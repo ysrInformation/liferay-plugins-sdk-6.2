@@ -2,6 +2,7 @@
 <%
 	long itemId = ParamUtil.getLong(request, HConstants.ITEM_ID);
 	ShoppingItem shoppingItem = ShoppingItemLocalServiceUtil.fetchShoppingItem(itemId);
+	String videoURL = shoppingItem.getVedioURL();
 %> 
 <c:choose>
 	<c:when test="<%=Validator.isNotNull(shoppingItem) %>">
@@ -27,6 +28,15 @@
 								<%
 							}
 						%>
+						<c:if test="<%= Validator.isNotNull(videoURL) && !videoURL.isEmpty() %>">
+							<li data-src="<%=shoppingItem.getVedioURL()%>" class="span2">
+								<%
+									String videoId = videoURL.substring(videoURL.indexOf("v=")+2, videoURL.length());
+									String youtubeThumbnailURL = "http://img.youtube.com/vi/"+videoId+"/default.jpg";
+								%>
+								<img src="<%=youtubeThumbnailURL%>" class="thumbnail details-img" />
+							</li>
+						</c:if>
 					</ul>
 				</div>
 				<div>

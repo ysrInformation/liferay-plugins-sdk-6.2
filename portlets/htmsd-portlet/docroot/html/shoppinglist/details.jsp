@@ -13,6 +13,7 @@
 			addItemsToCartActionURL.setParameter(ActionRequest.ACTION_NAME, "addItemToCart");
 			addItemsToCartActionURL.setParameter(HConstants.ITEM_ID, String.valueOf(itemId));
 			String cmd = ParamUtil.getString(request, Constants.CMD);
+			String videoURL = shoppingItem.getVedioURL();
 		%>
 		<liferay-ui:error key="item-exist" message="item-already-exist"/>
 		<aui:fieldset>
@@ -26,11 +27,22 @@
 								String thumbnailURL = CommonUtil.getThumbnailpath(imageId, themeDisplay.getScopeGroupId(), true);
 								%>
 									<li data-src="<%=imageURL%>" class="span2">
-		        						<img src="<%=thumbnailURL%>" class="thumbnail details-img" />
+										<a href="<%=imageURL%>">
+		        							<img src="<%=thumbnailURL%>" class="thumbnail details-img" />
+		        						</a>
 		      						</li>
 								<%
 							}
 						%>
+						<c:if test="<%= Validator.isNotNull(videoURL) && !videoURL.isEmpty() %>">
+							<li data-src="<%=shoppingItem.getVedioURL()%>" class="span2">
+								<%
+									String videoId = videoURL.substring(videoURL.indexOf("v=")+2, videoURL.length());
+									String youtubeThumbnailURL = "http://img.youtube.com/vi/"+videoId+"/default.jpg";
+								%>
+								<img src="<%=youtubeThumbnailURL%>" class="thumbnail details-img" />
+							</li>
+						</c:if>
 					</ul>
 				</div>
 				<div>
