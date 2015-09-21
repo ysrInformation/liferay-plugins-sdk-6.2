@@ -25,12 +25,9 @@
 	
 	<body class="$css_class $bg">
 	
-	#if("/home" == $layout.getFriendlyURL())
-		<img id="bg_top" src="$images_folder/bg_top.jpg"/>
-	#else
-		<img id="bg_top_fixed_heigth" src="$images_folder/bg_inner.jpg"/>
-	#end
-		
+	<div id="bg_top_fixed_heigth" class="bg">
+	</div>
+	
 	<a href="#main-content" id="skip-to-content">#language ("skip-to-content")</a>
 	
 	$theme.include($body_top_include)
@@ -40,6 +37,7 @@
 	
 	<div class="container-fluid" id="wrapper">
 		<header id="banner" role="banner">
+			<div id="fixed_div"></div>
 			<div id="search-div" class="row margin_left_zero">
 			
 				<div id="span4 heading" class="span4">
@@ -48,7 +46,7 @@
 							<img alt="$logo_description" height="65" src="$site_logo" width="65" />
 		
 							#if ($show_site_name)
-								<span class="site-name text-color-white" title="#language_format ("go-to-x", [$site_name])">
+								<span class="site-name" title="#language_format ("go-to-x", [$site_name])">
 									$site_name
 								</span>
 							#end
@@ -81,9 +79,9 @@
 		</header>
 	
 		<div id="content">
-			#if("/home" != $layout.getFriendlyURL())
-				<nav id="breadcrumbs">#breadcrumbs()</nav>
-			#end	
+			##if("/home" != $layout.getFriendlyURL())
+			##	<nav id="breadcrumbs">#breadcrumbs()</nav>
+			##end	
 	
 			#if ($selectable)
 				$theme.include($content_include)
@@ -116,16 +114,10 @@
 	
 	//Search 
 	var elTop = $('#search-div').offset().top;
-	elTop = parseInt(elTop)+parseInt(100);
+	
    	$(window).scroll(function() {
-   		//if($(window).scrollTop() > elTop) {
-   		//	$('#bg_top').fadeOut().hide();
-   		//	$('#bg_top_fixed_heigth').fadeOut().hide();
-   		//} else {
-   		//	$('#bg_top').fadeIn().show();
-   		//	$('#bg_top_fixed_heigth').fadeIn().show();
-   		//}
         $('#search-div').toggleClass('sticky', $(window).scrollTop() > elTop);
+        $('#fixed_div').toggleClass('fixed_div', $(window).scrollTop() > elTop);
     });
     
     //Scroll to Top

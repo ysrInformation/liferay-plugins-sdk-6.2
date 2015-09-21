@@ -25,7 +25,7 @@
 	background-color: #6f8720;
 	width: 100%;
 	color: #e2e2e2;
-	height: 235px;
+	height: 195px;
 	left: 0px;
 }
 
@@ -314,51 +314,18 @@
 
 .sticky {
 	background: rgba(0, 0, 0, 0)
-		url("../images/bg_inner.jpg") repeat scroll 0 0;
-	padding-left: 4.5%;
+		url("../images/bg.png") repeat scroll 0 0;
+	padding-left: 4.6%;
 	position: fixed;
 	top: 0;
 	width: 100%;
 	z-index: 1000;
 	left:0;
 	right:0;
-	
-	-webkit-animation: fadein 0.5s; /* Safari, Chrome and Opera > 12.1 */
-	-moz-animation: fadein 0.5s; /* Firefox < 16 */
-	-ms-animation: fadein 0.5s; /* Internet Explorer */
-	-o-animation: fadein 0.5s; /* Opera < 12.1 */
-	animation: fadein 0.5s;
 }
-
-@keyframes fadein {
-    from { top:-85px;  }
-    to   { top:0px;  }
+.fixed_div {
+	height: 80px;
 }
-
-/* Firefox < 16 */
-@-moz-keyframes fadein {
-     from { top:-85px;  }
-    to   { top:0px;  }
-}
-
-/* Safari, Chrome and Opera > 12.1 */
-@-webkit-keyframes fadein {
-      from { top:-85px;  }
-    to   { top:0px;  }
-}
-
-/* Internet Explorer */
-@-ms-keyframes fadein {
-     from { top:-85px;  }
-    to   { top:0px;  }
-}
-
-/* Opera < 12.1 */
-@-o-keyframes fadein {
-   from { top:-85px;  }
-    to   { top:0px;  }
-}
-
 
 /*****Scroll to Top****/
 .scroll-top-wrapper {
