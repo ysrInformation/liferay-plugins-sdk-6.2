@@ -11,7 +11,7 @@
 			<dynamic-content><![CDATA[]]></dynamic-content>
 		</dynamic-element>
 		<dynamic-element name="image" type="document_library" index-type="">
-			<dynamic-content><![CDATA[[$FILE=homebanner1.png$]]]></dynamic-content>
+			<dynamic-content><![CDATA[[$FILE=homebanner1.jpg$]]]></dynamic-content>
 		</dynamic-element>
 		<dynamic-content><![CDATA[]]></dynamic-content>
 	</dynamic-element>
@@ -20,7 +20,7 @@
 			<dynamic-content><![CDATA[]]></dynamic-content>
 		</dynamic-element>
 		<dynamic-element name="image" type="document_library" index-type="">
-			<dynamic-content><![CDATA[[$FILE=homebanner2.png$]]]></dynamic-content>
+			<dynamic-content><![CDATA[[$FILE=homebanner2.jpg$]]]></dynamic-content>
 		</dynamic-element>
 		<dynamic-content><![CDATA[]]></dynamic-content>
 	</dynamic-element>
@@ -29,7 +29,7 @@
 			<dynamic-content><![CDATA[]]></dynamic-content>
 		</dynamic-element>
 		<dynamic-element name="image" type="document_library" index-type="">
-			<dynamic-content><![CDATA[[$FILE=homebanner3.png$]]]></dynamic-content>
+			<dynamic-content><![CDATA[[$FILE=homebanner3.jpg$]]]></dynamic-content>
 		</dynamic-element>
 		<dynamic-content><![CDATA[]]></dynamic-content>
 	</dynamic-element>
