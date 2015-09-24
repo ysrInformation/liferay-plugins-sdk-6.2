@@ -6,18 +6,22 @@
 			    SELECT 
 					si.* 
 				FROM 
-					htmsd_Tag t
+					assetentry ae
 				INNER JOIN
-					htmsd_ShoppingItem_Tag st 
+					assetentries_assettags ae_at
 				ON
-					st.tagId = t.tagId 
-					AND t.name like ?
+					ae.entryId = ae_at.entryId
+                INNER JOIN 
+					assettag ast
+				ON 
+					ast.tagId = ae_at.tagId
+                    AND ast.name like ?
 				INNER JOIN  
 					htmsd_ShoppingItem si
 				ON 
-					st.itemId = si.itemId
-					AND NOT si.quantity = 0
-					AND si.status = 1
+					si.itemId = ae.classPK
+                    AND NOT si.quantity = 0
+                    AND si.status = 1
    				[$sort]
 		 	]]>
 	</sql>

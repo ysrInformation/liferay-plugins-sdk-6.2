@@ -154,3 +154,18 @@
 .text-center {
 	text-align: center;
 }
+
+.video {
+	position: relative;
+}
+
+.video a {
+	background: transparent url("../images/play.png") repeat scroll 0 0/50px
+		50px;
+	display: block;
+	height: 50px;
+	left: 33%;
+	position: absolute;
+	top: 30%;
+	width: 50px;
+}

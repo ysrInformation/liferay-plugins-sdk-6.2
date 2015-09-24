@@ -176,40 +176,4 @@
 			<role-name>user</role-name>
 		</security-role-ref>
 	</portlet>
-	<portlet>
-		<portlet-name>6</portlet-name>
-		<display-name>Search</display-name>
-		<portlet-class>com.htmsd.search.SearchPortlet</portlet-class>
-		<init-param>
-			<name>view-template</name>
-			<value>/html/search/view.jsp</value>
-		</init-param>
-		<init-param>
-			<name>config-template</name>
-			<value>/html/search/config.jsp</value>
-		</init-param>
-		<expiration-cache>0</expiration-cache>
-		<supports>
-			<mime-type>text/html</mime-type>
-			<portlet-mode>view</portlet-mode>
-		</supports>
-		<resource-bundle>content.Language</resource-bundle>
-		<portlet-info>
-			<title>Search</title>
-			<short-title>Search</short-title>
-			<keywords></keywords>
-		</portlet-info>
-		<security-role-ref>
-			<role-name>administrator</role-name>
-		</security-role-ref>
-		<security-role-ref>
-			<role-name>guest</role-name>
-		</security-role-ref>
-		<security-role-ref>
-			<role-name>power-user</role-name>
-		</security-role-ref>
-		<security-role-ref>
-			<role-name>user</role-name>
-		</security-role-ref>
-	</portlet>
 </portlet-app>

@@ -1,14 +1,22 @@
+<%@page import="com.liferay.portal.util.PortalUtil"%>
 <%@include file="/html/shoppinglist/init.jsp" %>
 
 <%
+	HttpServletRequest httpRequest = PortalUtil.getOriginalServletRequest(request);
+	String searchParam = httpRequest.getParameter("search-param");
 	String noOfItems  = portletPreferences.getValue("noOfItems", "8");
 	String categoryToDisplay  = portletPreferences.getValue("categoryToDisplay", "-1");
 	String sortBy = ParamUtil.getString(request, "sortBy", "totalPrice DESC");
 	int totalCount = ShoppingItemLocalServiceUtil.getItemByCategoryCount(Long.valueOf(categoryToDisplay));
-	if(categoryToDisplay.equalsIgnoreCase("-1")) {
-		totalCount = ShoppingItemLocalServiceUtil.getByStatusCount(HConstants.APPROVE);
+	
+	if(Validator.isNotNull(searchParam) && !searchParam.isEmpty()) {
+		totalCount = ShoppingItemLocalServiceUtil.getItemByTagNameCount(searchParam);
 	} else {
-		totalCount = ShoppingItemLocalServiceUtil.getItemByCategoryCount(Long.valueOf(categoryToDisplay));
+		if(categoryToDisplay.equalsIgnoreCase("-1")) {
+			totalCount = ShoppingItemLocalServiceUtil.getByStatusCount(HConstants.APPROVE);
+		} else {
+			totalCount = ShoppingItemLocalServiceUtil.getItemByCategoryCount(Long.valueOf(categoryToDisplay));
+		}
 	}
 %>
 <style>
@@ -63,25 +71,47 @@
 <aui:script>
 	var dataLen = 0;
 	var portletId = '<%= themeDisplay.getPortletDisplay().getId() %>';
+	var searchParam = '<%=searchParam%>';
+	
 	$(function() {
 		if(<%=totalCount%> != 0) {
 			$('#no-item-display').hide();
 			$('#loader-icon').hide();
 		}
-		getShoppingItems(0, <%=noOfItems%>);
+		console.info(searchParam);
+		console.info(searchParam !== 'null' && searchParam !== "");
+		if(searchParam != 'null' && searchParam != "") {
+			getSearchShoppingItems(0, <%=noOfItems%>);
+			console.info("1");
+		} else {
+			getShoppingItems(0, <%=noOfItems%>);
+			console.info("2");
+		}
+		
 		$('#<portlet:namespace/>sort-by option[value="<%=sortBy%>"').attr("selected", "selected")
 		window.onload = $("#<portlet:namespace/>len").val(<%=noOfItems%>);
 		$('#current_count').html(dataLen);
 	});
 	
-	function loadProducts() {
-		var len = $("#<portlet:namespace/>len").val();
-		var count = parseInt(len);
-		getShoppingItems(count, parseInt(count) + parseInt(<%=noOfItems%>));
-	}
+	<c:choose>
+		<c:when test="<%=Validator.isNotNull(searchParam) && !searchParam.isEmpty()%>">
+			function loadProducts() {
+				var len = $("#<portlet:namespace/>len").val();
+				var count = parseInt(len);
+				getSearchShoppingItems(count, parseInt(count) + parseInt(<%=noOfItems%>));
+			}
+		</c:when>
+		<c:otherwise>
+			function loadProducts() {
+				var len = $("#<portlet:namespace/>len").val();
+				var count = parseInt(len);
+				getShoppingItems(count, parseInt(count) + parseInt(<%=noOfItems%>));
+			}
+		</c:otherwise>
+	</c:choose>
+	
 	
 	function getShoppingItems(s, e) {
-		console.info("E1:"+e);
 		$.ajax({
 			url : '<%=themeDisplay.getPortalURL()+"/api/jsonws/htmsd-portlet.shoppingitem/get-shopping-items"%>',
 			type : "GET",
@@ -101,7 +131,6 @@
 				$('#loader-icon').hide();
 			},
 			success : function(data) {
-				console.info("E2:"+data.length);
 				if (data.length > 0) {	
 					$("#<portlet:namespace/>len").val(e);
 					render(data);
@@ -118,6 +147,47 @@
 			error : function() {
 			}
 		});
+	}
+	
+	function getSearchShoppingItems(s, e) {
+		console.info("Searching . . .");
+		if (searchParam) {
+			$.ajax({
+				url : '<%=themeDisplay.getPortalURL()+"/api/jsonws/htmsd-portlet.shoppingitem/get-shopping-items-bt-tag-name"%>',
+				type : "GET",
+				data : {
+					p_auth: Liferay.authToken,
+					tagName : searchParam,
+					sortBy: '<%=sortBy%>',
+					groupId : <%=themeDisplay.getScopeGroupId()%>,
+					start : s,
+					end: e,
+					
+				},
+				beforeSend : function() {
+					$('#loader-icon').show();
+				},
+				complete : function() {
+					$('#loader-icon').hide();
+				},
+				success : function(data) {
+					if (data.length > 0) {	
+						$("#<portlet:namespace/>len").val(e);
+						render(data);
+						dataLen = parseInt(dataLen) + parseInt(data.length);
+						$('#current_count').html(dataLen);
+						if(dataLen == parseInt(<%=totalCount%>)) {
+							$('#load-button').hide();
+						}
+					} else {
+						$('#load-button').hide();
+						$("#<portlet:namespace/>len").val(s);
+					}
+				},
+				error : function() {
+				}
+			});
+		}
 	}
 
 	function render(data) {

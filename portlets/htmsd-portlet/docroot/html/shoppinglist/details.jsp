@@ -40,7 +40,10 @@
 									String videoId = videoURL.substring(videoURL.indexOf("v=")+2, videoURL.length());
 									String youtubeThumbnailURL = "http://img.youtube.com/vi/"+videoId+"/default.jpg";
 								%>
-								<img src="<%=youtubeThumbnailURL%>" class="thumbnail details-img" />
+								<div class="video">
+									<img src="<%=youtubeThumbnailURL%>" class="thumbnail details-img" />
+									<a href="#"></a>
+								</div>
 							</li>
 						</c:if>
 					</ul>
@@ -87,8 +90,11 @@
 			    $("#lightGallery").lightGallery({
 			    	mode : 'fade',
 			    	thumbnail : false
-			    }); 
+			    });
+			    $('#breadcrumbs ul li').removeClass("only");
+			    $('#breadcrumbs ul').append('<li class=""><%=shoppingItem.getName()%></li>');
 			});
+			
 		</script>
 	</c:when>
 	<c:otherwise>
