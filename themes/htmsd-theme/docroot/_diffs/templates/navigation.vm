@@ -50,11 +50,5 @@
 	</div>
 </nav>
 <script>
-	function search() {
-		var searchParam = $('#search').val();
-		if(searchParam) {
-			window.location.href = '/search?search-param=' + searchParam;
-		} 
-	}
 	Liferay.Data.NAV_LIST_SELECTOR = '.navbar-inner .nav-collapse > ul';
 </script>

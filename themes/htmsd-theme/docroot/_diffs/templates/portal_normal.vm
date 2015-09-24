@@ -58,7 +58,7 @@
 					</h2>
 				</div>
 				<div class="span6 center">
-					<input id="search" placeholder="Search"/><button class="search-btn" onClick="javascript:search();">
+					<input id="search" placeholder="Search"/><button class="search-btn" onClick="javascript:searchItems();">
 						<i class="fa fa-search"></i> SEARCH
 					</button>
 				</div>
@@ -139,6 +139,7 @@
 		offsetTop = offset.top;
 		$('html, body').animate({scrollTop: offsetTop}, 500, 'linear');
 	}
+	
 	AUI().use('aui-base', function(A) {
 		Liferay.Service('/htmsd-portlet.shoppingcart/get-shopping-cart-item-count', {
 			userId: $user_id
@@ -146,5 +147,13 @@
 			$('#cart-item-count').html("&nbsp;"+obj+"&nbsp;");
 		});
 	});
+	
+	function searchItems() {
+		var searchParam = $('#search').val();
+		if(searchParam) {
+			window.location.href = '$themeDisplay.getURLCurrent()?search-param=' + searchParam;
+		} 
+	}
+	
 </script>
 </html>
