@@ -1,0 +1,138 @@
+/******Shopping List*******/
+.product-image img {
+  height: 300px !important;
+  width: 100%; }
+
+.product-details {
+  background: #F5F4E7;
+  padding: 10px; }
+
+.text-color-red {
+  color: #E0476A !important; }
+
+.product-details p {
+  color: #666666 !important;
+  font-size: 12px; }
+
+.product {
+  border: 1px solid #e32945;
+  overflow: auto; }
+
+#shopping_list {
+  width: 100%; }
+
+#shopping_list tbody tr:hover {
+  background-color: unset; }
+
+#shopping_list .product:hover {
+  border-color: #e32945;
+  -webkit-box-shadow: 0px 0px 10px 0px #e32945;
+  -moz-box-shadow: 0px 0px 10px 0px #e32945;
+  box-shadow: 0px 0px 10px 0px #e32945; }
+
+#shopping_list {
+  margin-left: 0px !important; }
+
+#shopping_list .row {
+  margin-left: 0px !important;
+  padding-bottom: 35px; }
+
+#shopping_list li {
+  margin-bottom: 20px; }
+
+.dynatable-search {
+  margin-bottom: 0px !important; }
+
+.dynatable-active-page {
+  background: #D8492D none repeat scroll 0 0 !important; }
+
+.dynatable-active-page a {
+  color: #fff !important; }
+
+#loader-icon {
+  text-align: center; }
+
+#loader_icon img {
+  height: 100px !important;
+  width: 100px !important; }
+
+#load-button {
+  text-align: center;
+  background: #F5F4E7; }
+
+#loader-div {
+  padding: 10px;
+  text-transform: uppercase; }
+
+/********Shopping Item Details********/
+.add-to-cart-item-price {
+  font-size: 27px;
+  padding: 20px 0; }
+
+.add-to-cart {
+  height: 40px;
+  width: 98%;
+  font-size: 15px; }
+
+.quantity {
+  width: 95% !important; }
+
+/*********shopping cart **********/
+.product-total div {
+  display: inline-block;
+  font-family: serif;
+  font-size: large; }
+
+.images-disp {
+  padding: 10px;
+  width: 200px;
+  height: auto; }
+
+.mycart {
+  text-align: center; }
+
+.description {
+  text-align: justify; }
+
+.details-img {
+  height: 100px !important; }
+
+/**********Order panel *********/
+.print-btn {
+  float: right; }
+
+#print-area {
+  border: 2px solid #000;
+  margin: 4% 2%;
+  padding: 3%; }
+
+.user-details {
+  padding: 5px;
+  text-decoration: none;
+  font-family: sans-serif; }
+
+.order-details table td, .order-details table th {
+  border: 2px solid grey;
+  padding: 10px; }
+
+.heading {
+  font-weight: bold; }
+
+.bill-no {
+  color: #FF0000; }
+
+.text-center {
+  text-align: center; }
+
+.video {
+  position: relative; }
+
+.video a {
+  background: transparent url("../images/play.png") repeat scroll 0 0/50px 50px;
+  display: block;
+  height: 50px;
+  left: 33%;
+  position: absolute;
+  top: 30%;
+  width: 50px; }
+
