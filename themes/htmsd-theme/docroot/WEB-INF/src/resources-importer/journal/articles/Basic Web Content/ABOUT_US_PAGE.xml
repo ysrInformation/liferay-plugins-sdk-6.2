@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+ 
+ <root available-locales="en_US" default-locale="en_US">
+ 	<dynamic-element name="content" type="text_area" index-type="keyword" index="0">
+		<dynamic-content language-id="en_US">
+	 	    <![CDATA[
+	 	    	<h2>ABOUT US</h2>
+
+				<p style="text-align: justify;">Our Establishment is since years,But we are coming up with on-line business for the first time ,Our Aim is not only to breed pets but also tp resource them.We are into the dealing of pets food pet accessories ,Exotic birds,tropical dishes,Animals and Aquariums</p>
+				
+				<p style="text-align: justify;">We also help and guide you on-line to breed and take care of the pet,petting and breeding of pets not,Only helps to secure the surrounding also helps then in a better living it also connects an &nbsp;emotional bond between the humans and animals ,Which helps in the society as &nbsp;a better living.Love and care are two Essentials in life,Which every one Requires be it a pet or a human our aim is to &nbsp;spread love</p>
+
+	 		]]>
+ 		</dynamic-content>
+	</dynamic-element>
+ </root>

@@ -59,7 +59,7 @@
 					{
                         "portletId": "56",
                         "portletPreferences": {
-                            "articleId": "ABOUT_US",
+                            "articleId": "ABOUT_US_HOME",
                             "groupId": "${groupId}",
                         }
                     }
@@ -186,11 +186,52 @@
 			"friendlyURL": "/video"
 		},
 		{
+			"columns": [	
+				[
+					{
+                        "portletId": "56",
+                        "portletPreferences": {
+                            "articleId": "ABOUT_US_PAGE",
+                            "groupId": "${groupId}",
+                        }
+                    }
+				]
+			],
 			"title": "About Us",
 			"name": "About Us",
 			"friendlyURL": "/about-us"
 		},
 		{
+			"layoutTemplateId": "layout-column_column-1",
+			"columns": [	
+				[
+					{
+                        "portletId": "56",
+                        "portletPreferences": {
+                            "articleId": "CONTACT_US",
+                            "groupId": "${groupId}",
+                        }
+                    }
+				],
+				[
+                    {
+                        "portletId": "1_WAR_webformportlet_INSTANCE_${groupId}",
+                        "portletPreferences": {
+                        	"title" : "Contact Us",
+							"description" : "",
+							"fieldLabel1": "Name",
+							"fieldType1": "text",
+							"fieldLabel2": "Email",
+							"fieldType2": "text",
+							"fieldLabel3": "Phone",
+							"fieldType3": "text",
+							"fieldLabel4":"Message",
+							"fieldType4": "textarea"
+						}						
+                    }
+                ]
+			],
+		
 			"title": "Contact Us",
 			"name": "Contact Us",
 			"friendlyURL": "/contact-us"
@@ -219,22 +260,6 @@
 			"title": "Cart",
 			"name": "Cart",
 			"friendlyURL": "/cart",
-			"hidden": "true"
-		},
-		{	
-			"columns": [
-				[
-					{
-			            "portletId": "6_WAR_htmsdportlet",
-			            "portletPreferences": {
-			            	"noOfItems":"8"
-			            }
-			        }
-			    ]
-			], 
-			"title": "Search",
-			"name": "Search",
-			"friendlyURL": "/search",
 			"hidden": "true"
 		}
 	]
