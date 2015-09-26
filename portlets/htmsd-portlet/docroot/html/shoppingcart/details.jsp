@@ -76,7 +76,51 @@ if (Validator.isNotNull(shoppingItem_Carts) && shoppingItem_Carts.size() > 0) {
 	} 
 }
 %>
+<table width="100%" class="cart-table">
+	<thead class="cart-head">
+		<tr class="cart-head-row">
+			<td style="width 60%">Item</td>
+			<td style="width 20%">Qty</td>
+			<td style="width 20%">Price</td>
+		</tr>
+	</thead>
+	<tbody >
+		<tr >
+			<td class="product-info" style="width 60%">
+				<div >
+					<div class="row-fluid">
+						<div class="span4">
+							<a href="#">
+								<img class="product-image" width="100" height="100" src="<%=themeDisplay.getPathContext()+request.getContextPath()+"/images/cart-tray.png"%>">
+							</a>
+						</div>
+						<div class="span8 product-description">
+							Lenovo A2010-a A2010 White
+						</div>
+					</div>	
+					<div class="pull-right">
+						<div class="remove-item">
+							<a  href="#">Remove Item</a>
+						</div>
+					</div>
+				</div>
+			</td>
 
+			<td style="width 20%">
+				<div >
+					<aui:input name="qunatity"  label="" value="3" cssClass="cart-qty"/> 
+				</div>
+			</td>
+
+			<td style="width 20%">
+				<div >
+					<h4>Rs. 14,970</h4>
+				</div>
+			</td>
+
+		</tr>
+	</tbody>
+</table>
 <aui:fieldset>
 	<div class="product-total">
 		<div><strong><liferay-ui:message key="total"/></strong></div>
