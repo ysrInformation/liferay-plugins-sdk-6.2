@@ -23,6 +23,12 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portlet.asset.model.AssetEntry;
+import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
+import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
 
 /**
  * The implementation of the shopping item local service.
@@ -72,7 +78,7 @@ public class ShoppingItemLocalServiceImpl
 			shoppingItem.setImageIds(imageIds);
 			shoppingItem.setVedioURL(vedioURL);
 			shoppingItem.setCreateDate(new Date());
-			shoppingItem.setModifiedDate(null);
+			shoppingItem.setModifiedDate(new Date());
 			shoppingItem.setRemark(remark);
 			
 			addShoppingItem(shoppingItem);
@@ -291,9 +297,17 @@ public class ShoppingItemLocalServiceImpl
 	public void deleteItem(long itemId) {
 		
 		try {
-			deleteShoppingItem(itemId);
+			ShoppingItem shoppingItem =  shoppingItemLocalService.fetchShoppingItem(itemId);
+			String [] imagesIds =   StringUtil.split(shoppingItem.getImageIds(), StringPool.COMMA);
+			for(String imagesId : imagesIds) {
+				DLAppLocalServiceUtil.deleteFileEntry(Long.valueOf(imagesId));
+			}
 			categoryFinder.deleteCatItemByItemId(itemId);
-			tagFinder.deleteTagItemByItemId(itemId);
+			AssetEntry  assetEntry=  AssetEntryLocalServiceUtil.fetchEntry(ShoppingItem.class.getName(), itemId);
+			if(Validator.isNotNull(assetEntry)) {
+				AssetEntryLocalServiceUtil.deleteAssetEntry(assetEntry);
+			}
+			shoppingItemLocalService.deleteShoppingItem(itemId);
 		} catch (SystemException e) {
 			_log.error(e);
 		} catch (PortalException e) {
