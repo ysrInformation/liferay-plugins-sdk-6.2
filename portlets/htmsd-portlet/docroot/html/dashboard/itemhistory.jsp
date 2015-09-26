@@ -27,7 +27,7 @@
 			}
 			
 		 	results = copy_itemHistoryList; 
-		 	total = ItemHistoryLocalServiceUtil.getItemHistoriesCount();
+		 	total = ItemHistoryLocalServiceUtil.getItemIdCount(itemId);
 			pageContext.setAttribute("results", results);
 			pageContext.setAttribute("total", total);
 		%>
@@ -44,8 +44,8 @@
 			<fmt:formatDate value="<%=itemHistory.getCreateDate() %>" pattern="dd/MM/yyyy" />
 		</liferay-ui:search-container-column-text>
 		
-		<liferay-ui:search-container-column-text name="status" >
-			<%=LanguageUtil.get(portletConfig,themeDisplay.getLocale(),String.valueOf(itemHistory.getAction())) %>
+		<liferay-ui:search-container-column-text name="action" >
+			<%=LanguageUtil.get(portletConfig,themeDisplay.getLocale(), itemHistory.getAction() == HConstants.ITEM_ADDED ? "item-added" : "item-updated" ) %>
 		</liferay-ui:search-container-column-text>
 		
 		<liferay-ui:search-container-column-text name="Remarks" property="remark" />
