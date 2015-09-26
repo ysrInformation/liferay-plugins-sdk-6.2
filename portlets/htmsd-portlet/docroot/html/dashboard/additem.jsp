@@ -17,7 +17,9 @@
 
 <aui:fieldset>
 	<aui:form action="<%=addItemURL %>" enctype="multipart/form-data" method="POST" name="addItemForm">
-		<aui:input name="<%=HConstants.NAME%>" required="true" />
+		<aui:input name="<%=HConstants.NAME%>">
+			<aui:validator name="required" errorMessage="item-name-required"></aui:validator>
+		</aui:input>
 		<aui:input name="<%=HConstants.PRODUCT_CODE %>" />
 		<aui:select name="<%=HConstants.CATEGORY_ID %>"   required="true" showEmptyOption="true">
 			<c:forEach items="<%=categories %>" var="category">   
