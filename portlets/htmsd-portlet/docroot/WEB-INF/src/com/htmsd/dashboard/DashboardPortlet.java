@@ -1,10 +1,13 @@
 package com.htmsd.dashboard;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
@@ -25,6 +28,7 @@ import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
@@ -82,7 +86,7 @@ public class DashboardPortlet extends MVCPortlet {
 			imageIds = saveFiles(uploadRequest, HConstants.IMAGE, HConstants.ITEM_FOLDER_NAME);
 			shoppingItem = ShoppingItemLocalServiceUtil.addItem(themeDisplay.getScopeGroupId(),
 					themeDisplay.getCompanyId(), currentUserId,currentUserName, currentUserId, StringPool.BLANK, productCode,
-					name, description, sellerPrice, totalPrice, quantity, HConstants.NEW,
+					name, description, sellerPrice, sellerPrice, quantity, HConstants.NEW,
 					StringUtil.merge(imageIds, StringPool.COMMA), vedioURL, StringPool.BLANK);
 			itemId = shoppingItem.getItemId();
 			ItemHistoryLocalServiceUtil.addItemHistory(itemId, currentUserId, currentUserName, HConstants.ITEM_ADDED, StringPool.BLANK);
@@ -210,7 +214,7 @@ public class DashboardPortlet extends MVCPortlet {
 						DLAppLocalServiceUtil.updateFileEntry(
 								themeDisplay.getUserId(), fileEntryId,
 								sourceFileName, contentType, sourceFileName,
-								sourceFileName, StringPool.BLANK, true, file,
+								sourceFileName, StringPool.BLANK, true, resizeImage(file, 600, 600),
 								serviceContext);
 					} catch (PortalException e) {
 						_log.error(e);
@@ -218,7 +222,17 @@ public class DashboardPortlet extends MVCPortlet {
 						_log.error(e);
 					}
 				}
-			}
+			}else if(fileEntryId > 0 && deleteImage) {
+				
+				try {
+					DLAppLocalServiceUtil.deleteFileEntry(fileEntryId);
+				} catch (PortalException e) {
+					_log.error(e);
+					e.printStackTrace();
+				} catch (SystemException e) {
+					_log.error(e);
+				}
+			 }
 		}
 		return fileIds;
 	}
@@ -260,13 +274,14 @@ public class DashboardPortlet extends MVCPortlet {
 				if (sizeInBytes > 0) {
 					File file = uploadRequest.getFile(fileName);
 					String sourceFileName = uploadRequest.getFileName(fileName);
-					
+					 
 					//adding document file into document library
 			    	if(file.exists() && file.length() > 0) {
 			        	 contentType = MimeTypesUtil.getContentType(sourceFileName);	
 			        	 try {
-							fileEntry = DLAppLocalServiceUtil.addFileEntry(themeDisplay.getUserId(), repositoryId, folderId, sourceFileName, contentType, file.getName(), StringPool.BLANK, StringPool.BLANK, file, serviceContext);
-						} catch (PortalException e) {
+							fileEntry = DLAppLocalServiceUtil.addFileEntry(themeDisplay.getUserId(), repositoryId, folderId, sourceFileName, contentType, file.getName(), StringPool.BLANK, StringPool.BLANK,  resizeImage(file, 600, 600), serviceContext);
+						
+			        	 } catch (PortalException e) {
 							e.printStackTrace();
 						} catch (SystemException e) {
 							e.printStackTrace();
@@ -279,6 +294,44 @@ public class DashboardPortlet extends MVCPortlet {
 			return fileIds;
 	}
 	
+	
+	/**
+	 * Method to resizeImage return the file with compressed size and given size
+	 * @param file
+	 * @param width
+	 * @param height
+	 * @return
+	 */
+	private File resizeImage(File file, int width, int height) {
+		
+		BufferedImage bufferedOriginalImage = null;
+		try {
+			bufferedOriginalImage = ImageIO.read(file);
+		} catch (IOException e) {
+			_log.error(e);
+		} 
+		if(Validator.isNotNull(bufferedOriginalImage)) {
+			
+			if(width == 0 || height == 0) {
+				width = bufferedOriginalImage.getWidth();
+				height = bufferedOriginalImage.getHeight();
+			}
+			int type = bufferedOriginalImage.getType() == 0? BufferedImage.TYPE_INT_ARGB : bufferedOriginalImage.getType();
+			BufferedImage bufferedCompressedImage = new BufferedImage(width, height, type);
+			Graphics2D graphics2d = bufferedCompressedImage.createGraphics();
+			graphics2d.drawImage(bufferedOriginalImage, 0, 0, width, height, null);
+			graphics2d.dispose();
+			
+			try {
+				ImageIO.write(bufferedCompressedImage, "jpg", file);
+			} catch (IOException e) {
+				_log.error(e);
+			}
+		}
+		return file;
+	}
+
+
 	/**
 	 * Method to getFolder return the folde with respected name or create folder and return id
 	 * @param themeDisplay
