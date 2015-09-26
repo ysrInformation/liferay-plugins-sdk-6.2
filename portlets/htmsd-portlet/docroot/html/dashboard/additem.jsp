@@ -27,7 +27,7 @@
 			</c:forEach>
 		</aui:select>
 		<liferay-ui:message key="description" />
-		<liferay-ui:input-editor />
+		<liferay-ui:input-editor cssClass="editor_padding"/>
 		<aui:input name="<%=HConstants.DESCRIPTION %>" value=""  type="hidden" />
 		<aui:layout>
 			<c:forEach var="i" begin="1" end="<%=HConstants.IMAGES_UPLOAD_LIMIT %>">
@@ -80,9 +80,10 @@
 		<aui:a href="http://www.google.com">Terms of user</aui:a>
 		And
 		<aui:a href="http://www.google.com">Posting Policies</aui:a>
-		
-		<aui:button type="submit" value="add-item" onClick="extractCodeFromEditor();"/>
-		<aui:button type="reset" value="reset" />
+		<aui:button-row>
+			<aui:button type="submit" value="add-item" onClick="extractCodeFromEditor();"/>
+			<aui:button type="reset" value="reset" />
+		</aui:button-row>
 	</aui:form>
 </aui:fieldset>
 
