@@ -71,6 +71,13 @@
 		<column name="tags" type="Collection" entity="Tag" mapping-table="ShoppingItem_Tag"/>
 		<column name="categories" type="Collection" entity="Category" mapping-table="ShopppingItem_Category"/>
 	
+	
+		<!-- Order By -->
+	
+		<order by="desc" >
+			<order-column name="modifiedDate">
+		</order-column></order>
+	
 		<!-- Finder methods -->
 		
 		<finder return-type="Collection" name="Status">
@@ -80,8 +87,9 @@
 		<finder return-type="Collection" name="UserId">
 			<finder-column name="userId"></finder-column>
 		</finder>
+		
 	</entity>
-	
+	 
 	<entity name="ShoppingCart" local-service="true" remote-service="true">
 
 		<!-- PK fields -->
