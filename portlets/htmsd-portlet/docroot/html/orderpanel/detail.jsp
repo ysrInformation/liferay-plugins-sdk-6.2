@@ -55,6 +55,10 @@
 </div>
 
 <div id="print-area">
+	<div class="text-center">
+		<liferay-ui:journal-article articleId="BILL_LOGO" groupId="<%= themeDisplay.getScopeGroupId() %>"/>
+	</div>
+	<hr/>
 	<div class="user-details">
 		<table style="width:100%">
 			<tr>
