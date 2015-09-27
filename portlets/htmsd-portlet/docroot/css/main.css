@@ -251,7 +251,7 @@
 	font-weight: bold;
 }
 
-.Not Delivered, .Order Cancelled {
+.Not.Delivered, .Order.Cancelled {
 	color : red;
 	font-weight: bold;
 }
