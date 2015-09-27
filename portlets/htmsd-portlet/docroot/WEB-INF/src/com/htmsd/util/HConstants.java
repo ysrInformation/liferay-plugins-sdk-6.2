@@ -60,6 +60,7 @@ public interface HConstants {
 	public static int ITEM_ADDED = 9;
 	public static int INITIAL_QUANTITY = 1;
 	public static int CANCEL_ORDER = 20;
+	public static int MAX_QUANTITY = 25;
 	public static String RUPPEE_SYMBOL = "&#8377;";
  
 	// PAGES

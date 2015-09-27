@@ -1,6 +1,7 @@
 package com.htmsd.util;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -318,5 +319,43 @@ public class CommonUtil {
 			default : orderStatusString = "N/A";
 		}
 		return orderStatusString;
+	}
+	
+	public static int[] getItemsQuantity(long itemId) {
+		
+		int userQuantity = 0;
+		int remainingQnty = 0;
+		long totalStock = 0l;
+		int[] quantityArray = null;
+		ShoppingItem shoppingItem = CommonUtil.getShoppingItem(itemId);
+		List<ShoppingItem_Cart> shoppingItem_Carts = new ArrayList<ShoppingItem_Cart>();
+		
+		if (Validator.isNotNull(shoppingItem)) {
+			totalStock = shoppingItem.getQuantity();
+			try {
+				shoppingItem_Carts = ShoppingItem_CartLocalServiceUtil.getShoppingItemByItemId(itemId);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			if (Validator.isNotNull(shoppingItem_Carts) && shoppingItem_Carts.size() > 0) {
+				for (ShoppingItem_Cart shoppingItem_cart : shoppingItem_Carts) {
+					userQuantity += shoppingItem_cart.getQuantity();
+				}
+			}
+		}
+		
+		if ((userQuantity) < totalStock) {
+			remainingQnty = ((int) totalStock - userQuantity);
+		} else if(totalStock == -1) {
+			remainingQnty = HConstants.MAX_QUANTITY;
+		} 
+		quantityArray = new int[remainingQnty];
+		if (remainingQnty > 0) {
+			for (int i=1;i<=remainingQnty;i++) {
+				quantityArray[i-1] = i;
+			}
+		}
+		
+		return quantityArray;
 	}
 }

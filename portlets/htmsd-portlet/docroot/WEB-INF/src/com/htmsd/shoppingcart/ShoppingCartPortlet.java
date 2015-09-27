@@ -16,6 +16,7 @@ import com.htmsd.slayer.model.ShoppingItem_Cart;
 import com.htmsd.slayer.model.ShoppingOrder;
 import com.htmsd.slayer.model.ShoppingOrderItem;
 import com.htmsd.slayer.service.InvoiceLocalServiceUtil;
+import com.htmsd.slayer.service.ShoppingItemLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingItem_CartLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingOrderItemLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
@@ -94,15 +95,24 @@ public class ShoppingCartPortlet extends MVCPortlet {
 			for (ShoppingItem_Cart shoppingItem_Cart:shoppingItem_Carts) {
 				
 				ShoppingItem shoppingItem = CommonUtil.getShoppingItem(shoppingItem_Cart.getItemId()); 
-				
+				long quantity = shoppingItem.getQuantity() - shoppingItem_Cart.getQuantity();
 				if (Validator.isNotNull(shoppingItem)) {
-					totalPrice = shoppingItem.getSellerPrice()+shoppingItem.getTotalPrice();
+					totalPrice = shoppingItem.getTotalPrice();
 					ShoppingOrderItem shoppingOrderItem = ShoppingOrderItemLocalServiceUtil
 						.insertShoppingOrderItem(shoppingItem_Cart.getQuantity(), totalPrice, themeDisplay.getUserId(), 
 						themeDisplay.getCompanyId(), themeDisplay.getScopeGroupId(), shoppingOrder.getOrderId(), shoppingItem.getItemId(),
 						shoppingItem.getName(), shoppingItem.getDescription(), shoppingItem.getProductCode());
 					
-					_log.info("shopping order Item ==>"+shoppingOrderItem.getItemId());
+					//updating shoppingItem quantity
+					if (Validator.isNotNull(shoppingOrderItem)) {
+						try {
+							ShoppingItem shoppingItem2 = ShoppingItemLocalServiceUtil.fetchShoppingItem(shoppingOrderItem.getShoppingItemId());
+							shoppingItem2.setQuantity(quantity);
+							ShoppingItemLocalServiceUtil.updateShoppingItem(shoppingItem2);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
 					
 					//deleting items from shoppingItem_Cart table. 
 					try {
