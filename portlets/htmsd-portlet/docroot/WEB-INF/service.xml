@@ -225,6 +225,7 @@
 		<column name="itemId" type="long"/>
 		<column name="cartId" type="long"/>
 		<column name="quantity" type="int"/>
+		<column name="totalPrice" type="double"/>
 		
 		<!-- Finder methods -->
 		

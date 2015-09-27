@@ -49,7 +49,7 @@
             <liferay-ui:search-container-column-text name="quantity" value="<%= String.valueOf(orderItem.getQuantity()) %>"/>
             
             <liferay-ui:search-container-column-text name="total">
-            	<%= orderItem.getTotalPrice() %>
+            	<%= CommonUtil.getPriceFormat(orderItem.getTotalPrice()) %>
             </liferay-ui:search-container-column-text>
 		
         </liferay-ui:search-container-row>

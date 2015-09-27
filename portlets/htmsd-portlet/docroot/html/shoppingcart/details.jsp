@@ -1,7 +1,6 @@
 <%@ include file="/html/shoppingcart/init.jsp"%>
 
 <%
-	int i=0;
 	double totalPrice = 0;
 	
 	PortletURL detailsURL = renderResponse.createRenderURL();
@@ -18,6 +17,10 @@
 	<portlet:param name="<%= Constants.CMD %>" value="remove-item"/> 
 </portlet:resourceURL>
 
+<portlet:resourceURL var="getTotalPriceURL"> 
+	<portlet:param name="<%= Constants.CMD %>" value="total-price"/> 
+</portlet:resourceURL>
+
 <liferay-portlet:renderURL  var="loginURL" portletName="<%= PortletKeys.LOGIN %>">
 	<portlet:param name="struts_action" value="/login/login" />
 	<portlet:param name="redirect" value="<%= checkoutURL.toString() %>" />
@@ -27,6 +30,7 @@
 
 <% 
 	String checkOutURL = (themeDisplay.isSignedIn()) ? checkoutURL.toString():loginURL;
+	String continueShoppingURL = themeDisplay.getPortalURL()+"/web/guest/exotic-pet-birds";
 %>
 
 <c:choose>
@@ -43,8 +47,10 @@
 			for (ShoppingItem_Cart shpCtItem:shoppingItem_Carts) { 
 				long itemId = shpCtItem.getItemId();
 				ShoppingItem shoppingItem = CommonUtil.getShoppingItem(itemId);
-				double price = shoppingItem.getTotalPrice();
+				double price = shpCtItem.getTotalPrice();
 				totalPrice += price;
+				int quantity[] = CommonUtil.getItemsQuantity(itemId);
+				String updatetotalPrice = "javascript:updatetotalPrice(this.value,'"+shpCtItem.getId()+"','"+getTotalPriceURL+"','"+shoppingItem.getTotalPrice()+"');";
 				String removeCartItem = "javascript:removeItems('"+shoppingItem.getItemId()+"','"+removeItemURL+"');";
 				String[] imageIdsList = Validator.isNotNull(shoppingItem) ? shoppingItem.getImageIds().split(StringPool.COMMA):new String[]{}; 
 				%>
@@ -88,7 +94,12 @@
 						</td>
 						<td style="width 20%">
 							<div >
-								<aui:input name="quantity"  label="" value="<%= shpCtItem.getQuantity() %>" cssClass="cart-qty"/> 
+								<aui:select name="quantity"  label="" cssClass="cart-qty" onChange="<%= updatetotalPrice  %>">
+									<% for (int j=0;j<quantity.length;j++) { %>
+										<aui:option value="<%= quantity[j] %>" label="<%= quantity[j] %>"
+											selected='<%= (Validator.isNotNull(shpCtItem) && shpCtItem.getQuantity() == quantity[j] ) %>'/>
+									<% } %>
+								</aui:select> 
 							</div>
 						</td>
 						<td style="width 20%">
@@ -112,6 +123,7 @@
 			</tfoot>
 		</table>
 		<aui:button-row cssClass="pull-right">
+			<aui:button type="button" value='<%= LanguageUtil.get(portletConfig, locale, "continue-shopping") %>' href="<%= continueShoppingURL %>"/>
 			<aui:button type="button" value='<%= LanguageUtil.get(portletConfig, locale, "place-order") %>' href="<%= checkOutURL %>"/>
 		</aui:button-row>
 	</c:when>
@@ -119,6 +131,10 @@
 		<h2><liferay-ui:message key="no-items-to-display"/></h2>
 	</c:otherwise>
 </c:choose>
+
+<div id="loader-icon" style="display:none;"> 
+	<img src="<%=request.getContextPath()%>/images/loader.gif" style="width: 100px; height: 100px"/>
+</div>
 
 <aui:script>
 function removeItems(itemId, url) {
@@ -165,6 +181,31 @@ function showPopup(url, height, width, title){
                 }).render();
     		popup.show();
     		popup.titleNode.html(title);
+	});
+}
+
+function updatetotalPrice(quantity, Id, url, price) {
+	
+	$.ajax({
+		url : url,
+		type : "GET",
+		data : {
+			<portlet:namespace/>quantity:quantity,
+			<portlet:namespace/>id:Id,
+			<portlet:namespace/>itemPrice:price
+		},
+		beforeSend : function() {
+			$('#loader-icon').show();
+		},
+		complete : function() {
+			$('#loader-icon').hide();
+		},
+		success : function(data) {
+			Liferay.Portlet.refresh('#p_p_id_4_WAR_htmsdportlet_ ');
+		},
+		error : function() {
+			alert("Something went wrong !!Please try again..");
+		}
 	});
 }
 </aui:script>
