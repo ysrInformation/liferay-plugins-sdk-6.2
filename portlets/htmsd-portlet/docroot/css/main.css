@@ -175,7 +175,7 @@
 }
 
 /***Shopping Cart****/
-.cart-table .cart-head {
+.cart-table .cart-head , .cart-footer {
 	background: #f2f2f2 none repeat scroll 0 0;
 	border-bottom: 1px solid #ddd;
 	border-top: 1px solid #ddd;
@@ -225,4 +225,21 @@
 
 .cart-table tr td:last-child, .cart-table tr th:last-child {
 	border-right: 0;
+}
+
+.cart-footer div {
+	padding: 10px 0px;
+}
+
+.price-text {
+	font-size: 18px;
+}
+
+.price {
+	color: black;
+	font-size: 18px;
+	font-weight: bold;
+}
+.price-div {
+  margin-right: 30px !important;
 }

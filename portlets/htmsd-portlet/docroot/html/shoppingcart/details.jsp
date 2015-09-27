@@ -114,12 +114,22 @@ if (Validator.isNotNull(shoppingItem_Carts) && shoppingItem_Carts.size() > 0) {
 
 			<td style="width 20%">
 				<div >
-					<h4>Rs. 14,970</h4>
+					<h5>Rs. 14,970</h5>
 				</div>
 			</td>
 
 		</tr>
 	</tbody>
+	<tfoot class="cart-footer">
+		<tr>
+			<td style="width 20%" colspan="3">
+				<div class="pull-right price-div">
+					<span class="price-text">Amount Payable:</span> 
+					<span class="price">Rs. 30,260</span>
+				</div>
+			</td>
+		</tr>
+	</tfoot>
 </table>
 <aui:fieldset>
 	<div class="product-total">
