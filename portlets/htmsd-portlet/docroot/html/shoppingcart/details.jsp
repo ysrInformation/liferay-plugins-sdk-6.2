@@ -28,6 +28,7 @@
 <% 
 	String checkOutURL = (themeDisplay.isSignedIn()) ? checkoutURL.toString():loginURL;
 %>
+
 <c:choose>
 	<c:when test='<%= (Validator.isNotNull(shoppingItem_Carts) && shoppingItem_Carts.size() > 0) %>'>
 		<table width="100%" class="cart-table">
