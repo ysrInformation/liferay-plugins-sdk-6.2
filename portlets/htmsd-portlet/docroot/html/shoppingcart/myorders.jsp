@@ -52,7 +52,7 @@
             	</div>
             	<c:if test="<%= shoppingOrder.getOrderStatus() == HConstants.PENDING %>">
             		<portlet:actionURL var="cancelOrderURL" name="CancelOrder">
-            			<portlet:param name="orderId" value="<%= shoppingOrder.getOrderId() %>"/>
+            			<portlet:param name="orderId" value="<%= String.valueOf(shoppingOrder.getOrderId()) %>"/>
             		</portlet:actionURL>
             		<div>
             		    <aui:a href="javascript:void(0);" onClick="javascript:cancelOrder('<%= cancelOrderURL %>');">
