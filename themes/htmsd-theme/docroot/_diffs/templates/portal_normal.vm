@@ -39,7 +39,7 @@
 			<div id="fixed_div"></div>
 			<div id="search-div" class="row margin_left_zero">
 			
-				<div id="span4 heading" class="span4">
+				<div id="heading" class="span4">
 					<h1 class="site-title">
 						<a class="$logo_css_class" href="$site_default_url" title="#language_format ("go-to-x", [$site_name])">
 							<img alt="$logo_description" height="65" src="$site_logo" width="65" />
@@ -109,13 +109,34 @@
 </body>
 
 <script>
-	
+	var isMobile = {
+	    Android: function() {
+	        return navigator.userAgent.match(/Android/i);
+	    },
+	    BlackBerry: function() {
+	        return navigator.userAgent.match(/BlackBerry/i);
+	    },
+	    iOS: function() {
+	        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+	    },
+	    Opera: function() {
+	        return navigator.userAgent.match(/Opera Mini/i);
+	    },
+	    Windows: function() {
+	        return navigator.userAgent.match(/IEMobile/i);
+	    },
+	    any: function() {
+	        return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+	    }
+	};
 	//Search 
 	var elTop = $('#search-div').offset().top;
-	
+	var mobile = !isMobile.any();
    	$(window).scroll(function() {
-        $('#search-div').toggleClass('sticky', $(window).scrollTop() > elTop);
-        $('#fixed_div').toggleClass('fixed_div', $(window).scrollTop() > elTop);
+   		if(mobile) {
+	        $('#search-div').toggleClass('sticky', $(window).scrollTop() > elTop);
+	        $('#fixed_div').toggleClass('fixed_div', $(window).scrollTop() > elTop);
+    	} 
     });
     
     //Scroll to Top
