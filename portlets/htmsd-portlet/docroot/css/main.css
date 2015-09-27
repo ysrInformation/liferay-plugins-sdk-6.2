@@ -186,7 +186,7 @@
 }
 
 .cart-qty {
-	width: 20px !important;
+	width: 50px !important;
 }
 
 .cart-table .product-description {
@@ -244,4 +244,14 @@
 .price-div {
 	margin-right: 30px !important;
 	padding: 5px 0 !important;
+}
+
+.Processing, .Shipping, .Delivered {
+	color : green;
+	font-weight: bold;
+}
+
+.Not Delivered, .Order Cancelled {
+	color : red;
+	font-weight: bold;
 }

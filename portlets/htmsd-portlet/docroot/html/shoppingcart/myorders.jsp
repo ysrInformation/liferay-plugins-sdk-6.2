@@ -72,7 +72,10 @@
             			<portlet:param name="orderId" value="<%= String.valueOf(shoppingOrder.getOrderId()) %>"/>
             		</portlet:actionURL>
             		<div>
-            		    <aui:a href="javascript:void(0);" onClick="javascript:cancelOrder('<%= cancelOrderURL %>');">
+            			<% 
+            				String cancelOrder = "javascript:cancelOrder('"+cancelOrderURL+"');";
+            			%>
+            		    <aui:a href="javascript:void(0);" onClick="<%= cancelOrder %>">
             				<liferay-ui:message key="cancel-order"/>
             			</aui:a>
             		</div>
