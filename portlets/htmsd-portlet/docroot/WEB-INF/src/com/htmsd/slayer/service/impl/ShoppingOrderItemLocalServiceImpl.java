@@ -44,7 +44,7 @@ public class ShoppingOrderItemLocalServiceImpl
 	 */
 	
 	public ShoppingOrderItem insertShoppingOrderItem(int quantity, double totalPrice, long userId, long companyId, 
-			long groupId, long orderId, String productName, String description, String productCode) {
+			long groupId, long orderId, long shoppingItemId, String productName, String description, String productCode) {
 		
 		ShoppingOrderItem shoppingOrderItem = new ShoppingOrderItemImpl();
 		
@@ -67,6 +67,7 @@ public class ShoppingOrderItemLocalServiceImpl
 		shoppingOrderItem.setDescription(description);
 		shoppingOrderItem.setTotalPrice(totalPrice);
 		shoppingOrderItem.setQuantity(quantity);
+		shoppingOrderItem.setShoppingItemId(shoppingItemId); 
 		
 		try {
 			shoppingOrderItem = shoppingOrderItemLocalService.addShoppingOrderItem(shoppingOrderItem);

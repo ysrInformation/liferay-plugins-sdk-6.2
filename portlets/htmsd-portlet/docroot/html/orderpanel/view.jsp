@@ -2,7 +2,7 @@
 
 <%
 	String tabs1 = ParamUtil.getString(request, "tab1", "Pending");
-    String tabNames = "Pending,Delivered";
+    String tabNames = "Pending,Shipping,Delivered,Order Cancelled";
 %>
 
 <portlet:renderURL var="tabsURL">

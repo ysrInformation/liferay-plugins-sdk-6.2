@@ -30,7 +30,6 @@ import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -99,8 +98,8 @@ public class ShoppingCartPortlet extends MVCPortlet {
 				if (Validator.isNotNull(shoppingItem)) {
 					totalPrice = shoppingItem.getSellerPrice()+shoppingItem.getTotalPrice();
 					ShoppingOrderItem shoppingOrderItem = ShoppingOrderItemLocalServiceUtil
-						.insertShoppingOrderItem((int)shoppingItem.getQuantity(), totalPrice, themeDisplay.getUserId(), 
-						themeDisplay.getCompanyId(), themeDisplay.getScopeGroupId(), shoppingOrder.getOrderId(), 
+						.insertShoppingOrderItem(shoppingItem_Cart.getQuantity(), totalPrice, themeDisplay.getUserId(), 
+						themeDisplay.getCompanyId(), themeDisplay.getScopeGroupId(), shoppingOrder.getOrderId(), shoppingItem.getItemId(),
 						shoppingItem.getName(), shoppingItem.getDescription(), shoppingItem.getProductCode());
 					
 					_log.info("shopping order Item ==>"+shoppingOrderItem.getItemId());
@@ -155,6 +154,29 @@ public class ShoppingCartPortlet extends MVCPortlet {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Method for canceling the order
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws IOException
+	 * @throws PortletException
+	 */
+	public void CancelOrder(ActionRequest actionRequest,
+			ActionResponse actionResponse) throws IOException, PortletException {
+	
+		_log.info("Inside CancelOrder method ..."); 
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		long orderId = ParamUtil.getLong(actionRequest, "orderId");
+
+		ShoppingOrderLocalServiceUtil.updateShoppingOrder(HConstants.CANCEL_ORDER, orderId);
+		
+		PortletConfig portletConfig = (PortletConfig) actionRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
+		String successMessage = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "you-have-requested-to-cancel-the-order-successfully");
+		SessionMessages.add(actionRequest, "request_processed", successMessage);
+		actionResponse.setRenderParameter(HConstants.JSP_PAGE, HConstants.PAGE_SHOPPING_CART_DETAILS); 
+		actionResponse.setRenderParameter("tab1", "my-orders");
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(ShoppingCartPortlet.class.getName());

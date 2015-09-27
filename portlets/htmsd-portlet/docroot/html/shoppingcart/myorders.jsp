@@ -33,6 +33,7 @@
            	String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
            	String orderId = HConstants.HTMSD + currentYear.substring(2, 4) + shoppingOrder.getOrderId();
            	String orderedDate = HConstants.DATE_FORMAT.format(shoppingOrder.getCreateDate()); 
+           	String status = CommonUtil.getOrderStatus(shoppingOrder.getOrderStatus());
             %>
             
             <liferay-ui:search-container-column-text name="no" value="<%= String.valueOf(slNo++) %>"/>
@@ -43,11 +44,36 @@
             
             <liferay-ui:search-container-column-text name="order-date" value="<%= orderedDate %>"/>
             
+            <liferay-ui:search-container-column-text name="status" value="<%= status %>" cssClass="<%= status %>"/> 
+            
             <liferay-ui:search-container-column-text name="action">
-            	<aui:a href="<%= orderDetailsURL.toString() %>"><liferay-ui:message key="view"/></aui:a>
+            	<div>
+            		<aui:a href="<%= orderDetailsURL.toString() %>"><liferay-ui:message key="view"/></aui:a>
+            	</div>
+            	<c:if test="<%= shoppingOrder.getOrderStatus() == HConstants.PENDING %>">
+            		<portlet:actionURL var="cancelOrderURL" name="CancelOrder">
+            			<portlet:param name="orderId" value="<%= shoppingOrder.getOrderId() %>"/>
+            		</portlet:actionURL>
+            		<div>
+            		    <aui:a href="javascript:void(0);" onClick="javascript:cancelOrder('<%= cancelOrderURL %>');">
+            				<liferay-ui:message key="cancel-order"/>
+            			</aui:a>
+            		</div>
+            	</c:if>
             </liferay-ui:search-container-column-text> 
 
         </liferay-ui:search-container-row>
      <liferay-ui:search-iterator searchContainer="<%= searchContainer %>"/>
 	</liferay-ui:search-container>
 </div>
+
+<aui:script>
+function cancelOrder(url) {
+	
+	var message = '<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-cancel-the-order?")%>';
+	
+	if (confirm(message)) {
+		window.location.href = url;
+	}
+}
+</aui:script>
