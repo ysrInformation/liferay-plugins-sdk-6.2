@@ -100,7 +100,7 @@ public class CommonUtil {
 		
 		String priceInString = StringPool.BLANK;
 		DecimalFormat df = new DecimalFormat("0.00");
-		priceInString = HConstants.RUPPEE_SYMBOL + StringPool.SPACE + df.format(price);
+		priceInString = HConstants.RUPPEE_SYMBOL+StringPool.PERIOD+ StringPool.SPACE + df.format(price);
 		return priceInString;
 	}
 	 
