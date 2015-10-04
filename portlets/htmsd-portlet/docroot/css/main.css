@@ -255,3 +255,8 @@
 	color : red;
 	font-weight: bold;
 }
+
+/************Dashboard*****************/
+#tags button {
+	display: none;
+}
