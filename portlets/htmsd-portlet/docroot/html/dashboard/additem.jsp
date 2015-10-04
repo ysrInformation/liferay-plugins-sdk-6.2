@@ -74,8 +74,10 @@
 			<aui:input name="<%=HConstants.WHOLESALE_QUANTITY %>" />	
 			<aui:input name="<%=HConstants.WHOLESALE_PRICE %>" />
 		</div>
-		<liferay-ui:message key="tags" />
-		<liferay-ui:asset-tags-selector className="<%=ShoppingItem.class.getName() %>" />
+		<div id="tags">
+			<liferay-ui:message key="tags" />
+			<liferay-ui:asset-tags-selector className="<%=ShoppingItem.class.getName() %>" />
+		</div>
 		<aui:input name="terms"  type="checkbox" required="true" label="" inlineField="true" />
 		<aui:a href="http://www.google.com">Terms of user</aui:a>
 		And
