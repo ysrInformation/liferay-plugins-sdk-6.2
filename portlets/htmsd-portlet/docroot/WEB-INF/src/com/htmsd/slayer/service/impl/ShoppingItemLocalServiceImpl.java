@@ -316,6 +316,7 @@ public class ShoppingItemLocalServiceImpl
 			for(String imagesId : imagesIds) {
 				DLAppLocalServiceUtil.deleteFileEntry(Long.valueOf(imagesId));
 			}
+			DLAppLocalServiceUtil.deleteFileEntry(shoppingItem.getSmallImage());
 			categoryFinder.deleteCatItemByItemId(itemId);
 			AssetEntry  assetEntry=  AssetEntryLocalServiceUtil.fetchEntry(ShoppingItem.class.getName(), itemId);
 			if(Validator.isNotNull(assetEntry)) {
