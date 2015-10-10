@@ -1,3 +1,4 @@
+<%@page import="com.htmsd.dashboard.DashboardPortlet"%>
 <%@include file="/html/dashboard/init.jsp" %>
 
 <%
@@ -5,6 +6,7 @@
 	String orderByCol = ParamUtil.getString(request, "orderByCol","createDate");
  	String orderByType = ParamUtil.getString(request, "orderByType","desc");
     String tabs1 = ParamUtil.getString(request, "tab1", "New Items");
+    String keyword = ParamUtil.getString(renderRequest, "keywords");
 	PortletURL mainURL = renderResponse.createRenderURL();
 	mainURL.setWindowState(WindowState.MAXIMIZED);
     String tabNames = "New Items,Approved Items,Rejected Items";
@@ -51,12 +53,18 @@
 <aui:button name="approveBtn" type="button" value="approve" onClick="changeAction('approve');" style="display:none"/>
 <aui:button name="rejectBtn" type="button" value="reject" onClick="changeAction('reject');" style="display:none"/>
 <aui:button type="button" value="add-item" href="<%=addItemURL.toString() %>"/>
+<div style="float:right">
+	<liferay-ui:input-search />
+</div>
+
 <liferay-ui:search-container delta="10"  orderByCol="<%=orderByCol %>" orderByType="<%=orderByType %>" emptyResultsMessage="No Items to display" iteratorURL="<%=iteratorURL %>"  rowChecker="<%= new RowChecker(renderResponse)%>">
 
 	<liferay-ui:search-container-results>
 		 <%
-		 
-		 	itemList = 	ShoppingItemLocalServiceUtil.getByStatus(status, searchContainer.getStart(), searchContainer.getEnd());
+
+		 	itemList = 	keyword.isEmpty() ? ShoppingItemLocalServiceUtil.getByStatus(status, searchContainer.getStart(), searchContainer.getEnd())
+		 									:ShoppingItemLocalServiceUtil.searchItems(status, keyword, searchContainer.getStart(), searchContainer.getEnd()) ;
+		 				
 			List<ShoppingItem> copy_itemList = new ArrayList<ShoppingItem>();
 			copy_itemList.addAll(itemList);
 		 	Comparator<ShoppingItem> beanComparator = new BeanComparator(orderByCol);
@@ -66,7 +74,8 @@
 			}
 			
 			results = copy_itemList; 
-			total = ShoppingItemLocalServiceUtil.getByStatusCount(status);
+			total = keyword.isEmpty() ? ShoppingItemLocalServiceUtil.getByStatusCount(status)
+									    :ShoppingItemLocalServiceUtil.searchCount(status, keyword);													;
 			
 			pageContext.setAttribute("results", results);
 			pageContext.setAttribute("total", total);
@@ -77,6 +86,8 @@
 		<liferay-ui:search-container-column-text name="no.">
 			<%=String.valueOf(searchContainer.getStart()+1+indexVar)%>
 		</liferay-ui:search-container-column-text>
+		
+		<liferay-ui:search-container-column-text  name="product-code"  property="productCode"/>
 		
 		<liferay-ui:search-container-column-text name="item-title" >
 			<portlet:renderURL var="historyURL">
@@ -91,9 +102,13 @@
 			<fmt:formatDate value="<%=item.getCreateDate() %>" pattern="dd/MM/yyyy" />
 		</liferay-ui:search-container-column-text>
 		
-		<liferay-ui:search-container-column-text name="item-added-by"  property="userName" />
+		<liferay-ui:search-container-column-text name="item-added-by" >
+			<%=item.getUserEmail() + StringPool.OPEN_PARENTHESIS + item.getUserName() + StringPool.CLOSE_PARENTHESIS %>
+		</liferay-ui:search-container-column-text>
 		
-		<liferay-ui:search-container-column-text name="last-update-by"  property="updateUserName" />
+		<liferay-ui:search-container-column-text name="last-update-by"  property="updateUserName" >
+			<%=item.getUpdateEmail() + StringPool.OPEN_PARENTHESIS + item.getUpdateUserName() + StringPool.CLOSE_PARENTHESIS %>
+		</liferay-ui:search-container-column-text>
 		
 		<c:if test='<%=tabs1.equals("Approved Items") %>'>
 			<liferay-ui:search-container-column-text name="stock">

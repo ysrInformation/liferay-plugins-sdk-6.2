@@ -39,6 +39,9 @@
 		updateItemURL.setParameter("userId", String.valueOf(item.getUserId()));
 		updateItemURL.setParameter("backURL", backURL);
 		updateItemURL.setParameter("tab1", ParamUtil.getString(renderRequest, "tab1"));
+		if(!isAdmin) {
+			updateItemURL.setParameter(HConstants.status,String.valueOf(item.getStatus()));
+		}
 		long quantity = item.getQuantity();
 		List<Category> itemCategory = CategoryLocalServiceUtil.getCategoryByItemId(itemId);
 		long categoryId = 0l;
@@ -65,6 +68,7 @@
 			<aui:form action="<%=updateItemURL %>" enctype="multipart/form-data" method="POST" name="itemDetailForm">
 				<aui:input name="userId" type="hidden" value="<%=item.getUserId() %>" />
 				<aui:input name="userName" type="hidden" value="<%=item.getUserName() %>" />
+				<aui:input name="<%=HConstants.SMALL_IMAGE %>" type="hidden" value="<%=item.getSmallImage() %>" />
 				<aui:input name="<%=HConstants.NAME%>" required="true" value="<%= item.getName()%>" />
 				<aui:input name="<%=HConstants.PRODUCT_CODE %>"  value="<%=item.getProductCode() %>"/>
 				<aui:select name="<%=HConstants.CATEGORY_ID %>"   required="true" showEmptyOption="true">
@@ -162,10 +166,10 @@
 				<liferay-ui:message key="tags" />
 				<liferay-ui:asset-tags-selector className="<%=ShoppingItem.class.getName() %>" classPK="<%=itemId %>" />		
 				<c:if test="<%=isAdmin%>">
-						<aui:select name="<%=HConstants.status %>" showEmptyOption="true" required="true" >
-							<aui:option value="<%=HConstants.APPROVE%>" label="approve" />
-							<aui:option value="<%=HConstants.REJECT %>" label="reject" />
-						</aui:select>
+					<aui:select name="<%=HConstants.status %>" showEmptyOption="true" required="true" >
+					<aui:option value="<%=HConstants.APPROVE%>" label="approve" />
+					<aui:option value="<%=HConstants.REJECT %>" label="reject" />
+				</aui:select>
 						<div id="remarkDiv" style="display:none;">
 							<aui:input name="<%=HConstants.REMARK %>" type="textarea" value="<%=item.getRemark()%>"/>
 						</div>

@@ -9,7 +9,6 @@
 </portlet:actionURL>
 <%
 	List<AssetTag> assetTags = AssetTagLocalServiceUtil.getTags(themeDisplay.getScopeGroupId(), PortalUtil.getClassNameId(ShoppingItem.class), null, -1, -1);
-	System.out.println(assetTags.size());
 	List<Category> categories = CategoryLocalServiceUtil.getCategories(-1, -1);
 %>
 
