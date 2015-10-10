@@ -43,7 +43,20 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  * Portlet implementation class DashboardPortlet
  */
 public class DashboardPortlet extends MVCPortlet {
- 
+
+	private  long smallImageId = 0;
+	
+	@Override
+	public void processAction(ActionRequest actionRequest,
+			ActionResponse actionResponse) throws IOException, PortletException {
+
+		String keywords = ParamUtil.getString(actionRequest, "keywords");
+		if (keywords.isEmpty()) {
+			super.processAction(actionRequest, actionResponse);
+		} else {
+			PortalUtil.copyRequestParameters(actionRequest, actionResponse);
+		}
+	}
 	
 	/**
 	 * Method to addItem into the item list
@@ -63,8 +76,10 @@ public class DashboardPortlet extends MVCPortlet {
 		long itemId = ParamUtil.getLong(uploadRequest, HConstants.ITEM_ID);
 		long userId  = ParamUtil.getLong(uploadRequest, "userId");
 		String userName = ParamUtil.getString(uploadRequest, "userName");
+		String userEmail = ParamUtil.getString(uploadRequest, "emailId");
 		long currentUserId  = themeDisplay.getUserId();
 		String currentUserName = themeDisplay.getUser().getScreenName();
+		String currentUserEmail = themeDisplay.getUser().getEmailAddress();
 		String name = ParamUtil.getString(uploadRequest, HConstants.NAME);
 		String productCode = ParamUtil.getString(uploadRequest, HConstants.PRODUCT_CODE);
 		String description = ParamUtil.getString(uploadRequest, HConstants.DESCRIPTION);
@@ -85,18 +100,18 @@ public class DashboardPortlet extends MVCPortlet {
 			//Adding items 
 			imageIds = saveFiles(uploadRequest, HConstants.IMAGE, HConstants.ITEM_FOLDER_NAME);
 			shoppingItem = ShoppingItemLocalServiceUtil.addItem(themeDisplay.getScopeGroupId(),
-					themeDisplay.getCompanyId(), currentUserId,currentUserName, currentUserId, StringPool.BLANK, productCode,
+					themeDisplay.getCompanyId(), currentUserId,currentUserName, currentUserEmail, currentUserId, StringPool.BLANK, StringPool.BLANK, productCode,
 					name, description, sellerPrice, sellerPrice, quantity, HConstants.NEW,
-					StringUtil.merge(imageIds, StringPool.COMMA), vedioURL, StringPool.BLANK);
+					StringUtil.merge(imageIds, StringPool.COMMA), vedioURL,  getSmallImageId(), StringPool.BLANK);
 			itemId = shoppingItem.getItemId();
 			ItemHistoryLocalServiceUtil.addItemHistory(itemId, currentUserId, currentUserName, HConstants.ITEM_ADDED, StringPool.BLANK);
 		} else {
 			//Updating items 
 				imageIds = updateImages(uploadRequest, HConstants.IMAGE, HConstants.IMAGE_ID);
 				shoppingItem = ShoppingItemLocalServiceUtil.updateItem(itemId,
-						themeDisplay.getScopeGroupId(), themeDisplay.getCompanyId(), userId, userName,currentUserId, currentUserName, productCode, name,
+						themeDisplay.getScopeGroupId(), themeDisplay.getCompanyId(), userId, userName, userEmail, currentUserId, currentUserName, currentUserEmail,productCode, name,
 						description, sellerPrice, totalPrice, quantity, status,
-						StringUtil.merge(imageIds, StringPool.COMMA), vedioURL, remark);
+						StringUtil.merge(imageIds, StringPool.COMMA), vedioURL, 0, remark);
 				ItemHistoryLocalServiceUtil.addItemHistory(itemId, currentUserId, currentUserName, HConstants.ITEM_UPDATED, staffRemark);
 		}
 		// Tag
@@ -112,6 +127,7 @@ public class DashboardPortlet extends MVCPortlet {
 	} 
 	
 	
+
 	/**
 	 * Method updateTags to update assesttags of items 
 	 * @param uploadRequest
@@ -216,6 +232,14 @@ public class DashboardPortlet extends MVCPortlet {
 								sourceFileName, contentType, sourceFileName,
 								sourceFileName, StringPool.BLANK, true, resizeImage(file, 600, 600),
 								serviceContext);
+						
+					if(i == 1) {
+						DLAppLocalServiceUtil.updateFileEntry(
+								themeDisplay.getUserId(), ParamUtil.getLong(uploadRequest, HConstants.SMALL_IMAGE),
+								sourceFileName, contentType, sourceFileName+HConstants.SMALL_IMAGE,
+								sourceFileName+HConstants.SMALL_IMAGE, StringPool.BLANK, true, resizeImage(file, 100, 100),
+								serviceContext);
+					}
 					} catch (PortalException e) {
 						_log.error(e);
 					} catch (SystemException e) {
@@ -226,6 +250,9 @@ public class DashboardPortlet extends MVCPortlet {
 				
 				try {
 					DLAppLocalServiceUtil.deleteFileEntry(fileEntryId);
+					if(i == 1) {
+						DLAppLocalServiceUtil.deleteFileEntry(ParamUtil.getLong(uploadRequest, HConstants.SMALL_IMAGE));
+					}
 				} catch (PortalException e) {
 					_log.error(e);
 					e.printStackTrace();
@@ -250,6 +277,7 @@ public class DashboardPortlet extends MVCPortlet {
 		List<Long> fileIds = new ArrayList<Long>();
 		ThemeDisplay themeDisplay=(ThemeDisplay)uploadRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		ServiceContext serviceContext = null;
+		long smallImgIds = 0;
 		try {
 			serviceContext = ServiceContextFactory.getInstance(uploadRequest);
 			serviceContext.setAddGuestPermissions(true);;
@@ -280,7 +308,11 @@ public class DashboardPortlet extends MVCPortlet {
 			        	 contentType = MimeTypesUtil.getContentType(sourceFileName);	
 			        	 try {
 							fileEntry = DLAppLocalServiceUtil.addFileEntry(themeDisplay.getUserId(), repositoryId, folderId, sourceFileName, contentType, file.getName(), StringPool.BLANK, StringPool.BLANK,  resizeImage(file, 600, 600), serviceContext);
-						
+							//Adding small Image
+							if(i == 1) {
+								FileEntry fileEntry2 =  DLAppLocalServiceUtil.addFileEntry(themeDisplay.getUserId(), repositoryId, folderId, sourceFileName+HConstants.SMALL_IMAGE, contentType, file.getName()+HConstants.SMALL_IMAGE, StringPool.BLANK, StringPool.BLANK,  resizeImage(file, 100, 100), serviceContext);
+								setSmallImageId(fileEntry2.getFileEntryId());	
+							}
 			        	 } catch (PortalException e) {
 							e.printStackTrace();
 						} catch (SystemException e) {
@@ -374,5 +406,13 @@ public class DashboardPortlet extends MVCPortlet {
 		actionResponse.sendRedirect(ParamUtil.getString(actionRequest, "redirectURL"));
 	}
 	
+	public long getSmallImageId() {
+		return smallImageId;
+	}
+
+	public void setSmallImageId(long smallImageId) {
+		this.smallImageId = smallImageId;
+	}
+
 	private Log _log = LogFactoryUtil.getLog(DashboardPortlet.class);
 }
