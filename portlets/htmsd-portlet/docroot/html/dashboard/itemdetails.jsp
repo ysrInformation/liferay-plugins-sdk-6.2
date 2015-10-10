@@ -19,12 +19,8 @@
 	.ui-widget-overlay,.ui-dialog-content{
 		cursor:zoom-out;
 	}
-	.cke_reset {
-		width : 500px;
-	}
   </style>
  </head> 
- 
 <%
  	String backURL = ParamUtil.getString(renderRequest, "backURL");
 	long itemId = ParamUtil.getLong(renderRequest, "itemId");
@@ -82,7 +78,7 @@
 					%>   
 				</aui:select>
 				<liferay-ui:message key="description" />
-				<liferay-ui:input-editor />
+				<liferay-ui:input-editor cssClass="editor_padding"/>
 				<aui:input name="<%=HConstants.DESCRIPTION %>" value="<%=item.getDescription()%>"  type="hidden"/>
 				<aui:layout>
 					<%
