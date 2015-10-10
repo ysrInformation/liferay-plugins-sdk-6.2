@@ -1,6 +1,7 @@
 package com.htmsd.util;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,7 +20,6 @@ import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -101,7 +101,7 @@ public class CommonUtil {
 		
 		String priceInString = StringPool.BLANK;
 		DecimalFormat df = new DecimalFormat("0.00");
-		priceInString = HConstants.RUPPEE_SYMBOL + StringPool.SPACE + df.format(price);
+		priceInString = HConstants.RUPPEE_SYMBOL+StringPool.PERIOD+ StringPool.SPACE + df.format(price);
 		return priceInString;
 	}
 	 
@@ -216,9 +216,15 @@ public class CommonUtil {
 		
 		List<ShoppingOrder> shoppingOrders = Collections.emptyList();
 		boolean isPendingOrderTab = tabName.equalsIgnoreCase("Pending");
+		boolean isShippingOrderTab = tabName.equalsIgnoreCase("Shipping");
+		boolean isOrderCancelledTab = tabName.equalsIgnoreCase("Order Cancelled");
 		
 		if (isPendingOrderTab) {
 			shoppingOrders = getShoppingOrders(HConstants.PENDING, groupId);
+		} else if (isShippingOrderTab) {
+			shoppingOrders = getShoppingOrders(HConstants.SHIPPING, groupId);
+		} else if(isOrderCancelledTab) { 
+			shoppingOrders = getShoppingOrders(HConstants.CANCEL_ORDER, groupId);
 		} else {
 			shoppingOrders = getShoppingOrders(HConstants.DELIVERED, groupId);
 		}
@@ -296,5 +302,60 @@ public class CommonUtil {
 		}
 		billNumber = (Validator.isNotNull(invoice))?String.valueOf(invoice.getInvoiceId()):"NA";
 		return billNumber;
+	}
+	
+	public static String getOrderStatus(int orderStatus) {
+		
+		String orderStatusString = StringPool.BLANK;
+		switch(orderStatus) {
+			case HConstants.PENDING : orderStatusString = HConstants.PROCESSING_STATUS;
+										break;
+			case HConstants.SHIPPING : orderStatusString = HConstants.SHIPPING_STATUS;
+										break;
+			case HConstants.DELIVERED : orderStatusString = HConstants.DELIVERED_STATUS;
+										break;
+			case HConstants.CANCEL_ORDER : orderStatusString = HConstants.ORDER_CANCELLED_STATUS;
+										break;
+			default : orderStatusString = "N/A";
+		}
+		return orderStatusString;
+	}
+	
+	public static int[] getItemsQuantity(long itemId) {
+		
+		int userQuantity = 0;
+		int remainingQnty = 0;
+		long totalStock = 0l;
+		int[] quantityArray = null;
+		ShoppingItem shoppingItem = CommonUtil.getShoppingItem(itemId);
+		List<ShoppingItem_Cart> shoppingItem_Carts = new ArrayList<ShoppingItem_Cart>();
+		
+		if (Validator.isNotNull(shoppingItem)) {
+			totalStock = shoppingItem.getQuantity();
+			try {
+				shoppingItem_Carts = ShoppingItem_CartLocalServiceUtil.getShoppingItemByItemId(itemId);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			if (Validator.isNotNull(shoppingItem_Carts) && shoppingItem_Carts.size() > 0) {
+				for (ShoppingItem_Cart shoppingItem_cart : shoppingItem_Carts) {
+					userQuantity += shoppingItem_cart.getQuantity();
+				}
+			}
+		}
+		
+		if ((userQuantity) < totalStock) {
+			remainingQnty = ((int) totalStock - userQuantity);
+		} else if(totalStock == -1) {
+			remainingQnty = HConstants.MAX_QUANTITY;
+		} 
+		quantityArray = new int[remainingQnty];
+		if (remainingQnty > 0) {
+			for (int i=1;i<=remainingQnty;i++) {
+				quantityArray[i-1] = i;
+			}
+		}
+		
+		return quantityArray;
 	}
 }

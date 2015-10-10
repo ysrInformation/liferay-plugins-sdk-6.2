@@ -7,6 +7,9 @@
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="javax.portlet.ActionRequest"%>
 <%@page import="java.util.Collections"%>
+<%@page import="java.util.Comparator"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.apache.commons.beanutils.BeanComparator"%>
 
 <%--Custom imports --%>
 <%@page import="com.htmsd.util.HConstants"%>
@@ -27,6 +30,7 @@
 <%@page import="com.liferay.portal.kernel.util.Constants"%>
 <%@page import="com.liferay.portal.kernel.util.StringPool"%>
 <%@page import="com.liferay.portal.kernel.util.Validator"%>
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="com.liferay.counter.service.CounterLocalServiceUtil"%>

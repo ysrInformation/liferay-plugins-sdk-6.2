@@ -16,11 +16,13 @@ import com.htmsd.slayer.model.ShoppingItem_Cart;
 import com.htmsd.slayer.model.ShoppingOrder;
 import com.htmsd.slayer.model.ShoppingOrderItem;
 import com.htmsd.slayer.service.InvoiceLocalServiceUtil;
+import com.htmsd.slayer.service.ShoppingItemLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingItem_CartLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingOrderItemLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
 import com.htmsd.util.CommonUtil;
 import com.htmsd.util.HConstants;
+import com.htmsd.util.NotificationUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
@@ -30,7 +32,6 @@ import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -74,6 +75,9 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		Invoice invoice = InvoiceLocalServiceUtil.insertInvoice(themeDisplay.getUserId(), shoppingOrder.getOrderId());
 		addShoppingOrderItem(themeDisplay, shoppingOrder);
 		
+		NotificationUtil.sendNotification(themeDisplay.getScopeGroupId(), 
+				themeDisplay.getUser().getFullName(), themeDisplay.getUser().getEmailAddress(), "EMAIL_NOTIFICATION");
+		
 		PortletConfig portletConfig = (PortletConfig) actionRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
 		String successMessage = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "you-order-has-been-registered-you-may-get-email-shortly");
 		SessionMessages.add(actionRequest, "request_processed", successMessage);
@@ -95,15 +99,24 @@ public class ShoppingCartPortlet extends MVCPortlet {
 			for (ShoppingItem_Cart shoppingItem_Cart:shoppingItem_Carts) {
 				
 				ShoppingItem shoppingItem = CommonUtil.getShoppingItem(shoppingItem_Cart.getItemId()); 
-				
+				long quantity = shoppingItem.getQuantity() - shoppingItem_Cart.getQuantity();
 				if (Validator.isNotNull(shoppingItem)) {
-					totalPrice = shoppingItem.getSellerPrice()+shoppingItem.getTotalPrice();
+					totalPrice = shoppingItem_Cart.getTotalPrice();
 					ShoppingOrderItem shoppingOrderItem = ShoppingOrderItemLocalServiceUtil
-						.insertShoppingOrderItem((int)shoppingItem.getQuantity(), totalPrice, themeDisplay.getUserId(), 
-						themeDisplay.getCompanyId(), themeDisplay.getScopeGroupId(), shoppingOrder.getOrderId(), 
+						.insertShoppingOrderItem(shoppingItem_Cart.getQuantity(), totalPrice, themeDisplay.getUserId(), 
+						themeDisplay.getCompanyId(), themeDisplay.getScopeGroupId(), shoppingOrder.getOrderId(), shoppingItem.getItemId(),
 						shoppingItem.getName(), shoppingItem.getDescription(), shoppingItem.getProductCode());
 					
-					_log.info("shopping order Item ==>"+shoppingOrderItem.getItemId());
+					//updating shoppingItem quantity
+					if (Validator.isNotNull(shoppingOrderItem)) {
+						try {
+							ShoppingItem shoppingItem2 = ShoppingItemLocalServiceUtil.fetchShoppingItem(shoppingOrderItem.getShoppingItemId());
+							shoppingItem2.setQuantity(quantity);
+							ShoppingItemLocalServiceUtil.updateShoppingItem(shoppingItem2);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
 					
 					//deleting items from shoppingItem_Cart table. 
 					try {
@@ -126,6 +139,27 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		if (Validator.isNotNull(cmd)) {
 			if (cmd.equalsIgnoreCase("remove-item")){
 				removeItem(resourceRequest, resourceResponse);
+			} else if (cmd.equalsIgnoreCase("total-price")) {
+				updateItemPrice(resourceRequest);
+			}
+		}
+	}
+
+	private void updateItemPrice(ResourceRequest resourceRequest) {
+	
+		int quantity = ParamUtil.getInteger(resourceRequest, "quantity");
+		double itemPrice = ParamUtil.getDouble(resourceRequest, "itemPrice");
+		long id = ParamUtil.getLong(resourceRequest, "id");
+		
+		if (id > 0) {
+			double totalPrice = quantity * itemPrice;
+			try {
+				ShoppingItem_Cart shoppingItem_Cart =  ShoppingItem_CartLocalServiceUtil.fetchShoppingItem_Cart(id);
+				shoppingItem_Cart.setQuantity(quantity);
+				shoppingItem_Cart.setTotalPrice(totalPrice);
+				ShoppingItem_CartLocalServiceUtil.updateShoppingItem_Cart(shoppingItem_Cart);
+			} catch (SystemException e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -155,6 +189,32 @@ public class ShoppingCartPortlet extends MVCPortlet {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Method for canceling the order
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws IOException
+	 * @throws PortletException
+	 */
+	public void CancelOrder(ActionRequest actionRequest,
+			ActionResponse actionResponse) throws IOException, PortletException {
+	
+		_log.info("Inside CancelOrder method ..."); 
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		long orderId = ParamUtil.getLong(actionRequest, "orderId");
+
+		ShoppingOrderLocalServiceUtil.updateShoppingOrder(HConstants.CANCEL_ORDER, orderId);
+		
+		NotificationUtil.sendNotification(themeDisplay.getScopeGroupId(), 
+				themeDisplay.getUser().getFullName(), themeDisplay.getUser().getEmailAddress(), "EMAIL_NOTIFICATION");
+		
+		PortletConfig portletConfig = (PortletConfig) actionRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
+		String successMessage = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "you-have-requested-to-cancel-the-order-successfully");
+		SessionMessages.add(actionRequest, "request_processed", successMessage);
+		actionResponse.setRenderParameter(HConstants.JSP_PAGE, HConstants.PAGE_SHOPPING_CART_DETAILS); 
+		actionResponse.setRenderParameter("tab1", "my-orders");
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(ShoppingCartPortlet.class.getName());

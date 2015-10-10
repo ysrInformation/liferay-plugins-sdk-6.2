@@ -54,7 +54,7 @@ public class ShoppingItem_CartLocalServiceImpl
 	 * @param itemId
 	 * @return
 	 */
-	public ShoppingItem_Cart insertItemsToCart(long cartId, long itemId) {
+	public ShoppingItem_Cart insertItemsToCart(int quantity, long cartId, long itemId, double totalPrice) {
 		ShoppingItem_Cart shoppingItem_Cart = null;
 		
 		try {
@@ -65,6 +65,8 @@ public class ShoppingItem_CartLocalServiceImpl
 		
 		shoppingItem_Cart.setCartId(cartId);
 		shoppingItem_Cart.setItemId(itemId);
+		shoppingItem_Cart.setQuantity(quantity); 
+		shoppingItem_Cart.setTotalPrice(totalPrice); 
 		
 		try {
 			addShoppingItem_Cart(shoppingItem_Cart);
@@ -123,5 +125,9 @@ public class ShoppingItem_CartLocalServiceImpl
 		}
 		
 		return itemsCount;
+	}
+	
+	public List<ShoppingItem_Cart> getShoppingItemByItemId(long itemId) throws SystemException {
+		return shoppingItem_CartPersistence.findByItemId(itemId);
 	}
 }

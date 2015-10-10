@@ -169,3 +169,94 @@
 	top: 30%;
 	width: 50px;
 }
+
+.editor_padding {
+	padding-bottom: 30px;
+}
+
+/***Shopping Cart****/
+.cart-table .cart-head , .cart-footer {
+	background: #f2f2f2 none repeat scroll 0 0;
+	border-bottom: 1px solid #ddd;
+	border-top: 1px solid #ddd;
+}
+
+.cart-table {
+	text-align: center;
+}
+
+.cart-qty {
+	width: 50px !important;
+}
+
+.cart-table .product-description {
+	text-align: justify;
+	padding-top: 12px;
+}
+
+.cart-table .remove-item {
+	padding: 5px;
+}
+
+.cart-head-row  td {
+	padding: 7px 0px;
+	text-transform: uppercase;
+}
+
+.cart-table {
+	border-collapse: collapse;
+}
+
+.cart-table td, table th {
+	border: 1px solid #ddd;
+}
+
+.cart-table tr:first-child th {
+	border-top: 0;
+}
+
+.cart-table tr:last-child td {
+	border-bottom: 0;
+}
+
+.cart-table tr td:first-child, table tr th:first-child {
+	border-left: 0;
+}
+
+.cart-table tr td:last-child, .cart-table tr th:last-child {
+	border-right: 0;
+}
+
+.cart-footer div {
+	padding: 10px 0px;
+}
+
+.price-text {
+	font-size: 16px;
+}
+
+.price {
+	color: black;
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.price-div {
+	margin-right: 30px !important;
+	padding: 5px 0 !important;
+}
+
+.Processing, .Shipping, .Delivered {
+	color : green;
+	font-weight: bold;
+}
+
+.Not.Delivered, .Order.Cancelled {
+	color : red;
+	font-weight: bold;
+}
+
+/************Dashboard*****************/
+#tags button {
+	display: none;
+}

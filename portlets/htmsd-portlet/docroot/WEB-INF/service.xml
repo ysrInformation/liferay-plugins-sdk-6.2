@@ -204,7 +204,7 @@
 		<column name="modifiedDate" type="Date" />
 
 		<!-- Other fields -->
-
+		<column name="shoppingItemId" type="long"/>
 		<column name="productCode" type="String" />
 		<column name="name" type="String" />
 		<column name="description" type="String" />
@@ -224,7 +224,8 @@
 		<column name="id" type="long" primary="true"/>
 		<column name="itemId" type="long"/>
 		<column name="cartId" type="long"/>
-		
+		<column name="quantity" type="int"/>
+		<column name="totalPrice" type="double"/>
 		
 		<!-- Finder methods -->
 		
@@ -235,6 +236,10 @@
 		
 		<finder return-type="Collection" name="CartId">
 			<finder-column name="cartId"/>
+		</finder>
+		
+		<finder return-type="Collection" name="ItemId">
+			<finder-column name="itemId"/>
 		</finder>
 		
 	</entity>

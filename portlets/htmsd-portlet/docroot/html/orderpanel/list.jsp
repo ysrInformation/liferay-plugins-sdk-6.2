@@ -36,7 +36,7 @@
            	String userName = (shoppingOrder.getUserId()>0l)?_user.getFullName():"N/A";
            	String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
            	String orderId = HConstants.HTMSD + currentYear.substring(2, 4) + shoppingOrder.getOrderId();
-           	String status = tabName.equalsIgnoreCase("Pending") ? HConstants.PENDING_STATUS:HConstants.DELIVERED_STATUS;
+           	String status = CommonUtil.getOrderStatus(shoppingOrder.getOrderStatus());
            	String orderedDate = HConstants.DATE_FORMAT.format(shoppingOrder.getCreateDate()); 
             %>
             
@@ -45,8 +45,6 @@
             <liferay-ui:search-container-column-text name="order-id" value="<%= orderId %>"/>
             
             <liferay-ui:search-container-column-text name="user-name" value="<%= userName %>" /> 
-            
-            <liferay-ui:search-container-column-text name="seller-name" value="<%= userName %>" /> 
             
             <liferay-ui:search-container-column-text name="order-date" value="<%= orderedDate %>"/>
             

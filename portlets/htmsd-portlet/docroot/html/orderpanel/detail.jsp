@@ -8,6 +8,7 @@
 
 <%
 	int slno = 1;
+	int orderStatus = 0;
 	double totalPrice = 0;
 	long orderId = ParamUtil.getLong(request, "orderId");
 	
@@ -15,6 +16,7 @@
 	try {
 		if (Validator.isNotNull(orderId)) {
 			shoppingOrder = ShoppingOrderLocalServiceUtil.fetchShoppingOrder(orderId);	
+			orderStatus = shoppingOrder.getOrderStatus();
 		}
 	} catch (Exception e){
 		System.out.println("No order exist"+e);
@@ -36,6 +38,8 @@
 	
 	List<ShoppingOrderItem> shoppingOrderItems = CommonUtil.getShoppingOrderItems(orderId);
 	DecimalFormat decimalFormat = new DecimalFormat("#.00");
+	
+	boolean showOrderForm = orderStatus == HConstants.PENDING || orderStatus == HConstants.SHIPPING;
 %>
 
 <portlet:renderURL var="backURL">
@@ -51,6 +55,10 @@
 </div>
 
 <div id="print-area">
+	<div class="text-center">
+		<liferay-ui:journal-article articleId="BILL_LOGO" groupId="<%= themeDisplay.getScopeGroupId() %>"/>
+	</div>
+	<hr/>
 	<div class="user-details">
 		<table style="width:100%">
 			<tr>
@@ -112,7 +120,7 @@
 </div>
 
 <aui:fieldset>
-	<c:if test="<%= shoppingOrder.getOrderStatus() != HConstants.DELIVERED %>">
+	<c:if test="<%= showOrderForm %>">
 		<aui:form method="post" action="<%= updateOrderURL %>" name="fm" inlineLabels="true"> 
 	
 			<aui:input name="orderId" type="hidden" value="<%= shoppingOrder.getOrderId() %>"/>

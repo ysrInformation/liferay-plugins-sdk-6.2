@@ -28,7 +28,7 @@
 								%>
 									<li data-src="<%=imageURL%>" class="span2">
 										<a href="<%=imageURL%>">
-		        							<img src="<%=thumbnailURL%>" class="thumbnail details-img" />
+		        							<img width="200" height="100" src="<%=thumbnailURL%>" class="thumbnail details-img" />
 		        						</a>
 		      						</li>
 								<%
@@ -41,7 +41,7 @@
 									String youtubeThumbnailURL = "http://img.youtube.com/vi/"+videoId+"/default.jpg";
 								%>
 								<div class="video">
-									<img src="<%=youtubeThumbnailURL%>" class="thumbnail details-img" />
+									<img width="200" height="100" src="<%=youtubeThumbnailURL%>" class="thumbnail details-img" />
 									<a href="#"></a>
 								</div>
 							</li>

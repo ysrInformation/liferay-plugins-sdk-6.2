@@ -58,6 +58,9 @@ public interface HConstants {
 	public static int VEDIO_UPDATED = 18;
 	public static int ITEM_UPDATED = 10;
 	public static int ITEM_ADDED = 9;
+	public static int INITIAL_QUANTITY = 1;
+	public static int CANCEL_ORDER = 20;
+	public static int MAX_QUANTITY = 25;
 	public static String RUPPEE_SYMBOL = "&#8377;";
  
 	// PAGES
@@ -69,6 +72,8 @@ public interface HConstants {
 	public static String HTMSD = "HTMSD";
 	public static String NOT_DELIVERED_STATUS = "Not Delivered";
 	public static String SHIPPING_STATUS = "Shipping";
+	public static String PROCESSING_STATUS = "Processing";
+	public static String ORDER_CANCELLED_STATUS = "Order Cancelled";
 
 	public static DateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
 

@@ -8,10 +8,11 @@ import javax.portlet.PortletException;
 
 import com.htmsd.slayer.NoSuchShoppingItem_CartException;
 import com.htmsd.slayer.model.ShoppingCart;
+import com.htmsd.slayer.model.ShoppingItem;
 import com.htmsd.slayer.model.ShoppingItem_Cart;
 import com.htmsd.slayer.service.ShoppingCartLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingItem_CartLocalServiceUtil;
-import com.htmsd.slayer.service.impl.ShoppingItem_CartLocalServiceImpl;
+import com.htmsd.util.CommonUtil;
 import com.htmsd.util.HConstants;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
@@ -62,7 +63,9 @@ public class ShoppingListPortlet extends MVCPortlet {
 		if (Validator.isNotNull(shoppingItem_Cart)) {
 			SessionErrors.add(actionRequest, "item-exist");
 		} else {
-			ShoppingItem_CartLocalServiceUtil.insertItemsToCart(shoppingCart.getCartId(), itemId);
+			ShoppingItem shoppingItem = CommonUtil.getShoppingItem(itemId);
+			double totalPrice = (Validator.isNotNull(shoppingItem) ? shoppingItem.getTotalPrice():0);
+			ShoppingItem_CartLocalServiceUtil.insertItemsToCart(HConstants.INITIAL_QUANTITY, shoppingCart.getCartId(), itemId, totalPrice);
 		}
 		
 		actionResponse.setRenderParameter(HConstants.JSP_PAGE, HConstants.PAGE_SHOPPING_LIST_DETAILS);

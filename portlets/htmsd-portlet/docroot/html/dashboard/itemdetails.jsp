@@ -19,9 +19,7 @@
 	.ui-widget-overlay,.ui-dialog-content{
 		cursor:zoom-out;
 	}
-	.cke_reset {
-		width : 500px;
-	}
+
   </style>
  </head> 
  
@@ -60,11 +58,10 @@
 		%>
 	
 		<liferay-ui:header title='<%=isAdmin ? "update-item" : "view-item" %>' backLabel="go-back" backURL='<%=backURL%>'/>
-		<liferay-ui:header title='<%=itemStatus%>'/>
 		<c:if test="<%=status == HConstants.REJECT %>">
 			<liferay-ui:header title='<%=item.getRemark()%>'/>
 		</c:if>
-		<aui:fieldset>
+		<aui:fieldset label="<%=itemStatus%>">
 			<aui:form action="<%=updateItemURL %>" enctype="multipart/form-data" method="POST" name="itemDetailForm">
 				<aui:input name="userId" type="hidden" value="<%=item.getUserId() %>" />
 				<aui:input name="userName" type="hidden" value="<%=item.getUserName() %>" />
@@ -82,7 +79,7 @@
 					%>   
 				</aui:select>
 				<liferay-ui:message key="description" />
-				<liferay-ui:input-editor />
+				<liferay-ui:input-editor cssClass="editor_padding"/>
 				<aui:input name="<%=HConstants.DESCRIPTION %>" value="<%=item.getDescription()%>"  type="hidden"/>
 				<aui:layout>
 					<%
