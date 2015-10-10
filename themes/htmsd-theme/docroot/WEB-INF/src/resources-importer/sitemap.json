@@ -176,11 +176,25 @@
 			"friendlyURL": "/fish"
 		},
 		{
+			"columns": [
+				[
+					{
+			            "portletId": "101"
+			        }
+			    ]
+			],
 			"title": "Gallery",
 			"name": "Gallery",
 			"friendlyURL": "/gallery"
 		},
 		{
+			"columns": [
+				[
+					{
+			            "portletId": "101"
+			        }
+			    ]
+			],
 			"title": "Videos",
 			"name": "Videos",
 			"friendlyURL": "/video"
@@ -260,6 +274,19 @@
 			"title": "Cart",
 			"name": "Cart",
 			"friendlyURL": "/cart",
+			"hidden": "true"
+		},
+		{	
+			"columns": [
+				[
+					{
+			            "portletId": "3_WAR_htmsdportlet"
+			        }
+			    ]
+			], 
+			"title": "Search",
+			"name": "Search",
+			"friendlyURL": "/search",
 			"hidden": "true"
 		}
 	]

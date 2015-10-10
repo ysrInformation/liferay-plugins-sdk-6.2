@@ -48,8 +48,10 @@
 		<column name="companyId" type="long" />
 		<column name="userId" type="long" />
 		<column name="userName" type="String" />
+		<column name="userEmail" type="String" />
 		<column name="updateUserId" type="long" />
 		<column name="updateUserName" type="String" />
+		<column name="updateEmail" type="String" />
 		<column name="createDate" type="Date" />
 		<column name="modifiedDate" type="Date" />
 
@@ -64,6 +66,7 @@
 		<column name="status" type="int" />
 		<column name="imageIds" type="String" />
 		<column name="vedioURL" type="String" />
+		<column name="smallImage" type="long" />
 		<column name="remark" type="String" />
 	
 		<!-- Relationships -->

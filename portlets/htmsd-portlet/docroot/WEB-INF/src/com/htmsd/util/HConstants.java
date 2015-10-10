@@ -4,7 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 public interface HConstants {
-
+ 
 	public static String ITEM_ID = "itemId";
 	public static String NAME = "name";
 	public static String PRODUCT_CODE = "productCode";
@@ -38,6 +38,7 @@ public interface HConstants {
 	public static String WHOLESALE_QUANTITY="wholeSaleQuantity";
 	public static String WHOLESALE_PRICE="wholeSalePrice";
 	public static String STAFF_REMARKS="staffRemark";
+	public static String SMALL_IMAGE = "smallImage";
 
 	public static int IMAGES_UPLOAD_LIMIT = 5;
 	public static int NEW = 0;

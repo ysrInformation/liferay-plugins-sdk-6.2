@@ -19,7 +19,9 @@
 	.ui-widget-overlay,.ui-dialog-content{
 		cursor:zoom-out;
 	}
-
+	.cke_reset {
+		width : 500px;
+	}
   </style>
  </head> 
  
@@ -37,6 +39,9 @@
 		updateItemURL.setParameter("userId", String.valueOf(item.getUserId()));
 		updateItemURL.setParameter("backURL", backURL);
 		updateItemURL.setParameter("tab1", ParamUtil.getString(renderRequest, "tab1"));
+		if(!isAdmin) {
+			updateItemURL.setParameter(HConstants.status,String.valueOf(item.getStatus()));
+		}
 		long quantity = item.getQuantity();
 		List<Category> itemCategory = CategoryLocalServiceUtil.getCategoryByItemId(itemId);
 		long categoryId = 0l;
@@ -55,13 +60,15 @@
 		%>
 	
 		<liferay-ui:header title='<%=isAdmin ? "update-item" : "view-item" %>' backLabel="go-back" backURL='<%=backURL%>'/>
+		<liferay-ui:header title='<%=itemStatus%>'/>
 		<c:if test="<%=status == HConstants.REJECT %>">
 			<liferay-ui:header title='<%=item.getRemark()%>'/>
 		</c:if>
-		<aui:fieldset label="<%=itemStatus%>">
+		<aui:fieldset>
 			<aui:form action="<%=updateItemURL %>" enctype="multipart/form-data" method="POST" name="itemDetailForm">
 				<aui:input name="userId" type="hidden" value="<%=item.getUserId() %>" />
 				<aui:input name="userName" type="hidden" value="<%=item.getUserName() %>" />
+				<aui:input name="<%=HConstants.SMALL_IMAGE %>" type="hidden" value="<%=item.getSmallImage() %>" />
 				<aui:input name="<%=HConstants.NAME%>" required="true" value="<%= item.getName()%>" />
 				<aui:input name="<%=HConstants.PRODUCT_CODE %>"  value="<%=item.getProductCode() %>"/>
 				<aui:select name="<%=HConstants.CATEGORY_ID %>"   required="true" showEmptyOption="true">
@@ -75,7 +82,7 @@
 					%>   
 				</aui:select>
 				<liferay-ui:message key="description" />
-				<liferay-ui:input-editor cssClass="editor_padding"/>
+				<liferay-ui:input-editor />
 				<aui:input name="<%=HConstants.DESCRIPTION %>" value="<%=item.getDescription()%>"  type="hidden"/>
 				<aui:layout>
 					<%
@@ -155,14 +162,15 @@
 					<aui:input name="<%=HConstants.WHOLESALE_QUANTITY %>" />	
 					<aui:input name="<%=HConstants.WHOLESALE_PRICE %>" />
 				</div>
-				
-				<liferay-ui:message key="tags" />
-				<liferay-ui:asset-tags-selector className="<%=ShoppingItem.class.getName() %>" classPK="<%=itemId %>" />		
+				<div id="tags">
+					<liferay-ui:message key="tags" />
+					<liferay-ui:asset-tags-selector className="<%=ShoppingItem.class.getName() %>" classPK="<%=itemId %>" />
+				</div>		
 				<c:if test="<%=isAdmin%>">
-						<aui:select name="<%=HConstants.status %>" showEmptyOption="true" required="true" >
-							<aui:option value="<%=HConstants.APPROVE%>" label="approve" />
-							<aui:option value="<%=HConstants.REJECT %>" label="reject" />
-						</aui:select>
+					<aui:select name="<%=HConstants.status %>" showEmptyOption="true" required="true" >
+					<aui:option value="<%=HConstants.APPROVE%>" label="approve" />
+					<aui:option value="<%=HConstants.REJECT %>" label="reject" />
+				</aui:select>
 						<div id="remarkDiv" style="display:none;">
 							<aui:input name="<%=HConstants.REMARK %>" type="textarea" value="<%=item.getRemark()%>"/>
 						</div>

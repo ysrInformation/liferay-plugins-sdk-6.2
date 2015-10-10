@@ -14,11 +14,19 @@
 
 package com.htmsd.slayer.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import com.htmsd.slayer.model.ShoppingItem;
+import com.htmsd.slayer.service.ShoppingItemLocalServiceUtil;
 import com.htmsd.slayer.service.base.ShoppingItemLocalServiceBaseImpl;
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.Junction;
+import com.liferay.portal.kernel.dao.orm.Property;
+import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
@@ -53,10 +61,10 @@ public class ShoppingItemLocalServiceImpl
 	 */
 	
 	public ShoppingItem addItem(long groupId, long companyId, long userId,
-			String userName, long updateUserId, String updateUserName,
+			String userName, String userEmail,long updateUserId, String updateUserName, String updateEmail,
 			String productCode, String name, String description,
 			Double sellerPrice, Double totalPrice, long quantity, int status,
-			String imageIds, String vedioURL, String remark) {
+			String imageIds, String vedioURL, long smallImage , String remark) {
 
 		ShoppingItem shoppingItem = null;
 		try {
@@ -66,8 +74,10 @@ public class ShoppingItemLocalServiceImpl
 			shoppingItem.setCompanyId(companyId);
 			shoppingItem.setUserId(userId);
 			shoppingItem.setUserName(userName);
+			shoppingItem.setUserEmail(userEmail);
 			shoppingItem.setUpdateUserId(updateUserId);
 			shoppingItem.setUpdateUserName(updateUserName);
+			shoppingItem.setUpdateEmail(updateEmail);
 			shoppingItem.setProductCode(productCode);
 			shoppingItem.setName(name);
 			shoppingItem.setDescription(description);
@@ -77,6 +87,7 @@ public class ShoppingItemLocalServiceImpl
 			shoppingItem.setStatus(status);
 			shoppingItem.setImageIds(imageIds);
 			shoppingItem.setVedioURL(vedioURL);
+			shoppingItem.setSmallImage(smallImage);
 			shoppingItem.setCreateDate(new Date());
 			shoppingItem.setModifiedDate(new Date());
 			shoppingItem.setRemark(remark);
@@ -89,8 +100,8 @@ public class ShoppingItemLocalServiceImpl
 	}
 	
 	public ShoppingItem updateItem(long itemId, long groupId, long companyId,
-			long userId, String userName, long updateUserId, String updateUserName, String productCode, String name, String description,
-			Double sellerPrice, Double totalPrice, long quantity, int status, String imageIds, String vedioURL, String remark) {
+			long userId, String userName, String userEmail ,long updateUserId, String updateUserName, String updateEmail , String productCode, String name, String description,
+			Double sellerPrice, Double totalPrice, long quantity, int status, String imageIds, String vedioURL, long smallImage ,String remark) {
 
 		ShoppingItem shoppingItem = null;
 		try {
@@ -100,8 +111,10 @@ public class ShoppingItemLocalServiceImpl
 			shoppingItem.setCompanyId(companyId);
 			shoppingItem.setUserId(userId);
 			shoppingItem.setUserName(userName);
+			shoppingItem.setUserEmail(userEmail);
 			shoppingItem.setUpdateUserId(updateUserId);
 			shoppingItem.setUpdateUserName(updateUserName);
+			shoppingItem.setUpdateEmail(updateEmail);
 			shoppingItem.setProductCode(productCode);
 			shoppingItem.setName(name);
 			shoppingItem.setDescription(description);
@@ -111,6 +124,7 @@ public class ShoppingItemLocalServiceImpl
 			shoppingItem.setStatus(status);
 			shoppingItem.setImageIds(imageIds);
 			shoppingItem.setVedioURL(vedioURL);
+			shoppingItem.setSellerPrice(sellerPrice);
 			shoppingItem.setModifiedDate(new Date());
 			shoppingItem.setRemark(remark);
 			
@@ -396,6 +410,70 @@ public class ShoppingItemLocalServiceImpl
 		}
 		return count;
 	}
+
+	public  List<ShoppingItem> searchItems(int status, String keyword, int start, int end) {
+		
+		String likeKeyword = StringUtil.quote(keyword, StringPool.PERCENT);
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(ShoppingItem.class);
+		
+		Junction junctionOR = RestrictionsFactoryUtil.disjunction();
+		
+		Property property = PropertyFactoryUtil.forName("userName");
+		junctionOR.add(property.like(likeKeyword));
+		
+		property = PropertyFactoryUtil.forName("updateUserName");
+		junctionOR.add(property.like(likeKeyword));
+		
+		property = PropertyFactoryUtil.forName("name");
+		junctionOR.add(property.like(likeKeyword));
+		
+		property = PropertyFactoryUtil.forName("productCode");
+		junctionOR.add(property.like(likeKeyword));
+		
+		dynamicQuery.add(junctionOR);
+
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("status", status));
+		
+		List<ShoppingItem> searchList = new ArrayList<ShoppingItem>();
+		try {
+			searchList =  ShoppingItemLocalServiceUtil.dynamicQuery(dynamicQuery, start, end);
+		} catch (SystemException e) {
+		}
+		return searchList;
+	}
+	
+	
+	public  int searchCount(int status, String keyword) {
+		
+		String likeKeyword = StringUtil.quote(keyword, StringPool.PERCENT);
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(ShoppingItem.class);
+		
+		Junction junctionOR = RestrictionsFactoryUtil.disjunction();
+		
+		Property property = PropertyFactoryUtil.forName("userName");
+		junctionOR.add(property.like(likeKeyword));
+		
+		property = PropertyFactoryUtil.forName("updateUserName");
+		junctionOR.add(property.like(likeKeyword));
+		
+		property = PropertyFactoryUtil.forName("name");
+		junctionOR.add(property.like(likeKeyword));
+		
+		property = PropertyFactoryUtil.forName("productCode");
+		junctionOR.add(property.like(likeKeyword));
+		
+		dynamicQuery.add(junctionOR);
+
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("status", status));
+		int searchCount = 0;
+		try {
+			searchCount =  (int) ShoppingItemLocalServiceUtil.dynamicQueryCount(dynamicQuery);
+		} catch (SystemException e) {
+		}
+		return  searchCount;
+		
+	}
+	
 	
 	public List<ShoppingItem> getItemByCategoryId(String sort, long categoryId, int start, int end) {
 		return shoppingItemFinder.getItemByCategoryId(sort, categoryId, start, end);

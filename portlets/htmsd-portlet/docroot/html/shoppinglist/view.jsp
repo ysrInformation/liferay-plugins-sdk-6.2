@@ -4,6 +4,7 @@
 <%
 	HttpServletRequest httpRequest = PortalUtil.getOriginalServletRequest(request);
 	String searchParam = httpRequest.getParameter("search-param");
+	if(Validator.isNull(searchParam)) searchParam = StringPool.BLANK;
 	String noOfItems  = portletPreferences.getValue("noOfItems", "8");
 	String categoryToDisplay  = portletPreferences.getValue("categoryToDisplay", "-1");
 	String sortBy = ParamUtil.getString(request, "sortBy", "totalPrice DESC");
@@ -224,5 +225,9 @@
 			window.location.href = '<%=themeDisplay.getPortalURL()%>' + ajaxURL;
 		});
 	}
+	
+	$(function() {
+		$('#search').val('<%=searchParam%>');
+	})
 	
 </aui:script>
