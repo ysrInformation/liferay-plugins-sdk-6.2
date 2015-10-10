@@ -172,7 +172,7 @@
 	function searchItems() {
 		var searchParam = $('#search').val();
 		if(searchParam) {
-			window.location.href = '$themeDisplay.getURLCurrent()?search-param=' + searchParam;
+			window.location.href = '/search?search-param=' + searchParam;
 		} 
 	}
 	
