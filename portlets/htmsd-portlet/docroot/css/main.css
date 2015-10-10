@@ -186,7 +186,7 @@
 }
 
 .cart-qty {
-	width: 50px !important;
+	width: 65px !important;
 }
 
 .cart-table .product-description {
@@ -207,7 +207,7 @@
 	border-collapse: collapse;
 }
 
-.cart-table td, table th {
+.cart-table td,.cart-table table th {
 	border: 1px solid #ddd;
 }
 
@@ -219,7 +219,7 @@
 	border-bottom: 0;
 }
 
-.cart-table tr td:first-child, table tr th:first-child {
+.cart-table tr td:first-child, .cart-table table tr th:first-child {
 	border-left: 0;
 }
 
@@ -254,6 +254,10 @@
 .Not.Delivered, .Order.Cancelled {
 	color : red;
 	font-weight: bold;
+}
+
+.txtmargin {
+	margin-bottom: 1%;
 }
 
 /************Dashboard*****************/
