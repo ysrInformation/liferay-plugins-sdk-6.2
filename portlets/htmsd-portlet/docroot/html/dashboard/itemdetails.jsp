@@ -162,9 +162,10 @@
 					<aui:input name="<%=HConstants.WHOLESALE_QUANTITY %>" />	
 					<aui:input name="<%=HConstants.WHOLESALE_PRICE %>" />
 				</div>
-				
-				<liferay-ui:message key="tags" />
-				<liferay-ui:asset-tags-selector className="<%=ShoppingItem.class.getName() %>" classPK="<%=itemId %>" />		
+				<div id="tags">
+					<liferay-ui:message key="tags" />
+					<liferay-ui:asset-tags-selector className="<%=ShoppingItem.class.getName() %>" classPK="<%=itemId %>" />
+				</div>		
 				<c:if test="<%=isAdmin%>">
 					<aui:select name="<%=HConstants.status %>" showEmptyOption="true" required="true" >
 					<aui:option value="<%=HConstants.APPROVE%>" label="approve" />
