@@ -1,9 +1,12 @@
 package com.htmsd.util;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import javax.swing.text.NumberFormatter;
 
 import com.htmsd.slayer.model.Invoice;
 import com.htmsd.slayer.model.ShoppingCart;
@@ -348,14 +351,25 @@ public class CommonUtil {
 			remainingQnty = ((int) totalStock - userQuantity);
 		} else if(totalStock == -1) {
 			remainingQnty = HConstants.MAX_QUANTITY;
-		} 
+		} else if(totalStock == 1) {
+			remainingQnty = 1;
+		}
+		
 		quantityArray = new int[remainingQnty];
 		if (remainingQnty > 0) {
-			for (int i=1;i<=remainingQnty;i++) {
+			for (int i=1;i<=(remainingQnty);i++) {
 				quantityArray[i-1] = i;
 			}
 		}
 		
 		return quantityArray;
+	}
+	
+	public static String getPriceInNumberFormat(double totalPrice, String priceSymbol) {
+		
+		NumberFormat numberFormat = NumberFormat.getInstance();
+		numberFormat.setMinimumFractionDigits(2);
+		String formattedPrice = priceSymbol+StringPool.SPACE+numberFormat.format(totalPrice);
+		return formattedPrice;
 	}
 }

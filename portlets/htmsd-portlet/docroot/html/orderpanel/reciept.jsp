@@ -1,5 +1,9 @@
 <%@ include file="/html/orderpanel/init.jsp"%>
 
+<head>
+	<link rel="stylesheet" type="text/css" href="<%= request.getContextPath()+"/css/main.css" %>"> 
+</head>
+
 <%
 	int slno = 1;
 	int orderStatus = 0;
@@ -38,42 +42,42 @@
 	DecimalFormat decimalFormat = new DecimalFormat("#.00");
 %>
 
-<div class="print-btn">
-	<liferay-ui:icon-menu>
-		<liferay-ui:icon image="print" url="javascript:printArticle();" message="print"  />
-	</liferay-ui:icon-menu>	
-</div>
-
 <div id="print-area">
+	<div class="print-btn">
+		<liferay-ui:icon-menu>
+			<liferay-ui:icon image="print" url="javascript:printArticle();" message="print"  />
+		</liferay-ui:icon-menu>	
+	</div>
+	
 	<div class="text-center">
 		<liferay-ui:journal-article articleId="BILL_LOGO" groupId="<%= themeDisplay.getScopeGroupId() %>"/>
 	</div><hr/>
-	<div class="row-fluid">
-		<div class="span2">
+	<div class="row-fluid txtmargin">
+		<div class="span5">
 			<strong><liferay-ui:message key="name"/></strong>
 			<label><%= fullName %></label>
 		</div>
-		<div class="span2">
+		<div class="span5">
 			<strong><liferay-ui:message key="email"/></strong>
 			<label><%= emailAddress %></label>
 		</div>
 	</div>
-	<div class="row-fluid">
-		<div class="span2">
+	<div class="row-fluid txtmargin">
+		<div class="span5">
 			<strong><liferay-ui:message key="mobile-number"/></strong>
 			<label><%= mobileNumber %></label>
 		</div>
-		<div class="span2">
+		<div class="span5">
 			<strong><liferay-ui:message key="alternative-number"/></strong>
 			<label><%= altNumber %></label>		
 		</div>
 	</div>
-	<div class="row-fluid">
-		<div class="span2">
+	<div class="row-fluid txtmargin">
+		<div class="span5">
 			<strong><liferay-ui:message key="bill-no"/></strong>
 			<label><%= CommonUtil.getBillNumber(orderId) %></label>
 		</div>
-		<div class="span2">
+		<div class="span5">
 			<strong><liferay-ui:message key="shipping-address"/></strong>
 			<label><%= sb.toString() %></label>
 		</div>
@@ -107,7 +111,7 @@
 				<tr>
 					<td><%= StringPool.BLANK %></td>
 					<td colspan="2" class="heading text-center"><liferay-ui:message key="amount-payable"/></td>
-					<td class="heading text-center"><%= CommonUtil.getPriceFormat(totalPrice) %></td>
+					<td class="heading text-center"><%= CommonUtil.getPriceInNumberFormat(totalPrice, HConstants.RUPEE_SYMBOL) %></td>
 				</tr>
 			</tbody>	
 		</table>

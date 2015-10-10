@@ -62,7 +62,7 @@
 </div>
 
 <div id="ordered-items">
-	<div class="row-fluid">
+	<div class="row-fluid txtmargin">
 		<div class="span5">
 			<strong><liferay-ui:message key="name"/></strong>
 			<label><%= fullName %></label>
@@ -72,7 +72,7 @@
 			<label><%= emailAddress %></label>
 		</div>
 	</div>
-	<div class="row-fluid">
+	<div class="row-fluid txtmargin">
 		<div class="span5">
 			<strong><liferay-ui:message key="mobile-number"/></strong>
 			<label><%= mobileNumber %></label>
@@ -82,7 +82,7 @@
 			<label><%= altNumber %></label>		
 		</div>
 	</div>
-	<div class="row-fluid">
+	<div class="row-fluid txtmargin">
 		<div class="span5">
 			<strong><liferay-ui:message key="bill-no"/></strong>
 			<label><%= CommonUtil.getBillNumber(orderId) %></label>

@@ -88,4 +88,7 @@ public interface HConstants {
 	public static final String EMAIL_SUBJECT ="Subject";
 	public static final String EMAIL_MESSAGE ="Message";
 	
+	//Price Symbol
+	public static final String RUPEE_SYMBOL = "Rs.";
+	
 }
