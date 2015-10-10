@@ -36,7 +36,7 @@
 	
 	String emailAddress = shoppingOrder.getShippingEmailAddress();
 	String altNumber = (Validator.isNotNull(shoppingOrder.getShippingAltMoble()) ? shoppingOrder.getShippingAltMoble():"N/A");
-	String mobileNumber = (Validator.isNotNull(shoppingOrder.getShippingMoble()) ? shoppingOrder.getShippingAltMoble():"N/A");
+	String mobileNumber = (Validator.isNotNull(shoppingOrder.getShippingMoble()) ? shoppingOrder.getShippingMoble():"N/A");
 
 	List<ShoppingOrderItem> shoppingOrderItems = CommonUtil.getShoppingOrderItems(orderId);
 	DecimalFormat decimalFormat = new DecimalFormat("#.00");
