@@ -153,6 +153,10 @@
 		<finder return-type="Collection" name="UserId">
 			<finder-column name="userId"/>
 		</finder>
+		
+		<finder return-type="Collection" name="OrderStatus">
+			<finder-column name="orderStatus"/>
+		</finder>
 
 	</entity>
 	

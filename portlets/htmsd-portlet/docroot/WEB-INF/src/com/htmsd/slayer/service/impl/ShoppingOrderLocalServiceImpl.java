@@ -14,13 +14,25 @@
 
 package com.htmsd.slayer.service.impl;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import com.htmsd.slayer.model.ShoppingOrder;
 import com.htmsd.slayer.model.impl.ShoppingOrderImpl;
+import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
 import com.htmsd.slayer.service.base.ShoppingOrderLocalServiceBaseImpl;
+import com.htmsd.util.HConstants;
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.Junction;
+import com.liferay.portal.kernel.dao.orm.Property;
+import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 /**
@@ -118,5 +130,121 @@ public class ShoppingOrderLocalServiceImpl
 			e.printStackTrace();
 		}
 		return shoppingOrders;
+	}
+	
+	public List<ShoppingOrder> getShoppingOrderByTabNames(int start, int end, String tabName) {
+		
+		List<ShoppingOrder> shoppingOrders = Collections.emptyList();
+		boolean isPendingOrderTab = tabName.equalsIgnoreCase("Pending");
+		boolean isShippingOrderTab = tabName.equalsIgnoreCase("Shipping");
+		boolean isOrderCancelledTab = tabName.equalsIgnoreCase("Order Cancelled");
+		
+		if (isPendingOrderTab) {
+			shoppingOrders = getShoppingOrders(HConstants.PENDING, start, end);
+		} else if (isShippingOrderTab) {
+			shoppingOrders = getShoppingOrders(HConstants.SHIPPING, start, end);
+		} else if(isOrderCancelledTab) { 
+			shoppingOrders = getShoppingOrders(HConstants.CANCEL_ORDER, start, end);
+		} else {
+			shoppingOrders = getShoppingOrders(HConstants.DELIVERED, start, end);
+		}
+		
+		return shoppingOrders;
+	}
+	
+	public List<ShoppingOrder> getShoppingOrders(int orderStatus, int start, int end) {
+		
+		List<ShoppingOrder> pendingOrderList = new ArrayList<ShoppingOrder>();
+
+		try {
+			pendingOrderList = shoppingOrderPersistence.findByOrderStatus(orderStatus, start, end);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return pendingOrderList;
+	}
+	
+	public int getCountByOrderStatus(int orderStatus) {
+		
+		int count = 0;
+		try {
+			shoppingOrderPersistence.countByOrderStatus(orderStatus);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		return count;
+	}
+	
+	public  List<ShoppingOrder> searchItems(int orderStatus, String keyword, int start, int end) {
+		
+		System.out.println("Searched Method  :"+orderStatus); 
+		String likeKeyword = StringUtil.quote(keyword, StringPool.PERCENT);
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(ShoppingOrder.class);
+		
+		Junction junctionOR = RestrictionsFactoryUtil.disjunction();
+		
+		Property property = PropertyFactoryUtil.forName("shippingFirstName");
+		junctionOR.add(property.like(likeKeyword));
+		
+		property = PropertyFactoryUtil.forName("shippingLastName");
+		junctionOR.add(property.like(likeKeyword));
+		
+		dynamicQuery.add(junctionOR);
+
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("orderStatus", orderStatus));
+		
+		List<ShoppingOrder> searchList = new ArrayList<ShoppingOrder>();
+		try {
+			searchList =  ShoppingOrderLocalServiceUtil.dynamicQuery(dynamicQuery, start, end);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return searchList;
+	}
+	
+	public int searchCount(int orderStatus, String keyword) {
+		
+		String likeKeyword = StringUtil.quote(keyword, StringPool.PERCENT);
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(ShoppingOrder.class);
+		
+		Junction junctionOR = RestrictionsFactoryUtil.disjunction();
+		
+		Property property = PropertyFactoryUtil.forName("shippingFirstName");
+		junctionOR.add(property.like(likeKeyword));
+		
+		property = PropertyFactoryUtil.forName("shippingLastName");
+		junctionOR.add(property.like(likeKeyword));
+		
+		dynamicQuery.add(junctionOR);
+
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("orderStatus", orderStatus));
+		
+		int searchCount = 0;
+		try {
+			searchCount = (int) ShoppingOrderLocalServiceUtil.dynamicQueryCount(dynamicQuery);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return searchCount;
+	}
+	
+	public int getOrderStatusByTabName(String tabName) {
+		
+		int orderStatus = 0;
+		if (Validator.isNotNull(tabName)) {
+			if (tabName.equalsIgnoreCase("Pending")) {
+				orderStatus = HConstants.PENDING;
+			} else if (tabName.equalsIgnoreCase("Shipping")) {
+				orderStatus = HConstants.SHIPPING;
+			} else if (tabName.equalsIgnoreCase("Order Cancelled")) {
+				orderStatus = HConstants.CANCEL_ORDER;
+			} else {
+				orderStatus = HConstants.DELIVERED;
+			}
+		}
+		return orderStatus;
 	}
 }
