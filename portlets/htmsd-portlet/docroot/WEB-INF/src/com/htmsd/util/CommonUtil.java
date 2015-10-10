@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.swing.text.NumberFormatter;
 
+import com.htmsd.slayer.NoSuchShoppingItem_CartException;
 import com.htmsd.slayer.model.Invoice;
 import com.htmsd.slayer.model.ShoppingCart;
 import com.htmsd.slayer.model.ShoppingItem;
@@ -324,12 +325,14 @@ public class CommonUtil {
 		return orderStatusString;
 	}
 	
-	public static int[] getItemsQuantity(long itemId) {
+	public static int[] getItemsQuantity(long itemId, long cartId) {
 		
-		int userQuantity = 0;
+		int allUserQuantity = 0;
 		int remainingQnty = 0;
+		int userQnty = 0;
 		long totalStock = 0l;
 		int[] quantityArray = null;
+		ShoppingItem_Cart shoppingItem_Cart = null;
 		ShoppingItem shoppingItem = CommonUtil.getShoppingItem(itemId);
 		List<ShoppingItem_Cart> shoppingItem_Carts = new ArrayList<ShoppingItem_Cart>();
 		
@@ -340,19 +343,29 @@ public class CommonUtil {
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
+			try {
+				shoppingItem_Cart = ShoppingItem_CartLocalServiceUtil.findByCartAndItemId(cartId, itemId);
+			} catch (NoSuchShoppingItem_CartException e) {
+				_log.error("No such Item exist with the cartId"+e); 
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			
 			if (Validator.isNotNull(shoppingItem_Carts) && shoppingItem_Carts.size() > 0) {
 				for (ShoppingItem_Cart shoppingItem_cart : shoppingItem_Carts) {
-					userQuantity += shoppingItem_cart.getQuantity();
+					allUserQuantity += shoppingItem_cart.getQuantity();
 				}
 			}
+			userQnty = (Validator.isNotNull(shoppingItem_Cart) && shoppingItem_Cart.getQuantity() > 0) ? 
+					shoppingItem_Cart.getQuantity()  : 0;
 		}
 		
-		if ((userQuantity) < totalStock) {
-			remainingQnty = ((int) totalStock - userQuantity);
+		if ((allUserQuantity) < totalStock) {
+			remainingQnty = ((int) totalStock - allUserQuantity) + userQnty;
 		} else if(totalStock == -1) {
-			remainingQnty = HConstants.MAX_QUANTITY;
-		} else if(totalStock == 1) {
-			remainingQnty = 1;
+			remainingQnty = HConstants.MAX_QUANTITY + userQnty;
+		} else {
+			remainingQnty = userQnty;
 		}
 		
 		quantityArray = new int[remainingQnty];

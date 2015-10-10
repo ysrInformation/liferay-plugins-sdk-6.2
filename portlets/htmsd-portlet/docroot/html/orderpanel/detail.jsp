@@ -149,7 +149,7 @@
 			</aui:select>
 		
 			<aui:button-row>
-				<aui:button type="button" value="update" onClick="updateStatus();"/> 
+				<aui:button type="button" cssClass="btn-primary" value="update" onClick="updateStatus();"/> 
 			</aui:button-row>
 		</aui:form>
 	</c:if>
