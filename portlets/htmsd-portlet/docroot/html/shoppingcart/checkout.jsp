@@ -50,7 +50,7 @@
 	        <aui:validator name="rangeLength" errorMessage="please-enter-valid-mobile-number">[10,10]</aui:validator>
 		</aui:input>
 		
-		<aui:input type="text" name="altNumber" label="alt-number" required="true" maxLength="10">
+		<aui:input type="text" name="altNumber" label="alt-number" maxLength="10">
 			<aui:validator name="digits"/>
 	        <aui:validator name="rangeLength" errorMessage="please-enter-valid-mobile-number">[10,10]</aui:validator>
 		</aui:input>
@@ -75,7 +75,7 @@
 		<aui:select name="state" label="state" id="state" />
 	</aui:column>
 
-	<aui:button-row>
+	<aui:button-row cssClass="pull-right">
 		<aui:button type="submit" value='<%= LanguageUtil.get(portletConfig, locale, "buy-now")%>'/>
 	</aui:button-row>
 	

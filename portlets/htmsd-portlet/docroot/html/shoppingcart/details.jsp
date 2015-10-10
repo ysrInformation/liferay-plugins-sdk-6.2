@@ -33,6 +33,7 @@
 	String continueShoppingURL = themeDisplay.getPortalURL()+"/web/guest/exotic-pet-birds";
 %>
 
+<div class="cart-details-page">
 <c:choose>
 	<c:when test='<%= (Validator.isNotNull(shoppingItem_Carts) && shoppingItem_Carts.size() > 0) %>'>
 		<table width="100%" class="cart-table">
@@ -72,7 +73,7 @@
 												String showInPopup = "javascript:showPopup('"+detailsURL.toString()+"','800','1200','Product Details');";
 												%>
 												<a href="<%= showInPopup %>">
-													<img class="product-image" width="100" height="100" src="<%= imageURL %>">
+													<img width="100" height="100" src="<%= imageURL %>" style="margin-top:5%;">
 												</a>
 												<c:if test="<%= !imageExist %>"><liferay-ui:message key="no-image"/></c:if>
 											</c:when>
@@ -116,7 +117,7 @@
 					<td style="width 20%" colspan="3">
 						<div class="pull-right price-div">
 							<span class="price-text"><liferay-ui:message key="amount-payable"/>:</span> 
-							<span class="price"><%= CommonUtil.getPriceFormat(totalPrice) %></span>
+							<span class="price"><%= CommonUtil.getPriceInNumberFormat(totalPrice, HConstants.RUPEE_SYMBOL) %></span>
 						</div>
 					</td>
 				</tr>
@@ -134,6 +135,7 @@
 
 <div id="loader-icon" style="display:none;"> 
 	<img src="<%=request.getContextPath()%>/images/loader.gif" style="width: 100px; height: 100px"/>
+</div>
 </div>
 
 <aui:script>
