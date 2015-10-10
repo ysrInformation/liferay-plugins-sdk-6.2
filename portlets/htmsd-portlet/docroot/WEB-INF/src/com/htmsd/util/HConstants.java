@@ -4,7 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 public interface HConstants {
-
+ 
 	public static String ITEM_ID = "itemId";
 	public static String NAME = "name";
 	public static String PRODUCT_CODE = "productCode";
