@@ -4,6 +4,7 @@
 		id="com.htmsd.slayer.service.persistence.ShoppingItemFinderImpl.findItemByTagName">
 		   <![CDATA[
 			    SELECT 
+			  		DISTINCT
 					si.* 
 				FROM 
 					assetentry ae
@@ -15,13 +16,14 @@
 					assettag ast
 				ON 
 					ast.tagId = ae_at.tagId
-                    AND ast.name like ?
 				INNER JOIN  
 					htmsd_ShoppingItem si
 				ON 
 					si.itemId = ae.classPK
                     AND NOT si.quantity = 0
                     AND si.status = 1
+                    OR si.name like ?
+                    OR ast.name like ?
    				[$sort]
 		 	]]>
 	</sql>
