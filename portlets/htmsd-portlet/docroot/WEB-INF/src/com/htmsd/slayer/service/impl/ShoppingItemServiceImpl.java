@@ -106,15 +106,8 @@ public class ShoppingItemServiceImpl extends ShoppingItemServiceBaseImpl {
 			jsonObject.put(HConstants.NAME, shoppingItem.getName());
 			jsonObject.put(HConstants.DESCRIPTION, StringUtil.shorten(shoppingItem.getDescription(), 50, ". . ."));
 			jsonObject.put(HConstants.TOTAL_PRICE, shoppingItem.getTotalPrice());
-			
-			String imageIds = shoppingItem.getImageIds();
-			long imageId = 0l;
-			
-			if(Validator.isNotNull(imageIds)) {
-				imageId = (imageIds.split(",").length > 0) ? Long.valueOf(imageIds.split(",")[0]) : 0;
-			}
-			
-			jsonObject.put(HConstants.IMAGE, CommonUtil.getThumbnailpath(imageId, groupId, true));
+			long imageId = shoppingItem.getSmallImage();
+			jsonObject.put(HConstants.IMAGE, CommonUtil.getThumbnailpath(imageId, groupId, false));
 			jsonArray.put(jsonObject);
 		}
 	}
