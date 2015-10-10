@@ -88,7 +88,7 @@
 		</liferay-ui:search-container-column-text>
 		
 		<liferay-ui:search-container-column-text  name="product-code"  property="productCode"/>
-		
+		 
 		<liferay-ui:search-container-column-text name="item-title" >
 			<portlet:renderURL var="historyURL">
 				<portlet:param name="jspPage" value="/html/dashboard/itemhistory.jsp"/>
