@@ -14,12 +14,27 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 /**
  * Portlet implementation class OrderPanelPortlet
  */
 public class OrderPanelPortlet extends MVCPortlet {
+	
+	@Override
+	public void processAction(ActionRequest actionRequest,
+			ActionResponse actionResponse) throws IOException, PortletException {
+
+		String keywords = ParamUtil.getString(actionRequest, "keywords");
+		String tabName = ParamUtil.getString(actionRequest, "tabName");
+		if (keywords.isEmpty()) {
+			super.processAction(actionRequest, actionResponse);
+		} else {
+			PortalUtil.copyRequestParameters(actionRequest, actionResponse);
+		}
+		actionResponse.setRenderParameter("tab1", tabName);
+	}
 	
 	public void updateOrderStatus(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortletException {
