@@ -31,7 +31,15 @@
 		
 		<column name="categories" type="Collection" entity="ShoppingItem" mapping-table="ShopppingItem_Category"/>
 		
-	</entity>
+		<finder return-type="Collection" name="Parent" >
+			<finder-column name="parentCategoryId" />
+		</finder>
+		
+		<finder return-type="Collection" name="Child">
+			<finder-column name="parentCategoryId" comparator="!="/>
+		</finder>
+		
+		</entity>
 
 	<entity name="ShoppingItem" local-service="true" remote-service="true">
 
@@ -272,6 +280,7 @@
 		<column name="createDate" type="Date"/>
 		<column name="userId" type="long" />
 		<column name="userName" type="String" />
+		<column name="userEmail" type="String" />
 		<column name="action" type="int" />
 		<column name="remark" type="String" />
 		

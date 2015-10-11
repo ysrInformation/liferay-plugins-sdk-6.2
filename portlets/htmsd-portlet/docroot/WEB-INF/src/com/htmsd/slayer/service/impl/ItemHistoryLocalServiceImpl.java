@@ -43,7 +43,7 @@ public class ItemHistoryLocalServiceImpl extends ItemHistoryLocalServiceBaseImpl
 	 */
 	
 	
-	public void  addItemHistory(long itemId, long userId, String userName, int action, String remark) {
+	public void  addItemHistory(long itemId, long userId, String userName, String userEmail, int action, String remark) {
 		
 		ItemHistory itemHistory = null;
 		try {
@@ -56,6 +56,7 @@ public class ItemHistoryLocalServiceImpl extends ItemHistoryLocalServiceBaseImpl
 		itemHistory.setCreateDate(new Date());
 		itemHistory.setUserId(userId);
 		itemHistory.setUserName(userName);
+		itemHistory.setUserEmail(userEmail);
 		itemHistory.setAction(action);
 		itemHistory.setRemark(remark);
 

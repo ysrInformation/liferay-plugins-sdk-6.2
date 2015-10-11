@@ -402,18 +402,14 @@ public class ShoppingItemLocalServiceImpl
 
 	public int getByStatusCount(int status) {
 		
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(ShoppingItem.class);
-		dynamicQuery.add(RestrictionsFactoryUtil.ne("quantity", (long)0));
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("status", status));
-		
-		long count = 0;
+		int count = 0;
 		try {
-			count = shoppingItemLocalService.dynamicQueryCount(dynamicQuery);
+			count = shoppingItemPersistence.countByStatus(status);
 		} catch (SystemException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return (int)count;
+		return count;
 	}
 
 	public  List<ShoppingItem> searchItems(int status, String keyword, int start, int end) {

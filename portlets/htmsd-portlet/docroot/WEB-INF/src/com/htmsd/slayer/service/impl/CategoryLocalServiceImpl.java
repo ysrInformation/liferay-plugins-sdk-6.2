@@ -14,6 +14,7 @@
 
 package com.htmsd.slayer.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class CategoryLocalServiceImpl extends CategoryLocalServiceBaseImpl {
 	 */
 	
 
-	public Category addCategory(long groupId, long companyId, long userId, String name, String description) {
+	public Category addCategory(long groupId, long companyId, long userId, String name, String description, long parentCategoryId) {
 		
 		Category category = null;
 		try {
@@ -60,7 +61,7 @@ public class CategoryLocalServiceImpl extends CategoryLocalServiceBaseImpl {
 			category.setModifiedDate(null);
 			category.setName(name);
 			category.setDescription(description);
-			category.setParentCategoryId(0l);
+			category.setParentCategoryId(parentCategoryId);
 			
 			categoryLocalService.addCategory(category);
 		} catch (SystemException e) {
@@ -69,7 +70,7 @@ public class CategoryLocalServiceImpl extends CategoryLocalServiceBaseImpl {
 		return category;
 	}
 	
-	public Category updateTag(long tagId, long groupId, long companyId, long userId, String name) {
+	public Category updateTag(long tagId, long groupId, long companyId, long userId, String name, long parentCategoryId) {
 			
 		Category category = null;
 		try {
@@ -81,7 +82,7 @@ public class CategoryLocalServiceImpl extends CategoryLocalServiceBaseImpl {
 			category.setModifiedDate(new Date());
 			category.setName(name);
 			category.setDescription(name);
-			category.setParentCategoryId(0l);
+			category.setParentCategoryId(parentCategoryId);
 			
 			categoryLocalService.updateCategory(category);
 		} catch (SystemException e) {
@@ -108,6 +109,72 @@ public class CategoryLocalServiceImpl extends CategoryLocalServiceBaseImpl {
 		}
 	}
 	
+	public List<Category> getByParent(long parentCategoryId) {
+		
+		List<Category> categories = new ArrayList<Category>();
+		try {
+			categories = categoryPersistence.findByParent(parentCategoryId);
+		} catch (SystemException e) {
+			_log.error(e);
+		}
+		return categories;
+	}
+	
+	public List<Category> getByParent(long parentCategoryId, int start, int end) {
+		
+		List<Category> categories = new ArrayList<Category>();
+		try {
+			categories = categoryPersistence.findByParent(parentCategoryId, start, end);
+		} catch (SystemException e) {
+			_log.error(e);
+		}
+		return categories;
+	}
+	
+	public int getByParentCount(long parentCategoryId) {
+		
+		int categoriesCount = 0;
+		try {
+			categoriesCount = categoryPersistence.countByParent(parentCategoryId);
+		} catch (SystemException e) {
+			_log.error(e);
+		}
+		return categoriesCount;
+	}
+	
+	
+	public List<Category> getByChild(long parentCategoryId) {
+		
+		List<Category> categories = new ArrayList<Category>();
+		try {
+			categories = categoryPersistence.findByChild(parentCategoryId);
+		} catch (SystemException e) {
+			_log.error(e);
+		}
+		return categories;
+	}
+	
+	public List<Category> getByChild(long parentCategoryId, int start, int end) {
+		
+		List<Category> categories = new ArrayList<Category>();
+		try {
+			categories = categoryPersistence.findByChild(parentCategoryId, start, end);
+		} catch (SystemException e) {
+			_log.error(e);
+		}
+		return categories;
+	}
+	
+	public int getByChildCount(long parentCategoryId) {
+		
+		int categoriesCount = 0;
+		try {
+			categoriesCount = categoryPersistence.countByChild(parentCategoryId);
+		} catch (SystemException e) {
+			_log.error(e);
+		}
+		return categoriesCount;
+	}
 	public void removeMapping(long itemId) {
 		
 		categoryFinder.deleteCatItemByItemId(itemId);
