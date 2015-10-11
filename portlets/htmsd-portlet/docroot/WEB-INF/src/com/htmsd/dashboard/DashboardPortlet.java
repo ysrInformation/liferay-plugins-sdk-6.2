@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,14 +12,22 @@ import javax.imageio.ImageIO;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
+import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceResponse;
 
+import com.htmsd.slayer.model.Category;
 import com.htmsd.slayer.model.ShoppingItem;
+import com.htmsd.slayer.service.CategoryLocalServiceUtil;
 import com.htmsd.slayer.service.ItemHistoryLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingItemLocalServiceUtil;
 import com.htmsd.util.HConstants;
 import com.htmsd.util.NotificationUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSON;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
@@ -46,6 +55,30 @@ public class DashboardPortlet extends MVCPortlet {
 
 	private  long smallImageId = 0;
 	
+	
+	@Override
+	public void serveResource(ResourceRequest resourceRequest,
+			ResourceResponse resourceResponse) throws IOException,
+			PortletException {
+		
+	String resourceId = resourceRequest.getResourceID();
+	JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+
+	if(resourceId.equals("getCategoryId")) {
+		long parentCategoryId = ParamUtil.getLong(resourceRequest, "parentCategoryId");
+		List<Category> categories = CategoryLocalServiceUtil.getByParent(parentCategoryId);
+		for(Category category : categories) {
+			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+			jsonObject.put("categoryName", category.getName());
+			jsonObject.put("categoryId", category.getCategoryId());
+			jsonArray.put(jsonObject);
+		}
+	}
+	PrintWriter printWriter = resourceResponse.getWriter();
+	printWriter.write(jsonArray.toString());
+	printWriter.flush();
+	}
+
 	@Override
 	public void processAction(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortletException {
@@ -104,7 +137,7 @@ public class DashboardPortlet extends MVCPortlet {
 					name, description, sellerPrice, sellerPrice, quantity, HConstants.NEW,
 					StringUtil.merge(imageIds, StringPool.COMMA), vedioURL,  getSmallImageId(), StringPool.BLANK);
 			itemId = shoppingItem.getItemId();
-			ItemHistoryLocalServiceUtil.addItemHistory(itemId, currentUserId, currentUserName, HConstants.ITEM_ADDED, StringPool.BLANK);
+			ItemHistoryLocalServiceUtil.addItemHistory(itemId, currentUserId, currentUserName, currentUserEmail, HConstants.ITEM_ADDED, StringPool.BLANK);
 		} else {
 			//Updating items 
 				imageIds = updateImages(uploadRequest, HConstants.IMAGE, HConstants.IMAGE_ID);
@@ -112,7 +145,7 @@ public class DashboardPortlet extends MVCPortlet {
 						themeDisplay.getScopeGroupId(), themeDisplay.getCompanyId(), userId, userName, userEmail, currentUserId, currentUserName, currentUserEmail,productCode, name,
 						description, sellerPrice, totalPrice, quantity, status,
 						StringUtil.merge(imageIds, StringPool.COMMA), vedioURL, 0, remark);
-				ItemHistoryLocalServiceUtil.addItemHistory(itemId, currentUserId, currentUserName, HConstants.ITEM_UPDATED, staffRemark);
+				ItemHistoryLocalServiceUtil.addItemHistory(itemId, currentUserId, currentUserName, currentUserEmail, HConstants.ITEM_UPDATED, staffRemark);
 		}
 		// Tag
 			updateTags(uploadRequest, itemId, themeDisplay);
@@ -310,14 +343,7 @@ public class DashboardPortlet extends MVCPortlet {
 							fileEntry = DLAppLocalServiceUtil.addFileEntry(themeDisplay.getUserId(), repositoryId, folderId, sourceFileName, contentType, file.getName(), StringPool.BLANK, StringPool.BLANK,  resizeImage(file, 600, 600), serviceContext);
 							//Adding small Image
 							if(i == 1) {
-							FileEntry fileEntry2 = DLAppLocalServiceUtil
-									.addFileEntry(themeDisplay.getUserId(),
-											repositoryId, folderId,
-											sourceFileName + HConstants.SMALL_IMAGE,
-											contentType, file.getName() + HConstants.SMALL_IMAGE,
-											StringPool.BLANK, StringPool.BLANK,
-											resizeImage(file, 300, 300),
-											serviceContext);
+								FileEntry fileEntry2 =  DLAppLocalServiceUtil.addFileEntry(themeDisplay.getUserId(), repositoryId, folderId, sourceFileName+HConstants.SMALL_IMAGE, contentType, file.getName()+HConstants.SMALL_IMAGE, StringPool.BLANK, StringPool.BLANK,  resizeImage(file, 100, 100), serviceContext);
 								setSmallImageId(fileEntry2.getFileEntryId());	
 							}
 			        	 } catch (PortalException e) {

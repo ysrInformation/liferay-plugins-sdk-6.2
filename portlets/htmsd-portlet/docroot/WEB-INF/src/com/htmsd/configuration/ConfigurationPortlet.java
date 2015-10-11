@@ -7,7 +7,6 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 
-import com.htmsd.slayer.model.ShoppingItem;
 import com.htmsd.slayer.service.CategoryLocalServiceUtil;
 import com.htmsd.util.HConstants;
 import com.liferay.counter.service.CounterLocalServiceUtil;
@@ -20,7 +19,6 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.asset.model.AssetTag;
-import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetTagLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
@@ -29,15 +27,18 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  */
 public class ConfigurationPortlet extends MVCPortlet {
  
+	
+	
+	
 	public void addCategory(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortletException {
 
 		String name = ParamUtil.getString(actionRequest, HConstants.NAME);
 		String description = ParamUtil.getString(actionRequest, HConstants.DESCRIPTION);
-		
+		long parentCategoryId = ParamUtil.getLong(actionRequest, HConstants.CATEGORY_ID);
 		ThemeDisplay themeDisplay=(ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		
-		CategoryLocalServiceUtil.addCategory(themeDisplay.getScopeGroupId(), themeDisplay.getCompanyId(), themeDisplay.getUserId(), name, description);
+		CategoryLocalServiceUtil.addCategory(themeDisplay.getScopeGroupId(), themeDisplay.getCompanyId(), themeDisplay.getUserId(), name, description, parentCategoryId);
 
 		actionResponse.setRenderParameter("tab1", "Category");
 	}

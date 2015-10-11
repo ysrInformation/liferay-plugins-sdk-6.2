@@ -14,6 +14,8 @@ public interface HConstants {
 	public static String QUANTITY = "quantity";
 	public static String UNILIMITED_QUANTITY = "unlimitedQuanity";
 	public static String CATEGORY = "category";
+	public static String PARENT_CATEGORY="parentCategory";
+	public static String PARENT_CATEGORY_ID="parentCategoryId";
 	public static String TAG = "tag";
 	public static String CATEGORY_ID = "categoryId";
 	public static String TAG_ID = "tagId";
