@@ -343,7 +343,7 @@ public class DashboardPortlet extends MVCPortlet {
 							fileEntry = DLAppLocalServiceUtil.addFileEntry(themeDisplay.getUserId(), repositoryId, folderId, sourceFileName, contentType, file.getName(), StringPool.BLANK, StringPool.BLANK,  resizeImage(file, 600, 600), serviceContext);
 							//Adding small Image
 							if(i == 1) {
-								FileEntry fileEntry2 =  DLAppLocalServiceUtil.addFileEntry(themeDisplay.getUserId(), repositoryId, folderId, sourceFileName+HConstants.SMALL_IMAGE, contentType, file.getName()+HConstants.SMALL_IMAGE, StringPool.BLANK, StringPool.BLANK,  resizeImage(file, 100, 100), serviceContext);
+								FileEntry fileEntry2 =  DLAppLocalServiceUtil.addFileEntry(themeDisplay.getUserId(), repositoryId, folderId, sourceFileName+HConstants.SMALL_IMAGE, contentType, file.getName()+HConstants.SMALL_IMAGE, StringPool.BLANK, StringPool.BLANK,  resizeImage(file, 300, 300), serviceContext);
 								setSmallImageId(fileEntry2.getFileEntryId());	
 							}
 			        	 } catch (PortalException e) {
