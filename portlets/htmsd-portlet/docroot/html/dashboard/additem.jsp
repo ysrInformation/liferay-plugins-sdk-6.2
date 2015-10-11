@@ -89,12 +89,20 @@
 			</aui:column>
 		</aui:layout>
 		
+		<aui:layout>
+			<aui:column columnWidth="30">
+				<aui:input name="<%=HConstants.WHOLESALE_DISCOUNT %>" type="checkbox"  inlineLabel="true" />
+			</aui:column>	
+			<div id="wholeSaleDiv" style="display:none;">
+				<aui:column columnWidth="30">
+					<aui:input name="<%=HConstants.WHOLESALE_QUANTITY %>" />	
+				</aui:column>
+				<aui:column columnWidth="30">
+					<aui:input name="<%=HConstants.WHOLESALE_PRICE %>" />
+				</aui:column>
+			</div>
+		</aui:layout>
 		
-		<aui:input name="<%=HConstants.WHOLESALE_DISCOUNT %>" type="checkbox"  inlineLabel="true" />
-		<div id="wholeSaleDiv" style="display:none;">
-			<aui:input name="<%=HConstants.WHOLESALE_QUANTITY %>" />	
-			<aui:input name="<%=HConstants.WHOLESALE_PRICE %>" />
-		</div>
 		<div id="tags">
 			<liferay-ui:message key="tags" />
 			<liferay-ui:asset-tags-selector className="<%=ShoppingItem.class.getName() %>" />

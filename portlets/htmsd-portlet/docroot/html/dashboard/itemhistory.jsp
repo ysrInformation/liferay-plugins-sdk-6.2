@@ -38,7 +38,9 @@
 			<%=String.valueOf(searchContainer.getStart()+1+indexVar)%>
 		</liferay-ui:search-container-column-text>
 		
-		<liferay-ui:search-container-column-text name="User Name" property="userName" />
+		<liferay-ui:search-container-column-text name="last-update-by" >
+			<%=itemHistory.getUserEmail() + StringPool.OPEN_PARENTHESIS + itemHistory.getUserName() + StringPool.CLOSE_PARENTHESIS %>
+		</liferay-ui:search-container-column-text>
 		
 		<liferay-ui:search-container-column-text name="date" orderable="true" orderableProperty="createDate" >
 			<fmt:formatDate value="<%=itemHistory.getCreateDate() %>" pattern="dd/MM/yyyy" />
