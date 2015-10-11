@@ -83,7 +83,7 @@
 					</aui:column>
 					
 					<aui:column columnWidth="25">
-						<aui:select name="<%=HConstants.PARENT_CATEGORY_ID %>"   required="true" showEmptyOption="true">
+						<aui:select name="<%=HConstants.PARENT_CATEGORY_ID %>" label="category"  required="true" showEmptyOption="true">
 							<%
 								
 								for(Category parentCategory : parentCategories) {
@@ -96,7 +96,7 @@
 						</aui:select>
 					</aui:column>
 					<aui:column columnWidth="25">
-						<aui:select name="<%=HConstants.CATEGORY_ID %>" showEmptyOption="true" required="true"></aui:select>
+						<aui:select name="<%=HConstants.CATEGORY_ID %>" label="sub-category" showEmptyOption="true" required="true"></aui:select>
 					</aui:column>
 				</aui:layout>
 				

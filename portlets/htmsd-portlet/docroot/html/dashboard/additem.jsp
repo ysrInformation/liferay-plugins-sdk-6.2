@@ -31,7 +31,7 @@
 			</aui:column>
 			
 			<aui:column columnWidth="25">
-				<aui:select name="<%=HConstants.PARENT_CATEGORY_ID %>"   required="true" showEmptyOption="true">
+				<aui:select name="<%=HConstants.PARENT_CATEGORY_ID %>" label="category"  required="true" showEmptyOption="true">
 					<c:forEach items="<%=parentCategories %>" var="parentCategory">   
 						<aui:option label="${parentCategory.name}"  value="${parentCategory.categoryId}"/>
 					</c:forEach>
@@ -39,7 +39,7 @@
 			</aui:column>
 			
 			<aui:column columnWidth="25">
-				<aui:select name="<%=HConstants.CATEGORY_ID %>"   required="true" showEmptyOption="true">
+				<aui:select name="<%=HConstants.CATEGORY_ID %>" label="sub-category"  required="true" showEmptyOption="true">
 				</aui:select>
 			</aui:column>
 		</aui:layout>
