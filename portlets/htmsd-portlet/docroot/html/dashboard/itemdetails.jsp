@@ -100,10 +100,8 @@
 					</aui:column>
 				</aui:layout>
 				
-				
-				
 				<liferay-ui:message key="description" />
-				<liferay-ui:input-editor />
+				<liferay-ui:input-editor cssClass="editor_padding" />
 				<aui:input name="<%=HConstants.DESCRIPTION %>" value="<%=item.getDescription()%>"  type="hidden"/>
 				<aui:layout>
 					<%
