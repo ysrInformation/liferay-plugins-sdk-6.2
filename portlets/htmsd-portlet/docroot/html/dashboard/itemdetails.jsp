@@ -1,5 +1,6 @@
 <%@page import="com.liferay.portal.util.PortalUtil"%>
 <%@include file="/html/dashboard/init.jsp" %>
+<portlet:resourceURL  id="getCategoryId"  var="getCategoryURL"/>
 
 <head>
   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
@@ -19,8 +20,12 @@
 	.ui-widget-overlay,.ui-dialog-content{
 		cursor:zoom-out;
 	}
+	/* .cke_reset {
+		width : 500px;
+	} */
   </style>
  </head> 
+ 
 <%
  	String backURL = ParamUtil.getString(renderRequest, "backURL");
 	long itemId = ParamUtil.getLong(renderRequest, "itemId");
@@ -28,7 +33,7 @@
 	DLFileEntry documentFileEntry = null;
 	DecimalFormat decimalFormat = new DecimalFormat("#.00");
 	if(Validator.isNotNull(item)) {
-		List<Category> categories = CategoryLocalServiceUtil.getCategories(-1, -1);
+		List<Category> parentCategories = CategoryLocalServiceUtil.getByParent(0);
 		PortletURL updateItemURL = renderResponse.createActionURL();
 		updateItemURL.setParameter(ActionRequest.ACTION_NAME, "addItem");
 		updateItemURL.setParameter(HConstants.ITEM_ID, String.valueOf(itemId));
@@ -41,8 +46,10 @@
 		long quantity = item.getQuantity();
 		List<Category> itemCategory = CategoryLocalServiceUtil.getCategoryByItemId(itemId);
 		long categoryId = 0l;
+		long parentCategoryId = 0l;
 		if(itemCategory.size()>=1) {
 			categoryId = itemCategory.get(0).getCategoryId();
+			parentCategoryId = itemCategory.get(0).getParentCategoryId();
 		}
 		int status = item.getStatus();
 		String itemStatus = StringPool.BLANK;
@@ -65,20 +72,38 @@
 				<aui:input name="userId" type="hidden" value="<%=item.getUserId() %>" />
 				<aui:input name="userName" type="hidden" value="<%=item.getUserName() %>" />
 				<aui:input name="<%=HConstants.SMALL_IMAGE %>" type="hidden" value="<%=item.getSmallImage() %>" />
-				<aui:input name="<%=HConstants.NAME%>" required="true" value="<%= item.getName()%>" />
-				<aui:input name="<%=HConstants.PRODUCT_CODE %>"  value="<%=item.getProductCode() %>"/>
-				<aui:select name="<%=HConstants.CATEGORY_ID %>"   required="true" showEmptyOption="true">
-					<%
-						for(Category category : categories) {
-							boolean showcategory = category.getCategoryId()== categoryId ? true : false;
-							%>
-								<aui:option label="<%=category.getName() %>"  value="<%=category.getCategoryId() %>" selected="<%=showcategory %>" />
+				
+				<aui:layout>
+					<aui:column columnWidth="25">
+						<aui:input name="<%=HConstants.NAME%>" required="true" value="<%= item.getName()%>" />
+					</aui:column>
+					
+					<aui:column columnWidth="25">
+						<aui:input name="<%=HConstants.PRODUCT_CODE %>" value="<%=item.getProductCode() %>"/>
+					</aui:column>
+					
+					<aui:column columnWidth="25">
+						<aui:select name="<%=HConstants.PARENT_CATEGORY_ID %>"   required="true" showEmptyOption="true">
 							<%
-						}
-					%>   
-				</aui:select>
+								
+								for(Category parentCategory : parentCategories) {
+									boolean showoption = (parentCategory.getCategoryId() == parentCategoryId);
+									%>
+										<aui:option label="<%=parentCategory.getName() %>"  value="<%=parentCategory.getCategoryId() %>" selected="<%=showoption %>" />
+									<%
+								}
+							%>   
+						</aui:select>
+					</aui:column>
+					<aui:column columnWidth="25">
+						<aui:select name="<%=HConstants.CATEGORY_ID %>" showEmptyOption="true" required="true"></aui:select>
+					</aui:column>
+				</aui:layout>
+				
+				
+				
 				<liferay-ui:message key="description" />
-				<liferay-ui:input-editor cssClass="editor_padding"/>
+				<liferay-ui:input-editor />
 				<aui:input name="<%=HConstants.DESCRIPTION %>" value="<%=item.getDescription()%>"  type="hidden"/>
 				<aui:layout>
 					<%
@@ -182,6 +207,8 @@
 
 			<script>
 				$(document).ready(function(){
+					fetchCategories('<%=categoryId%>');
+					$('#<portlet:namespace/><%=HConstants.CATEGORY_ID%>').attr()
 					if(!<%=isAdmin%>) {
 						$('#<portlet:namespace/>fm input,input[type=textarea],select ').attr("disabled", true);	
 					}
@@ -240,7 +267,7 @@
 					return confirm("Are you sure you want to update ?");
 				}
 				
-				AUI().use('aui-base' ,function (A) {
+				AUI().use('aui-base',function (A) {
 					 A.one("#<portlet:namespace /><%=HConstants.UNILIMITED_QUANTITY%>Checkbox").on('change',function(e){
 						var quantity =  A.one("#<portlet:namespace /><%=HConstants.QUANTITY%>");
 						if(e.currentTarget.get('checked')) {
@@ -250,6 +277,11 @@
 						 }
 					});
 					 
+					 
+				 A.one("#<portlet:namespace /><%=HConstants.PARENT_CATEGORY_ID%>").on('change',function(e){
+					 fetchCategories(0);
+					});	 
+				 
 					 
 				 A.one("#<portlet:namespace /><%=HConstants.WHOLESALE_DISCOUNT%>Checkbox").on('change',function(e){
 						var wholeSaleDiv = document.getElementById("wholeSaleDiv");
@@ -281,6 +313,32 @@
 
 				function extractCodeFromEditor() {
 				 	 document.<portlet:namespace />itemDetailForm.<portlet:namespace /><%=HConstants.DESCRIPTION%>.value = window.<portlet:namespace />editor.getHTML();
+				}
+				
+				function setCategory(data,categoryId) {
+					var A = new AUI();
+					var categoryElem = A.one("#<portlet:namespace /><%=HConstants.CATEGORY_ID%>");
+					categoryElem.get('children').remove();
+					for(x in data) {
+						var showSelected = (categoryId > 0) &&  (categoryId == data[x].categoryId) ? 'selected' : '';
+						A.Node.create('<option value='+ data[x].categoryId + ' '+ showSelected + '>'+ data[x].categoryName +'</option>').appendTo(categoryElem);
+					}
+				}
+				function fetchCategories(categoryId) {
+					AUI().use('aui-base','aui-io-request',function (A) {
+						var parentCategoryId =  A.one("#<portlet:namespace /><%=HConstants.PARENT_CATEGORY_ID%>").val();
+						A.io.request('<%=getCategoryURL%>', {
+							dataType: 'json',
+							data: {
+								'<portlet:namespace/>parentCategoryId' : parentCategoryId
+							   },
+							  on: {
+							   success: function() {
+								   setCategory(this.get('responseData'),categoryId);
+							   }
+							  }
+						});
+					});	
 				}
 			</script>
 			<%

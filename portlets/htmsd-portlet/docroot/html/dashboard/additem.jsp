@@ -4,27 +4,47 @@
 <%@page import="com.liferay.portlet.asset.model.AssetTag"%>
 <%@include file="/html/dashboard/init.jsp" %>
 
+<portlet:resourceURL  id="getCategoryId"  var="getCategoryURL"/>
+
 <portlet:actionURL name="addItem" var="addItemURL" >
 	<portlet:param name="tab1" value='<%=ParamUtil.getString(renderRequest, "tab1") %>'/>
 </portlet:actionURL>
 <%
 	List<AssetTag> assetTags = AssetTagLocalServiceUtil.getTags(themeDisplay.getScopeGroupId(), PortalUtil.getClassNameId(ShoppingItem.class), null, -1, -1);
-	List<Category> categories = CategoryLocalServiceUtil.getCategories(-1, -1);
+	List<Category> parentCategories = CategoryLocalServiceUtil.getByParent(0);
+	List<Category> categories = CategoryLocalServiceUtil.getByChild(0);
 %>
 
 <liferay-ui:header title="add-item" backLabel="go-back" backURL='<%=ParamUtil.getString(renderRequest, "backURL") %>'/>
 
 <aui:fieldset>
 	<aui:form action="<%=addItemURL %>" enctype="multipart/form-data" method="POST" name="addItemForm">
-		<aui:input name="<%=HConstants.NAME%>">
-			<aui:validator name="required" errorMessage="item-name-required"></aui:validator>
-		</aui:input>
-		<aui:input name="<%=HConstants.PRODUCT_CODE %>" />
-		<aui:select name="<%=HConstants.CATEGORY_ID %>"   required="true" showEmptyOption="true">
-			<c:forEach items="<%=categories %>" var="category">   
-				<aui:option label="${category.name}"  value="${category.categoryId}"/>
-			</c:forEach>
-		</aui:select>
+		<aui:layout>
+			<aui:column columnWidth="25">
+				<aui:input name="<%=HConstants.NAME%>">
+					<aui:validator name="required" errorMessage="item-name-required"></aui:validator>
+				</aui:input>
+			</aui:column>
+			
+			<aui:column columnWidth="25">
+				<aui:input name="<%=HConstants.PRODUCT_CODE %>" />
+			</aui:column>
+			
+			<aui:column columnWidth="25">
+				<aui:select name="<%=HConstants.PARENT_CATEGORY_ID %>"   required="true" showEmptyOption="true">
+					<c:forEach items="<%=parentCategories %>" var="parentCategory">   
+						<aui:option label="${parentCategory.name}"  value="${parentCategory.categoryId}"/>
+					</c:forEach>
+				</aui:select>
+			</aui:column>
+			
+			<aui:column columnWidth="25">
+				<aui:select name="<%=HConstants.CATEGORY_ID %>"   required="true" showEmptyOption="true">
+				</aui:select>
+			</aui:column>
+		</aui:layout>
+		
+		
 		<liferay-ui:message key="description" />
 		<liferay-ui:input-editor cssClass="editor_padding"/>
 		<aui:input name="<%=HConstants.DESCRIPTION %>" value=""  type="hidden" />
@@ -53,20 +73,22 @@
 			<aui:validator name="url" />
 		</aui:input>
 		
-		<aui:input name="<%=HConstants.PRICE %>" required="true">
-			<aui:validator name="number" />
-		</aui:input>
 		<aui:layout>
-			<aui:column columnWidth="25">
-				<aui:input name="<%=HConstants.QUANTITY %>">
+			<aui:column>
+				<aui:input name="<%=HConstants.PRICE %>" required="true">
 					<aui:validator name="number" />
 				</aui:input>
 			</aui:column>
-			
-			<aui:column columnWidth="25">
+			<aui:column>
+				<aui:input name="<%=HConstants.QUANTITY %>">
+					<aui:validator name="number" />
+				</aui:input>
+			</aui:column>	
+			<aui:column >
 				<aui:input name="<%=HConstants.UNILIMITED_QUANTITY %>" type="checkbox" label="unlimited-quantity" />
 			</aui:column>
 		</aui:layout>
+		
 		
 		<aui:input name="<%=HConstants.WHOLESALE_DISCOUNT %>" type="checkbox"  inlineLabel="true" />
 		<div id="wholeSaleDiv" style="display:none;">
@@ -87,7 +109,6 @@
 		</aui:button-row>
 	</aui:form>
 </aui:fieldset>
-
 
 <script>
 	
@@ -115,8 +136,9 @@
 	    control.focus();
 	}
 	
-	AUI().use('aui-base' ,function (A) {	
-		 A.one("#<portlet:namespace /><%=HConstants.UNILIMITED_QUANTITY%>Checkbox").on('change',function(e){
+	AUI().use('aui-base' ,'aui-io-request',function (A) {	
+		 
+		A.one("#<portlet:namespace /><%=HConstants.UNILIMITED_QUANTITY%>Checkbox").on('change',function(e){
 			 var quantity =  A.one("#<portlet:namespace /><%=HConstants.QUANTITY%>");
 			if(e.currentTarget.get('checked')) {
 				quantity.set('disabled', true);
@@ -134,9 +156,32 @@
 			 wholeSaleDiv.style.display = "none";	
 		 }
 		}); 
-	});
+		 
+		A.one("#<portlet:namespace /><%=HConstants.PARENT_CATEGORY_ID%>").on('change',function(e){
+			var parentCategoryId =  A.one("#<portlet:namespace /><%=HConstants.PARENT_CATEGORY_ID%>").val();
+			A.io.request('<%=getCategoryURL%>', {
+				dataType: 'json',
+				data: {
+					'<portlet:namespace/>parentCategoryId' : parentCategoryId
+				   },
+				  on: {
+				   success: function() {
+					   setCategory(this.get('responseData'));
+				   }
+				  }
+				});
 
+		});
+	});
 	function extractCodeFromEditor() {
         var x = document.<portlet:namespace />addItemForm.<portlet:namespace /><%=HConstants.DESCRIPTION%>.value = window.<portlet:namespace />editor.getHTML();
+	}
+	function setCategory(data) {
+		var A = new AUI();
+		var categoryElem = A.one("#<portlet:namespace /><%=HConstants.CATEGORY_ID%>");
+		categoryElem.get('children').remove();
+		for(x in data) {
+			A.Node.create('<option value='+data[x].categoryId+'>'+data[x].categoryName+'</option>').appendTo(categoryElem);
+		}
 	}
 </script>
