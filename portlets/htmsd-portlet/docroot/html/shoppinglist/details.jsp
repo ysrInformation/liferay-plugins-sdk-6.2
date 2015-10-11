@@ -76,7 +76,12 @@
 						</div> --%>
 						<c:if test='<%= !cmd.equalsIgnoreCase("itemsDetails") %>'>
 							<div class="add-to-cart-btn">
-								<aui:button name="add-to-cart" type="submit" cssClass="add-to-cart" value='<%= LanguageUtil.get(pageContext, "add-to-cart") %>'/>
+								<%
+									Category parenCategory = CommonUtil.getShoppingItemParentCategory(shoppingItem.getItemId());
+									String btnName =  LanguageUtil.get(pageContext, "add-to-cart");
+									if (parenCategory.getName().equalsIgnoreCase("live")) btnName = LanguageUtil.get(pageContext, "request-for-adoption");
+								%>
+								<aui:button name="add-to-cart" type="submit" cssClass="add-to-cart" value='<%= btnName %>'/>
 							</div>
 						</c:if>
 					</div>

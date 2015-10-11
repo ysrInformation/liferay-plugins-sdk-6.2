@@ -15,6 +15,7 @@
 	<aui:select name="preferences--categoryToDisplay--" showEmptyOption="true" required="true">
 		<%
 			for(Category category : CategoryLocalServiceUtil.getCategories(-1, -1)) {
+				if(category.getParentCategoryId() == 0) continue;
 				%>
 					<aui:option label="<%=category.getName() %>" 
 						value="<%=category.getCategoryId() %>" 

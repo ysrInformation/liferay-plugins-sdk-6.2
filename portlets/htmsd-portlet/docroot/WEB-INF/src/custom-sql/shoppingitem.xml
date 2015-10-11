@@ -42,5 +42,17 @@
 			   		st.itemId = s.itemId AND st.tagId = ?
 		 	]]>
 		</sql>
+		<sql id = "com.htmsd.slayer.service.persistence.ShoppingItemFinderImpl.getShoppingItemCategory">
+		   <![CDATA[
+			    SELECT 
+				    c.*
+				FROM
+				    htmsd_ShopppingItem_Category sc
+				        INNER JOIN
+				    htmsd_Category c ON c.categoryId = sc.categoryId
+				        INNER JOIN
+				    htmsd_ShoppingItem s ON sc.itemId = s.itemId AND s.itemId = ?
+		 	]]>
+		</sql>
 	</custom-sql>
 	

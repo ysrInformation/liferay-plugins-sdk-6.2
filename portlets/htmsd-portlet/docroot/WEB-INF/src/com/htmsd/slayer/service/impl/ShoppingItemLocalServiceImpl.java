@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.htmsd.slayer.model.Category;
 import com.htmsd.slayer.model.ShoppingItem;
 import com.htmsd.slayer.service.ShoppingItemLocalServiceUtil;
 import com.htmsd.slayer.service.base.ShoppingItemLocalServiceBaseImpl;
@@ -501,6 +502,10 @@ public class ShoppingItemLocalServiceImpl
 	
 	public int getItemByTagNameCount(String tagName) {
 		return shoppingItemFinder.getItemsByTagNameCount(tagName);
+	}
+	
+	public Category getShoppingItemCategory(long itemId) {
+		return shoppingItemFinder.getShoppingItemCategory(itemId);
 	}
 	
 	private Log _log = LogFactoryUtil.getLog(ShoppingItemLocalServiceImpl.class);

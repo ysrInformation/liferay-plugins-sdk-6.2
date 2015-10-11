@@ -2,7 +2,9 @@ package com.htmsd.slayer.service.persistence;
 
 import java.util.List;
 
+import com.htmsd.slayer.model.Category;
 import com.htmsd.slayer.model.ShoppingItem;
+import com.htmsd.slayer.model.impl.CategoryImpl;
 import com.htmsd.slayer.model.impl.ShoppingItemImpl;
 import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
@@ -31,6 +33,8 @@ public class ShoppingItemFinderImpl extends BasePersistenceImpl<ShoppingItem>
 	public static String FIND_ITEM_BY_TAG_NAME = ShoppingItemFinderImpl.class
 			.getName() + ".findItemByTagName";
 	
+	public static String SHOPPING_ITEM_CATEGORY = ShoppingItemFinderImpl.class
+			.getName() + ".getShoppingItemCategory";
 	
 	
 	@SuppressWarnings("unchecked")
@@ -162,5 +166,20 @@ public class ShoppingItemFinderImpl extends BasePersistenceImpl<ShoppingItem>
 		queryPos.add(StringPool.PERCENT + tagName+ StringPool.PERCENT);
 		
 		return query.list().size();
+	}
+	
+	public Category getShoppingItemCategory(long itemId) {
+		Session session = openSession();
+		String sql = CustomSQLUtil.get(SHOPPING_ITEM_CATEGORY);
+		
+		SQLQuery query = session.createSQLQuery(sql);
+		query.addEntity("Category", CategoryImpl.class);
+		
+		QueryPos queryPos = QueryPos.getInstance(query);
+		queryPos.add(itemId);
+		
+		Category category = (query.list().size() > 0) ? (Category) query.list().get(0) : new CategoryImpl();
+		
+		return category;
 	}
 }

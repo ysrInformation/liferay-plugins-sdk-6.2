@@ -9,12 +9,14 @@ import java.util.List;
 import javax.swing.text.NumberFormatter;
 
 import com.htmsd.slayer.NoSuchShoppingItem_CartException;
+import com.htmsd.slayer.model.Category;
 import com.htmsd.slayer.model.Invoice;
 import com.htmsd.slayer.model.ShoppingCart;
 import com.htmsd.slayer.model.ShoppingItem;
 import com.htmsd.slayer.model.ShoppingItem_Cart;
 import com.htmsd.slayer.model.ShoppingOrder;
 import com.htmsd.slayer.model.ShoppingOrderItem;
+import com.htmsd.slayer.service.CategoryLocalServiceUtil;
 import com.htmsd.slayer.service.InvoiceLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingCartLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingItemLocalServiceUtil;
@@ -384,5 +386,17 @@ public class CommonUtil {
 		numberFormat.setMinimumFractionDigits(2);
 		String formattedPrice = priceSymbol+StringPool.SPACE+numberFormat.format(totalPrice);
 		return formattedPrice;
+	}
+	
+	public  static Category getShoppingItemParentCategory(long itemId) {
+		Category category = ShoppingItemLocalServiceUtil.getShoppingItemCategory(itemId);
+		long parentCategoryId = category.getParentCategoryId();
+		Category parenCategory = null;
+		try {
+			parenCategory = CategoryLocalServiceUtil.fetchCategory(parentCategoryId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		return parenCategory;
 	}
 }
