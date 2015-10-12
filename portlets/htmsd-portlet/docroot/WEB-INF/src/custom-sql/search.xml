@@ -7,13 +7,13 @@
 			  		DISTINCT
 					si.* 
 				FROM 
-					assetentry ae
+					AssetEntry ae
 				INNER JOIN
-					assetentries_assettags ae_at
+					AssetEntries_AssetTags ae_at
 				ON
 					ae.entryId = ae_at.entryId
                 INNER JOIN 
-					assettag ast
+					AssetTag ast
 				ON 
 					ast.tagId = ae_at.tagId
 				INNER JOIN  
