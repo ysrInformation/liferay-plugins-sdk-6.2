@@ -42,6 +42,7 @@
 		updateItemURL.setParameter("tab1", ParamUtil.getString(renderRequest, "tab1"));
 		if(!isAdmin) {
 			updateItemURL.setParameter(HConstants.status,String.valueOf(item.getStatus()));
+			updateItemURL.setParameter(HConstants.QUANTITY, String.valueOf(item.getQuantity()));
 		}
 		long quantity = item.getQuantity();
 		List<Category> itemCategory = CategoryLocalServiceUtil.getCategoryByItemId(itemId);
@@ -71,6 +72,7 @@
 			<aui:form action="<%=updateItemURL %>" enctype="multipart/form-data" method="POST" name="itemDetailForm">
 				<aui:input name="userId" type="hidden" value="<%=item.getUserId() %>" />
 				<aui:input name="userName" type="hidden" value="<%=item.getUserName() %>" />
+				<aui:input name="emailId" type="hidden" value="<%=item.getUserEmail() %>" />
 				<aui:input name="<%=HConstants.SMALL_IMAGE %>" type="hidden" value="<%=item.getSmallImage() %>" />
 				
 				<aui:layout>
@@ -159,18 +161,18 @@
 					<aui:validator name="number" />
 				</aui:input>
 				
-				<aui:layout>
-					<aui:column columnWidth="25">
-						<aui:input name="<%=HConstants.QUANTITY %>"  value="<%= quantity == -1 ? StringPool.BLANK : quantity%>" disabled="<%=( quantity == -1 ) %>">
-							<aui:validator name="number" />
-					</aui:input>
-					</aui:column>
-					<aui:column columnWidth="25">
-						<aui:input name="<%=HConstants.UNILIMITED_QUANTITY %>" type="checkbox" label="unlimited-quantity" checked="<%= quantity == -1 ? true : false %>"/>
-					</aui:column>
-				</aui:layout>
+				<c:if test="<%=isAdmin %>">
+					<aui:layout>
+						<aui:column columnWidth="25">
+							<aui:input name="<%=HConstants.QUANTITY %>"  value="<%= quantity == -1 ? StringPool.BLANK : quantity%>" disabled="<%=( quantity == -1 ) %>">
+								<aui:validator name="number" />
+						</aui:input>
+						</aui:column>
+						<aui:column columnWidth="25">
+							<aui:input name="<%=HConstants.UNILIMITED_QUANTITY %>" type="checkbox" label="unlimited-quantity" checked="<%= quantity == -1 ? true : false %>"/>
+						</aui:column>
+					</aui:layout>
 				
-				<c:if test="<%=isAdmin%>">
 					<aui:input name="<%=HConstants.TOTAL_PRICE %>"  value="<%=decimalFormat.format(item.getTotalPrice()) %>">
 						<aui:validator name="number" />
 					</aui:input>
@@ -179,15 +181,27 @@
 				<aui:layout>
 					<aui:column columnWidth="30">
 						<aui:input name="<%=HConstants.WHOLESALE_DISCOUNT %>" type="checkbox"  inlineLabel="true" />
+					</aui:column>
+					<aui:column columnWidth="60">
+						<div id="wholeSaleDiv" style="display:none;">
+							<%
+								for(int i = 1 ; i <= HConstants.WHOLESALE_LIMIT ; i ++) {
+									%>
+										<div id="wholeSaleDiv${i}">
+											<aui:row>
+												<aui:column columnWidth="30">
+													<aui:input name="<%=HConstants.WHOLESALE_QUANTITY + i %>" />	
+												</aui:column>
+												<aui:column columnWidth="30">
+													<aui:input name="<%=HConstants.WHOLESALE_PRICE + i%>" />
+												</aui:column>
+											</aui:row>
+										</div>
+									<%
+								}
+							%>
+						</div>
 					</aui:column>	
-					<div id="wholeSaleDiv" style="display:none;">
-						<aui:column columnWidth="30">
-							<aui:input name="<%=HConstants.WHOLESALE_QUANTITY %>" />	
-						</aui:column>
-						<aui:column columnWidth="30">
-							<aui:input name="<%=HConstants.WHOLESALE_PRICE %>" />
-						</aui:column>
-					</div>
 				</aui:layout>
 				
 				<div id="tags">
@@ -275,15 +289,6 @@
 				}
 				
 				AUI().use('aui-base',function (A) {
-					 A.one("#<portlet:namespace /><%=HConstants.UNILIMITED_QUANTITY%>Checkbox").on('change',function(e){
-						var quantity =  A.one("#<portlet:namespace /><%=HConstants.QUANTITY%>");
-						if(e.currentTarget.get('checked')) {
-							quantity.set('disabled', true);
-						 }else{
-						 	quantity.set('disabled', false);	
-						 }
-					});
-					 
 					 
 				 A.one("#<portlet:namespace /><%=HConstants.PARENT_CATEGORY_ID%>").on('change',function(e){
 					 fetchCategories(0);
@@ -299,7 +304,17 @@
 						 wholeSaleDiv.style.display = "none";	
 					 }
 					});  
+				 
 					 <c:if test='<%=isAdmin %>'>
+					 
+					 A.one("#<portlet:namespace /><%=HConstants.UNILIMITED_QUANTITY%>Checkbox").on('change',function(e){
+							var quantity =  A.one("#<portlet:namespace /><%=HConstants.QUANTITY%>");
+							if(e.currentTarget.get('checked')) {
+								quantity.set('disabled', true);
+							 }else{
+							 	quantity.set('disabled', false);	
+							 }
+						});
 					 
 						 A.one("#<portlet:namespace /><%=HConstants.status%>").on('change',function(e){
 							var remarkDiv = document.getElementById("remarkDiv");

@@ -43,6 +43,7 @@ public interface HConstants {
 	public static String SMALL_IMAGE = "smallImage";
 
 	public static int IMAGES_UPLOAD_LIMIT = 5;
+	public static int WHOLESALE_LIMIT = 3;
 	public static int NEW = 0;
 	public static int APPROVE = 1;
 	public static int REJECT = 5;
