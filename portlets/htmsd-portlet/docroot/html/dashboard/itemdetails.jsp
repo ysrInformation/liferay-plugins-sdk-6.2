@@ -1,3 +1,5 @@
+<%@page import="com.htmsd.slayer.service.WholeSaleLocalServiceUtil"%>
+<%@page import="com.htmsd.slayer.model.WholeSale"%>
 <%@page import="com.liferay.portal.util.PortalUtil"%>
 <%@include file="/html/dashboard/init.jsp" %>
 <portlet:resourceURL  id="getCategoryId"  var="getCategoryURL"/>
@@ -46,6 +48,8 @@
 		}
 		long quantity = item.getQuantity();
 		List<Category> itemCategory = CategoryLocalServiceUtil.getCategoryByItemId(itemId);
+		List<WholeSale> wholeSales  =WholeSaleLocalServiceUtil.getWholeSaleItem(itemId);
+		long wholeSaleSize =  wholeSales.size();
 		long categoryId = 0l;
 		long parentCategoryId = 0l;
 		if(itemCategory.size()>=1) {
@@ -178,32 +182,48 @@
 					</aui:input>
 				</c:if>
 				
+				
 				<aui:layout>
 					<aui:column columnWidth="30">
-						<aui:input name="<%=HConstants.WHOLESALE_DISCOUNT %>" type="checkbox"  inlineLabel="true" />
+						<aui:input name="<%=HConstants.WHOLESALE_DISCOUNT %>" type="checkbox"  checked="<%= wholeSaleSize > 0 ? true :  false %>" inlineLabel="true" />
 					</aui:column>
-					<aui:column columnWidth="60">
-						<div id="wholeSaleDiv" style="display:none;">
+					<div id="wholeSaleDiv" style='<%= wholeSaleSize > 0 ? "display:block" :  "display:block" %>'>
+						<aui:column columnWidth="60">
 							<%
 								for(int i = 1 ; i <= HConstants.WHOLESALE_LIMIT ; i ++) {
 									%>
-										<div id="wholeSaleDiv${i}">
+										<div class="wholesaleclass" id='<%="wholeSaleDiv" + i %>' style='<%=wholeSaleSize >= i ? "display:block;" : "display:none;"%> '>
 											<aui:row>
 												<aui:column columnWidth="30">
-													<aui:input name="<%=HConstants.WHOLESALE_QUANTITY + i %>" />	
+													<aui:input name="<%=HConstants.WHOLESALE_QUANTITY + i %>" value="<%=wholeSaleSize >= i  ? wholeSales.get(i-1).getQuantity() : StringPool.BLANK%>" />	
 												</aui:column>
 												<aui:column columnWidth="30">
-													<aui:input name="<%=HConstants.WHOLESALE_PRICE + i%>" />
+													<aui:input name="<%=HConstants.WHOLESALE_PRICE + i%>"  value="<%=wholeSaleSize >= i  ? wholeSales.get(i-1).getPrice() : StringPool.BLANK%>" />
 												</aui:column>
+												<span>
+													<%	if(i!=HConstants.WHOLESALE_LIMIT) {
+														 %>
+														   <aui:button cssClass="addclass" name='<%="addbtn" + i %>' value="add"  />
+														 <%
+														 
+														}
+													%>
+													<%	if(i!=1) {
+															%>
+																<aui:button cssClass="removeclass" name='<%="removebtn" + i %>'  value="remove" />
+															<%
+														}
+													%>
+												</span>
 											</aui:row>
 										</div>
+											
 									<%
 								}
 							%>
-						</div>
-					</aui:column>	
+						</aui:column>	
+					</div>	
 				</aui:layout>
-				
 				<div id="tags">
 					<liferay-ui:message key="tags" />
 					<liferay-ui:asset-tags-selector className="<%=ShoppingItem.class.getName() %>" classPK="<%=itemId %>" />
@@ -294,16 +314,18 @@
 					 fetchCategories(0);
 					});	 
 				 
-					 
 				 A.one("#<portlet:namespace /><%=HConstants.WHOLESALE_DISCOUNT%>Checkbox").on('change',function(e){
-						var wholeSaleDiv = document.getElementById("wholeSaleDiv");
+						var wholeSaleDiv = document.getElementById("wholeSaleDiv1");
+						var fullwholeSaleDiv = document.getElementById("wholeSaleDiv");
 
 						if(e.currentTarget.get('checked')) {
 							wholeSaleDiv.style.display = "block";
-					 }else{
-						 wholeSaleDiv.style.display = "none";	
-					 }
-					});  
+							fullwholeSaleDiv.style.display = "block";
+						 }else{
+							wholeSaleDiv.style.display = "none";	
+						 	fullwholeSaleDiv.style.display = "none";
+					 	}
+					}); 
 				 
 					 <c:if test='<%=isAdmin %>'>
 					 
@@ -332,7 +354,13 @@
 				function  <portlet:namespace />initEditor() {
 				    return document.getElementById('<portlet:namespace /><%=HConstants.DESCRIPTION%>').value;
 				}
-
+				function showWholeDiv(){
+					 A.one("#<portlet:namespace /><%=HConstants.WHOLESALE_DISCOUNT%>Checkbox").on('change',function(e){
+						 if(e.currentTarget.get('checked')) {
+							 wholeSaleDiv.style.display = 'none';						 
+						 }
+					 });
+				}
 				function extractCodeFromEditor() {
 				 	 document.<portlet:namespace />itemDetailForm.<portlet:namespace /><%=HConstants.DESCRIPTION%>.value = window.<portlet:namespace />editor.getHTML();
 				}
@@ -362,6 +390,30 @@
 						});
 					});	
 				}
+				
+				$('.addclass').click(function(){
+					
+					var id = $(this).attr('id');
+					var counter = parseInt(id.substr(id.length-1, id.length))+1;
+					$('#wholeSaleDiv'+counter).show();
+					$('#<portlet:namespace/>addbtn'+(counter-1)).hide();
+					$('#<portlet:namespace/>removebtn'+(counter-1)).hide();
+					$('#<portlet:namespace/>addbtn'+counter).show();
+					$('#<portlet:namespace/>removebtn'+counter).show();
+				});
+				
+				
+				$('.removeclass').click(function(){
+					
+					var id = $(this).attr('id');
+					var counter = parseInt(id.substr(id.length-1, id.length));
+					$('#wholeSaleDiv'+counter).hide();
+					$('#<portlet:namespace/>removebtn'+counter).hide();
+					$('#<portlet:namespace/>addbtn'+(counter-1)).show();
+					$('#<portlet:namespace/>removebtn'+(counter-1)).show();
+					$('#<portlet:namespace/><%=HConstants.WHOLESALE_QUANTITY%>'+counter).val('');
+					$('#<portlet:namespace/><%=HConstants.WHOLESALE_PRICE%>'+counter).val('');
+				});
 			</script>
 			<%
 		}else {

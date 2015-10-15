@@ -296,5 +296,20 @@
 			<finder-column name="action"/>
 		</finder>
 	</entity>
+	
+	<entity name="WholeSale" local-service="true">
+		<column name="wholseSaleId" type="long" primary="true" />
+		<column name="itemId" type="long" />
+		<column name="quantity" type="long" />
+		<column name="price" type="double" />
+		
+		<finder return-type="Collection" name="Item">
+			<finder-column name="itemId" />
+		</finder>
+		<finder return-type="Collection" name="Quantity">
+			<finder-column name="itemId" />
+			<finder-column name="quantity" comparator="&lt;=" />
+		</finder>
+	</entity>
 
 </service-builder>

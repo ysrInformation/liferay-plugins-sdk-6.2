@@ -93,40 +93,43 @@
 			<aui:column columnWidth="30">
 				<aui:input name="<%=HConstants.WHOLESALE_DISCOUNT %>" type="checkbox"  inlineLabel="true" />
 			</aui:column>
-			<aui:column columnWidth="60">
-				<%
-					for(int i = 1 ; i <= HConstants.WHOLESALE_LIMIT ; i ++) {
-						%>
-							<div class="wholesaleclass" id='<%="wholeSaleDiv" + i %>' style="display:none;">
-								<aui:row>
-									<aui:column columnWidth="30">
-										<aui:input name="<%=HConstants.WHOLESALE_QUANTITY + i %>" />	
-									</aui:column>
-									<aui:column columnWidth="30">
-										<aui:input name="<%=HConstants.WHOLESALE_PRICE + i%>" />
-									</aui:column>
-									<span>
-										<%	if(i!=HConstants.WHOLESALE_LIMIT) {
-											 %>
-											   <aui:button cssClass="addclass" name='<%="addbtn" + i %>' value="add"  />
-											 <%
-											 
-											}
-										%>
-										<%	if(i!=1) {
-												%>
-													<aui:button cssClass="removeclass" name='<%="removebtn" + i %>'  value="remove" />
-												<%
-											}
-										%>
-									</span>
-								</aui:row>
-							</div>
-								
-						<%
-					}
-				%>
-			</aui:column>	
+			<div id="wholeSaleDiv" style="display:none;">
+				<aui:column columnWidth="60">
+					<%
+						for(int i = 1 ; i <= HConstants.WHOLESALE_LIMIT ; i ++) {
+							%>
+								<div class="wholesaleclass" id='<%="wholeSaleDiv" + i %>' style="display:none;">
+									<aui:row>
+										<aui:column columnWidth="30">
+											<aui:input name="<%=HConstants.WHOLESALE_QUANTITY + i %>" />	
+										</aui:column>
+										<aui:column columnWidth="30">
+											<aui:input name="<%=HConstants.WHOLESALE_PRICE + i%>" />
+										</aui:column>
+										<span>
+											<%	if(i!=HConstants.WHOLESALE_LIMIT) {
+												 %>
+												   <aui:button cssClass="addclass" name='<%="addbtn" + i %>' value="add"  />
+												 <%
+												 
+												}
+											%>
+											<%	if(i!=1) {
+													%>
+														<aui:button cssClass="removeclass" name='<%="removebtn" + i %>'  value="remove" />
+													<%
+												}
+											%>
+										</span>
+									</aui:row>
+								</div>
+									
+							<%
+						}
+					%>
+				</aui:column>	
+			</div>
+			
 		</aui:layout>
 		<div id="tags">
 			<liferay-ui:message key="tags" />
@@ -182,12 +185,15 @@
 		 
 		 A.one("#<portlet:namespace /><%=HConstants.WHOLESALE_DISCOUNT%>Checkbox").on('change',function(e){
 			var wholeSaleDiv = document.getElementById("wholeSaleDiv1");
+			var fullwholeSaleDiv = document.getElementById("wholeSaleDiv");
 
 			if(e.currentTarget.get('checked')) {
 				wholeSaleDiv.style.display = "block";
-		 }else{
-			 wholeSaleDiv.style.display = "none";	
-		 }
+				fullwholeSaleDiv.style.display = "block";
+			 }else{
+				wholeSaleDiv.style.display = "none";	
+			 	fullwholeSaleDiv.style.display = "none";
+		 	}
 		}); 
 		 
 		A.one("#<portlet:namespace /><%=HConstants.PARENT_CATEGORY_ID%>").on('change',function(e){
@@ -223,6 +229,8 @@
 		var id = $(this).attr('id');
 		var counter = parseInt(id.substr(id.length-1, id.length))+1;
 		$('#wholeSaleDiv'+counter).show();
+		$('#<portlet:namespace/>addbtn'+(counter-1)).hide();
+		$('#<portlet:namespace/>removebtn'+(counter-1)).hide();
 		$('#<portlet:namespace/>addbtn'+counter).show();
 		$('#<portlet:namespace/>removebtn'+counter).show();
 	});
@@ -234,6 +242,8 @@
 		var counter = parseInt(id.substr(id.length-1, id.length));
 		$('#wholeSaleDiv'+counter).hide();
 		$('#<portlet:namespace/>removebtn'+counter).hide();
+		$('#<portlet:namespace/>addbtn'+(counter-1)).show();
+		$('#<portlet:namespace/>removebtn'+(counter-1)).show();
 		$('#<portlet:namespace/><%=HConstants.WHOLESALE_QUANTITY%>'+counter).val('');
 		$('#<portlet:namespace/><%=HConstants.WHOLESALE_PRICE%>'+counter).val('');
 	});

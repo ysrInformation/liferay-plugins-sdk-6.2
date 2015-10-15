@@ -20,11 +20,11 @@ import com.htmsd.slayer.model.ShoppingItem;
 import com.htmsd.slayer.service.CategoryLocalServiceUtil;
 import com.htmsd.slayer.service.ItemHistoryLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingItemLocalServiceUtil;
+import com.htmsd.slayer.service.WholeSaleLocalServiceUtil;
 import com.htmsd.util.HConstants;
 import com.htmsd.util.NotificationUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.json.JSON;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -137,6 +137,7 @@ public class DashboardPortlet extends MVCPortlet {
 					name, description, sellerPrice, sellerPrice, quantity, HConstants.NEW,
 					StringUtil.merge(imageIds, StringPool.COMMA), vedioURL,  getSmallImageId(), StringPool.BLANK);
 			itemId = shoppingItem.getItemId();
+			
 			ItemHistoryLocalServiceUtil.addItemHistory(itemId, currentUserId, currentUserName, currentUserEmail, HConstants.ITEM_ADDED, StringPool.BLANK);
 		} else {
 			//Updating items 
@@ -154,12 +155,35 @@ public class DashboardPortlet extends MVCPortlet {
 		ShoppingItemLocalServiceUtil.updateCategory(itemId, categoryId, userId, userName);
 		actionResponse.setRenderParameter("tab1", ParamUtil.getString(uploadRequest, "tab1"));
 		
+		//WholeSale
+		updateWholeSale(uploadRequest,itemId);
+		
+		
 		NotificationUtil.sendNotification(themeDisplay.getScopeGroupId(), 
 				themeDisplay.getUser().getFullName(), themeDisplay.getUser().getEmailAddress(), "EMAIL_NOTIFICATION");
 		
 	} 
 	
 	
+	/**
+	 * Method updateWholeSale to update updateWholeSale of items 
+	 * @param uploadRequest
+	 * @param itemId
+	 */
+	private void updateWholeSale(UploadPortletRequest uploadRequest, long itemId) {
+		
+		WholeSaleLocalServiceUtil.deleteWholeSaleByItem(itemId);
+		if(ParamUtil.getBoolean(uploadRequest, HConstants.WHOLESALE_DISCOUNT)) {
+			
+			for(int i = 1 ; i <= HConstants.WHOLESALE_LIMIT; i++) {
+				long quantity = ParamUtil.getLong(uploadRequest, HConstants.WHOLESALE_QUANTITY+i);
+				double price = ParamUtil.getDouble(uploadRequest, HConstants.WHOLESALE_PRICE+i);
+				if(quantity > 0 && price > 0.0) {
+					WholeSaleLocalServiceUtil.putWholeSale(itemId, quantity, price);
+				}
+			}
+		}
+	}
 
 	/**
 	 * Method updateTags to update assesttags of items 
