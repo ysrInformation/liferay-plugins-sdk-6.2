@@ -129,7 +129,13 @@
 				<a href="#" onclick="showStockForm('<%=showStockFormURL%>');"><aui:icon image="edit"/></a> 
 				<%=item.getQuantity() == -1 ? LanguageUtil.get(portletConfig,themeDisplay.getLocale(),"unlimited") : item.getQuantity() %>
 			</liferay-ui:search-container-column-text>
+			
+		<liferay-ui:search-container-column-text name="total-sold" >
+			
+		</liferay-ui:search-container-column-text>
 		</c:if>
+		
+		
 		
 		<liferay-ui:search-container-column-text name="">
 			<%
