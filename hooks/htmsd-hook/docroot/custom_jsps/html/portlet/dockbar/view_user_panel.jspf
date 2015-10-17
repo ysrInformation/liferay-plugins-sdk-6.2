@@ -24,7 +24,6 @@
 				<liferay-portlet:runtime portletName="<%= PortletKeys.STAGING_BAR %>" />
 			</aui:nav-item>
 		</c:if>
-		
 		<li class="currency">
 			<aui:select name="Currency" inlineField="true" inlineLabel="true" >
 			</aui:select>
