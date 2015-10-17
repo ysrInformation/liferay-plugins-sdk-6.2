@@ -54,7 +54,7 @@
 		</liferay-ui:search-container-column-text>
 		
 		<liferay-ui:search-container-column-text name="status" >
-			<%=LanguageUtil.get(portletConfig,themeDisplay.getLocale(),String.valueOf(item.getStatus())) %>
+			<%=item.getStatus() == HConstants.APPROVE ? "New" : (item.getStatus() == HConstants.REJECT ? "Rejected" : "Listed")%>
 		</liferay-ui:search-container-column-text>
 		
 		<liferay-ui:search-container-column-text name="stock">
@@ -97,7 +97,8 @@ function showStockForm(url) {
 				dialog: {
 				    centered: true,
 				    modal: true,
-				    width : 300
+				    width : 300,
+				    height : 300
 				},
 				dialogIframe: {
 					id: 'showstockDialog',

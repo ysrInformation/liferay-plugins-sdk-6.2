@@ -230,17 +230,20 @@
 				</div>		
 				<c:if test="<%=isAdmin%>">
 					<aui:select name="<%=HConstants.status %>" showEmptyOption="true" required="true" >
-					<aui:option value="<%=HConstants.APPROVE%>" label="approve" />
-					<aui:option value="<%=HConstants.REJECT %>" label="reject" />
-				</aui:select>
-						<div id="remarkDiv" style="display:none;">
-							<aui:input name="<%=HConstants.REMARK %>" type="textarea" value="<%=item.getRemark()%>"/>
-						</div>
-					</c:if>
+						<aui:option value="<%=HConstants.APPROVE%>" label="approve" />
+						<aui:option value="<%=HConstants.REJECT %>" label="reject" />
+					</aui:select>
+					<div id="remarkDiv" style="display:none;">
+						<aui:input name="<%=HConstants.REMARK %>" type="textarea" value="<%=item.getRemark()%>"/>
+					</div>
+				</c:if>
+				<c:if test="<%=isAdmin || isStaff %>">
 					<aui:input name="<%=HConstants.STAFF_REMARKS %>" type="textarea"/>
 					<aui:button type="submit" value="update" onClick="return confirmSubmit();"/>
 					<aui:button type="button" href="<%=backURL %>" value="cancel" />
-			</aui:form>
+				</c:if>
+					
+				</aui:form>
 			</aui:fieldset>
 			
 			<!-- Image for Modal -->
@@ -249,9 +252,8 @@
 			<script>
 				$(document).ready(function(){
 					fetchCategories('<%=categoryId%>');
-					$('#<portlet:namespace/><%=HConstants.CATEGORY_ID%>').attr()
 					if(!<%=isAdmin%>) {
-						$('#<portlet:namespace/>fm input,input[type=textarea],select ').attr("disabled", true);	
+						$('#<portlet:namespace/>itemDetailForm input,input[type=textarea],select ').attr("disabled", true);	
 					}
 				});
 				$("img").on("click",function(){
@@ -329,24 +331,24 @@
 				 
 					 <c:if test='<%=isAdmin %>'>
 					 
-					 A.one("#<portlet:namespace /><%=HConstants.UNILIMITED_QUANTITY%>Checkbox").on('change',function(e){
-							var quantity =  A.one("#<portlet:namespace /><%=HConstants.QUANTITY%>");
-							if(e.currentTarget.get('checked')) {
-								quantity.set('disabled', true);
-							 }else{
-							 	quantity.set('disabled', false);	
-							 }
-						});
-					 
-						 A.one("#<portlet:namespace /><%=HConstants.status%>").on('change',function(e){
-							var remarkDiv = document.getElementById("remarkDiv");
-							console.log(remarkDiv);
-							if(e.currentTarget.get('value') == <%=HConstants.REJECT%>) {
-								remarkDiv.style.display  = 'block';
-							}else{
-								remarkDiv.style.display  = 'none';
-							}
-						 });
+						 A.one("#<portlet:namespace /><%=HConstants.UNILIMITED_QUANTITY%>Checkbox").on('change',function(e){
+								var quantity =  A.one("#<portlet:namespace /><%=HConstants.QUANTITY%>");
+								if(e.currentTarget.get('checked')) {
+									quantity.set('disabled', true);
+								 }else{
+								 	quantity.set('disabled', false);	
+								 }
+							});
+						 
+							 A.one("#<portlet:namespace /><%=HConstants.status%>").on('change',function(e){
+								var remarkDiv = document.getElementById("remarkDiv");
+								console.log(remarkDiv);
+								if(e.currentTarget.get('value') == <%=HConstants.REJECT%>) {
+									remarkDiv.style.display  = 'block';
+								}else{
+									remarkDiv.style.display  = 'none';
+								}
+							 });
 						 
 					 </c:if>
 				});

@@ -1,3 +1,6 @@
+<%@page import="com.liferay.portal.model.User"%>
+<%@page import="com.liferay.portal.service.UserLocalServiceUtil"%>
+<%@page import="com.liferay.portal.service.UserLocalService"%>
 <%@page import="com.htmsd.dashboard.DashboardPortlet"%>
 <%@include file="/html/dashboard/init.jsp" %>
 
@@ -102,12 +105,16 @@
 			<fmt:formatDate value="<%=item.getCreateDate() %>" pattern="dd/MM/yyyy" />
 		</liferay-ui:search-container-column-text>
 		
-		<liferay-ui:search-container-column-text name="item-added-by" >
+		<liferay-ui:search-container-column-text name="seller" >
 			<%=item.getUserEmail() + StringPool.OPEN_PARENTHESIS + item.getUserName() + StringPool.CLOSE_PARENTHESIS %>
 		</liferay-ui:search-container-column-text>
 		
-		<liferay-ui:search-container-column-text name="last-update-by"  property="updateUserName" >
-			<%=item.getUpdateEmail() + StringPool.OPEN_PARENTHESIS + item.getUpdateUserName() + StringPool.CLOSE_PARENTHESIS %>
+		
+		<liferay-ui:search-container-column-text name="seller-city" >
+			<%
+				User seller = UserLocalServiceUtil.fetchUser(item.getUserId());
+			%>
+			<%=user.getAddresses().isEmpty() ? StringPool.BLANK : user.getAddresses().get(0).getCity() %>		
 		</liferay-ui:search-container-column-text>
 		
 		<c:if test='<%=tabs1.equals("Approved Items") %>'>

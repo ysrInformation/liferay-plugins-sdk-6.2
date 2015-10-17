@@ -6,7 +6,7 @@
 <aui:form action="<%=updateStockURL %>" method="POST" target="_parent">
 	<aui:input name="itemId" value="<%=ParamUtil.getString(renderRequest, HConstants.ITEM_ID) %>" type="hidden"  />
 				<aui:input name="<%=HConstants.QUANTITY %>">
-					<aui:validator name="number" />
+					<aui:validator name="digits" />
 				</aui:input>
 	<aui:input name="<%=HConstants.UNILIMITED_QUANTITY %>" type="checkbox" label="unlimited-quantity" />
 	<aui:button value="save" type="submit"/>	
