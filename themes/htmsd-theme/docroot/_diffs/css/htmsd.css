@@ -365,3 +365,16 @@
 .scroll-top-wrapper i.fa {
 	line-height: inherit;
 }
+
+.currency div {
+	margin-bottom: 0 !important;
+	margin-top: 6px;
+}
+
+.currency label {
+	color: white;
+}
+
+.currency select {
+	width: 50%;
+}
