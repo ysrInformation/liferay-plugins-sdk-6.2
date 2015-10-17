@@ -39,9 +39,6 @@
 <%@page import="org.apache.commons.collections.ListUtils"%>
 <%@page import="org.apache.commons.beanutils.BeanComparator"%>
 
-<head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-</head>
 
 <%
 	boolean isAdmin = permissionChecker.isOmniadmin();
