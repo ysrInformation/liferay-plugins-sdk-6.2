@@ -82,6 +82,15 @@
 	text-transform: uppercase;
 }
 
+.qty-discounts {
+	width: 100%;
+	margin-bottom: 10px;
+}
+.qty-discounts th, .qty-discounts td {
+	text-align: left;
+	padding: 5px;
+}
+
 /********Shopping Item Details********/
 .add-to-cart-item-price {
 	font-size: 27px;

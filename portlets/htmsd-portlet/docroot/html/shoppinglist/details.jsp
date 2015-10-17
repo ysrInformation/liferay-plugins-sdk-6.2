@@ -1,3 +1,6 @@
+<%@page import="com.htmsd.slayer.service.WholeSaleLocalServiceUtil"%>
+<%@page import="com.htmsd.slayer.service.WholeSaleLocalService"%>
+<%@page import="com.htmsd.slayer.model.WholeSale"%>
 <%@include file="/html/shoppinglist/init.jsp" %>
 <%
 	long itemId = ParamUtil.getLong(request, HConstants.ITEM_ID);
@@ -14,6 +17,7 @@
 			addItemsToCartActionURL.setParameter(HConstants.ITEM_ID, String.valueOf(itemId));
 			String cmd = ParamUtil.getString(request, Constants.CMD);
 			String videoURL = shoppingItem.getVedioURL();
+			List<WholeSale> wholeSales = WholeSaleLocalServiceUtil.getWholeSaleItem(shoppingItem.getItemId());
 		%>
 		<liferay-ui:error key="item-exist" message="item-already-exist"/>
 		<aui:fieldset>
@@ -69,11 +73,30 @@
 						</div>
 						<div class="add-to-cart-item-price" id="itemPrice">
 						</div>
-						<%-- <div class="add-to-cart-item-quantity" >
-							<aui:input name="quantity" value="1" cssClass="quantity" required="true" showRequiredLabel="false">
-								<aui:validator name="digit"/>
-							</aui:input>
-						</div> --%>
+						<div class="add-to-cart-item-quantity" >
+							<c:if test="<%= wholeSales.size() > 0 %>">
+								<table class="qty-discounts">
+									<thead>
+										<tr>
+											<th><liferay-ui:message key="qunatity"/></th>
+											<th><liferay-ui:message key="price"/></th>
+										</tr>
+									</thead>
+									<tbody>
+										<%
+											for(WholeSale wholeSale : wholeSales) {
+												%>
+													<tr>
+														<td><%=wholeSale.getQuantity() + " Units"%></td>
+														<td><%=CommonUtil.getPriceFormat(wholeSale.getPrice()) %></td>
+													</tr>
+												<%
+											}
+										%>
+									</tbody>
+								</table>
+							</c:if>
+						</div>
 						<c:if test='<%= !cmd.equalsIgnoreCase("itemsDetails") %>'>
 							<div class="add-to-cart-btn">
 								<%
