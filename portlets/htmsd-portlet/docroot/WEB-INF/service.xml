@@ -311,5 +311,21 @@
 			<finder-column name="quantity" comparator="&lt;=" />
 		</finder>
 	</entity>
+	
+	<entity name="Currency" local-service="true" remote-service="true">
+		<column name="currencyId" type="long" primary="true"/>
+		<column name="currencyCode" type="String"/>
+		<column name="currencyDesc" type="String"/>
+		<column name="conversion" type="double"/>
+		<column name="currencySymbol" type="String"/>
+		
+		<order by="ase">
+			<order-column name="currencyCode"/>
+		</order>		
+		
+		<finder return-type="Currency" name="CurrencyCode">
+			<finder-column name="currencyCode"/>
+		</finder>
+	</entity>
 
 </service-builder>
