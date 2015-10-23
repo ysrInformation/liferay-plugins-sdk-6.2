@@ -6,9 +6,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.swing.text.NumberFormatter;
-import javax.swing.text.html.HTMLDocument.HTMLReader.PreAction;
-
 import com.htmsd.slayer.NoSuchShoppingItem_CartException;
 import com.htmsd.slayer.model.Category;
 import com.htmsd.slayer.model.Currency;
@@ -110,10 +107,15 @@ public class CommonUtil {
 	}
 	
 	public static String getPriceFormat(double price) {
-		
 		String priceInString = StringPool.BLANK;
-		DecimalFormat df = new DecimalFormat("0.00");
-		priceInString = getCurrencySymbol()+StringPool.PERIOD+ StringPool.SPACE + df.format(price);
+		NumberFormat df = NumberFormat.getInstance();
+		java.util.Currency currency = null;
+		try {
+			currency = java.util.Currency.getInstance(getCurrencySymbol());
+			priceInString = currency.getSymbol()+" "+ df.format(price);
+		} catch (IllegalArgumentException e) {
+			priceInString = HConstants.RUPPEE_SYMBOL+" "+ df.format(price);
+		}
 		return priceInString;
 	}
 	 

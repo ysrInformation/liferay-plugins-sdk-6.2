@@ -177,7 +177,7 @@
 	var ajaxURI2 = '$theme_display.getPortalURL()/api/jsonws/htmsd-portlet.currency/get-currencies';
 	AUI().use('aui-base', function(A) {
 		AUI().io.request(ajaxURI2, {
-			sync: true,
+			sync: false,
 			dateType:'json',
 			method: 'get',
 			on: {
@@ -216,7 +216,7 @@
 	var ajaxURI1 = '$theme_display.getPortalURL()/api/jsonws/htmsd-portlet.currency/get-seleced-currency-id';
 	AUI().use('aui-base', function(A) {
 		AUI().io.request(ajaxURI1, {
-			sync: true,
+			sync: false,
 			dateType:'json',
 			method: 'get',
 			on: {
