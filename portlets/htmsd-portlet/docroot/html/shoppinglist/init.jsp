@@ -37,5 +37,12 @@
 
 <%@page import="org.apache.commons.collections.ListUtils"%>
 <%@page import="org.apache.commons.beanutils.BeanComparator"%>
- 
+<aui:script>
+	function formatPrice(number) {
+		accounting.settings.currency.symbol = '<%=CommonUtil.getCurrencySymbol()%> 	';
+		var text = '';
+		text = accounting.formatMoney(Math.abs(number));
+		return text;
+	}
+</aui:script>
 

@@ -95,4 +95,6 @@ public interface HConstants {
 	//Price Symbol
 	public static final String RUPEE_SYMBOL = "Rs.";
 	
+	public static final String CURRENCY_PORTLET_PREFERENCE = "CURRENCY_PORTLET";
+	
 }

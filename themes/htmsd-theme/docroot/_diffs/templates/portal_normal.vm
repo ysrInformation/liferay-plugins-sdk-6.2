@@ -105,9 +105,7 @@
 			<i class="fa fa-2x fa-arrow-circle-up"></i>
 		</span>
 	</div>
-		
 </body>
-
 <script>
 	var isMobile = {
 	    Android: function() {
@@ -175,6 +173,59 @@
 			window.location.href = '/search?search-param=' + searchParam;
 		} 
 	}
+
+	var ajaxURI2 = '$theme_display.getPortalURL()/api/jsonws/htmsd-portlet.currency/get-currencies';
+	AUI().use('aui-base', function(A) {
+		AUI().io.request(ajaxURI2, {
+			sync: true,
+			dateType:'json',
+			method: 'get',
+			on: {
+				success: function() {
+					currencies = JSON.parse(this.get('responseData'));
+					var selectCurr = $('#_145_Currency');
+					for(var index in currencies) {
+			    		var name = (currencies[index].currencyCode);
+			    		var currencyId = (currencies[index].currencyId);
+			    		selectCurr.append(new Option(name,currencyId));
+		    		}
+				}
+			}
+		});
+	});	
 	
+	function changeCurrency(obj) {
+		var ajaxURI3 = '$theme_display.getPortalURL()/api/jsonws/htmsd-portlet.currency/set-currency';
+		AUI().use('aui-base', function(A) {
+			AUI().io.request(ajaxURI3, {
+				sync: true,
+				dateType:'json',
+				method: 'post',
+				data : {
+					currencyId : obj.value
+				},
+				on: {
+					success: function() {
+						window.location.href = '$theme_display.getURLCurrent()';
+					}
+				}
+			});
+		});	
+	}
+	
+	var ajaxURI1 = '$theme_display.getPortalURL()/api/jsonws/htmsd-portlet.currency/get-seleced-currency-id';
+	AUI().use('aui-base', function(A) {
+		AUI().io.request(ajaxURI1, {
+			sync: true,
+			dateType:'json',
+			method: 'get',
+			on: {
+				success: function() {
+					currencyId = this.get('responseData');
+					$('#_145_Currency option[value="'+currencyId+'"]').attr('selected', 'selected');
+				}
+			}
+		});
+	});
 </script>
 </html>

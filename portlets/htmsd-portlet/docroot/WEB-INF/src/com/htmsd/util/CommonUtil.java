@@ -7,9 +7,11 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.swing.text.NumberFormatter;
+import javax.swing.text.html.HTMLDocument.HTMLReader.PreAction;
 
 import com.htmsd.slayer.NoSuchShoppingItem_CartException;
 import com.htmsd.slayer.model.Category;
+import com.htmsd.slayer.model.Currency;
 import com.htmsd.slayer.model.Invoice;
 import com.htmsd.slayer.model.ShoppingCart;
 import com.htmsd.slayer.model.ShoppingItem;
@@ -17,6 +19,7 @@ import com.htmsd.slayer.model.ShoppingItem_Cart;
 import com.htmsd.slayer.model.ShoppingOrder;
 import com.htmsd.slayer.model.ShoppingOrderItem;
 import com.htmsd.slayer.service.CategoryLocalServiceUtil;
+import com.htmsd.slayer.service.CurrencyLocalServiceUtil;
 import com.htmsd.slayer.service.InvoiceLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingCartLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingItemLocalServiceUtil;
@@ -26,6 +29,7 @@ import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -39,9 +43,11 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Address;
 import com.liferay.portal.model.Country;
 import com.liferay.portal.model.Phone;
+import com.liferay.portal.model.PortletPreferences;
 import com.liferay.portal.model.Region;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.CountryServiceUtil;
+import com.liferay.portal.service.PortletPreferencesLocalServiceUtil;
 import com.liferay.portal.service.RegionServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.model.DLFileShortcut;
@@ -107,7 +113,7 @@ public class CommonUtil {
 		
 		String priceInString = StringPool.BLANK;
 		DecimalFormat df = new DecimalFormat("0.00");
-		priceInString = HConstants.RUPPEE_SYMBOL+StringPool.PERIOD+ StringPool.SPACE + df.format(price);
+		priceInString = getCurrencySymbol()+StringPool.PERIOD+ StringPool.SPACE + df.format(price);
 		return priceInString;
 	}
 	 
@@ -398,5 +404,40 @@ public class CommonUtil {
 			e.printStackTrace();
 		}
 		return parenCategory;
+	}
+	
+	public static String getCurrencySymbol() {
+		Currency currencyRates = getCurrency();
+		if (Validator.isNull(currencyRates)) return HConstants.RUPPEE_SYMBOL;
+        java.util.Currency currency = java.util.Currency.getInstance(currencyRates.getCurrencyCode());
+        
+        return currency.getSymbol();
+	}
+
+	private static Currency getCurrency() {
+		PortletPreferences portletPreferences = null;
+		
+		try {
+			portletPreferences = PortletPreferencesLocalServiceUtil.getPortletPreferences(0, 0, 0, HConstants.CURRENCY_PORTLET_PREFERENCE);
+		} catch (PortalException e1) {
+			e1.printStackTrace();
+		} catch (SystemException e1) {
+			e1.printStackTrace();
+		}
+		
+		long currencyId = Long.valueOf(portletPreferences.getPreferences());
+		Currency currencyRates = null;
+		try {
+			currencyRates = CurrencyLocalServiceUtil.fetchCurrency(currencyId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		return currencyRates;
+	}
+	
+	public static double getCurrentRate() {
+		Currency currencyRates = getCurrency();
+		if (Validator.isNull(currencyRates)) return 0;
+		return currencyRates.getConversion();
 	}
 }

@@ -26,8 +26,8 @@
 		</c:if>
 		
 		<li class="currency">
-			<aui:select name="Currency" inlineField="true" inlineLabel="true" >
-				<aui:option label="-Select-"/>
+			<aui:select name="Currency" inlineField="true" inlineLabel="true"  onChange="javascript:changeCurrency(this);">
+				<aui:option label="INR" value="0" selected="true"/>
 			</aui:select>
 		</li>
 		<li>

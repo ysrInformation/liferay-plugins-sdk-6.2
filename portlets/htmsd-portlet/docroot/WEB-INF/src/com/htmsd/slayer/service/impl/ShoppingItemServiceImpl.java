@@ -94,6 +94,7 @@ public class ShoppingItemServiceImpl extends ShoppingItemServiceBaseImpl {
 		List<ShoppingItem> shoppingItems = new ArrayList<ShoppingItem>();
 		shoppingItems = shoppingItemLocalService.getItemByTagName(tagName, sortBy, start, end);
 		getItemJSONArray(groupId, jsonArray, shoppingItems);
+		System.out.println(jsonArray);
 		return jsonArray;
 	}
 
@@ -105,7 +106,9 @@ public class ShoppingItemServiceImpl extends ShoppingItemServiceBaseImpl {
 			jsonObject.put(HConstants.ITEM_ID, shoppingItem.getItemId());
 			jsonObject.put(HConstants.NAME, shoppingItem.getName());
 			jsonObject.put(HConstants.DESCRIPTION, StringUtil.shorten(shoppingItem.getDescription(), 50, ". . ."));
-			jsonObject.put(HConstants.TOTAL_PRICE, shoppingItem.getTotalPrice());
+			double currencyRate = CommonUtil.getCurrentRate();
+			double total = (currencyRate == 0) ? shoppingItem.getTotalPrice() :  shoppingItem.getTotalPrice() / currencyRate; 
+			jsonObject.put(HConstants.TOTAL_PRICE, total);
 			long imageId = shoppingItem.getSmallImage();
 			jsonObject.put(HConstants.IMAGE, CommonUtil.getThumbnailpath(imageId, groupId, false));
 			jsonArray.put(jsonObject);

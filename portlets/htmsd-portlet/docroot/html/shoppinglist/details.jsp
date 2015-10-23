@@ -17,6 +17,8 @@
 			addItemsToCartActionURL.setParameter(HConstants.ITEM_ID, String.valueOf(itemId));
 			String cmd = ParamUtil.getString(request, Constants.CMD);
 			String videoURL = shoppingItem.getVedioURL();
+			String currencySymbol = CommonUtil.getCurrencySymbol();
+			double currentRate = CommonUtil.getCurrentRate();
 			List<WholeSale> wholeSales = WholeSaleLocalServiceUtil.getWholeSaleItem(shoppingItem.getItemId());
 		%>
 		<liferay-ui:error key="item-exist" message="item-already-exist"/>
@@ -88,7 +90,9 @@
 												%>
 													<tr>
 														<td><%=wholeSale.getQuantity() + " Units"%></td>
-														<td><%=CommonUtil.getPriceFormat(wholeSale.getPrice()) %></td>
+														<%	double total = (currentRate == 0) ? wholeSale.getPrice() :  wholeSale.getPrice() / currentRate; 
+ %>
+														<td><%=CommonUtil.getPriceFormat(total) %></td>
 													</tr>
 												<%
 											}
@@ -113,7 +117,7 @@
 		</aui:fieldset>
 		<script>
 			$(document).ready(function() {
-				var price = <%=price%>;
+				var price = <%=(currentRate == 0) ? price :  price / currentRate%>;
 				$('#itemPrice').html(formatPrice(price));
 			    $("#lightGallery").lightGallery({
 			    	mode : 'fade',
