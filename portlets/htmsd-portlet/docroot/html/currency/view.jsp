@@ -2,21 +2,24 @@
 <%@page import="javax.portlet.PortletSession"%>
 <%@include file="/html/common/init.jsp" %>
 <style>
-	#p_p_id_7_WAR_htmsdportlet_ , #p_p_id_7_WAR_htmsdportlet_ .portlet-borderless-container {
-		background: transparent;
-	}	
-	
-	#p_p_id_7_WAR_htmsdportlet_ .portlet-borderless-container .control-group {
-		margin-top: 0px;
-	}
-	
-	.currency label {
-		color: white;
-	}
-	
-	.currency select {
-		width: 50%;
-	}
+#p_p_id_7_WAR_htmsdportlet_, #p_p_id_7_WAR_htmsdportlet_ .portlet-borderless-container
+	{
+	background: transparent none repeat scroll 0 0;
+	height: 10px;
+	margin-top: 5px;
+}
+#p_p_id_7_WAR_htmsdportlet_ .portlet-body {
+	height: 30px;
+}
+
+
+.currency label {
+	color: white;
+}
+
+.currency select {
+	width: 48%;
+}
 </style>
 <%
 	String currencyId = (String) portletSession.getAttribute("currentCurrencyId", PortletSession.APPLICATION_SCOPE);
