@@ -22,8 +22,8 @@
 					si.itemId = ae.classPK
                     AND NOT si.quantity = 0
                     AND si.status = 1
-                    OR si.name like ?
-                    OR ast.name like ?
+                    AND si.name like ?
+                    OR ast.name like ? 
    				[$sort]
 		 	]]>
 	</sql>
