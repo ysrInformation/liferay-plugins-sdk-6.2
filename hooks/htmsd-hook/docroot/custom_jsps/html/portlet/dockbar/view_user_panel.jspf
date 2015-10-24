@@ -26,9 +26,7 @@
 		</c:if>
 		
 		<li class="currency">
-			<aui:select name="Currency" inlineField="true" inlineLabel="true"  onChange="javascript:changeCurrency(this);">
-				<aui:option label="INR" value="0" selected="true"/>
-			</aui:select>
+			<liferay-portlet:runtime portletName="7_WAR_htmsdportlet" />
 		</li>
 		<li>
 			<a href="/sell"> Sell </a>
