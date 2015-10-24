@@ -40,6 +40,9 @@
 		sync: false,
 		dateType:'json',
 		method: 'get',
+		data : {
+			p_auth: Liferay.authToken
+		},
 		on: {
 			success: function() {
 				currencies = JSON.parse(this.get('responseData'));
@@ -60,6 +63,7 @@
 		AUI().io.request('<%=setCurrencyURL%>', {
 			sync: true,
 			data : {
+				p_auth: Liferay.authToken,
 				<portlet:namespace/>currencyId : obj.value 				
 			},
 			on: {

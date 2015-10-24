@@ -433,7 +433,8 @@ public class CommonUtil {
 		NumberFormat df = NumberFormat.getInstance();
 		String symbol = getCurrencySymbol(currencyId);
 		if (symbol.equalsIgnoreCase("INR")) return priceInString = HConstants.RUPPEE_SYMBOL +" "+ df.format(price);
-		priceInString = getCurrencySymbol(currencyId) +" "+ df.format(price);
+		java.util.Currency currency = java.util.Currency.getInstance(symbol);
+		priceInString = currency.getSymbol() +" "+ df.format(price);
 		return priceInString;
 	}
 }
