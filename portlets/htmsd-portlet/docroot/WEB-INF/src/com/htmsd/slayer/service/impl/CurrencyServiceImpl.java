@@ -16,6 +16,8 @@ package com.htmsd.slayer.service.impl;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.htmsd.slayer.model.Currency;
 import com.htmsd.slayer.service.CurrencyLocalServiceUtil;
 import com.htmsd.slayer.service.base.CurrencyServiceBaseImpl;
@@ -53,46 +55,5 @@ public class CurrencyServiceImpl extends CurrencyServiceBaseImpl {
 	@AccessControlled(guestAccessEnabled =  true)
 	public List<Currency> getCurrencies() throws SystemException {
 		return CurrencyLocalServiceUtil.getCurrencies(-1, -1);
-	}
-	
-	public void setCurrency(long currencyId) {
-		PortletPreferences portletPreferences = null;
-		
-		try {
-			portletPreferences = PortletPreferencesLocalServiceUtil.getPortletPreferences(0, 0, 0, HConstants.CURRENCY_PORTLET_PREFERENCE);
-		} catch (PortalException e1) {
-			e1.printStackTrace();
-		} catch (SystemException e1) {
-			e1.printStackTrace();
-		}
-		
-		if (Validator.isNull(portletPreferences)) {
-			try {
-				portletPreferences = PortletPreferencesLocalServiceUtil.createPortletPreferences(counterLocalService.increment());
-				PortletPreferencesLocalServiceUtil.addPortletPreferences(portletPreferences);
-			} catch (SystemException e) {
-				e.printStackTrace();
-			}
-		}
-		portletPreferences.setPortletId(HConstants.CURRENCY_PORTLET_PREFERENCE);
-		portletPreferences.setPreferences(String.valueOf(currencyId));
-		try {
-			PortletPreferencesLocalServiceUtil.updatePortletPreferences(portletPreferences);
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public long getSelecedCurrencyId() {
-		PortletPreferences portletPreferences = null;
-		
-		try {
-			portletPreferences = PortletPreferencesLocalServiceUtil.getPortletPreferences(0, 0, 0, HConstants.CURRENCY_PORTLET_PREFERENCE);
-		} catch (PortalException e1) {
-			e1.printStackTrace();
-		} catch (SystemException e1) {
-			e1.printStackTrace();
-		}
-		return Long.valueOf(portletPreferences.getPreferences());
 	}
 }

@@ -1,3 +1,4 @@
+<%@page import="javax.portlet.PortletSession"%>
 <%@include file="/html/common/init.jsp" %>
 
 <%@page import="com.liferay.portal.kernel.util.ListUtil"%>
@@ -37,12 +38,16 @@
 
 <%@page import="org.apache.commons.collections.ListUtils"%>
 <%@page import="org.apache.commons.beanutils.BeanComparator"%>
+<%
+	String val = (String) portletSession.getAttribute("currentCurrencyId", PortletSession.APPLICATION_SCOPE);
+	long currencyId = (Validator.isNull(val)) ?  0 : Long.valueOf(val);
+	System.out.println(CommonUtil.getCurrencySymbol(currencyId));
+%>	
 <aui:script>
 	function formatPrice(number) {
-		accounting.settings.currency.symbol = '<%=CommonUtil.getCurrencySymbol()%> 	';
+		accounting.settings.currency.symbol = '<%=CommonUtil.getCurrencySymbol(currencyId)%>';
 		var text = '';
 		text = accounting.formatMoney(Math.abs(number));
 		return text;
 	}
 </aui:script>
-

@@ -107,15 +107,10 @@ public class CommonUtil {
 	}
 	
 	public static String getPriceFormat(double price) {
+		
 		String priceInString = StringPool.BLANK;
-		NumberFormat df = NumberFormat.getInstance();
-		java.util.Currency currency = null;
-		try {
-			currency = java.util.Currency.getInstance(getCurrencySymbol());
-			priceInString = currency.getSymbol()+" "+ df.format(price);
-		} catch (IllegalArgumentException e) {
-			priceInString = HConstants.RUPPEE_SYMBOL+" "+ df.format(price);
-		}
+		DecimalFormat df = new DecimalFormat("0.00");
+		priceInString = HConstants.RUPPEE_SYMBOL+StringPool.PERIOD+ StringPool.SPACE + df.format(price);
 		return priceInString;
 	}
 	 
@@ -408,26 +403,16 @@ public class CommonUtil {
 		return parenCategory;
 	}
 	
-	public static String getCurrencySymbol() {
-		Currency currencyRates = getCurrency();
+	public static String getCurrencySymbol(long currencyId) {
+		Currency currencyRates = getCurrency(currencyId);
 		if (Validator.isNull(currencyRates)) return HConstants.RUPPEE_SYMBOL;
         java.util.Currency currency = java.util.Currency.getInstance(currencyRates.getCurrencyCode());
         
         return currency.getSymbol();
 	}
 
-	private static Currency getCurrency() {
-		PortletPreferences portletPreferences = null;
+	private static Currency getCurrency(long currencyId) {
 		
-		try {
-			portletPreferences = PortletPreferencesLocalServiceUtil.getPortletPreferences(0, 0, 0, HConstants.CURRENCY_PORTLET_PREFERENCE);
-		} catch (PortalException e1) {
-			e1.printStackTrace();
-		} catch (SystemException e1) {
-			e1.printStackTrace();
-		}
-		
-		long currencyId = Long.valueOf(portletPreferences.getPreferences());
 		Currency currencyRates = null;
 		try {
 			currencyRates = CurrencyLocalServiceUtil.fetchCurrency(currencyId);
@@ -437,9 +422,18 @@ public class CommonUtil {
 		return currencyRates;
 	}
 	
-	public static double getCurrentRate() {
-		Currency currencyRates = getCurrency();
+	public static double getCurrentRate(long currencyId) {
+		Currency currencyRates = getCurrency(currencyId);
 		if (Validator.isNull(currencyRates)) return 0;
 		return currencyRates.getConversion();
+	}
+	
+	public static String getPriceFormat(double price, long currencyId) {
+		String priceInString = StringPool.BLANK;
+		NumberFormat df = NumberFormat.getInstance();
+		String symbol = getCurrencySymbol(currencyId);
+		if (symbol.equalsIgnoreCase("INR")) return priceInString = HConstants.RUPPEE_SYMBOL +" "+ df.format(price);
+		priceInString = getCurrencySymbol(currencyId) +" "+ df.format(price);
+		return priceInString;
 	}
 }

@@ -1,3 +1,4 @@
+<%@page import="javax.portlet.PortletSession"%>
 <%@page import="com.liferay.portal.util.PortalUtil"%>
 <%@include file="/html/shoppinglist/init.jsp" %>
 
@@ -19,6 +20,7 @@
 			totalCount = ShoppingItemLocalServiceUtil.getItemByCategoryCount(Long.valueOf(categoryToDisplay));
 		}
 	}
+	
 %>
 <style>
 	#no-item-display {
@@ -119,6 +121,7 @@
 			data : {
 				p_auth: Liferay.authToken,
 				categoryId : <%=categoryToDisplay%>,
+				currencyId : <%=currencyId%>, 
 				groupId : <%=themeDisplay.getScopeGroupId()%>,
 				status : <%=HConstants.APPROVE%>,
 				start : s,
@@ -161,6 +164,7 @@
 					tagName : searchParam,
 					sortBy: '<%=sortBy%>',
 					groupId : <%=themeDisplay.getScopeGroupId()%>,
+					currencyId : <%=currencyId%>,
 					start : s,
 					end: e,
 					
@@ -229,5 +233,4 @@
 	$(function() {
 		$('#search').val('<%=searchParam%>');
 	})
-	
 </aui:script>

@@ -62,7 +62,7 @@ public class ShoppingItemServiceImpl extends ShoppingItemServiceBaseImpl {
 	 *@return  
 	 */
 	@AccessControlled(guestAccessEnabled=true)
-	public JSONArray getShoppingItems(long categoryId, long groupId, int status, int start, int end, String sortBy) {
+	public JSONArray getShoppingItems(long categoryId, long currencyId, long groupId, int status, int start, int end, String sortBy) {
 		
 		_log.info("Getting Shopping Item List Start:"+start+" End:"+end+" SortBy:"+sortBy);
 		
@@ -73,7 +73,7 @@ public class ShoppingItemServiceImpl extends ShoppingItemServiceBaseImpl {
 		} else {
 			shoppingItems = shoppingItemLocalService.getItemByOrder(sortBy, start, end);
 		}
-		getItemJSONArray(groupId, jsonArray, shoppingItems);
+		getItemJSONArray(groupId, jsonArray, shoppingItems, currencyId);
 		return jsonArray;
 	}
 	
@@ -87,26 +87,26 @@ public class ShoppingItemServiceImpl extends ShoppingItemServiceBaseImpl {
 	 * @return
 	 */
 	@AccessControlled(guestAccessEnabled=true)
-	public JSONArray getShoppingItemsBtTagName(String tagName, String sortBy, long groupId, int start, int end) {
+	public JSONArray getShoppingItemsBtTagName(String tagName, String sortBy, long groupId, long currencyId, int start, int end) {
 		_log.info("Getting Shopping Item List Start:"+start+" End:"+end+" SortBy:"+sortBy);
 		
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
 		List<ShoppingItem> shoppingItems = new ArrayList<ShoppingItem>();
 		shoppingItems = shoppingItemLocalService.getItemByTagName(tagName, sortBy, start, end);
-		getItemJSONArray(groupId, jsonArray, shoppingItems);
+		getItemJSONArray(groupId, jsonArray, shoppingItems, currencyId);
 		System.out.println(jsonArray);
 		return jsonArray;
 	}
 
 	private void getItemJSONArray(long groupId, JSONArray jsonArray,
-			List<ShoppingItem> shoppingItems) {
+			List<ShoppingItem> shoppingItems, long currencyId) {
 		for (ShoppingItem shoppingItem : shoppingItems) {
 
 			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 			jsonObject.put(HConstants.ITEM_ID, shoppingItem.getItemId());
 			jsonObject.put(HConstants.NAME, shoppingItem.getName());
 			jsonObject.put(HConstants.DESCRIPTION, StringUtil.shorten(shoppingItem.getDescription(), 50, ". . ."));
-			double currencyRate = CommonUtil.getCurrentRate();
+			double currencyRate = CommonUtil.getCurrentRate(currencyId);
 			double total = (currencyRate == 0) ? shoppingItem.getTotalPrice() :  shoppingItem.getTotalPrice() / currencyRate; 
 			jsonObject.put(HConstants.TOTAL_PRICE, total);
 			long imageId = shoppingItem.getSmallImage();
