@@ -8,10 +8,16 @@
 	height: 10px;
 	margin-top: 5px;
 }
+
+#portlet_7_WAR_htmsdportlet{
+	background: transparent none repeat scroll 0 0;
+	margin-top: -10px;
+	padding: 0;
+}
+
 #p_p_id_7_WAR_htmsdportlet_ .portlet-body {
 	height: 30px;
 }
-
 
 .currency label {
 	color: white;
