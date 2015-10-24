@@ -45,7 +45,7 @@
 %>	
 <aui:script>
 	function formatPrice(number) {
-		accounting.settings.currency.symbol = '<%=CommonUtil.getCurrencySymbol(currencyId)%>';
+		accounting.settings.currency.symbol = '<%=CommonUtil.getCurrencySymbol(currencyId)%> ';
 		var text = '';
 		text = accounting.formatMoney(Math.abs(number));
 		return text;
