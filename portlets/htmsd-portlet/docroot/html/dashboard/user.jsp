@@ -54,7 +54,7 @@
 		</liferay-ui:search-container-column-text>
 		
 		<liferay-ui:search-container-column-text name="status" >
-			<%=item.getStatus() == HConstants.APPROVE ? "New" : (item.getStatus() == HConstants.REJECT ? "Rejected" : "Listed")%>
+			<%=item.getStatus() == HConstants.APPROVE ? "Listed" : (item.getStatus() == HConstants.REJECT ? "Rejected" : "New")%>
 		</liferay-ui:search-container-column-text>
 		
 		<liferay-ui:search-container-column-text name="stock">
