@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.htmsd.slayer.model.Category;
+import com.htmsd.slayer.model.ItemHistory;
 import com.htmsd.slayer.model.ShoppingItem;
 import com.htmsd.slayer.service.ShoppingItemLocalServiceUtil;
 import com.htmsd.slayer.service.base.ShoppingItemLocalServiceBaseImpl;
@@ -322,6 +323,10 @@ public class ShoppingItemLocalServiceImpl
 			AssetEntry  assetEntry=  AssetEntryLocalServiceUtil.fetchEntry(ShoppingItem.class.getName(), itemId);
 			if(Validator.isNotNull(assetEntry)) {
 				AssetEntryLocalServiceUtil.deleteAssetEntry(assetEntry);
+			}
+			List<ItemHistory> itemHistories = itemHistoryLocalService.getItemHistoryByItemId(itemId, 0, itemHistoryLocalService.getItemIdCount(itemId));
+			for(ItemHistory itemHistory  :itemHistories) {
+				itemHistoryLocalService.deleteItemHistory(itemHistory.getHistoryId());
 			}
 			shoppingItemLocalService.deleteShoppingItem(itemId);
 		} catch (SystemException e) {
