@@ -52,7 +52,7 @@
 			<c:forEach var="i" begin="1" end="<%=HConstants.IMAGES_UPLOAD_LIMIT %>">
 				<aui:column columnWidth="60" >
 					<aui:input name='image${i}'  type="file" label="" onChange="readURL(this,${i});">
-						<aui:validator name="acceptFiles" errorMessage="please-upload-the-jpg,png,gif">'jpg,png,gif'</aui:validator>
+						<aui:validator name="acceptFiles" errorMessage="please-upload-image">'jpg,png,gif,jpeg,tif,tiff,bmp'</aui:validator>
 						<c:if test="${i==1}">
 							<aui:validator name="required" errorMessage="please-upload-atleast-one-image" />
 						</c:if>	
