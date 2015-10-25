@@ -178,16 +178,20 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		
 		List<ShoppingItem_Cart> shoppingItem_Carts = CommonUtil.getUserCartItems(themeDisplay.getUserId());
 		
-		if (Validator.isNotNull(shoppingItem_Carts)) {
-			for (ShoppingItem_Cart shoppingItem_Cart:shoppingItem_Carts) {
-				if (itemId == shoppingItem_Cart.getItemId()) {
-					try {
-						ShoppingItem_CartLocalServiceUtil.deleteShoppingItem_Cart(shoppingItem_Cart.getId());
-					} catch (Exception e) {
-						e.printStackTrace();
+		if (themeDisplay.isSignedIn()) {
+			if (Validator.isNotNull(shoppingItem_Carts)) {
+				for (ShoppingItem_Cart shoppingItem_Cart:shoppingItem_Carts) {
+					if (itemId == shoppingItem_Cart.getItemId()) {
+						try {
+							ShoppingItem_CartLocalServiceUtil.deleteShoppingItem_Cart(shoppingItem_Cart.getId());
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					}
 				}
 			}
+		} else {
+			//delete from guest
 		}
 	}
 	

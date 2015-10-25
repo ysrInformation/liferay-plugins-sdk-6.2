@@ -14,6 +14,7 @@
 <%--Custom imports --%>
 <%@page import="com.htmsd.util.HConstants"%>
 <%@page import="com.htmsd.util.CommonUtil"%>
+<%@page import="com.htmsd.util.ShoppingBean"%>
 <%@page import="com.htmsd.slayer.model.ShoppingItem"%>
 <%@page import="com.htmsd.slayer.model.ShoppingCart"%>
 <%@page import="com.htmsd.slayer.model.ShoppingOrder"%>

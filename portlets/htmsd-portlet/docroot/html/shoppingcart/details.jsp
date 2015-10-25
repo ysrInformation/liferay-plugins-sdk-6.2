@@ -10,7 +10,12 @@
 	PortletURL checkoutURL = renderResponse.createRenderURL();
 	checkoutURL.setParameter("jspPage", "/html/shoppingcart/checkout.jsp");
 	
-	List<ShoppingItem_Cart> shoppingItem_Carts = CommonUtil.getUserCartItems(themeDisplay.getUserId());
+	List<ShoppingBean> shoppingItemsList = new ArrayList<ShoppingBean>();
+	if (themeDisplay.isSignedIn()) {
+		shoppingItemsList = CommonUtil.getSignedInUserItems(themeDisplay.getUserId());;
+	} else {
+		shoppingItemsList = CommonUtil.getGuestUserItems(portletSession);
+	}
 %>
 
 <portlet:resourceURL var="removeItemURL"> 
@@ -36,7 +41,7 @@
 
 <div class="cart-details-page">
 <c:choose>
-	<c:when test='<%= (Validator.isNotNull(shoppingItem_Carts) && shoppingItem_Carts.size() > 0) %>'>
+	<c:when test='<%= (Validator.isNotNull(shoppingItemsList) && shoppingItemsList.size() > 0) %>'>
 		<table width="100%" class="cart-table">
 			<thead class="cart-head">
 				<tr class="cart-head-row">
@@ -46,7 +51,7 @@
 				</tr>
 			</thead>
 			<% 
-			for (ShoppingItem_Cart shpCtItem:shoppingItem_Carts) { 
+			for (ShoppingBean shpCtItem:shoppingItemsList) { 
 				long itemId = shpCtItem.getItemId();
 				long cartId = shpCtItem.getCartId();
 				ShoppingItem shoppingItem = CommonUtil.getShoppingItem(itemId);
@@ -56,7 +61,7 @@
 					totalPrice += price;
 					int quantity[] = CommonUtil.getItemsQuantity(itemId, cartId);
 					int qtyLength = quantity.length;
-					String updatetotalPrice = "javascript:updatetotalPrice(this.value,'"+shpCtItem.getId()+"','"+getTotalPriceURL+"','"+shoppingItem.getTotalPrice()+"');";
+					String updatetotalPrice = "javascript:updatetotalPrice(this.value,'"+shpCtItem.getCartItemId()+"','"+getTotalPriceURL+"','"+shoppingItem.getTotalPrice()+"');";
 					String removeCartItem = "javascript:removeItems('"+shoppingItem.getItemId()+"','"+removeItemURL+"');";
 					String[] imageIdsList = Validator.isNotNull(shoppingItem) ? shoppingItem.getImageIds().split(StringPool.COMMA):new String[]{}; 
 					%>
@@ -110,7 +115,7 @@
 							</td>
 							<td style="width:20%">
 								<div >
-									<h5><%= CommonUtil.getPriceFormat(price) %></h5>
+									<h5><%= CommonUtil.getPriceInNumberFormat(price, HConstants.RUPEE_SYMBOL) %></h5>
 								</div>
 							</td>
 						</tr>

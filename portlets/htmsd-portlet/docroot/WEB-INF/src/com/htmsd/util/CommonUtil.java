@@ -4,7 +4,17 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import javax.portlet.PortletSession;
+import javax.portlet.RenderRequest;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import com.htmsd.slayer.NoSuchShoppingItem_CartException;
 import com.htmsd.slayer.model.Category;
@@ -26,7 +36,6 @@ import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -40,13 +49,13 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Address;
 import com.liferay.portal.model.Country;
 import com.liferay.portal.model.Phone;
-import com.liferay.portal.model.PortletPreferences;
 import com.liferay.portal.model.Region;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.CountryServiceUtil;
-import com.liferay.portal.service.PortletPreferencesLocalServiceUtil;
 import com.liferay.portal.service.RegionServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.model.DLFileShortcut;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
 
@@ -278,13 +287,17 @@ public class CommonUtil {
 		return (ShoppingOrderLocalServiceUtil.getShoppingOrderByUserId(userId));
 	}
 	
-	public static int getItemsCount(long userId) {
+	public static int getItemsCount(long userId, ThemeDisplay themeDisplay, PortletSession portletSession) {
 		
 		int itemsCount = 0;
-		try {
-			itemsCount = ShoppingItem_CartLocalServiceUtil.getItemsCountByCartId(userId);
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (themeDisplay.isSignedIn()) {
+			try {
+				itemsCount = ShoppingItem_CartLocalServiceUtil.getItemsCountByCartId(userId);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			itemsCount = getGuestUserItems(portletSession).size();
 		}
 		return itemsCount;
 	}
@@ -437,4 +450,70 @@ public class CommonUtil {
 		priceInString = currency.getSymbol() +" "+ df.format(price);
 		return priceInString;
 	}
+	
+	public static List<ShoppingBean> getSignedInUserItems(long userId){
+		
+		List<ShoppingBean> shoppingBeans = new ArrayList<ShoppingBean>();
+		
+		for (ShoppingItem_Cart shIt_cart: getUserCartItems(userId)) {
+			ShoppingBean shoppingBean = new ShoppingBean();
+			ShoppingItem shoppingItem = getShoppingItem(shIt_cart.getItemId());
+			String[] imageIds = (Validator.isNotNull(shoppingItem))?shoppingItem.getImageIds().split(","):new String[]{}; 
+			shoppingBean.setCartId(shIt_cart.getCartId());
+			shoppingBean.setQuantity(shIt_cart.getQuantity());
+			shoppingBean.setTotalPrice(shIt_cart.getTotalPrice()); 
+			shoppingBean.setItemId(shIt_cart.getItemId()); 
+			shoppingBean.setUnitPrice(shoppingItem.getTotalPrice()); 
+			shoppingBean.setProductName(shoppingItem.getName());
+			shoppingBean.setImageId(Long.valueOf(imageIds[0]));
+			shoppingBean.setCartItemId(shIt_cart.getId()); 
+			shoppingBean.setProductCode(shoppingItem.getProductCode()); 
+			shoppingBeans.add(shoppingBean);
+		}
+		
+		return shoppingBeans;
+	}
+	
+	public static List<ShoppingBean> getGuestUserItems(PortletSession portletSession) {
+		
+		System.out.println("Inside guestUserItem ...."); 
+		
+		List<ShoppingBean> shoppingBeans = new ArrayList<ShoppingBean>();
+	/*	Map<String, Long> itemsMap = new HashMap<String, Long>();
+		Cookie[] cookies = request.getCookies();
+		
+		if (cookies.length == 0) return new ArrayList<ShoppingBean>();
+		
+		for (Cookie cookie : cookies) {
+			System.out.println("Name :"+cookie.getName()+"#! Value :"+cookie.getValue()); 
+			if (cookie.getName().equals("SHOPPING_ITEM_ID")) {
+				System.out.println("value"+cookie.getValue()); 
+				itemsMap.put("SHOPPING_ITEM_ID", Long.valueOf(cookie.getValue()));
+			}
+		}*/
+		
+		@SuppressWarnings("unchecked")
+		List<Long> itemIds = Validator.isNotNull(portletSession.getAttribute("SHOPPING_ITEM_ID", PortletSession.APPLICATION_SCOPE))
+			? (List<Long>)portletSession.getAttribute("SHOPPING_ITEM_ID", PortletSession.APPLICATION_SCOPE): new ArrayList<Long>();
+		
+		if (Validator.isNotNull(itemIds)) {
+			for (Long itemId:itemIds) {
+				ShoppingBean shoppingBean = new ShoppingBean();
+				ShoppingItem shoppingItem = getShoppingItem(itemId);
+				String[] imageIds = (Validator.isNotNull(shoppingItem))?shoppingItem.getImageIds().split(","):new String[]{};
+				double totalPrice = shoppingItem.getTotalPrice() * HConstants.INITIAL_QUANTITY;
+				shoppingBean.setItemId(itemId);
+				shoppingBean.setProductCode(shoppingItem.getProductCode());
+				shoppingBean.setProductName(shoppingItem.getName());
+				shoppingBean.setQuantity(HConstants.INITIAL_QUANTITY);
+				shoppingBean.setUnitPrice(shoppingItem.getTotalPrice()); 
+				shoppingBean.setTotalPrice(totalPrice);
+				shoppingBean.setImageId(Long.parseLong(imageIds[0]));
+				shoppingBeans.add(shoppingBean);
+			}
+		}
+
+		return shoppingBeans;
+	}
+	
 }
