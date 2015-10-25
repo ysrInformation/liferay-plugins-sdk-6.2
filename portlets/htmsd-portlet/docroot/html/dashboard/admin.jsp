@@ -114,7 +114,7 @@
 			<%
 				User seller = UserLocalServiceUtil.fetchUser(item.getUserId());
 			%>
-			<%=user.getAddresses().isEmpty() ? StringPool.BLANK : user.getAddresses().get(0).getCity() %>		
+			<%=seller.getAddresses().isEmpty() ? StringPool.BLANK : seller.getAddresses().get(0).getCity() %>		
 		</liferay-ui:search-container-column-text>
 		
 		<c:if test='<%=tabs1.equals("Approved Items") %>'>
