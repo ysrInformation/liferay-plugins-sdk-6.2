@@ -5,7 +5,7 @@
 #p_p_id_7_WAR_htmsdportlet_, #p_p_id_7_WAR_htmsdportlet_ .portlet-borderless-container
 	{
 	background: transparent none repeat scroll 0 0;
-	height: 10px;
+	height: 38px;
 	margin-top: 5px;
 }
 
