@@ -485,25 +485,23 @@ public class CommonUtil {
 		_log.info("Inside guestUserItem ...."); 
 		
 		List<ShoppingBean> shoppingBeans = new ArrayList<ShoppingBean>();
-		List<Long> itemIds = Validator.isNotNull(portletSession.getAttribute("SHOPPING_ITEM_ID", PortletSession.APPLICATION_SCOPE))
-				? (List<Long>) portletSession.getAttribute("SHOPPING_ITEM_ID", PortletSession.APPLICATION_SCOPE): new ArrayList<Long>();
+		Long itemId = Validator.isNotNull(portletSession.getAttribute("SHOPPING_ITEM_ID", PortletSession.APPLICATION_SCOPE))
+				? (Long) portletSession.getAttribute("SHOPPING_ITEM_ID", PortletSession.APPLICATION_SCOPE): 0;
 		
-		if (Validator.isNotNull(itemIds)) {
-			for (Long itemId:itemIds) {
-				ShoppingBean shoppingBean = new ShoppingBean();
-				ShoppingItem shoppingItem = getShoppingItem(itemId);
-				String[] imageIds = (Validator.isNotNull(shoppingItem))?shoppingItem.getImageIds().split(","):new String[]{};
-				double totalPrice = shoppingItem.getTotalPrice() * HConstants.INITIAL_QUANTITY;
-				shoppingBean.setItemId(itemId);
-				shoppingBean.setProductCode(shoppingItem.getProductCode());
-				shoppingBean.setProductName(shoppingItem.getName());
-				shoppingBean.setQuantity(HConstants.INITIAL_QUANTITY);
-				shoppingBean.setUnitPrice(shoppingItem.getTotalPrice()); 
-				shoppingBean.setTotalPrice(totalPrice);
-				shoppingBean.setDescription((Validator.isNotNull(shoppingItem))?shoppingItem.getDescription():StringPool.BLANK); 
-				shoppingBean.setImageId(Long.parseLong(imageIds[0]));
-				shoppingBeans.add(shoppingBean);
-			}
+		if (Validator.isNotNull(itemId)) {
+			ShoppingBean shoppingBean = new ShoppingBean();
+			ShoppingItem shoppingItem = getShoppingItem(itemId);
+			String[] imageIds = (Validator.isNotNull(shoppingItem))?shoppingItem.getImageIds().split(","):new String[]{};
+			double totalPrice = shoppingItem.getTotalPrice() * HConstants.INITIAL_QUANTITY;
+			shoppingBean.setItemId(itemId);
+			shoppingBean.setProductCode(shoppingItem.getProductCode());
+			shoppingBean.setProductName(shoppingItem.getName());
+			shoppingBean.setQuantity(HConstants.INITIAL_QUANTITY);
+			shoppingBean.setUnitPrice(shoppingItem.getTotalPrice()); 
+			shoppingBean.setTotalPrice(totalPrice);
+			shoppingBean.setDescription((Validator.isNotNull(shoppingItem))?shoppingItem.getDescription():StringPool.BLANK); 
+			shoppingBean.setImageId(Long.parseLong(imageIds[0]));
+			shoppingBeans.add(shoppingBean);
 		}
 
 		return shoppingBeans;

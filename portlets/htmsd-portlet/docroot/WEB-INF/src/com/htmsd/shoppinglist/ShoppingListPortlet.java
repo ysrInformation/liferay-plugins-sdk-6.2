@@ -72,22 +72,19 @@ public class ShoppingListPortlet extends MVCPortlet {
 		_log.info("In addGuestUserCart method, itemId :::"+itemId); 
 
 		PortletSession portletSession = actionRequest.getPortletSession();
-		List<Long> itemIds = new ArrayList<Long>(); 
-		itemIds.add(itemId);
+	
 		boolean isItemExist = false;
-		List<Long> sessionList = (List<Long>)portletSession.getAttribute("SHOPPING_ITEM_ID", PortletSession.APPLICATION_SCOPE);
-		if (Validator.isNotNull(sessionList) && sessionList.size() > 0) {
-			for (Long id:sessionList) {
-				if (id == itemId) {
-					isItemExist = true;
-				}
+		Long sessionItemId = (Long) portletSession.getAttribute("SHOPPING_ITEM_ID", PortletSession.APPLICATION_SCOPE);
+		if (Validator.isNotNull(sessionItemId) && sessionItemId > 0) {
+			if (sessionItemId == itemId) {
+				isItemExist = true;
 			}
 		}
 		
 		if (isItemExist) {
 			SessionErrors.add(actionRequest, "item-exist");
 		} else {
-			portletSession.setAttribute("SHOPPING_ITEM_ID", itemIds, PortletSession.APPLICATION_SCOPE);	
+			portletSession.setAttribute("SHOPPING_ITEM_ID", itemId, PortletSession.APPLICATION_SCOPE);	
 			List<ShoppingBean> shoppingBeanList = CommonUtil.getGuestUserItems(portletSession);
 			portletSession.setAttribute("SHOPPING_ITEMS", shoppingBeanList, PortletSession.APPLICATION_SCOPE); 
 		}
