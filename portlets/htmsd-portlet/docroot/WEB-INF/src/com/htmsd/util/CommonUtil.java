@@ -188,8 +188,8 @@ public class CommonUtil {
 		User user = null;
 		Phone phone = null;
 		Address address = null;
-		List<Phone> phoneList = Collections.emptyList();
-		List<Address> addresses = Collections.emptyList();
+		List<Phone> phoneList = new ArrayList<Phone>();
+		List<Address> addresses = new ArrayList<Address>(); 
 		try {
 			user = UserLocalServiceUtil.fetchUser(userId);
 			if (Validator.isNotNull(user)) 
@@ -297,7 +297,7 @@ public class CommonUtil {
 				e.printStackTrace();
 			}
 		} else {
-			itemsCount = getGuestUserItems(portletSession).size();
+			itemsCount = (!getGuestUserList(portletSession).isEmpty()) ? getGuestUserList(portletSession).size() : 0;
 		}
 		return itemsCount;
 	}
@@ -456,6 +456,7 @@ public class CommonUtil {
 	
 	public static List<ShoppingBean> getSignedInUserItems(long userId){
 		
+		_log.info("Inside getSignedInUserItems ..."); 
 		List<ShoppingBean> shoppingBeans = new ArrayList<ShoppingBean>();
 		
 		for (ShoppingItem_Cart shIt_cart: getUserCartItems(userId)) {
@@ -469,7 +470,8 @@ public class CommonUtil {
 			shoppingBean.setUnitPrice(shoppingItem.getTotalPrice()); 
 			shoppingBean.setProductName(shoppingItem.getName());
 			shoppingBean.setImageId(Long.valueOf(imageIds[0]));
-			shoppingBean.setCartItemId(shIt_cart.getId()); 
+			shoppingBean.setCartItemId(shIt_cart.getId());
+			shoppingBean.setDescription((Validator.isNotNull(shoppingItem))?shoppingItem.getDescription():StringPool.BLANK); 
 			shoppingBean.setProductCode(shoppingItem.getProductCode()); 
 			shoppingBeans.add(shoppingBean);
 		}
@@ -477,27 +479,14 @@ public class CommonUtil {
 		return shoppingBeans;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static List<ShoppingBean> getGuestUserItems(PortletSession portletSession) {
 		
-		System.out.println("Inside guestUserItem ...."); 
+		_log.info("Inside guestUserItem ...."); 
 		
 		List<ShoppingBean> shoppingBeans = new ArrayList<ShoppingBean>();
-	/*	Map<String, Long> itemsMap = new HashMap<String, Long>();
-		Cookie[] cookies = request.getCookies();
-		
-		if (cookies.length == 0) return new ArrayList<ShoppingBean>();
-		
-		for (Cookie cookie : cookies) {
-			System.out.println("Name :"+cookie.getName()+"#! Value :"+cookie.getValue()); 
-			if (cookie.getName().equals("SHOPPING_ITEM_ID")) {
-				System.out.println("value"+cookie.getValue()); 
-				itemsMap.put("SHOPPING_ITEM_ID", Long.valueOf(cookie.getValue()));
-			}
-		}*/
-		
-		@SuppressWarnings("unchecked")
 		List<Long> itemIds = Validator.isNotNull(portletSession.getAttribute("SHOPPING_ITEM_ID", PortletSession.APPLICATION_SCOPE))
-			? (List<Long>)portletSession.getAttribute("SHOPPING_ITEM_ID", PortletSession.APPLICATION_SCOPE): new ArrayList<Long>();
+				? (List<Long>) portletSession.getAttribute("SHOPPING_ITEM_ID", PortletSession.APPLICATION_SCOPE): new ArrayList<Long>();
 		
 		if (Validator.isNotNull(itemIds)) {
 			for (Long itemId:itemIds) {
@@ -511,12 +500,24 @@ public class CommonUtil {
 				shoppingBean.setQuantity(HConstants.INITIAL_QUANTITY);
 				shoppingBean.setUnitPrice(shoppingItem.getTotalPrice()); 
 				shoppingBean.setTotalPrice(totalPrice);
+				shoppingBean.setDescription((Validator.isNotNull(shoppingItem))?shoppingItem.getDescription():StringPool.BLANK); 
 				shoppingBean.setImageId(Long.parseLong(imageIds[0]));
 				shoppingBeans.add(shoppingBean);
 			}
 		}
 
 		return shoppingBeans;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static List<ShoppingBean> getGuestUserList(PortletSession session) {
+		
+		_log.info("Inside getGuestUserList ..."); 
+		List<ShoppingBean> shoppingBeanList = new ArrayList<ShoppingBean>();
+		if (Validator.isNotNull(session.getAttribute("SHOPPING_ITEMS",PortletSession.APPLICATION_SCOPE))) {
+			shoppingBeanList = (List<ShoppingBean>) session.getAttribute("SHOPPING_ITEMS", PortletSession.APPLICATION_SCOPE);
+		}
+		return shoppingBeanList;
 	}
 	
 }

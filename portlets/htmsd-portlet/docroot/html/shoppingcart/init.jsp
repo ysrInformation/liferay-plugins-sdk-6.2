@@ -9,6 +9,7 @@
 <%@page import="java.util.Collections"%>
 <%@page import="java.util.Comparator"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="javax.portlet.WindowState"%>
 <%@page import="org.apache.commons.beanutils.BeanComparator"%>
 
 <%--Custom imports --%>

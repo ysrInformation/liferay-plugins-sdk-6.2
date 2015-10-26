@@ -56,6 +56,12 @@ public class ShoppingBean {
 	public void setProductCode(String productCode) {
 		this.productCode = productCode;
 	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
 	
 	private int quantity;
 	private long itemId;
@@ -66,5 +72,5 @@ public class ShoppingBean {
 	private long cartItemId;
 	private String productName;
 	private String productCode;
-
+	private String description;
 }

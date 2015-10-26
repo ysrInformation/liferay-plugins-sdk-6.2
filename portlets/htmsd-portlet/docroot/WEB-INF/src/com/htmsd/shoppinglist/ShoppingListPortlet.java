@@ -18,6 +18,7 @@ import com.htmsd.slayer.service.ShoppingCartLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingItem_CartLocalServiceUtil;
 import com.htmsd.util.CommonUtil;
 import com.htmsd.util.HConstants;
+import com.htmsd.util.ShoppingBean;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -60,28 +61,17 @@ public class ShoppingListPortlet extends MVCPortlet {
 		actionResponse.setRenderParameter(HConstants.JSP_PAGE, HConstants.PAGE_SHOPPING_LIST_DETAILS);
 		actionResponse.setRenderParameter(HConstants.ITEM_ID, String.valueOf(itemId));
 	}
-
+	
+	/**
+	 * Method for adding guest user Items
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @param itemId
+	 */
 	private void addGuestUserCart(ActionRequest actionRequest, ActionResponse actionResponse, long itemId) {
 
 		_log.info("In addGuestUserCart method, itemId :::"+itemId); 
-		/*HttpServletRequest servletRequest = PortalUtil.getHttpServletRequest(actionRequest);
-		
-		Cookie[] cookies = servletRequest.getCookies(); 
-		
-		String itemIdString = null;
-		for (Cookie cookie : cookies) {
-			System.out.println("Name ::" +cookie.getName()+"| Value ::"+cookie.getValue()); 
-		    if ("SHOPPING_ITEM_ID".equals(cookie.getName())){
-		    	itemIdString = cookie.getValue();
-		    }
-		}
-		if (Validator.isNotNull(itemIdString) && itemIdString.equalsIgnoreCase(String.valueOf(itemId))) {  
-			SessionErrors.add(actionRequest, "item-exist");
-		} else {
-			Cookie cookie = createCookie("SHOPPING_ITEM_ID", String.valueOf(itemId));
-			actionResponse.addProperty(cookie); 
-		}
-		*/
+
 		PortletSession portletSession = actionRequest.getPortletSession();
 		List<Long> itemIds = new ArrayList<Long>(); 
 		itemIds.add(itemId);
@@ -89,10 +79,17 @@ public class ShoppingListPortlet extends MVCPortlet {
 			SessionErrors.add(actionRequest, "item-exist");
 		} else {
 			portletSession.setAttribute("SHOPPING_ITEM_ID", itemIds, PortletSession.APPLICATION_SCOPE);	
-			System.out.println(portletSession.getAttribute("SHOPPING_ITEM_ID", PortletSession.APPLICATION_SCOPE));
+			List<ShoppingBean> shoppingBeanList = CommonUtil.getGuestUserItems(portletSession);
+			portletSession.setAttribute("SHOPPING_ITEMS", shoppingBeanList, PortletSession.APPLICATION_SCOPE); 
 		}
 	}
-
+	
+	/**
+	 * Method for adding loggedin user items in cart
+	 * @param actionRequest
+	 * @param themeDisplay
+	 * @param itemId
+	 */
 	private void addSignedInUserCart(ActionRequest actionRequest,
 			ThemeDisplay themeDisplay, long itemId) {
 		
@@ -116,15 +113,5 @@ public class ShoppingListPortlet extends MVCPortlet {
 			double totalPrice = (Validator.isNotNull(shoppingItem) ? shoppingItem.getTotalPrice():0);
 			ShoppingItem_CartLocalServiceUtil.insertItemsToCart(HConstants.INITIAL_QUANTITY, shoppingCart.getCartId(), itemId, totalPrice);
 		}
-	}
-	
-	private Cookie createCookie(String cookieName, String cookieValue) {
-	    Cookie cookie = new Cookie(cookieName, cookieValue);
-	    cookie.setPath(StringPool.SLASH);
-	    cookie.setMaxAge(0);
-	    cookie.setHttpOnly(true);
-	    cookie.setSecure(true);
-	    cookie.setVersion(0);
-	    return cookie;
 	}
 }

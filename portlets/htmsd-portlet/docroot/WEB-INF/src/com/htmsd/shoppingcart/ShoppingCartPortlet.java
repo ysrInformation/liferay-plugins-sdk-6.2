@@ -1,12 +1,14 @@
 package com.htmsd.shoppingcart;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
+import javax.portlet.PortletSession;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
@@ -23,6 +25,7 @@ import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
 import com.htmsd.util.CommonUtil;
 import com.htmsd.util.HConstants;
 import com.htmsd.util.NotificationUtil;
+import com.htmsd.util.ShoppingBean;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
@@ -150,6 +153,11 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		int quantity = ParamUtil.getInteger(resourceRequest, "quantity");
 		double itemPrice = ParamUtil.getDouble(resourceRequest, "itemPrice");
 		long id = ParamUtil.getLong(resourceRequest, "id");
+		long itemId = ParamUtil.getLong(resourceRequest, "itemId");
+		
+		PortletSession portletSession = resourceRequest.getPortletSession();
+		List<ShoppingBean> shoppingCartList = CommonUtil.getGuestUserList(portletSession);
+		List<ShoppingBean> newShoppingCartList = new ArrayList<ShoppingBean>();
 		
 		if (id > 0) {
 			double totalPrice = quantity * itemPrice;
@@ -161,6 +169,18 @@ public class ShoppingCartPortlet extends MVCPortlet {
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
+		} else {
+			if (Validator.isNotNull(shoppingCartList) && shoppingCartList.size() > 0){
+				for (ShoppingBean shoppingBean:shoppingCartList) {
+					if (itemId == shoppingBean.getItemId()) {
+						double total = quantity * itemPrice;
+						shoppingBean.setQuantity(quantity); 
+						shoppingBean.setTotalPrice(total);
+						newShoppingCartList.add(shoppingBean);
+					}
+				}
+				portletSession.setAttribute("SHOPPING_ITEMS", newShoppingCartList, PortletSession.APPLICATION_SCOPE);
+			}
 		}
 	}
 
@@ -171,12 +191,14 @@ public class ShoppingCartPortlet extends MVCPortlet {
 	 */
 	private void removeItem(ResourceRequest resourceRequest, ResourceResponse resourceResponse) {
 		
+		_log.info("Inside removeItem ..."); 
 		ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		PortletSession portletSession = resourceRequest.getPortletSession();
 		long itemId = ParamUtil.getLong(resourceRequest, HConstants.ITEM_ID);
 		
-		_log.info("ItemId is ==>" +itemId); 
-		
+		List<ShoppingBean> newCartList = new ArrayList<ShoppingBean>();
 		List<ShoppingItem_Cart> shoppingItem_Carts = CommonUtil.getUserCartItems(themeDisplay.getUserId());
+		List<ShoppingBean> shoppingbeanList = CommonUtil.getGuestUserList(portletSession);
 		
 		if (themeDisplay.isSignedIn()) {
 			if (Validator.isNotNull(shoppingItem_Carts)) {
@@ -192,6 +214,15 @@ public class ShoppingCartPortlet extends MVCPortlet {
 			}
 		} else {
 			//delete from guest
+			if (Validator.isNotNull(shoppingbeanList) && shoppingbeanList.size() > 0) {
+				for (ShoppingBean shoppingBean:shoppingbeanList) {
+					newCartList.add(shoppingBean);
+					if (itemId == shoppingBean.getItemId()) {
+						newCartList.remove(shoppingBean);
+					}
+				}
+			}
+			portletSession.setAttribute("SHOPPING_ITEMS", newCartList, PortletSession.APPLICATION_SCOPE); 
 		}
 	}
 	
