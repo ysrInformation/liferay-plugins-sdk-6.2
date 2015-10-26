@@ -445,9 +445,12 @@ public class CommonUtil {
 		String priceInString = StringPool.BLANK;
 		NumberFormat df = NumberFormat.getInstance();
 		String symbol = getCurrencySymbol(currencyId);
-		if (symbol.equalsIgnoreCase("INR")) return priceInString = HConstants.RUPPEE_SYMBOL +" "+ df.format(price);
-		java.util.Currency currency = java.util.Currency.getInstance(symbol);
-		priceInString = currency.getSymbol() +" "+ df.format(price);
+		try {
+			java.util.Currency currency = java.util.Currency.getInstance(symbol);
+			priceInString = currency.getSymbol() +" "+ df.format(price);
+		} catch (IllegalArgumentException e) {
+			priceInString = symbol + " " + df.format(price);
+		}
 		return priceInString;
 	}
 	
