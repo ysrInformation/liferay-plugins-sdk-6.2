@@ -76,7 +76,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		
 		_log.info("orderId is ==>"+shoppingOrder.getOrderId()); 
 		Invoice invoice = InvoiceLocalServiceUtil.insertInvoice(themeDisplay.getUserId(), shoppingOrder.getOrderId());
-		addShoppingOrderItem(themeDisplay, shoppingOrder);
+		addShoppingOrderItem(actionRequest, themeDisplay, shoppingOrder);
 		
 		NotificationUtil.sendNotification(themeDisplay.getScopeGroupId(), 
 				themeDisplay.getUser().getFullName(), themeDisplay.getUser().getEmailAddress(), "EMAIL_NOTIFICATION");
@@ -93,7 +93,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 	 * @param themeDisplay
 	 * @param shoppingOrder
 	 */
-	private void addShoppingOrderItem(ThemeDisplay themeDisplay, ShoppingOrder shoppingOrder) {
+	private void addShoppingOrderItem(ActionRequest actionRequest, ThemeDisplay themeDisplay, ShoppingOrder shoppingOrder) {
 		
 		double totalPrice = 0;
 		List<ShoppingItem_Cart> shoppingItem_Carts = CommonUtil.getUserCartItems(themeDisplay.getUserId());
@@ -128,6 +128,35 @@ public class ShoppingCartPortlet extends MVCPortlet {
 						e.printStackTrace();
 					} catch (SystemException e) {
 						e.printStackTrace();
+					}
+				}
+			}
+		} else {
+			PortletSession portletSession = actionRequest.getPortletSession();
+			List<ShoppingBean> shoppingBeanList = CommonUtil.getGuestUserList(portletSession);
+			if (Validator.isNotNull(shoppingBeanList) && shoppingBeanList.size() > 0) {
+				for (ShoppingBean shoppingBean:shoppingBeanList) {
+					ShoppingItem shoppingItem = CommonUtil.getShoppingItem(shoppingBean.getItemId()); 
+					long quantity = shoppingItem.getQuantity() - shoppingBean.getQuantity();
+					if (Validator.isNotNull(shoppingItem)) {
+						totalPrice = shoppingBean.getTotalPrice();
+						ShoppingOrderItem shoppingOrderItem = ShoppingOrderItemLocalServiceUtil
+							.insertShoppingOrderItem(shoppingBean.getQuantity(), totalPrice, themeDisplay.getUserId(), 
+							themeDisplay.getCompanyId(), themeDisplay.getScopeGroupId(), shoppingOrder.getOrderId(), shoppingItem.getItemId(),
+							shoppingItem.getName(), shoppingItem.getDescription(), shoppingItem.getProductCode());
+						
+						//updating shoppingItem quantity
+						if (Validator.isNotNull(shoppingOrderItem)) {
+							try {
+								ShoppingItem shoppingItem2 = ShoppingItemLocalServiceUtil.fetchShoppingItem(shoppingOrderItem.getShoppingItemId());
+								shoppingItem2.setQuantity(quantity);
+								ShoppingItemLocalServiceUtil.updateShoppingItem(shoppingItem2);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+						//remove items from user List
+						portletSession.removeAttribute("SHOPPING_ITEMS", PortletSession.APPLICATION_SCOPE); 
 					}
 				}
 			}

@@ -8,7 +8,6 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.PortletSession;
-import javax.servlet.http.Cookie;
 
 import com.htmsd.slayer.NoSuchShoppingItem_CartException;
 import com.htmsd.slayer.model.ShoppingCart;
@@ -24,7 +23,6 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -68,6 +66,7 @@ public class ShoppingListPortlet extends MVCPortlet {
 	 * @param actionResponse
 	 * @param itemId
 	 */
+	@SuppressWarnings("unchecked")
 	private void addGuestUserCart(ActionRequest actionRequest, ActionResponse actionResponse, long itemId) {
 
 		_log.info("In addGuestUserCart method, itemId :::"+itemId); 
@@ -75,7 +74,17 @@ public class ShoppingListPortlet extends MVCPortlet {
 		PortletSession portletSession = actionRequest.getPortletSession();
 		List<Long> itemIds = new ArrayList<Long>(); 
 		itemIds.add(itemId);
-		if (Validator.isNotNull(portletSession.getAttribute("SHOPPING_ITEM_ID", PortletSession.APPLICATION_SCOPE))) {
+		boolean isItemExist = false;
+		List<Long> sessionList = (List<Long>)portletSession.getAttribute("SHOPPING_ITEM_ID", PortletSession.APPLICATION_SCOPE);
+		if (Validator.isNotNull(sessionList) && sessionList.size() > 0) {
+			for (Long id:sessionList) {
+				if (id == itemId) {
+					isItemExist = true;
+				}
+			}
+		}
+		
+		if (isItemExist) {
 			SessionErrors.add(actionRequest, "item-exist");
 		} else {
 			portletSession.setAttribute("SHOPPING_ITEM_ID", itemIds, PortletSession.APPLICATION_SCOPE);	
