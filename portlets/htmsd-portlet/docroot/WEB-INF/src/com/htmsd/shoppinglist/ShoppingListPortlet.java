@@ -6,7 +6,7 @@ import java.util.List;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
-import javax.portlet.PortletSession;
+import javax.servlet.http.HttpSession;
 
 import com.htmsd.slayer.NoSuchShoppingItem_CartException;
 import com.htmsd.slayer.model.ShoppingCart;
@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 /**
@@ -70,10 +71,10 @@ public class ShoppingListPortlet extends MVCPortlet {
 
 		_log.info("In addGuestUserCart method, itemId :::"+itemId); 
 
-		PortletSession portletSession = actionRequest.getPortletSession();
+		HttpSession session = PortalUtil.getHttpServletRequest(actionRequest).getSession();
 	
 		boolean isItemExist = false;
-		List<ShoppingBean> shoppingCartList = CommonUtil.getGuestUserList(portletSession);
+		List<ShoppingBean> shoppingCartList = CommonUtil.getGuestUserList(session);
 		if (Validator.isNotNull(shoppingCartList) && shoppingCartList.size() > 0) {
 			for (ShoppingBean shoppingBean:shoppingCartList) {
 				if (itemId == shoppingBean.getItemId()) {
@@ -85,7 +86,7 @@ public class ShoppingListPortlet extends MVCPortlet {
 		if (isItemExist) {
 			SessionErrors.add(actionRequest, "item-exist");
 		} else {
-			CommonUtil.getGuestUserItems(itemId, portletSession);
+			CommonUtil.getGuestUserItems(itemId, session);
 		}
 	}
 	

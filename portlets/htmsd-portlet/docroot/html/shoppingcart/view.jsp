@@ -1,7 +1,7 @@
 <%@ include file="/html/shoppingcart/init.jsp"%>
 
 <% 
-	int itemscount = CommonUtil.getItemsCount(themeDisplay.getUserId(), themeDisplay, portletSession);
+	int itemscount = CommonUtil.getItemsCount(themeDisplay.getUserId(), themeDisplay, session);
 	String tabNames="my-cart,my-orders";
 	String tabs1 = ParamUtil.getString(request, "tab1", "my-cart");
 %>

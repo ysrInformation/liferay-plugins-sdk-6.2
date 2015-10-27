@@ -8,9 +8,9 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
-import javax.portlet.PortletSession;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
+import javax.servlet.http.HttpSession;
 
 import com.htmsd.slayer.model.Invoice;
 import com.htmsd.slayer.model.ShoppingItem;
@@ -38,6 +38,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 /**
@@ -131,36 +132,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 					}
 				}
 			}
-		} else {
-			PortletSession portletSession = actionRequest.getPortletSession();
-			List<ShoppingBean> shoppingBeanList = CommonUtil.getGuestUserList(portletSession);
-			if (Validator.isNotNull(shoppingBeanList) && shoppingBeanList.size() > 0) {
-				for (ShoppingBean shoppingBean:shoppingBeanList) {
-					ShoppingItem shoppingItem = CommonUtil.getShoppingItem(shoppingBean.getItemId()); 
-					long quantity = shoppingItem.getQuantity() - shoppingBean.getQuantity();
-					if (Validator.isNotNull(shoppingItem)) {
-						totalPrice = shoppingBean.getTotalPrice();
-						ShoppingOrderItem shoppingOrderItem = ShoppingOrderItemLocalServiceUtil
-							.insertShoppingOrderItem(shoppingBean.getQuantity(), totalPrice, themeDisplay.getUserId(), 
-							themeDisplay.getCompanyId(), themeDisplay.getScopeGroupId(), shoppingOrder.getOrderId(), shoppingItem.getItemId(),
-							shoppingItem.getName(), shoppingItem.getDescription(), shoppingItem.getProductCode());
-						
-						//updating shoppingItem quantity
-						if (Validator.isNotNull(shoppingOrderItem)) {
-							try {
-								ShoppingItem shoppingItem2 = ShoppingItemLocalServiceUtil.fetchShoppingItem(shoppingOrderItem.getShoppingItemId());
-								shoppingItem2.setQuantity(quantity);
-								ShoppingItemLocalServiceUtil.updateShoppingItem(shoppingItem2);
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-						}
-						//remove items from user List
-						portletSession.removeAttribute("SHOPPING_ITEMS", PortletSession.APPLICATION_SCOPE); 
-					}
-				}
-			}
-		}
+		} 
 	}
 	
 	public void serveResource(ResourceRequest resourceRequest,
@@ -184,8 +156,8 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		long id = ParamUtil.getLong(resourceRequest, "id");
 		long itemId = ParamUtil.getLong(resourceRequest, "itemId");
 		
-		PortletSession portletSession = resourceRequest.getPortletSession();
-		List<ShoppingBean> shoppingCartList = CommonUtil.getGuestUserList(portletSession);
+		HttpSession session = PortalUtil.getHttpServletRequest(resourceRequest).getSession();
+		List<ShoppingBean> shoppingCartList = CommonUtil.getGuestUserList(session);
 		List<ShoppingBean> newShoppingCartList = new ArrayList<ShoppingBean>();
 		
 		if (id > 0) {
@@ -211,7 +183,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 					}
 				}
 			}
-			portletSession.setAttribute("SHOPPING_ITEMS", newShoppingCartList, PortletSession.APPLICATION_SCOPE);
+			session.setAttribute("SHOPPING_ITEMS", newShoppingCartList);
 		}
 	}
 
@@ -224,12 +196,12 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		
 		_log.info("Inside removeItem ..."); 
 		ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		PortletSession portletSession = resourceRequest.getPortletSession();
+		HttpSession session = PortalUtil.getHttpServletRequest(resourceRequest).getSession();
 		long itemId = ParamUtil.getLong(resourceRequest, HConstants.ITEM_ID);
 		
 		List<ShoppingBean> newCartList = new ArrayList<ShoppingBean>();
 		List<ShoppingItem_Cart> shoppingItem_Carts = CommonUtil.getUserCartItems(themeDisplay.getUserId());
-		List<ShoppingBean> shoppingbeanList = CommonUtil.getGuestUserList(portletSession);
+		List<ShoppingBean> shoppingbeanList = CommonUtil.getGuestUserList(session);
 		
 		if (themeDisplay.isSignedIn()) {
 			if (Validator.isNotNull(shoppingItem_Carts)) {
@@ -253,7 +225,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 					}
 				}
 			}
-			portletSession.setAttribute("SHOPPING_ITEMS", newCartList, PortletSession.APPLICATION_SCOPE); 
+			session.setAttribute("SHOPPING_ITEMS", newCartList); 
 		}
 	}
 	

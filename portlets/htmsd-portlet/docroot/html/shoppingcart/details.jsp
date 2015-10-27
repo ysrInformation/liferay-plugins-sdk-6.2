@@ -35,7 +35,7 @@
 		shoppingItemsList = CommonUtil.getSignedInUserItems(themeDisplay.getUserId());;
 	} else {
 		checkOutURL = loginURL;
-		shoppingItemsList = CommonUtil.getGuestUserList(portletSession);
+		shoppingItemsList = CommonUtil.getGuestUserList(session);
 	}
 	String continueShoppingURL = themeDisplay.getPortalURL()+"/web/guest/exotic-pet-birds";
 %>

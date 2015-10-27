@@ -287,7 +287,7 @@ public class CommonUtil {
 		return (ShoppingOrderLocalServiceUtil.getShoppingOrderByUserId(userId));
 	}
 	
-	public static int getItemsCount(long userId, ThemeDisplay themeDisplay, PortletSession portletSession) {
+	public static int getItemsCount(long userId, ThemeDisplay themeDisplay, HttpSession session) {
 		
 		int itemsCount = 0;
 		if (themeDisplay.isSignedIn()) {
@@ -297,7 +297,7 @@ public class CommonUtil {
 				e.printStackTrace();
 			}
 		} else {
-			itemsCount = (!getGuestUserList(portletSession).isEmpty()) ? getGuestUserList(portletSession).size() : 0;
+			itemsCount = (!getGuestUserList(session).isEmpty()) ? getGuestUserList(session).size() : 0;
 		}
 		return itemsCount;
 	}
@@ -480,12 +480,12 @@ public class CommonUtil {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static void getGuestUserItems(long itemId, PortletSession portletSession) {
+	public static void getGuestUserItems(long itemId, HttpSession session) {
 		
 		_log.info("Inside guestUserItem ...."); 
 		
 		List<ShoppingBean> newShoppingCartList = new ArrayList<ShoppingBean>();
-		List<ShoppingBean> shoppingCartList = getGuestUserList(portletSession);
+		List<ShoppingBean> shoppingCartList = getGuestUserList(session);
 		
 		ShoppingBean shoppingBean = new ShoppingBean();
 		ShoppingItem shoppingItem = getShoppingItem(itemId);
@@ -507,17 +507,17 @@ public class CommonUtil {
 		}
 		newShoppingCartList.add(shoppingBean);
 		
-		portletSession.removeAttribute("SHOPPING_ITEMS", PortletSession.APPLICATION_SCOPE); 
-		portletSession.setAttribute("SHOPPING_ITEMS", newShoppingCartList, PortletSession.APPLICATION_SCOPE);
+		session.removeAttribute("SHOPPING_ITEMS"); 
+		session.setAttribute("SHOPPING_ITEMS", newShoppingCartList);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static List<ShoppingBean> getGuestUserList(PortletSession session) {
+	public static List<ShoppingBean> getGuestUserList(HttpSession httpsession) {
 		
 		_log.info("Inside getGuestUserList ..."); 
 		List<ShoppingBean> shoppingBeanList = new ArrayList<ShoppingBean>();
-		if (Validator.isNotNull(session.getAttribute("SHOPPING_ITEMS",PortletSession.APPLICATION_SCOPE))) {
-			shoppingBeanList = (List<ShoppingBean>) session.getAttribute("SHOPPING_ITEMS", PortletSession.APPLICATION_SCOPE);
+		if (Validator.isNotNull(httpsession.getAttribute("SHOPPING_ITEMS"))) {
+			shoppingBeanList = (List<ShoppingBean>) httpsession.getAttribute("SHOPPING_ITEMS");
 		}
 		return shoppingBeanList;
 	}
