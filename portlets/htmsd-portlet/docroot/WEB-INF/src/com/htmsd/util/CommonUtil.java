@@ -480,31 +480,35 @@ public class CommonUtil {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static List<ShoppingBean> getGuestUserItems(PortletSession portletSession) {
+	public static void getGuestUserItems(long itemId, PortletSession portletSession) {
 		
 		_log.info("Inside guestUserItem ...."); 
 		
-		List<ShoppingBean> shoppingBeans = new ArrayList<ShoppingBean>();
-		Long itemId = Validator.isNotNull(portletSession.getAttribute("SHOPPING_ITEM_ID", PortletSession.APPLICATION_SCOPE))
-				? (Long) portletSession.getAttribute("SHOPPING_ITEM_ID", PortletSession.APPLICATION_SCOPE): 0;
+		List<ShoppingBean> newShoppingCartList = new ArrayList<ShoppingBean>();
+		List<ShoppingBean> shoppingCartList = getGuestUserList(portletSession);
 		
-		if (Validator.isNotNull(itemId)) {
-			ShoppingBean shoppingBean = new ShoppingBean();
-			ShoppingItem shoppingItem = getShoppingItem(itemId);
-			String[] imageIds = (Validator.isNotNull(shoppingItem))?shoppingItem.getImageIds().split(","):new String[]{};
-			double totalPrice = shoppingItem.getTotalPrice() * HConstants.INITIAL_QUANTITY;
-			shoppingBean.setItemId(itemId);
-			shoppingBean.setProductCode(shoppingItem.getProductCode());
-			shoppingBean.setProductName(shoppingItem.getName());
-			shoppingBean.setQuantity(HConstants.INITIAL_QUANTITY);
-			shoppingBean.setUnitPrice(shoppingItem.getTotalPrice()); 
-			shoppingBean.setTotalPrice(totalPrice);
-			shoppingBean.setDescription((Validator.isNotNull(shoppingItem))?shoppingItem.getDescription():StringPool.BLANK); 
-			shoppingBean.setImageId(Long.parseLong(imageIds[0]));
-			shoppingBeans.add(shoppingBean);
+		ShoppingBean shoppingBean = new ShoppingBean();
+		ShoppingItem shoppingItem = getShoppingItem(itemId);
+		String[] imageIds = (Validator.isNotNull(shoppingItem))?shoppingItem.getImageIds().split(","):new String[]{};
+		double totalPrice = shoppingItem.getTotalPrice() * HConstants.INITIAL_QUANTITY;
+		shoppingBean.setItemId(itemId);
+		shoppingBean.setProductCode(shoppingItem.getProductCode());
+		shoppingBean.setProductName(shoppingItem.getName());
+		shoppingBean.setQuantity(HConstants.INITIAL_QUANTITY);
+		shoppingBean.setUnitPrice(shoppingItem.getTotalPrice()); 
+		shoppingBean.setTotalPrice(totalPrice);
+		shoppingBean.setDescription((Validator.isNotNull(shoppingItem))?shoppingItem.getDescription():StringPool.BLANK); 
+		shoppingBean.setImageId(Long.parseLong(imageIds[0]));
+		
+		if (Validator.isNotNull(shoppingCartList) && shoppingCartList.size() > 0) {
+			for (ShoppingBean shoppingcartItem: shoppingCartList) {
+				newShoppingCartList.add(shoppingcartItem);
+			} 
 		}
-
-		return shoppingBeans;
+		newShoppingCartList.add(shoppingBean);
+		
+		portletSession.removeAttribute("SHOPPING_ITEMS", PortletSession.APPLICATION_SCOPE); 
+		portletSession.setAttribute("SHOPPING_ITEMS", newShoppingCartList, PortletSession.APPLICATION_SCOPE);
 	}
 	
 	@SuppressWarnings("unchecked")

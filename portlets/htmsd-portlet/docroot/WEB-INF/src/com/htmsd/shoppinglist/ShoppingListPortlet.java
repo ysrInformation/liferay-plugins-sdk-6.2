@@ -1,7 +1,6 @@
 package com.htmsd.shoppinglist;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.portlet.ActionRequest;
@@ -74,19 +73,19 @@ public class ShoppingListPortlet extends MVCPortlet {
 		PortletSession portletSession = actionRequest.getPortletSession();
 	
 		boolean isItemExist = false;
-		Long sessionItemId = (Long) portletSession.getAttribute("SHOPPING_ITEM_ID", PortletSession.APPLICATION_SCOPE);
-		if (Validator.isNotNull(sessionItemId) && sessionItemId > 0) {
-			if (sessionItemId == itemId) {
-				isItemExist = true;
+		List<ShoppingBean> shoppingCartList = CommonUtil.getGuestUserList(portletSession);
+		if (Validator.isNotNull(shoppingCartList) && shoppingCartList.size() > 0) {
+			for (ShoppingBean shoppingBean:shoppingCartList) {
+				if (itemId == shoppingBean.getItemId()) {
+					isItemExist = true;
+				}
 			}
 		}
 		
 		if (isItemExist) {
 			SessionErrors.add(actionRequest, "item-exist");
 		} else {
-			portletSession.setAttribute("SHOPPING_ITEM_ID", itemId, PortletSession.APPLICATION_SCOPE);	
-			List<ShoppingBean> shoppingBeanList = CommonUtil.getGuestUserItems(portletSession);
-			portletSession.setAttribute("SHOPPING_ITEMS", shoppingBeanList, PortletSession.APPLICATION_SCOPE); 
+			CommonUtil.getGuestUserItems(itemId, portletSession);
 		}
 	}
 	

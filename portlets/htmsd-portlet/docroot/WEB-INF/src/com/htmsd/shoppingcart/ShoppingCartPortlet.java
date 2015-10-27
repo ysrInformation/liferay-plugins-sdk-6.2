@@ -206,10 +206,12 @@ public class ShoppingCartPortlet extends MVCPortlet {
 						shoppingBean.setQuantity(quantity); 
 						shoppingBean.setTotalPrice(total);
 						newShoppingCartList.add(shoppingBean);
+					} else {
+						newShoppingCartList.add(shoppingBean);
 					}
 				}
-				portletSession.setAttribute("SHOPPING_ITEMS", newShoppingCartList, PortletSession.APPLICATION_SCOPE);
 			}
+			portletSession.setAttribute("SHOPPING_ITEMS", newShoppingCartList, PortletSession.APPLICATION_SCOPE);
 		}
 	}
 
