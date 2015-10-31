@@ -58,7 +58,7 @@
 					</h2>
 				</div>
 				<div class="span6 center">
-					<input id="search" placeholder="Search"/><button class="search-btn" onClick="javascript:searchItems();">
+					<input id="search" placeholder="Search"/><button id="srch-btn" class="search-btn" onClick="javascript:searchItems();">
 						<i class="fa fa-search"></i> SEARCH
 					</button>
 				</div>
@@ -134,7 +134,9 @@
    		if(mobile) {
 	        $('#search-div').toggleClass('sticky', $(window).scrollTop() > elTop);
 	        $('#fixed_div').toggleClass('fixed_div', $(window).scrollTop() > elTop);
-    	} 
+    	} else {
+    		$('#srch-btn').html('<i class="fa fa-search"></i>');
+    	}
     });
     
     //Scroll to Top
