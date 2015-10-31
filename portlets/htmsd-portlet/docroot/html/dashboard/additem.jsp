@@ -3,7 +3,6 @@
 <%@page import="com.liferay.portlet.asset.service.persistence.AssetTagUtil"%>
 <%@page import="com.liferay.portlet.asset.model.AssetTag"%>
 <%@include file="/html/dashboard/init.jsp" %>
-
 <portlet:resourceURL  id="getCategoryId"  var="getCategoryURL"/>
 
 <portlet:actionURL name="addItem" var="addItemURL" >
@@ -20,28 +19,28 @@
 <aui:fieldset>
 	<aui:form action="<%=addItemURL %>" enctype="multipart/form-data" method="POST" name="addItemForm">
 		<aui:layout>
-			<aui:column columnWidth="25">
+			<aui:col width="25">
 				<aui:input name="<%=HConstants.NAME%>">
 					<aui:validator name="required" errorMessage="item-name-required"></aui:validator>
 				</aui:input>
-			</aui:column>
+			</aui:col>
 			
-			<aui:column columnWidth="25">
+			<aui:col width="25">
 				<aui:input name="<%=HConstants.PRODUCT_CODE %>" />
-			</aui:column>
+			</aui:col>
 			
-			<aui:column columnWidth="25">
+			<aui:col width="25">
 				<aui:select name="<%=HConstants.PARENT_CATEGORY_ID %>" label="category"  required="true" showEmptyOption="true">
 					<c:forEach items="<%=parentCategories %>" var="parentCategory">   
 						<aui:option label="${parentCategory.name}"  value="${parentCategory.categoryId}"/>
 					</c:forEach>
 				</aui:select>
-			</aui:column>
+			</aui:col>
 			
-			<aui:column columnWidth="25">
+			<aui:col width="25">
 				<aui:select name="<%=HConstants.CATEGORY_ID %>" label="sub-category"  required="true" showEmptyOption="true">
 				</aui:select>
-			</aui:column>
+			</aui:col>
 		</aui:layout>
 		
 		
@@ -90,28 +89,25 @@
 		</aui:layout>
 		
 		<aui:layout>
-			<aui:column columnWidth="30">
-				<aui:input name="<%=HConstants.WHOLESALE_DISCOUNT %>" type="checkbox"  inlineLabel="true" />
-			</aui:column>
+			<aui:input name="<%=HConstants.WHOLESALE_DISCOUNT %>" type="checkbox"  inlineLabel="true" />
 			<div id="wholeSaleDiv" style="display:none;">
-				<aui:column columnWidth="60">
-					<%
-						for(int i = 1 ; i <= HConstants.WHOLESALE_LIMIT ; i ++) {
-							%>
-								<div class="wholesaleclass" id='<%="wholeSaleDiv" + i %>' style="display:none;">
-									<aui:row>
-										<aui:column columnWidth="30">
-											<aui:input name="<%=HConstants.WHOLESALE_QUANTITY + i %>" />	
-										</aui:column>
-										<aui:column columnWidth="30">
-											<aui:input name="<%=HConstants.WHOLESALE_PRICE + i%>" />
-										</aui:column>
-										<span>
+				<%
+					for(int i = 1 ; i <= HConstants.WHOLESALE_LIMIT ; i ++) {
+						%>
+							<div class="wholesaleclass" id='<%="wholeSaleDiv" + i %>' style="display:none;">
+								<aui:row>
+									<aui:col width="20">
+										<aui:input name="<%=HConstants.WHOLESALE_QUANTITY + i %>" />	
+									</aui:col>
+									<aui:col width="20">
+										<aui:input name="<%=HConstants.WHOLESALE_PRICE + i%>" />
+									</aui:col>
+									<aui:col width="20">
+										<aui:button-row cssClass="add-btn-padding">
 											<%	if(i!=HConstants.WHOLESALE_LIMIT) {
-												 %>
-												   <aui:button cssClass="addclass" name='<%="addbtn" + i %>' value="add"  />
-												 <%
-												 
+													%>
+												  		<aui:button cssClass="addclass" name='<%="addbtn" + i %>' value="add"  />
+												 	<%
 												}
 											%>
 											<%	if(i!=1) {
@@ -120,14 +116,14 @@
 													<%
 												}
 											%>
-										</span>
-									</aui:row>
-								</div>
-									
-							<%
-						}
-					%>
-				</aui:column>	
+										</aui:button-row>
+									</aui:col>
+								</aui:row>
+								<hr/>
+							</div>
+						<%
+					}
+				%>
 			</div>
 			
 		</aui:layout>

@@ -55,10 +55,14 @@
 <aui:button name="deleteBtn" type="submit" value="delete" style="display:none"/>
 <aui:button name="approveBtn" type="button" value="approve" onClick="changeAction('approve');" style="display:none"/>
 <aui:button name="rejectBtn" type="button" value="reject" onClick="changeAction('reject');" style="display:none"/>
-<aui:button type="button" value="add-item" href="<%=addItemURL.toString() %>"/>
-<div style="float:right">
-	<liferay-ui:input-search />
-</div>
+<aui:nav-bar>
+	<aui:nav>
+		<aui:nav-item href="<%=addItemURL.toString() %>" iconCssClass="icon-plus" label="add-item"/>
+	</aui:nav>
+	<aui:nav-bar-search cssClass="form-search pull-right">
+		<liferay-ui:input-search />
+	</aui:nav-bar-search>
+</aui:nav-bar>
 
 <liferay-ui:search-container delta="10"  orderByCol="<%=orderByCol %>" orderByType="<%=orderByType %>" emptyResultsMessage="No Items to display" iteratorURL="<%=iteratorURL %>"  rowChecker="<%= new RowChecker(renderResponse)%>">
 
