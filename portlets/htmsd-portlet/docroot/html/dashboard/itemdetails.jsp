@@ -80,15 +80,15 @@
 				<aui:input name="<%=HConstants.SMALL_IMAGE %>" type="hidden" value="<%=item.getSmallImage() %>" />
 				
 				<aui:layout>
-					<aui:column columnWidth="25">
+					<aui:col width="25">
 						<aui:input name="<%=HConstants.NAME%>" required="true" value="<%= item.getName()%>" />
-					</aui:column>
+					</aui:col>
 					
-					<aui:column columnWidth="25">
+					<aui:col width="25">
 						<aui:input name="<%=HConstants.PRODUCT_CODE %>" value="<%=item.getProductCode() %>"/>
-					</aui:column>
+					</aui:col>
 					
-					<aui:column columnWidth="25">
+					<aui:col width="25">
 						<aui:select name="<%=HConstants.PARENT_CATEGORY_ID %>" label="category"  required="true" showEmptyOption="true">
 							<%
 								
@@ -100,10 +100,10 @@
 								}
 							%>   
 						</aui:select>
-					</aui:column>
-					<aui:column columnWidth="25">
+					</aui:col>
+					<aui:col width="25">
 						<aui:select name="<%=HConstants.CATEGORY_ID %>" label="sub-category" showEmptyOption="true" required="true"></aui:select>
-					</aui:column>
+					</aui:col>
 				</aui:layout>
 				
 				<liferay-ui:message key="description" />
@@ -184,28 +184,25 @@
 				
 				
 				<aui:layout>
-					<aui:column columnWidth="30">
-						<aui:input name="<%=HConstants.WHOLESALE_DISCOUNT %>" type="checkbox"  checked="<%= wholeSaleSize > 0 ? true :  false %>" inlineLabel="true" />
-					</aui:column>
+					<aui:input name="<%=HConstants.WHOLESALE_DISCOUNT %>" type="checkbox"  checked="<%= wholeSaleSize > 0 ? true :  false %>" inlineLabel="true" />
 					<div id="wholeSaleDiv" style='<%= wholeSaleSize > 0 ? "display:block" :  "display:block" %>'>
-						<aui:column columnWidth="60">
-							<%
-								for(int i = 1 ; i <= HConstants.WHOLESALE_LIMIT ; i ++) {
-									%>
-										<div class="wholesaleclass" id='<%="wholeSaleDiv" + i %>' style='<%=wholeSaleSize >= i ? "display:block;" : "display:none;"%> '>
-											<aui:row>
-												<aui:column columnWidth="30">
-													<aui:input name="<%=HConstants.WHOLESALE_QUANTITY + i %>" value="<%=wholeSaleSize >= i  ? wholeSales.get(i-1).getQuantity() : StringPool.BLANK%>" />	
-												</aui:column>
-												<aui:column columnWidth="30">
-													<aui:input name="<%=HConstants.WHOLESALE_PRICE + i%>"  value="<%=wholeSaleSize >= i  ? wholeSales.get(i-1).getPrice() : StringPool.BLANK%>" />
-												</aui:column>
-												<span>
+						<%
+							for(int i = 1 ; i <= HConstants.WHOLESALE_LIMIT ; i ++) {
+								%>
+									<div class="wholesaleclass" id='<%="wholeSaleDiv" + i %>' style='<%=wholeSaleSize >= i ? "display:block;" : "display:none;"%> '>
+										<aui:row>
+											<aui:col width="20">
+												<aui:input name="<%=HConstants.WHOLESALE_QUANTITY + i %>" value="<%=wholeSaleSize >= i  ? wholeSales.get(i-1).getQuantity() : StringPool.BLANK%>" />	
+											</aui:col>
+											<aui:col width="20">
+												<aui:input name="<%=HConstants.WHOLESALE_PRICE + i%>"  value="<%=wholeSaleSize >= i  ? wholeSales.get(i-1).getPrice() : StringPool.BLANK%>" />
+											</aui:col>
+											<aui:col width="20">
+												<aui:button-row cssClass="add-btn-padding">
 													<%	if(i!=HConstants.WHOLESALE_LIMIT) {
-														 %>
-														   <aui:button cssClass="addclass" name='<%="addbtn" + i %>' value="add"  />
-														 <%
-														 
+															%>
+														 		<aui:button cssClass="addclass" name='<%="addbtn" + i %>' value="add"  />
+														 	<%
 														}
 													%>
 													<%	if(i!=1) {
@@ -214,14 +211,13 @@
 															<%
 														}
 													%>
-												</span>
-											</aui:row>
-										</div>
-											
-									<%
-								}
-							%>
-						</aui:column>	
+												</aui:button-row>
+											</aui:col>
+										</aui:row>
+									</div>
+								<%
+							}
+						%>
 					</div>	
 				</aui:layout>
 				<div id="tags">

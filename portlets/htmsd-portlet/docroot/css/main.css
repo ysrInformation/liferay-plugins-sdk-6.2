@@ -273,3 +273,7 @@
 #tags button {
 	display: none;
 }
+
+.add-btn-padding {
+	margin: 24px 0;
+}
