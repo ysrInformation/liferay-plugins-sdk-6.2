@@ -1,5 +1,12 @@
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@include file="/html/common/init.jsp" %>
+<c:if test="<%=!permissionChecker.isOmniadmin() %>">
+	<style>
+		#p_p_id_6_WAR_htmsdportlet_ {
+			display: none;
+		}
+	</style>
+</c:if>
 <portlet:renderURL var="addressURL" windowState="<%=LiferayWindowState.POP_UP.toString() %>">
 	<portlet:param name="jspPage" value="/html/addresscapture/addressform.jsp"/>
 </portlet:renderURL>
