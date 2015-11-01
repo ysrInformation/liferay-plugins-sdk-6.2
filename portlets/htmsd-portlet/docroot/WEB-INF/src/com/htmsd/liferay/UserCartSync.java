@@ -71,7 +71,9 @@ public class UserCartSync extends Action {
 			cartId = shoppingCart.getCartId();
 		}
 		
+		System.out.println("cartId ==>"+cartId);
 		if (Validator.isNotNull(shoppingBeanList) && shoppingBeanList.size() > 0) {
+			System.out.println("Inside bean..."); 
 			for (ShoppingBean shoppingBean:shoppingBeanList) {
 				 ShoppingItem_CartLocalServiceUtil.insertItemsToCart(shoppingBean.getQuantity(), 
 						 cartId, shoppingBean.getItemId(), shoppingBean.getTotalPrice());
