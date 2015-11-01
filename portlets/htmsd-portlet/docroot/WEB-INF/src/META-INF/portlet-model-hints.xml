@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="com.htmsd.slayer.model.Category">
+		<field name="categoryId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="parentCategoryId" type="long" />
+		<field name="name" type="String" />
+		<field name="description" type="String" />
+	</model>
+	<model name="com.htmsd.slayer.model.Currency">
+		<field name="currencyId" type="long" />
+		<field name="currencyCode" type="String" />
+		<field name="currencyDesc" type="String" />
+		<field name="conversion" type="double" />
+		<field name="currencySymbol" type="String" />
+	</model>
+	<model name="com.htmsd.slayer.model.Invoice">
+		<field name="invoiceId" type="long" />
+		<field name="orderId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+	</model>
+	<model name="com.htmsd.slayer.model.ItemHistory">
+		<field name="historyId" type="long" />
+		<field name="itemId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="userEmail" type="String" />
+		<field name="action" type="int" />
+		<field name="remark" type="String" />
+	</model>
+	<model name="com.htmsd.slayer.model.ShoppingCart">
+		<field name="cartId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+	</model>
+	<model name="com.htmsd.slayer.model.ShoppingItem">
+		<field name="itemId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="userEmail" type="String" />
+		<field name="updateUserId" type="long" />
+		<field name="updateUserName" type="String" />
+		<field name="updateEmail" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="productCode" type="String" />
+		<field name="name" type="String">
+			<hint name="max-length">500</hint>
+		</field>
+		<field name="description" type="String">
+			<hint name="max-length">5000</hint>
+		</field>
+		<field name="sellerPrice" type="Double" />
+		<field name="totalPrice" type="Double" />
+		<field name="quantity" type="long" />
+		<field name="status" type="int" />
+		<field name="imageIds" type="String" />
+		<field name="vedioURL" type="String" />
+		<field name="smallImage" type="long" />
+		<field name="remark" type="String" />
+	</model>
+	<model name="com.htmsd.slayer.model.ShoppingItem_Cart">
+		<field name="id" type="long" />
+		<field name="itemId" type="long" />
+		<field name="cartId" type="long" />
+		<field name="quantity" type="int" />
+		<field name="totalPrice" type="double" />
+	</model>
+	<model name="com.htmsd.slayer.model.ShoppingOrder">
+		<field name="orderId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="orderStatus" type="int" />
+		<field name="shippingFirstName" type="String" />
+		<field name="shippingLastName" type="String" />
+		<field name="shippingEmailAddress" type="String" />
+		<field name="shippingStreet" type="String" />
+		<field name="shippingCity" type="String" />
+		<field name="shippingState" type="String" />
+		<field name="shippingCountry" type="String" />
+		<field name="shippingZip" type="String" />
+		<field name="shippingMoble" type="String" />
+		<field name="shippingAltMoble" type="String" />
+	</model>
+	<model name="com.htmsd.slayer.model.ShoppingOrderItem">
+		<field name="itemId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="orderId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="shoppingItemId" type="long" />
+		<field name="productCode" type="String" />
+		<field name="name" type="String">
+			<hint name="max-length">500</hint>
+		</field>
+		<field name="description" type="String">
+			<hint name="max-length">5000</hint>
+		</field>
+		<field name="totalPrice" type="Double" />
+		<field name="quantity" type="int" />
+		<field name="orderStatus" type="int" />
+	</model>
+	<model name="com.htmsd.slayer.model.Tag">
+		<field name="tagId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="name" type="String" />
+	</model>
+	<model name="com.htmsd.slayer.model.WholeSale">
+		<field name="wholseSaleId" type="long" />
+		<field name="itemId" type="long" />
+		<field name="quantity" type="long" />
+		<field name="price" type="double" />
+	</model>
+</model-hints>

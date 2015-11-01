@@ -225,7 +225,8 @@
 		<column name="description" type="String" />
 		<column name="totalPrice" type="Double" />
 		<column name="quantity" type="int"/>
-	
+		<column name="orderStatus" type="int"/>
+		
 		<!-- Finder methods -->
 		<finder return-type="Collection" name="OrderId">
 			<finder-column name="orderId"/>
