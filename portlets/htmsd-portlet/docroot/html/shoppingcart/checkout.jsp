@@ -70,9 +70,9 @@
 	        <aui:validator name="rangeLength" errorMessage="please-enter-valid-pincode-number">[6,6]</aui:validator>
 		</aui:input>
 		
-		<aui:select name="country" label="country" id="country" />
+		<aui:select name="country" label="country" id="country" required="true"/>
 		
-		<aui:select name="state" label="state" id="state" />
+		<aui:select name="state" label="state" id="state" required="true"/> 
 	</aui:column>
 
 	<aui:button-row cssClass="pull-right">

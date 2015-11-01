@@ -199,9 +199,12 @@ public class CommonUtil {
 			e.printStackTrace();
 		}
 		
-		if (addresses.size() > 0 && phoneList.size() > 0) {
-			phone = phoneList.get(0);
+		if (addresses.size() > 0) {
 			address = addresses.get(0);
+		}
+		
+		if (phoneList.size() > 0) {
+			phone = phoneList.get(0);			
 		}
 		
 		userAddress[0] = (Validator.isNotNull(address))?address.getStreet1():StringPool.BLANK;
