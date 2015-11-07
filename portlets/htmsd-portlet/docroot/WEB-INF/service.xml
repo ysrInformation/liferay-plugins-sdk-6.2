@@ -70,6 +70,7 @@
 		<column name="description" type="String" />
 		<column name="sellerPrice" type="Double" />
 		<column name="totalPrice" type="Double" />
+		<column name="tax" type="Double" />
 		<column name="quantity" type="long" />
 		<column name="status" type="int" />
 		<column name="imageIds" type="String" />

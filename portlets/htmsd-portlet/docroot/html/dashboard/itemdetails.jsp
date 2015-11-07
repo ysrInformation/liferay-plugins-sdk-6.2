@@ -165,6 +165,18 @@
 					<aui:validator name="number" />
 				</aui:input>
 				
+				<aui:input name="<%=HConstants.TAX %>" value="<%=item.getTax() %>">
+					<aui:validator  name="custom"  errorMessage="Please enter valid Percentage" >
+						function (val, fieldNode, ruleValue) {
+							var result = false;
+							if (val.match(/^(?:\d*\.\d{1,2}|\d+)$/) || val.length == 0 ) {
+								result = true;
+							}
+							return result;
+						}
+					</aui:validator>
+				</aui:input>
+				
 				<c:if test="<%=isAdmin %>">
 					<aui:layout>
 						<aui:column columnWidth="25">

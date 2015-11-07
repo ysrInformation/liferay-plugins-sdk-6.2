@@ -118,6 +118,7 @@ public class DashboardPortlet extends MVCPortlet {
 		String description = ParamUtil.getString(uploadRequest, HConstants.DESCRIPTION);
 		Double sellerPrice = ParamUtil.getDouble(uploadRequest, HConstants.PRICE);
 		Double totalPrice = ParamUtil.getDouble(uploadRequest, HConstants.TOTAL_PRICE);
+		Double tax = ParamUtil.getDouble(uploadRequest, HConstants.TAX);
 		boolean unlimitedQuantity = ParamUtil.getBoolean(uploadRequest, HConstants.UNILIMITED_QUANTITY);
 		long quantity = unlimitedQuantity ? -1 : ParamUtil.getLong(uploadRequest, HConstants.QUANTITY);
 		long categoryId = ParamUtil.getLong(uploadRequest, HConstants.CATEGORY_ID);
@@ -134,7 +135,7 @@ public class DashboardPortlet extends MVCPortlet {
 			imageIds = saveFiles(uploadRequest, HConstants.IMAGE, HConstants.ITEM_FOLDER_NAME);
 			shoppingItem = ShoppingItemLocalServiceUtil.addItem(themeDisplay.getScopeGroupId(),
 					themeDisplay.getCompanyId(), currentUserId,currentUserName, currentUserEmail, currentUserId, StringPool.BLANK, StringPool.BLANK, productCode,
-					name, description, sellerPrice, sellerPrice, quantity, HConstants.NEW,
+					name, description, sellerPrice, sellerPrice, tax, quantity, HConstants.NEW,
 					StringUtil.merge(imageIds, StringPool.COMMA), vedioURL,  getSmallImageId(), StringPool.BLANK);
 			itemId = shoppingItem.getItemId();
 			
@@ -144,7 +145,7 @@ public class DashboardPortlet extends MVCPortlet {
 				imageIds = updateImages(uploadRequest, HConstants.IMAGE, HConstants.IMAGE_ID);
 				shoppingItem = ShoppingItemLocalServiceUtil.updateItem(itemId,
 						themeDisplay.getScopeGroupId(), themeDisplay.getCompanyId(), userId, userName, userEmail, currentUserId, currentUserName, currentUserEmail,productCode, name,
-						description, sellerPrice, totalPrice, quantity, status,
+						description, sellerPrice, totalPrice, tax, quantity, status,
 						StringUtil.merge(imageIds, StringPool.COMMA), vedioURL, 0, remark);
 				ItemHistoryLocalServiceUtil.addItemHistory(itemId, currentUserId, currentUserName, currentUserEmail, HConstants.ITEM_UPDATED, staffRemark);
 		}
