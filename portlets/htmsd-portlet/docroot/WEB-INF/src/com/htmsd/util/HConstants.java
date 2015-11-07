@@ -11,6 +11,7 @@ public interface HConstants {
 	public static String DESCRIPTION = "description";
 	public static String PRICE = "price";
 	public static String TOTAL_PRICE = "totalPrice";
+	public static String TAX = "tax";
 	public static String QUANTITY = "quantity";
 	public static String UNILIMITED_QUANTITY = "unlimitedQuanity";
 	public static String CATEGORY = "category";

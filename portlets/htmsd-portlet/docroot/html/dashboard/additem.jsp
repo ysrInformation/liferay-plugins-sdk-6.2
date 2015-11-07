@@ -79,6 +79,19 @@
 				</aui:input>
 			</aui:column>
 			<aui:column>
+				<aui:input name="<%=HConstants.TAX %>">
+					<aui:validator  name="custom"  errorMessage="Please enter valid Percentage" >
+						function (val, fieldNode, ruleValue) {
+							var result = false;
+							if (val.match(/^(?:\d*\.\d{1,2}|\d+)$/) || val.length == 0 ) {
+								result = true;
+							}
+							return result;
+						}
+					</aui:validator>
+				</aui:input>
+			</aui:column>
+			<aui:column>
 				<aui:input name="<%=HConstants.QUANTITY %>">
 					<aui:validator name="number" />
 				</aui:input>

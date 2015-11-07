@@ -65,7 +65,7 @@ public class ShoppingItemLocalServiceImpl
 	public ShoppingItem addItem(long groupId, long companyId, long userId,
 			String userName, String userEmail,long updateUserId, String updateUserName, String updateEmail,
 			String productCode, String name, String description,
-			Double sellerPrice, Double totalPrice, long quantity, int status,
+			Double sellerPrice, Double totalPrice, Double tax, long quantity, int status,
 			String imageIds, String vedioURL, long smallImage , String remark) {
 
 		ShoppingItem shoppingItem = null;
@@ -85,6 +85,7 @@ public class ShoppingItemLocalServiceImpl
 			shoppingItem.setDescription(description);
 			shoppingItem.setSellerPrice(sellerPrice);
 			shoppingItem.setTotalPrice(totalPrice);
+			shoppingItem.setTax(tax);
 			shoppingItem.setQuantity(quantity);
 			shoppingItem.setStatus(status);
 			shoppingItem.setImageIds(imageIds);
@@ -103,7 +104,7 @@ public class ShoppingItemLocalServiceImpl
 	
 	public ShoppingItem updateItem(long itemId, long groupId, long companyId,
 			long userId, String userName, String userEmail ,long updateUserId, String updateUserName, String updateEmail , String productCode, String name, String description,
-			Double sellerPrice, Double totalPrice, long quantity, int status, String imageIds, String vedioURL, long smallImage ,String remark) {
+			Double sellerPrice, Double totalPrice, Double tax, long quantity, int status, String imageIds, String vedioURL, long smallImage ,String remark) {
 
 		ShoppingItem shoppingItem = null;
 		try {
@@ -122,6 +123,7 @@ public class ShoppingItemLocalServiceImpl
 			shoppingItem.setDescription(description);
 			shoppingItem.setSellerPrice(sellerPrice);
 			shoppingItem.setTotalPrice(totalPrice);
+			shoppingItem.setTax(tax);
 			shoppingItem.setQuantity(quantity);
 			shoppingItem.setStatus(status);
 			shoppingItem.setImageIds(imageIds);
