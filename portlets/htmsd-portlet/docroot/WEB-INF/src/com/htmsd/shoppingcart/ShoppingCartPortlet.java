@@ -107,10 +107,11 @@ public class ShoppingCartPortlet extends MVCPortlet {
 				if (Validator.isNotNull(shoppingItem)) {
 					totalPrice = shoppingItem_Cart.getTotalPrice();
 					ShoppingOrderItem shoppingOrderItem = ShoppingOrderItemLocalServiceUtil
-						.insertShoppingOrderItem(shoppingItem_Cart.getQuantity(), totalPrice, themeDisplay.getUserId(), 
+						.insertShoppingOrderItem(shoppingItem_Cart.getQuantity(), HConstants.PENDING, totalPrice, themeDisplay.getUserId(), 
 						themeDisplay.getCompanyId(), themeDisplay.getScopeGroupId(), shoppingOrder.getOrderId(), shoppingItem.getItemId(),
 						shoppingItem.getName(), shoppingItem.getDescription(), shoppingItem.getProductCode());
 					
+					Invoice invoice = InvoiceLocalServiceUtil.insertInvoice(themeDisplay.getUserId(), shoppingOrderItem.getItemId());
 					//updating shoppingItem quantity
 					if (Validator.isNotNull(shoppingOrderItem)) {
 						try {

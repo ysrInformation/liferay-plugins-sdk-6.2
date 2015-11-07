@@ -14,12 +14,26 @@
 
 package com.htmsd.slayer.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.ListUtils;
+
+import com.htmsd.slayer.model.ShoppingOrder;
 import com.htmsd.slayer.model.ShoppingOrderItem;
 import com.htmsd.slayer.model.impl.ShoppingOrderItemImpl;
+import com.htmsd.slayer.service.ShoppingOrderItemLocalServiceUtil;
+import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
 import com.htmsd.slayer.service.base.ShoppingOrderItemLocalServiceBaseImpl;
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 /**
  * The implementation of the shopping order item local service.
@@ -43,7 +57,7 @@ public class ShoppingOrderItemLocalServiceImpl
 	 * Never reference this interface directly. Always use {@link com.htmsd.slayer.service.ShoppingOrderItemLocalServiceUtil} to access the shopping order item local service.
 	 */
 	
-	public ShoppingOrderItem insertShoppingOrderItem(int quantity, double totalPrice, long userId, long companyId, 
+	public ShoppingOrderItem insertShoppingOrderItem(int quantity, int orderStatus, double totalPrice, long userId, long companyId, 
 			long groupId, long orderId, long shoppingItemId, String productName, String description, String productCode) {
 		
 		ShoppingOrderItem shoppingOrderItem = new ShoppingOrderItemImpl();
@@ -61,6 +75,7 @@ public class ShoppingOrderItemLocalServiceImpl
 		shoppingOrderItem.setCompanyId(companyId);
 		shoppingOrderItem.setGroupId(groupId);
 		shoppingOrderItem.setName(productName);
+		shoppingOrderItem.setOrderStatus(orderStatus); 
 		shoppingOrderItem.setProductCode(productCode);
 		shoppingOrderItem.setCreateDate(new Date());
 		shoppingOrderItem.setOrderId(orderId);
@@ -86,6 +101,40 @@ public class ShoppingOrderItemLocalServiceImpl
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return shoppingOrderItems;
+	}
+	
+	public List<Long> getUserOrders(long userId) {
+		
+		List<Long> orderIds = new ArrayList<Long>();
+		
+		List<ShoppingOrder> shoppingOrders = ShoppingOrderLocalServiceUtil.getShoppingOrderByUserId(userId);
+		
+		if (Validator.isNull(shoppingOrders) && shoppingOrders.isEmpty()) return orderIds;
+		
+		for (ShoppingOrder shoppingOrder : shoppingOrders) {
+			orderIds.add(shoppingOrder.getOrderId());
+		}
+		
+		return orderIds;
+	}
+	
+	public List<ShoppingOrderItem> getShoppingOrderItems(long userId) {
+		
+		List<ShoppingOrderItem> shoppingOrderItems = new ArrayList<ShoppingOrderItem>();
+		List<Object> orderIds = new ArrayList<Object>();
+		for (Object orderId:getUserOrders(userId)) {
+			orderIds.add(orderId);
+		}
+		
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(ShoppingOrderItem.class);
+		dynamicQuery.add(PropertyFactoryUtil.forName("orderId").in(orderIds));
+		try {
+			shoppingOrderItems = ShoppingOrderItemLocalServiceUtil.dynamicQuery(dynamicQuery);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
 		return shoppingOrderItems;
 	}
 

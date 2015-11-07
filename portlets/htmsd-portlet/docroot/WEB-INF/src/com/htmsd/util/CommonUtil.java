@@ -35,7 +35,10 @@ import com.htmsd.slayer.service.ShoppingOrderItemLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.QueryPos;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -56,6 +59,10 @@ import com.liferay.portal.service.RegionServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.asset.model.AssetCategory;
+import com.liferay.portlet.asset.model.AssetVocabulary;
+import com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil;
+import com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.model.DLFileShortcut;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
 
@@ -331,17 +338,18 @@ public class CommonUtil {
 	
 	public static String getOrderStatus(int orderStatus) {
 		
-		String orderStatusString = StringPool.BLANK;
-		switch(orderStatus) {
-			case HConstants.PENDING : orderStatusString = HConstants.PROCESSING_STATUS;
-										break;
-			case HConstants.SHIPPING : orderStatusString = HConstants.SHIPPING_STATUS;
-										break;
-			case HConstants.DELIVERED : orderStatusString = HConstants.DELIVERED_STATUS;
-										break;
-			case HConstants.CANCEL_ORDER : orderStatusString = HConstants.ORDER_CANCELLED_STATUS;
-										break;
-			default : orderStatusString = "N/A";
+		String orderStatusString = "N/A";
+		AssetCategory category = getAssetCategoryById(orderStatus);
+		if (Validator.isNull(category)) return orderStatusString;
+		
+		if (orderStatus == HConstants.PENDING) {
+			orderStatusString = HConstants.PROCESSING_STATUS;
+		} else  {
+			if (category.getName().equals(HConstants.CANCEL_ORDER_STATUS)) {
+				orderStatusString = HConstants.ORDER_CANCELLED_STATUS;
+			} else {
+				orderStatusString = category.getName();
+			}
 		}
 		return orderStatusString;
 	}
@@ -525,4 +533,43 @@ public class CommonUtil {
 		return shoppingBeanList;
 	}
 	
+	public static List<AssetCategory> getAssetCategoryList(long groupId, String vocabularyName) {
+		
+		AssetVocabulary assetVocabulary = null;
+		List<AssetCategory> assetCategories = new ArrayList<AssetCategory>();
+		try {
+			assetVocabulary = AssetVocabularyLocalServiceUtil.getGroupVocabulary(groupId, vocabularyName);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if (Validator.isNull(assetVocabulary)) return assetCategories;
+		
+		assetCategories = getAssetCategory(assetVocabulary.getVocabularyId());
+		
+		return assetCategories;
+	}
+	
+	public static List<AssetCategory> getAssetCategory(long vocabularyId) {
+		
+		_log.info("Inside Asset Category....");
+		List<AssetCategory> assetCategories = new ArrayList<AssetCategory>();
+		try {
+			assetCategories = AssetCategoryLocalServiceUtil.getVocabularyCategories(vocabularyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return assetCategories;
+	}
+	
+	public static AssetCategory getAssetCategoryById(long categoryId) {
+		AssetCategory category = null;
+		try {
+			category = AssetCategoryLocalServiceUtil.fetchAssetCategory(categoryId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		return category;
+	}
 }

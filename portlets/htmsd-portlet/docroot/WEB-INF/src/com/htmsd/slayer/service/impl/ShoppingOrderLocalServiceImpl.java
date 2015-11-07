@@ -15,11 +15,11 @@
 package com.htmsd.slayer.service.impl;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import com.htmsd.slayer.model.ShoppingOrder;
+import com.htmsd.slayer.model.ShoppingOrderItem;
 import com.htmsd.slayer.model.impl.ShoppingOrderImpl;
 import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
 import com.htmsd.slayer.service.base.ShoppingOrderLocalServiceBaseImpl;
@@ -34,6 +34,8 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portlet.asset.model.AssetCategory;
+import com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil;
 
 /**
  * The implementation of the shopping order local service.
@@ -122,6 +124,26 @@ public class ShoppingOrderLocalServiceImpl
 		}
 	}
 	
+	public void updateShoppingOrderItem(int orderStatus, long orderItemId) {
+		
+		ShoppingOrderItem shoppingOrderItem = null;
+		try {
+			shoppingOrderItem = shoppingOrderItemLocalService.fetchShoppingOrderItem(orderItemId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (Validator.isNull(shoppingOrderItem)) return;
+		
+		shoppingOrderItem.setOrderStatus(orderStatus); 
+		shoppingOrderItem.setModifiedDate(new Date()); 
+		
+		try {
+			shoppingOrderItemLocalService.updateShoppingOrderItem(shoppingOrderItem);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public List<ShoppingOrder> getShoppingOrderByUserId(long userId){
 		List<ShoppingOrder> shoppingOrders = null;
 		try {
@@ -132,21 +154,21 @@ public class ShoppingOrderLocalServiceImpl
 		return shoppingOrders;
 	}
 	
-	public List<ShoppingOrder> getShoppingOrderByTabNames(int start, int end, String tabName) {
+	public List<ShoppingOrderItem> getShoppingOrderByTabNames(int start, int end, String tabName) {
 		
-		List<ShoppingOrder> shoppingOrders = Collections.emptyList();
+		List<ShoppingOrderItem> shoppingOrders = new ArrayList<ShoppingOrderItem>();
 		boolean isPendingOrderTab = tabName.equalsIgnoreCase("Pending");
 		boolean isShippingOrderTab = tabName.equalsIgnoreCase("Shipping");
 		boolean isOrderCancelledTab = tabName.equalsIgnoreCase("Order Cancelled");
 		
 		if (isPendingOrderTab) {
-			shoppingOrders = getShoppingOrders(HConstants.PENDING, start, end);
+			shoppingOrders = getOrderItems(HConstants.PENDING, start, end);
 		} else if (isShippingOrderTab) {
-			shoppingOrders = getShoppingOrders(HConstants.SHIPPING, start, end);
+			shoppingOrders = getOrderItems(getOrderStatusByTabName("Shipping"), start, end); 
 		} else if(isOrderCancelledTab) { 
-			shoppingOrders = getShoppingOrders(HConstants.CANCEL_ORDER, start, end);
+			shoppingOrders = getOrderItems(getOrderStatusByTabName("Order Cancelled"), start, end);
 		} else {
-			shoppingOrders = getShoppingOrders(HConstants.DELIVERED, start, end);
+			shoppingOrders = getOrderItems(getOrderStatusByTabName("Delivered"), start, end);
 		}
 		
 		return shoppingOrders;
@@ -238,13 +260,54 @@ public class ShoppingOrderLocalServiceImpl
 			if (tabName.equalsIgnoreCase("Pending")) {
 				orderStatus = HConstants.PENDING;
 			} else if (tabName.equalsIgnoreCase("Shipping")) {
-				orderStatus = HConstants.SHIPPING;
+				orderStatus = (int) getAssetCategoryIdByName(HConstants.SHIPPING_STATUS);
 			} else if (tabName.equalsIgnoreCase("Order Cancelled")) {
-				orderStatus = HConstants.CANCEL_ORDER;
+				orderStatus = (int) getAssetCategoryIdByName(HConstants.CANCEL_ORDER_STATUS);
 			} else {
-				orderStatus = HConstants.DELIVERED;
+				orderStatus = (int) getAssetCategoryIdByName(HConstants.DELIVERED_STATUS);
 			}
 		}
 		return orderStatus;
+	}
+	
+	public List<ShoppingOrderItem> getOrderItems(int orderStatus, int start, int end) {
+		
+		List<ShoppingOrderItem> shoppingOrderItems = null;
+		try {
+			shoppingOrderItems = shoppingOrderItemPersistence.findByOrderStatus(orderStatus, start, end);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		return shoppingOrderItems;
+	}
+	
+	public int getOrderItemCount(int orderStatus) {
+		
+		int count = 0;
+		try {
+			count = shoppingOrderItemLocalService.getShoppingOrderItemsCount();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		return count;
+	}
+	
+	public long getAssetCategoryIdByName(String name) {
+		
+		long categoryId = 0;
+		List<AssetCategory> assetCategories = null;
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(AssetCategory.class);
+		dynamicQuery.add(PropertyFactoryUtil.forName("name").eq(name));
+		try {
+			assetCategories = AssetCategoryLocalServiceUtil.dynamicQuery(dynamicQuery);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		if (Validator.isNull(assetCategories) && assetCategories.isEmpty()) return categoryId;
+		
+		categoryId = assetCategories.get(0).getCategoryId();
+		
+		return categoryId;
 	}
 }

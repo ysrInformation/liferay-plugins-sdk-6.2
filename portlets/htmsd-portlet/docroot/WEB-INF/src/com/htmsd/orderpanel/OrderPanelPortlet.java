@@ -12,6 +12,7 @@ import com.htmsd.util.NotificationUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.util.PortalUtil;
@@ -42,8 +43,10 @@ public class OrderPanelPortlet extends MVCPortlet {
 		_log.info("In updateOrderStatus ..."); 
 		int orderStatus = ParamUtil.getInteger(actionRequest, "orderStatus");
 		long orderId = ParamUtil.getLong(actionRequest, "orderId");
+		long orderItemId = ParamUtil.getLong(actionRequest, "orderItemId");
+		String tabName = ParamUtil.getString(actionRequest, "tabName");
 		
-		ShoppingOrderLocalServiceUtil.updateShoppingOrder(orderStatus, orderId);
+		ShoppingOrderLocalServiceUtil.updateShoppingOrderItem(orderStatus, orderItemId);
 		
 		ShoppingOrder shoppingOrder = null;
 		try {
@@ -57,6 +60,8 @@ public class OrderPanelPortlet extends MVCPortlet {
 					shoppingOrder.getUserName(), shoppingOrder.getShippingEmailAddress(), "EMAIL_NOTIFICATION");
 		}
 		
+		actionResponse.setWindowState(LiferayWindowState.NORMAL);
+		actionResponse.setRenderParameter("tab1", tabName); 
 	}
 
 	private final Log _log = LogFactoryUtil.getLog(OrderPanelPortlet.class);
