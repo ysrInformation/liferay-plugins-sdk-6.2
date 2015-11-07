@@ -232,6 +232,10 @@
 		<finder return-type="Collection" name="OrderId">
 			<finder-column name="orderId"/>
 		</finder>
+		
+		<finder return-type="Collection" name="OrderStatus">
+			<finder-column name="orderStatus"/>
+		</finder>
 
 	</entity>
 	

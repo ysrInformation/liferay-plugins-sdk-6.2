@@ -79,6 +79,7 @@ public interface HConstants {
 	public static String SHIPPING_STATUS = "Shipping";
 	public static String PROCESSING_STATUS = "Processing";
 	public static String ORDER_CANCELLED_STATUS = "Order Cancelled";
+	public static String CANCEL_ORDER_STATUS = "Cancel Order";
 
 	public static DateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
 
@@ -97,5 +98,6 @@ public interface HConstants {
 	public static final String RUPEE_SYMBOL = "Rs.";
 	
 	public static final String CURRENCY_PORTLET_PREFERENCE = "CURRENCY_PORTLET";
+	public static final String ASSET_VOCABULARY_ORDER_STATUS = "Order Status";
 	
 }
