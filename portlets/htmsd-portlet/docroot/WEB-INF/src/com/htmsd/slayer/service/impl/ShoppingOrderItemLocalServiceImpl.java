@@ -121,5 +121,10 @@ public class ShoppingOrderItemLocalServiceImpl
 		List<ShoppingOrderItem> shoppingOrderItems = shoppingItemFinder.getOrderItemsByUserId(0, 0, userId, getUserOrders(userId), false);
 		return shoppingOrderItems.size();
 	}
-
+	
+	public List<ShoppingOrderItem> getShoppingOrderItems(long userId) {
+		List<ShoppingOrderItem> shoppingOrderItems = new ArrayList<ShoppingOrderItem>();
+		shoppingOrderItems = shoppingItemFinder.getOrderItemsByUserId(0, 0, userId, getUserOrders(userId), false); 
+		return shoppingOrderItems;
+	}
 }
