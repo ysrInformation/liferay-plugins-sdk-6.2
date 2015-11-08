@@ -65,9 +65,9 @@
 					<li><a href="/home">Home </a></li>
 					<li><a href="/about-us">About US </a></li>
 					<li><a href="/contact-us">Contact US </a></li>
-					<li><a href="javascript:void(0)">Legal Notice </a></li>
-					<li><a href="javascript:void(0)">Terms And Conditions </a></li>
-					<li><a href="javascript:void(0)">Privacy Policy </a></li>
+					<li><a href="/legal-notice">Legal Notice </a></li>
+					<li><a href="/terms-and-conditions">Terms And Conditions </a></li>
+					<li><a href="/privacy-policy">Privacy Policy </a></li>
 				</ul>
 			</div>
 			<div class="span3">
