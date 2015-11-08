@@ -64,7 +64,6 @@
 						int qtyLength = quantity.length;
 						String updatetotalPrice = "javascript:updatetotalPrice(this.value,'"+shpCtItem.getCartItemId()+"','"+getTotalPriceURL+"','"+shoppingItem.getTotalPrice()+"','"+itemId+"');";
 						String removeCartItem = "javascript:removeItems('"+shoppingItem.getItemId()+"','"+removeItemURL+"');";
-						String[] imageIdsList = Validator.isNotNull(shoppingItem) ? shoppingItem.getImageIds().split(StringPool.COMMA):new String[]{}; 
 						%>
 						<tbody>
 							<tr>
@@ -73,11 +72,11 @@
 										<div class="row-fluid">
 											<div class="span4">
 												<c:choose>
-													<c:when test="<%= (Validator.isNotNull(imageIdsList) && imageIdsList.length > 0) %>">
+													<c:when test="<%= (shpCtItem.getImageId() > 0) %>">
 														<%
 														boolean imageExist = false;
 														String image_upload_preview = HConstants.IMAGE_UPLOAD_PREVIEW+1;
-														String imageURL = CommonUtil.getThumbnailpath(Long.parseLong(imageIdsList[0]), themeDisplay.getScopeGroupId(), false);
+														String imageURL = CommonUtil.getThumbnailpath(shpCtItem.getImageId(), themeDisplay.getScopeGroupId(), false);
 														imageExist = (!imageURL.isEmpty())?true:false;
 														detailsURL.setParameter(HConstants.ITEM_ID, String.valueOf(itemId));
 														detailsURL.setParameter(Constants.CMD, "itemsDetails");
