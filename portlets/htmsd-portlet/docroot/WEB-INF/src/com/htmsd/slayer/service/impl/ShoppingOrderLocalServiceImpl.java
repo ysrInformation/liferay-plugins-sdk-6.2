@@ -304,9 +304,9 @@ public class ShoppingOrderLocalServiceImpl
 			e.printStackTrace();
 		}
 		
-		if (Validator.isNull(assetCategories) && assetCategories.isEmpty()) return categoryId;
-		
-		categoryId = assetCategories.get(0).getCategoryId();
+		if (Validator.isNotNull(assetCategories) && assetCategories.size() > 0) {
+			categoryId = assetCategories.get(0).getCategoryId();
+		}
 		
 		return categoryId;
 	}
