@@ -474,14 +474,13 @@ public class CommonUtil {
 		for (ShoppingItem_Cart shIt_cart: getUserCartItems(userId)) {
 			ShoppingBean shoppingBean = new ShoppingBean();
 			ShoppingItem shoppingItem = getShoppingItem(shIt_cart.getItemId());
-			String[] imageIds = (Validator.isNotNull(shoppingItem))?shoppingItem.getImageIds().split(","):new String[]{}; 
 			shoppingBean.setCartId(shIt_cart.getCartId());
 			shoppingBean.setQuantity(shIt_cart.getQuantity());
 			shoppingBean.setTotalPrice(shIt_cart.getTotalPrice()); 
 			shoppingBean.setItemId(shIt_cart.getItemId()); 
 			shoppingBean.setUnitPrice(shoppingItem.getTotalPrice()); 
 			shoppingBean.setProductName(shoppingItem.getName());
-			shoppingBean.setImageId(Long.valueOf(imageIds[0]));
+			shoppingBean.setImageId(Validator.isNotNull(shoppingItem)? shoppingItem.getSmallImage():0);
 			shoppingBean.setCartItemId(shIt_cart.getId());
 			shoppingBean.setDescription((Validator.isNotNull(shoppingItem))?shoppingItem.getDescription():StringPool.BLANK); 
 			shoppingBean.setProductCode(shoppingItem.getProductCode()); 
@@ -501,7 +500,6 @@ public class CommonUtil {
 		
 		ShoppingBean shoppingBean = new ShoppingBean();
 		ShoppingItem shoppingItem = getShoppingItem(itemId);
-		String[] imageIds = (Validator.isNotNull(shoppingItem))?shoppingItem.getImageIds().split(","):new String[]{};
 		double totalPrice = shoppingItem.getTotalPrice() * HConstants.INITIAL_QUANTITY;
 		shoppingBean.setItemId(itemId);
 		shoppingBean.setProductCode(shoppingItem.getProductCode());
@@ -510,7 +508,7 @@ public class CommonUtil {
 		shoppingBean.setUnitPrice(shoppingItem.getTotalPrice()); 
 		shoppingBean.setTotalPrice(totalPrice);
 		shoppingBean.setDescription((Validator.isNotNull(shoppingItem))?shoppingItem.getDescription():StringPool.BLANK); 
-		shoppingBean.setImageId(Long.parseLong(imageIds[0]));
+		shoppingBean.setImageId(Validator.isNotNull(shoppingItem)? shoppingItem.getSmallImage():0);
 		
 		if (Validator.isNotNull(shoppingCartList) && shoppingCartList.size() > 0) {
 			for (ShoppingBean shoppingcartItem: shoppingCartList) {
