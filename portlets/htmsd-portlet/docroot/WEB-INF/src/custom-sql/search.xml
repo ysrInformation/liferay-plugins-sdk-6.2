@@ -27,5 +27,20 @@
    				[$sort]
 		 	]]>
 	</sql>
+	<sql id="com.htmsd.slayer.service.persistence.ShoppingItemFinderImpl.findOrderByUserId">
+		<![CDATA[
+			SELECT 
+				soi.* 
+			FROM 
+				htmsd_ShoppingOrderItem as soi
+			INNER JOIN 
+				htmsd_ShoppingOrder as so ON soi.orderId = so.orderId 
+			AND 
+				so.orderId IN ([$ORDER_IDS$])
+			WHERE 
+				so.userId = ? 
+			[$LIMIT$];
+		]]>
+	</sql>
 </custom-sql>
 	

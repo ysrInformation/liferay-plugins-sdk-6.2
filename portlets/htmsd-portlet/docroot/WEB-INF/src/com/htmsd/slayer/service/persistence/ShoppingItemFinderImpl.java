@@ -4,8 +4,10 @@ import java.util.List;
 
 import com.htmsd.slayer.model.Category;
 import com.htmsd.slayer.model.ShoppingItem;
+import com.htmsd.slayer.model.ShoppingOrderItem;
 import com.htmsd.slayer.model.impl.CategoryImpl;
 import com.htmsd.slayer.model.impl.ShoppingItemImpl;
+import com.htmsd.slayer.model.impl.ShoppingOrderItemImpl;
 import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.SQLQuery;
@@ -35,6 +37,9 @@ public class ShoppingItemFinderImpl extends BasePersistenceImpl<ShoppingItem>
 	
 	public static String SHOPPING_ITEM_CATEGORY = ShoppingItemFinderImpl.class
 			.getName() + ".getShoppingItemCategory";
+	
+	public static String SHOPPING_ORDER_ITEMS_BY_USERID = ShoppingItemFinderImpl.class
+			.getName() + ".findOrderByUserId";
 	
 	
 	@SuppressWarnings("unchecked")
@@ -181,5 +186,29 @@ public class ShoppingItemFinderImpl extends BasePersistenceImpl<ShoppingItem>
 		Category category = (query.list().size() > 0) ? (Category) query.list().get(0) : new CategoryImpl();
 		
 		return category;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<ShoppingOrderItem> getOrderItemsByUserId(int start, int end, long userId, String orderIds, boolean isLimitRequired) {
+
+		Session session = openSession();
+
+		String sql = CustomSQLUtil.get(SHOPPING_ORDER_ITEMS_BY_USERID);
+		sql = sql.replace("[$ORDER_IDS$]", orderIds);
+		if (isLimitRequired) {
+			sql = sql.replace("[$LIMIT$]", "limit "+start+","+end);
+		} else {
+			sql = sql.replace("[$LIMIT$]", StringPool.BLANK);
+		}
+		
+		_log.info("The Query is >>>>>>>>>" + sql);
+
+		SQLQuery query = session.createSQLQuery(sql);
+		query.addEntity("ShoppingOrderItem", ShoppingOrderItemImpl.class);
+
+		QueryPos queryPos = QueryPos.getInstance(query);
+		queryPos.add(userId);
+		
+		return (List<ShoppingOrderItem>) query.list();
 	}
 }

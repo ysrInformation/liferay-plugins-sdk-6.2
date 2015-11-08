@@ -24,11 +24,13 @@
 		<aui:input name="tabName" type="hidden" value="<%= tabName %>"/>
 		
 		<aui:select id="orderStatus" name="orderStatus" label="order-status" showEmptyOption="true" required="true"> 
+			<c:if test="<%= Validator.isNotNull(orderStatusList) && !orderStatusList.isEmpty() %>">
 			<% 
 			for (AssetCategory assetCategory : orderStatusList) { 
 				%><aui:option label="<%= assetCategory.getName() %>" value="<%= assetCategory.getCategoryId() %>"/><% 
 			}
 			%>
+			</c:if>
 		</aui:select>
 	
 		<aui:button-row>

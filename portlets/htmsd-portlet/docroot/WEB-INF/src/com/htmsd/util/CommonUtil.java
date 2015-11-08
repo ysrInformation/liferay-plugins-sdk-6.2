@@ -339,12 +339,13 @@ public class CommonUtil {
 	public static String getOrderStatus(int orderStatus) {
 		
 		String orderStatusString = "N/A";
-		AssetCategory category = getAssetCategoryById(orderStatus);
-		if (Validator.isNull(category)) return orderStatusString;
 		
 		if (orderStatus == HConstants.PENDING) {
 			orderStatusString = HConstants.PROCESSING_STATUS;
 		} else  {
+			AssetCategory category = getAssetCategoryById(orderStatus);
+			if (Validator.isNull(category)) return orderStatusString;
+			
 			if (category.getName().equals(HConstants.CANCEL_ORDER_STATUS)) {
 				orderStatusString = HConstants.ORDER_CANCELLED_STATUS;
 			} else {

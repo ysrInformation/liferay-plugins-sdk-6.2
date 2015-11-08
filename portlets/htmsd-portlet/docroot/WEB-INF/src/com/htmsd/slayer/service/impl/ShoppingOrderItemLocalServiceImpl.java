@@ -18,20 +18,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.collections.ListUtils;
-
 import com.htmsd.slayer.model.ShoppingOrder;
 import com.htmsd.slayer.model.ShoppingOrderItem;
 import com.htmsd.slayer.model.impl.ShoppingOrderItemImpl;
-import com.htmsd.slayer.service.ShoppingOrderItemLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
 import com.htmsd.slayer.service.base.ShoppingOrderItemLocalServiceBaseImpl;
-import com.liferay.portal.kernel.dao.orm.DynamicQuery;
-import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
-import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.util.ArrayUtil;
-import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -104,38 +95,31 @@ public class ShoppingOrderItemLocalServiceImpl
 		return shoppingOrderItems;
 	}
 	
-	public List<Long> getUserOrders(long userId) {
+	public String getUserOrders(long userId) {
 		
+		String orderIdsArray = "0";
 		List<Long> orderIds = new ArrayList<Long>();
-		
 		List<ShoppingOrder> shoppingOrders = ShoppingOrderLocalServiceUtil.getShoppingOrderByUserId(userId);
 		
-		if (Validator.isNull(shoppingOrders) && shoppingOrders.isEmpty()) return orderIds;
+		if (Validator.isNull(shoppingOrders) && shoppingOrders.isEmpty()) return orderIdsArray;
 		
 		for (ShoppingOrder shoppingOrder : shoppingOrders) {
 			orderIds.add(shoppingOrder.getOrderId());
 		}
 		
-		return orderIds;
+		return StringUtil.merge(orderIds); 
 	}
 	
-	public List<ShoppingOrderItem> getShoppingOrderItems(long userId) {
+	public List<ShoppingOrderItem> getShoppingOrderItems(int start, int end, long userId) {
 		
 		List<ShoppingOrderItem> shoppingOrderItems = new ArrayList<ShoppingOrderItem>();
-		List<Object> orderIds = new ArrayList<Object>();
-		for (Object orderId:getUserOrders(userId)) {
-			orderIds.add(orderId);
-		}
-		
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(ShoppingOrderItem.class);
-		dynamicQuery.add(PropertyFactoryUtil.forName("orderId").in(orderIds));
-		try {
-			shoppingOrderItems = ShoppingOrderItemLocalServiceUtil.dynamicQuery(dynamicQuery);
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		
+		shoppingOrderItems = shoppingItemFinder.getOrderItemsByUserId(start, end, userId, getUserOrders(userId), true); 
 		return shoppingOrderItems;
+	}
+	
+	public int getOrderItemsCount(long userId) {
+		List<ShoppingOrderItem> shoppingOrderItems = shoppingItemFinder.getOrderItemsByUserId(0, 0, userId, getUserOrders(userId), false);
+		return shoppingOrderItems.size();
 	}
 
 }

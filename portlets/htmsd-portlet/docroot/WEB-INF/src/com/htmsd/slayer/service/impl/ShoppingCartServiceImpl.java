@@ -14,16 +14,26 @@
 
 package com.htmsd.slayer.service.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.htmsd.slayer.NoSuchShoppingCartException;
 import com.htmsd.slayer.model.ShoppingCart;
+import com.htmsd.slayer.model.ShoppingItem;
 import com.htmsd.slayer.model.ShoppingItem_Cart;
+import com.htmsd.slayer.model.ShoppingOrderItem;
+import com.htmsd.slayer.service.ShoppingItemLocalServiceUtil;
 import com.htmsd.slayer.service.base.ShoppingCartServiceBaseImpl;
+import com.htmsd.util.CommonUtil;
+import com.htmsd.util.HConstants;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.security.ac.AccessControlled;
 
@@ -80,4 +90,51 @@ public class ShoppingCartServiceImpl extends ShoppingCartServiceBaseImpl {
 		
 		return count;
 	}
+	
+	@AccessControlled(guestAccessEnabled=true)
+	public JSONArray getUserOrderItems(long userId, long groupId, long currencyId, int start, int end) {
+		_log.info("Getting Shopping Item List Start:"+start+" End:"+end);
+		
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+		List<ShoppingOrderItem> shoppingOrderItems = new ArrayList<ShoppingOrderItem>();
+		shoppingOrderItems = shoppingOrderItemLocalService.getShoppingOrderItems(start, end, userId);
+		getItemJSONArray(jsonArray, shoppingOrderItems, currencyId, groupId);
+		_log.info(jsonArray);
+		return jsonArray;
+	}
+
+	private void getItemJSONArray(JSONArray jsonArray,
+			List<ShoppingOrderItem> orderItems, long currencyId, long groupId) {
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+		for (ShoppingOrderItem orderItem : orderItems) {
+
+			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+			ShoppingItem shoppingItem = null;
+			try {
+				shoppingItem = ShoppingItemLocalServiceUtil.fetchShoppingItem(orderItem.getShoppingItemId());
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			if (Validator.isNull(shoppingItem)) continue;
+			
+			double currencyRate = CommonUtil.getCurrentRate(currencyId);
+			double total = (currencyRate == 0) ? orderItem.getTotalPrice() :  orderItem.getTotalPrice() / currencyRate; 
+			long imageId = shoppingItem.getSmallImage();
+			
+			jsonObject.put(HConstants.ITEM_ID, shoppingItem.getItemId());
+			jsonObject.put(HConstants.NAME, shoppingItem.getName());
+			jsonObject.put(HConstants.DESCRIPTION, StringUtil.shorten(shoppingItem.getDescription(), 50, ". . ."));
+			jsonObject.put(HConstants.TOTAL_PRICE, total);
+			jsonObject.put("orderItemId", orderItem.getItemId());
+			jsonObject.put("orderId", orderItem.getOrderId());
+			jsonObject.put("quantity", orderItem.getQuantity());
+			jsonObject.put("orderDate", sdf.format(orderItem.getCreateDate()));
+			jsonObject.put("orderStatus", orderItem.getOrderStatus());
+			jsonObject.put("status", CommonUtil.getOrderStatus(orderItem.getOrderStatus()));
+			jsonObject.put(HConstants.IMAGE, CommonUtil.getThumbnailpath(imageId, groupId, false));
+			jsonArray.put(jsonObject);
+		}
+	}
+	
 }
