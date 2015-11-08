@@ -243,8 +243,10 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		_log.info("Inside CancelOrder method ..."); 
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		long orderId = ParamUtil.getLong(actionRequest, "orderId");
-
-		ShoppingOrderLocalServiceUtil.updateShoppingOrder(HConstants.CANCEL_ORDER, orderId);
+		long orderItemId = ParamUtil.getLong(actionRequest, "orderItemId");
+		long categoryId = ShoppingOrderLocalServiceUtil.getAssetCategoryIdByName(HConstants.CANCEL_ORDER_STATUS);
+	
+		ShoppingOrderLocalServiceUtil.updateShoppingOrderItem((int)categoryId, orderItemId);
 		
 		NotificationUtil.sendNotification(themeDisplay.getScopeGroupId(), 
 				themeDisplay.getUser().getFullName(), themeDisplay.getUser().getEmailAddress(), "EMAIL_NOTIFICATION");
