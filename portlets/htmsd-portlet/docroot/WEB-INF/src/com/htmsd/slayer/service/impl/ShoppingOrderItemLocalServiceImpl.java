@@ -23,6 +23,7 @@ import com.htmsd.slayer.model.ShoppingOrderItem;
 import com.htmsd.slayer.model.impl.ShoppingOrderItemImpl;
 import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
 import com.htmsd.slayer.service.base.ShoppingOrderItemLocalServiceBaseImpl;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -97,17 +98,17 @@ public class ShoppingOrderItemLocalServiceImpl
 	
 	public String getUserOrders(long userId) {
 		
-		String orderIdsArray = "0";
+		String orderIdsArray = StringPool.BLANK;
 		List<Long> orderIds = new ArrayList<Long>();
 		List<ShoppingOrder> shoppingOrders = ShoppingOrderLocalServiceUtil.getShoppingOrderByUserId(userId);
 		
-		if (Validator.isNull(shoppingOrders) && shoppingOrders.isEmpty()) return orderIdsArray;
+		if (Validator.isNull(shoppingOrders) || shoppingOrders.size() == 0) return orderIdsArray;
 		
 		for (ShoppingOrder shoppingOrder : shoppingOrders) {
 			orderIds.add(shoppingOrder.getOrderId());
 		}
-		
-		return StringUtil.merge(orderIds); 
+		orderIdsArray = StringUtil.merge(orderIds);
+		return orderIdsArray; 
 	}
 	
 	public List<ShoppingOrderItem> getShoppingOrderItems(int start, int end, long userId) {
@@ -119,7 +120,7 @@ public class ShoppingOrderItemLocalServiceImpl
 	
 	public int getOrderItemsCount(long userId) {
 		List<ShoppingOrderItem> shoppingOrderItems = shoppingItemFinder.getOrderItemsByUserId(0, 0, userId, getUserOrders(userId), false);
-		return shoppingOrderItems.size();
+		return ((Validator.isNotNull(shoppingOrderItems) && shoppingOrderItems.size() > 0)? shoppingOrderItems.size() : 0);
 	}
 	
 	public List<ShoppingOrderItem> getShoppingOrderItems(long userId) {

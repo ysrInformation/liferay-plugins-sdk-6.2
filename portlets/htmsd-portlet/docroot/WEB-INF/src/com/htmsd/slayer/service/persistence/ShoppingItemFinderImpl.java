@@ -191,10 +191,11 @@ public class ShoppingItemFinderImpl extends BasePersistenceImpl<ShoppingItem>
 	@SuppressWarnings("unchecked")
 	public List<ShoppingOrderItem> getOrderItemsByUserId(int start, int end, long userId, String orderIds, boolean isLimitRequired) {
 
+		_log.info("Inside getOrderItemsByUserId ..."+orderIds); 
 		Session session = openSession();
-
+		
 		String sql = CustomSQLUtil.get(SHOPPING_ORDER_ITEMS_BY_USERID);
-		sql = sql.replace("[$ORDER_IDS$]", orderIds);
+		sql = sql.replace("[$ORDER_IDS$]",(orderIds.isEmpty() ? "0" :  orderIds));
 		if (isLimitRequired) {
 			sql = sql.replace("[$LIMIT$]", "limit "+start+","+end);
 		} else {
