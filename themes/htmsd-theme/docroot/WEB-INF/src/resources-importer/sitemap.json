@@ -288,6 +288,24 @@
 			"name": "Search",
 			"friendlyURL": "/search",
 			"hidden": "true"
+		},
+		{	
+			"title": "Legal Notice",
+			"name": "Legal Notice",
+			"friendlyURL": "/legal-notice",
+			"hidden": "true"
+		},
+		{	
+			"title": "Terms And Conditions",
+			"name": "Terms And Conditions",
+			"friendlyURL": "/terms-and-conditions",
+			"hidden": "true"
+		},
+		{	
+			"title": "Privacy Policy",
+			"name": "Privacy Policy",
+			"friendlyURL": "/privacy-policy",
+			"hidden": "true"
 		}
 	]
 }
