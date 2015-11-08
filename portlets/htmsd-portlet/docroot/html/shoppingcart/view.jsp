@@ -29,7 +29,7 @@
 		</c:choose>
 	</liferay-ui:section>
 	<liferay-ui:section>
-		<%@include file="/html/shoppingcart/myorders.jsp" %>
+		<%@include file="/html/shoppingcart/my-orders.jsp" %>
 	</liferay-ui:section>
 </liferay-ui:tabs>
 

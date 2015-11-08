@@ -9,6 +9,7 @@
 <%@page import="java.util.Collections"%>
 <%@page import="java.util.Comparator"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="javax.portlet.PortletSession"%>
 <%@page import="javax.portlet.WindowState"%>
 <%@page import="org.apache.commons.beanutils.BeanComparator"%>
 
@@ -23,6 +24,8 @@
 <%@page import="com.htmsd.slayer.model.ShoppingItem_Cart"%>
 <%@page import="com.htmsd.slayer.service.ShoppingItemLocalServiceUtil"%>
 <%@page import="com.htmsd.slayer.service.ShoppingItem_CartLocalServiceUtil"%>
+<%@page import="com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil"%>
+<%@page import="com.htmsd.slayer.service.ShoppingOrderItemLocalServiceUtil"%>
 
 <%--Liferay's imports --%>
 <%@page import="com.liferay.portal.util.PortletKeys"%>
@@ -38,6 +41,7 @@
 <%@page import="com.liferay.counter.service.CounterLocalServiceUtil"%>
 <%@page import="com.liferay.counter.service.persistence.CounterUtil"%>
 <%@page import="com.liferay.portal.service.UserLocalServiceUtil"%>
+
 
 
 
