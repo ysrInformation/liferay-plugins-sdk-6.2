@@ -60,7 +60,7 @@
 						itemExist = true;
 						double price = shpCtItem.getTotalPrice();
 						totalPrice += price;
-						int quantity[] = CommonUtil.getItemsQuantity(itemId, cartId);
+						int quantity[] = CommonUtil.getItemsQuantity(itemId, cartId, session);
 						int qtyLength = quantity.length;
 						String updatetotalPrice = "javascript:updatetotalPrice(this.value,'"+shpCtItem.getCartItemId()+"','"+getTotalPriceURL+"','"+shoppingItem.getTotalPrice()+"','"+itemId+"');";
 						String removeCartItem = "javascript:removeItems('"+shoppingItem.getItemId()+"','"+removeItemURL+"');";
@@ -171,7 +171,7 @@ function removeItems(itemId, url) {
 			sync : false,
 			on : {
 	         	success : function() {
-	         		Liferay.Portlet.refresh('#p_p_id_4_WAR_htmsdportlet_');
+	         		location.reload();
 				},
 	       		failure : function() {
 	        		alert("Something went wrong !!Please try again..");
