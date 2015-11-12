@@ -42,7 +42,8 @@ public interface HConstants {
 	public static String WHOLESALE_PRICE="wholeSalePrice";
 	public static String STAFF_REMARKS="staffRemark";
 	public static String SMALL_IMAGE = "smallImage";
-
+	public static String TIN = "Tin";
+	public static String COMPANY_NAME="Company Name";
 	public static int IMAGES_UPLOAD_LIMIT = 5;
 	public static int WHOLESALE_LIMIT = 3;
 	public static int NEW = 0;
@@ -79,7 +80,6 @@ public interface HConstants {
 	public static String SHIPPING_STATUS = "Shipping";
 	public static String PROCESSING_STATUS = "Processing";
 	public static String ORDER_CANCELLED_STATUS = "Order Cancelled";
-	public static String CANCEL_ORDER_STATUS = "Cancel Order";
 
 	public static DateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
 
@@ -98,6 +98,5 @@ public interface HConstants {
 	public static final String RUPEE_SYMBOL = "Rs.";
 	
 	public static final String CURRENCY_PORTLET_PREFERENCE = "CURRENCY_PORTLET";
-	public static final String ASSET_VOCABULARY_ORDER_STATUS = "Order Status";
 	
 }

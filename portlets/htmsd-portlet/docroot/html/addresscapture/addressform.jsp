@@ -8,19 +8,27 @@
 	<aui:fieldset>
 		<aui:col width="<%= 50 %>">
 		
-			<aui:input  name="street1" />
-		
+			<aui:input  name="street1" required="true"/>
+			
 			<aui:input  name="street2" />
 		
 			<aui:input  name="street3" />
 			
-			<aui:input  name="zip" />
+			<aui:input  name="zip" >
+				<aui:validator name="required" />
+				<aui:validator name="number"></aui:validator>
+				<aui:validator name="minLength">6</aui:validator>
+				<aui:validator name="maxLength">6</aui:validator>
+			</aui:input>
 			
 		</aui:col>
 
 		<aui:col width="<%= 50 %>">
 			
-			<aui:input  name="city" />
+			<aui:input  name="city" >
+				<aui:validator name="required" />
+				<aui:validator name="alpha" />
+			</aui:input>
 			
 			<aui:select label="country" name="countryId" showEmptyOption="true" >
 				<c:forEach var="country" items="<%=CountryServiceUtil.getCountries() %>">
@@ -30,7 +38,7 @@
 			
 			<aui:select label="region"  name="regionId" />
 		
-			<aui:button type="submit" value="Save"/>
+			<aui:button type="submit" value="save"/>
 		
 		</aui:col>
 				
@@ -53,7 +61,7 @@ AUI().use('aui-base', function(A){
 					  var regions = A.one("#<portlet:namespace/>regionId");
 					  regions.get('children').remove();
 					  for(x in obj) {
-						  var option = A.Node.create("<option value"+obj[x].regionId+">"+obj[x].name+"</option>").appendTo(regions);
+						  var option = A.Node.create("<option value="+obj[x].regionId+">"+obj[x].name+"</option>").appendTo(regions);
 					  }
 				  }
 				);

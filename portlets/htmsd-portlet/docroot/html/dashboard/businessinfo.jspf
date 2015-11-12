@@ -1,0 +1,67 @@
+<div id="businessDiv" style="display:none;">
+	
+	<aui:form id="businessForm" name="businessForm" action="#" method="POST">
+		<aui:fieldset>
+			<aui:col width="<%= 50 %>">
+			
+				<aui:input id="companyName" type="text" name="companyName" />
+				<p id="<portlet:namespace/>companyNameErr" style="display:none;">Please Enter Company Name</p>
+			
+				<aui:input  name="street1" />
+				<p id="<portlet:namespace/>street1Err" style="display:none;">Please Enter Street Name</p>
+			
+				<aui:input  name="street2" />
+			
+				<aui:input  name="street3" />
+				
+				<aui:input  name="zip" />
+				<p id="<portlet:namespace/>zipErr" style="display:none;">Please Enter Valid Zip </p>
+				
+			</aui:col>
+	
+			<aui:col width="<%= 50 %>">
+				
+				<aui:input id="tin"  type="text" name="tin" />
+				<p id="<portlet:namespace/>tinErr" style="display:none;">Please Enter Valid Tin Number</p>
+				
+				
+				<aui:input  name="city" />
+				<p id="<portlet:namespace/>cityErr" style="display:none;">Please Enter Valid City </p>
+				
+				<aui:select label="country" name="countryId" showEmptyOption="true" onChange="getRegions();" >
+					<c:forEach var="country" items="<%=CountryServiceUtil.getCountries() %>">
+						<aui:option value="${country.countryId}"  label="${country.name}" />
+					</c:forEach>
+				</aui:select>
+				
+				<aui:select label="region"  name="regionId" />
+			
+			
+			</aui:col>
+					
+		</aui:fieldset>
+	</aui:form>
+</div>
+
+
+<script>
+function getRegions() {
+
+	AUI().use('aui-base', function(A) {
+		Liferay.Service('/region/get-regions', {
+			countryId : A.one("#<portlet:namespace/>countryId").attr('value')
+		}, function(obj) {
+
+			var regions = A.one("#<portlet:namespace/>regionId");
+			regions.get('children').remove();
+			for (x in obj) {
+				var option = A.Node.create(
+						"<option value="+obj[x].regionId+">"
+								+ obj[x].name + "</option>")
+						.appendTo(regions);
+			}
+		});
+
+	});
+}
+</script>
