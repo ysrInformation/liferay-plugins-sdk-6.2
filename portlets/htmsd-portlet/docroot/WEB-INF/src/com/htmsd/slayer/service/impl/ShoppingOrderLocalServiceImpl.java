@@ -14,6 +14,7 @@
 
 package com.htmsd.slayer.service.impl;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -220,8 +221,7 @@ public class ShoppingOrderLocalServiceImpl
 		
 		if (keyword.contains("-")) {
 			Criterion criterion = PropertyFactoryUtil.forName("createDate").between(
-					 sdf.format(getFromDateAndToDate(keyword, 0, 0, 0)), 
-					 sdf.format(getFromDateAndToDate(keyword, 59, 59, 23)));
+					getFromDateAndToDate("yyyy-MM-dd 00:00:00", keyword), getFromDateAndToDate("yyyy-MM-dd 59:59:23", keyword));
 			dynamicQuery.add(criterion);
 		}
 		
@@ -255,9 +255,8 @@ public class ShoppingOrderLocalServiceImpl
 		dynamicQuery.add(junctionOR);
 		
 		if (keyword.contains("-")) {
-			Criterion criterion = PropertyFactoryUtil.forName("createDate").between(
-					 sdf.format(getFromDateAndToDate(keyword, 0, 0, 0)), 
-					 sdf.format(getFromDateAndToDate(keyword, 59, 59, 23)));
+			Criterion criterion = PropertyFactoryUtil.forName("createDate").between(getFromDateAndToDate("yyyy-MM-dd 00:00:00", keyword),
+					getFromDateAndToDate("yyyy-MM-dd 59:59:23", keyword));
 			dynamicQuery.add(criterion);
 		}
 
@@ -331,18 +330,20 @@ public class ShoppingOrderLocalServiceImpl
 		return categoryId;
 	}
 	
-	private static Date getFromDateAndToDate(String date ,int hours,int minutes,int seconds) {
+	private static String getFromDateAndToDate(String pattern, String date) {
 		
-		Date returnDate = null;
+		Date returnDate = new Date(); 
+		SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+		String[] dateArray = date.split("-");
 		if (Validator.isNotNull(date)) {
-			long year = Long.valueOf(date.substring(6, 10));
-			long month = Long.valueOf(date.substring(0,2))-1;
-			long day = Long.valueOf(date.substring(3,5));
-			Calendar fromCal = Calendar.getInstance();
-			fromCal.set((int)year,(int)month, (int)day, hours, minutes, seconds);
-			returnDate = fromCal.getTime();
-			System.out.println("DaTE IS :::"+returnDate);
+			int day = Integer.valueOf(dateArray[0]);
+			int month = Integer.valueOf(dateArray[1])-1;
+			int year = Integer.valueOf(dateArray[2]);
+			Calendar cal = Calendar.getInstance();
+			cal.set(year, month, day); 
+			returnDate = cal.getTime();
 		}
-		return returnDate;
+
+		return sdf.format(returnDate);
 	}
 }
