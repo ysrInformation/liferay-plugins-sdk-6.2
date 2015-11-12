@@ -36,9 +36,10 @@
 			
 			<liferay-ui:search-container-results>
 				<%
+				keyword = keyword.trim();
 			 	shoppingOrders = keyword.isEmpty() ? ShoppingOrderLocalServiceUtil.getShoppingOrderByTabNames(searchContainer.getStart(), 
-			 			searchContainer.getEnd(), tabName) : ShoppingOrderLocalServiceUtil.getShoppingOrderByTabNames(searchContainer.getStart(),
-			 					searchContainer.getEnd(), tabName);
+			 			searchContainer.getEnd(), tabName) : ShoppingOrderLocalServiceUtil.searchItems(keyword, tabName, searchContainer.getStart(),
+			 					searchContainer.getEnd());
 			 				
 				List<ShoppingOrderItem> copy_itemList = new ArrayList<ShoppingOrderItem>();
 				copy_itemList.addAll(shoppingOrders);
@@ -50,7 +51,7 @@
 				
 				results = copy_itemList; 
 				total = keyword.isEmpty() ? ShoppingOrderLocalServiceUtil.getOrderItemCount(orderStatus)
-										    : ShoppingOrderLocalServiceUtil.getOrderItemCount(orderStatus);													
+										    : ShoppingOrderLocalServiceUtil.searchCount(tabName, keyword);												
 				
 				pageContext.setAttribute("results", results);
 				pageContext.setAttribute("total", total);

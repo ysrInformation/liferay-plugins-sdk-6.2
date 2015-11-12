@@ -14,16 +14,19 @@
 
 package com.htmsd.slayer.service.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import com.htmsd.slayer.model.ShoppingOrder;
 import com.htmsd.slayer.model.ShoppingOrderItem;
 import com.htmsd.slayer.model.impl.ShoppingOrderImpl;
-import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
+import com.htmsd.slayer.service.ShoppingOrderItemLocalServiceUtil;
 import com.htmsd.slayer.service.base.ShoppingOrderLocalServiceBaseImpl;
 import com.htmsd.util.HConstants;
+import com.liferay.portal.kernel.dao.orm.Criterion;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.Junction;
@@ -198,27 +201,35 @@ public class ShoppingOrderLocalServiceImpl
 		return count;
 	}
 	
-	public  List<ShoppingOrder> searchItems(int orderStatus, String keyword, int start, int end) {
+	public  List<ShoppingOrderItem> searchItems(String keyword, String tabName, int start, int end) {
 		
-		System.out.println("Searched Method  :"+orderStatus); 
+		System.out.println("Searched Method  >>>>>>>>>> Keyword is ::"+keyword); 
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		String likeKeyword = StringUtil.quote(keyword, StringPool.PERCENT);
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(ShoppingOrder.class);
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(ShoppingOrderItem.class);
 		
 		Junction junctionOR = RestrictionsFactoryUtil.disjunction();
 		
-		Property property = PropertyFactoryUtil.forName("shippingFirstName");
+		Property property = PropertyFactoryUtil.forName("name");
 		junctionOR.add(property.like(likeKeyword));
 		
-		property = PropertyFactoryUtil.forName("shippingLastName");
-		junctionOR.add(property.like(likeKeyword));
+		property = PropertyFactoryUtil.forName("quantity");
+		junctionOR.add(property.like(Integer.parseInt(keyword)));
 		
 		dynamicQuery.add(junctionOR);
-
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("orderStatus", orderStatus));
 		
-		List<ShoppingOrder> searchList = new ArrayList<ShoppingOrder>();
+		if (keyword.contains("-")) {
+			Criterion criterion = PropertyFactoryUtil.forName("createDate").between(
+					 sdf.format(getFromDateAndToDate(keyword, 0, 0, 0)), 
+					 sdf.format(getFromDateAndToDate(keyword, 59, 59, 23)));
+			dynamicQuery.add(criterion);
+		}
+		
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("orderStatus", getOrderStatusByTabName(tabName)));
+		System.out.println("end of query...."); 
+		List<ShoppingOrderItem> searchList = new ArrayList<ShoppingOrderItem>();
 		try {
-			searchList =  ShoppingOrderLocalServiceUtil.dynamicQuery(dynamicQuery, start, end);
+			searchList =  ShoppingOrderItemLocalServiceUtil.dynamicQuery(dynamicQuery, start, end);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
@@ -226,26 +237,35 @@ public class ShoppingOrderLocalServiceImpl
 		return searchList;
 	}
 	
-	public int searchCount(int orderStatus, String keyword) {
+	public int searchCount(String tabName, String keyword) {
 		
+		System.out.println("Searched Method  ,, Keyword is ::"+keyword); 
 		String likeKeyword = StringUtil.quote(keyword, StringPool.PERCENT);
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(ShoppingOrder.class);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(ShoppingOrderItem.class);
 		
 		Junction junctionOR = RestrictionsFactoryUtil.disjunction();
 		
-		Property property = PropertyFactoryUtil.forName("shippingFirstName");
+		Property property = PropertyFactoryUtil.forName("name");
 		junctionOR.add(property.like(likeKeyword));
 		
-		property = PropertyFactoryUtil.forName("shippingLastName");
-		junctionOR.add(property.like(likeKeyword));
+		property = PropertyFactoryUtil.forName("quantity");
+		junctionOR.add(property.like(Integer.parseInt(keyword)));
 		
 		dynamicQuery.add(junctionOR);
-
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("orderStatus", orderStatus));
 		
+		if (keyword.contains("-")) {
+			Criterion criterion = PropertyFactoryUtil.forName("createDate").between(
+					 sdf.format(getFromDateAndToDate(keyword, 0, 0, 0)), 
+					 sdf.format(getFromDateAndToDate(keyword, 59, 59, 23)));
+			dynamicQuery.add(criterion);
+		}
+
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("orderStatus", getOrderStatusByTabName(tabName)));
+
 		int searchCount = 0;
 		try {
-			searchCount = (int) ShoppingOrderLocalServiceUtil.dynamicQueryCount(dynamicQuery);
+			searchCount = (int) ShoppingOrderItemLocalServiceUtil.dynamicQueryCount(dynamicQuery);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
@@ -309,5 +329,20 @@ public class ShoppingOrderLocalServiceImpl
 		}
 		
 		return categoryId;
+	}
+	
+	private static Date getFromDateAndToDate(String date ,int hours,int minutes,int seconds) {
+		
+		Date returnDate = null;
+		if (Validator.isNotNull(date)) {
+			long year = Long.valueOf(date.substring(6, 10));
+			long month = Long.valueOf(date.substring(0,2))-1;
+			long day = Long.valueOf(date.substring(3,5));
+			Calendar fromCal = Calendar.getInstance();
+			fromCal.set((int)year,(int)month, (int)day, hours, minutes, seconds);
+			returnDate = fromCal.getTime();
+			System.out.println("DaTE IS :::"+returnDate);
+		}
+		return returnDate;
 	}
 }
