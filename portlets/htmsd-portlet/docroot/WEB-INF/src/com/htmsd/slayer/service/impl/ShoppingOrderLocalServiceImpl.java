@@ -214,7 +214,7 @@ public class ShoppingOrderLocalServiceImpl
 		junctionOR.add(property.like(likeKeyword));
 		
 		property = PropertyFactoryUtil.forName("quantity");
-		junctionOR.add(property.like(Integer.parseInt(keyword)));
+		//junctionOR.add(property.like(Integer.parseInt(keyword)));
 		
 		dynamicQuery.add(junctionOR);
 		
@@ -250,7 +250,7 @@ public class ShoppingOrderLocalServiceImpl
 		junctionOR.add(property.like(likeKeyword));
 		
 		property = PropertyFactoryUtil.forName("quantity");
-		junctionOR.add(property.like(Integer.parseInt(keyword)));
+		//junctionOR.add(property.like(Integer.parseInt(keyword)));
 		
 		dynamicQuery.add(junctionOR);
 		
