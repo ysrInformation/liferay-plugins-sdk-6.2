@@ -117,7 +117,6 @@ public class DashboardPortlet extends MVCPortlet {
 	}
 	PrintWriter printWriter = resourceResponse.getWriter();
 	printWriter.write(jsonArray.toString());
-	System.out.println(jsonArray.toString());
 	printWriter.flush();
 	}
 	
