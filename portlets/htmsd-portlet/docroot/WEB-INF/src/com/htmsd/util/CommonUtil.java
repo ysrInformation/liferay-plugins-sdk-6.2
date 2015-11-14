@@ -355,7 +355,7 @@ public class CommonUtil {
 		return orderStatusString;
 	}
 	
-	public static int[] getItemsQuantity(long itemId, long cartId) {
+	public static int[] getItemsQuantity(long itemId, long cartId, HttpSession httpSession) {
 		
 		int allUserQuantity = 0;
 		int remainingQnty = 0;
@@ -372,11 +372,12 @@ public class CommonUtil {
 				shoppingItem_Carts = ShoppingItem_CartLocalServiceUtil.getShoppingItemByItemId(itemId);
 			} catch (SystemException e) {
 				e.printStackTrace();
+				_log.error("No items exist with this Id ::"+e.getMessage()); 
 			}
 			try {
 				shoppingItem_Cart = ShoppingItem_CartLocalServiceUtil.findByCartAndItemId(cartId, itemId);
 			} catch (NoSuchShoppingItem_CartException e) {
-				_log.error("No such Item exist with the cartId"+e); 
+				_log.error("No such Item exist with the cartId ::"+e.getMessage()); 
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
@@ -386,8 +387,12 @@ public class CommonUtil {
 					allUserQuantity += shoppingItem_cart.getQuantity();
 				}
 			}
-			userQnty = (Validator.isNotNull(shoppingItem_Cart) && shoppingItem_Cart.getQuantity() > 0) ? 
-					shoppingItem_Cart.getQuantity()  : 0;
+			
+			if (cartId == 0 || Validator.isNull(shoppingItem_Cart)) {
+				userQnty =  getGuestUserQuantity(itemId, httpSession);
+			} else {
+				userQnty = (shoppingItem_Cart.getQuantity() > 0) ? shoppingItem_Cart.getQuantity()  : 0; 
+			}
 		}
 		
 		if ((allUserQuantity) < totalStock) {
@@ -570,5 +575,48 @@ public class CommonUtil {
 			e.printStackTrace();
 		}
 		return category;
+	}
+	
+	public static double calculateVat(double totalPrice, double vatPercentage) {
+		double vat = 0;
+		vat = (totalPrice * vatPercentage) / (100 + vatPercentage);
+		return vat;
+	}
+	
+	public static int getGuestUserQuantity(long itemId, HttpSession httpSession) {
+		
+		int quantity = 0;
+		List<ShoppingBean> shoppingItems = getGuestUserList(httpSession);
+		if (Validator.isNotNull(shoppingItems) && shoppingItems.size() > 0) {
+			for (ShoppingBean shoppingBean:shoppingItems) {
+				if (itemId == shoppingBean.getItemId()) {
+					quantity += shoppingBean.getQuantity();
+				}
+			}
+		}
+		return quantity;
+	}
+	
+	public static boolean isCategoryLive(long itemId) {
+		
+		_log.info("Is Category Live ..."); 
+		Category category = null;
+		try {
+			category = ShoppingItemLocalServiceUtil.getShoppingItemCategory(itemId);	
+		} catch (Exception e) {
+			_log.error(e.getMessage());
+		}
+		
+		if (Validator.isNull(category)) return false;
+		
+		try {
+			if (category.getParentCategoryId() > 0) {
+				category = CategoryLocalServiceUtil.fetchCategory(category.getParentCategoryId());	
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		_log.info(Validator.isNotNull(category) && category.getName().equals("Live")); 
+		return (Validator.isNotNull(category) && category.getName().equals("Live"));
 	}
 }

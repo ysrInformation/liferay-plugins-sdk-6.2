@@ -15,6 +15,7 @@ import javax.portlet.PortletException;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
+import com.htmsd.addresscapture.AddressCapture;
 import com.htmsd.slayer.model.Category;
 import com.htmsd.slayer.model.ShoppingItem;
 import com.htmsd.slayer.service.CategoryLocalServiceUtil;
@@ -23,6 +24,9 @@ import com.htmsd.slayer.service.ShoppingItemLocalServiceUtil;
 import com.htmsd.slayer.service.WholeSaleLocalServiceUtil;
 import com.htmsd.util.HConstants;
 import com.htmsd.util.NotificationUtil;
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -39,6 +43,11 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.Address;
+import com.liferay.portal.model.Contact;
+import com.liferay.portal.model.ListTypeConstants;
+import com.liferay.portal.service.AddressLocalServiceUtil;
+import com.liferay.portal.service.ListTypeServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -60,7 +69,7 @@ public class DashboardPortlet extends MVCPortlet {
 	public void serveResource(ResourceRequest resourceRequest,
 			ResourceResponse resourceResponse) throws IOException,
 			PortletException {
-		
+		 
 	String resourceId = resourceRequest.getResourceID();
 	JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
 
@@ -73,10 +82,57 @@ public class DashboardPortlet extends MVCPortlet {
 			jsonObject.put("categoryId", category.getCategoryId());
 			jsonArray.put(jsonObject);
 		}
+	} else {
+		long categoryId = ParamUtil.getLong(resourceRequest, HConstants.CATEGORY_ID);
+		Category category = null;
+		try {
+			category = CategoryLocalServiceUtil.fetchCategory(categoryId);
+		} catch (SystemException e) {
+			_log.error(e);
+		}
+		if(Validator.isNotNull(category) && !category.getName().equalsIgnoreCase("Live")){
+			
+			int typeId = 0;
+			try {
+				typeId = ListTypeServiceUtil.getListTypes(Contact.class.getName() + ListTypeConstants.ADDRESS).get(0).getListTypeId();
+			} catch (SystemException e) {
+				_log.error(e);
+			}
+			ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
+			DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Address.class);
+			dynamicQuery.add(RestrictionsFactoryUtil.eq("userId", themeDisplay.getUserId()));
+			dynamicQuery.add(RestrictionsFactoryUtil.eq("typeId", typeId));
+			try {
+				long count = AddressLocalServiceUtil.dynamicQueryCount(dynamicQuery);
+				if(count > 0){
+					jsonArray.put("true");
+				}else{
+					jsonArray.put("false");
+				}
+			} catch (SystemException e) {
+				_log.error(e);
+			}
+		}
+		
 	}
 	PrintWriter printWriter = resourceResponse.getWriter();
 	printWriter.write(jsonArray.toString());
 	printWriter.flush();
+	}
+	
+	
+	/**
+	 * Method to saveBusiness for saving user business info
+	 * @param actionRequest
+	 * @param actionResponse
+	 *  @throws IOException
+	 * @throws PortletException
+	 */
+	public void saveBusiness(ActionRequest actionRequest,
+			ActionResponse actionResponse) throws IOException, PortletException {
+		
+		AddressCapture addressCapture = new AddressCapture();
+		addressCapture.saveAddress(actionRequest, actionResponse);
 	}
 
 	@Override

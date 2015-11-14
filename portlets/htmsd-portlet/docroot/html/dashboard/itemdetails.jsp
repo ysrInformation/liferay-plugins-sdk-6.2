@@ -1,7 +1,5 @@
-<%@page import="com.htmsd.slayer.service.WholeSaleLocalServiceUtil"%>
-<%@page import="com.htmsd.slayer.model.WholeSale"%>
-<%@page import="com.liferay.portal.util.PortalUtil"%>
 <%@include file="/html/dashboard/init.jsp" %>
+
 <portlet:resourceURL  id="getCategoryId"  var="getCategoryURL"/>
 
 <head>
@@ -204,10 +202,14 @@
 									<div class="wholesaleclass" id='<%="wholeSaleDiv" + i %>' style='<%=wholeSaleSize >= i ? "display:block;" : "display:none;"%> '>
 										<aui:row>
 											<aui:col width="20">
-												<aui:input name="<%=HConstants.WHOLESALE_QUANTITY + i %>" value="<%=wholeSaleSize >= i  ? wholeSales.get(i-1).getQuantity() : StringPool.BLANK%>" />	
+												<aui:input name="<%=HConstants.WHOLESALE_QUANTITY + i %>" value="<%=wholeSaleSize >= i  ? wholeSales.get(i-1).getQuantity() : StringPool.BLANK%>" >
+													<aui:validator name="number" />
+												</aui:input>	
 											</aui:col>
 											<aui:col width="20">
-												<aui:input name="<%=HConstants.WHOLESALE_PRICE + i%>"  value="<%=wholeSaleSize >= i  ? wholeSales.get(i-1).getPrice() : StringPool.BLANK%>" />
+												<aui:input name="<%=HConstants.WHOLESALE_PRICE + i%>"  value="<%=wholeSaleSize >= i  ? wholeSales.get(i-1).getPrice() : StringPool.BLANK%>" >
+													<aui:validator name="number" />
+												</aui:input>
 											</aui:col>
 											<aui:col width="20">
 												<aui:button-row cssClass="add-btn-padding">
@@ -350,7 +352,6 @@
 						 
 							 A.one("#<portlet:namespace /><%=HConstants.status%>").on('change',function(e){
 								var remarkDiv = document.getElementById("remarkDiv");
-								console.log(remarkDiv);
 								if(e.currentTarget.get('value') == <%=HConstants.REJECT%>) {
 									remarkDiv.style.display  = 'block';
 								}else{

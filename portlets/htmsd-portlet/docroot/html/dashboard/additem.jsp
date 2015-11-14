@@ -1,13 +1,14 @@
-<%@page import="com.liferay.portal.util.PortalUtil"%>
-<%@page import="com.liferay.portlet.asset.service.AssetTagLocalServiceUtil"%>
-<%@page import="com.liferay.portlet.asset.service.persistence.AssetTagUtil"%>
-<%@page import="com.liferay.portlet.asset.model.AssetTag"%>
 <%@include file="/html/dashboard/init.jsp" %>
+
 <portlet:resourceURL  id="getCategoryId"  var="getCategoryURL"/>
+<portlet:resourceURL id="getBusinessAddr" var="getBusinessAddrURL" />
+<portlet:actionURL var="saveBusinessURl" name="saveBusiness"/>
+
 
 <portlet:actionURL name="addItem" var="addItemURL" >
 	<portlet:param name="tab1" value='<%=ParamUtil.getString(renderRequest, "tab1") %>'/>
 </portlet:actionURL>
+
 <%
 	List<AssetTag> assetTags = AssetTagLocalServiceUtil.getTags(themeDisplay.getScopeGroupId(), PortalUtil.getClassNameId(ShoppingItem.class), null, -1, -1);
 	List<Category> parentCategories = CategoryLocalServiceUtil.getByParent(0);
@@ -17,7 +18,7 @@
 <liferay-ui:header title="add-item" backLabel="go-back" backURL='<%=ParamUtil.getString(renderRequest, "backURL") %>'/>
 
 <aui:fieldset>
-	<aui:form action="<%=addItemURL %>" enctype="multipart/form-data" method="POST" name="addItemForm">
+	<aui:form action="<%=addItemURL %>" enctype="multipart/form-data" method="POST" name="addItemForm" >
 		<aui:layout>
 			<aui:col width="25">
 				<aui:input name="<%=HConstants.NAME%>">
@@ -110,10 +111,14 @@
 							<div class="wholesaleclass" id='<%="wholeSaleDiv" + i %>' style="display:none;">
 								<aui:row>
 									<aui:col width="20">
-										<aui:input name="<%=HConstants.WHOLESALE_QUANTITY + i %>" />	
+										<aui:input name="<%=HConstants.WHOLESALE_QUANTITY + i %>" >
+											<aui:validator name="number" />
+										</aui:input>	
 									</aui:col>
 									<aui:col width="20">
-										<aui:input name="<%=HConstants.WHOLESALE_PRICE + i%>" />
+										<aui:input name="<%=HConstants.WHOLESALE_PRICE + i%>" >
+											<aui:validator name="number" />
+										</aui:input>
 									</aui:col>
 									<aui:col width="20">
 										<aui:button-row cssClass="add-btn-padding">
@@ -149,11 +154,13 @@
 		And
 		<aui:a href="http://www.google.com">Posting Policies</aui:a>
 		<aui:button-row>
-			<aui:button type="submit" value="add-item" onClick="extractCodeFromEditor();"/>
+			<aui:button type="button" value="add-item"  onClick="onAddItem();" />
 			<aui:button type="reset" value="reset" />
 		</aui:button-row>
 	</aui:form>
 </aui:fieldset>
+
+<%@include file="/html/dashboard/businessinfo.jspf" %>
 
 <script>
 	
@@ -256,4 +263,141 @@
 		$('#<portlet:namespace/><%=HConstants.WHOLESALE_QUANTITY%>'+counter).val('');
 		$('#<portlet:namespace/><%=HConstants.WHOLESALE_PRICE%>'+counter).val('');
 	});
+	
+	function getBusinessAddress() {
+		var A = AUI();
+		var cat = A.one('#<portlet:namespace/><%=HConstants.PARENT_CATEGORY_ID %>').attr('value');
+		
+		A.io.request('<%=getBusinessAddrURL%>', {
+			dataType: 'json',
+			data: {
+				'<portlet:namespace/>categoryId' : cat
+			   },
+			  on: {
+			   success: function() {
+					if(this.get('responseData')[0] == 'false'){
+						AUI().use('aui-modal', function(A) {
+					        Liferay.Util.openWindow({
+					            dialog: {
+					                centered: true,
+					                modal: true,
+					                bodyContent : document.getElementById('businessDiv').innerHTML ,
+					                
+					                toolbars: {
+		    	   	 			          body: [
+		    	   	 			            {
+		    	   	 			              icon: 'glyphicon glyphicon-file',
+		    	   	 			              label: 'Ok',
+		    	   	 			         	  centered: true,
+			    	   	 			          on: {
+			    	   	 			            click: function() {
+			    	   	 			            	
+			    	   	 			            	var validForm = false;
+			    	   	 			            	 
+			    	   	 			            	validForm = validateBusinessForm(document.getElementById('<portlet:namespace/>businessForm').elements);
+			    	   	 			            	if(validForm) {
+			    	   	 			            	   AUI().use('aui-base','aui-io-request', 'aui-form-validator', 'aui-overlay-context-panel', function(A){
+					    	   	 			         		
+					    	   	 			            	A.io.request('<%=saveBusinessURl%>',{
+						    	   	 			           	 sync : true,
+						    	   	 			                dataType: 'json',
+						    	   	 			                form: { 
+						    	   	 			               	 	  id: '<portlet:namespace/>businessForm'
+						    	   	 			                }, 
+						    	   	 			                on: {
+						    	   	 			                success: function() {
+							    	   	 			                if(validForm) {
+							    	   	 			              	  var updateBusinessDialog=Liferay.Util.Window.getById('updateBusiness');
+							    	   	 			           	 		updateBusinessDialog.destroy();	
+							    	   	 			                }
+					    	   	 			                   		}
+						    	   	 			                }
+						    	   	 			            });
+					    	   	 			       		});
+			    	   	 			            	}
+				    	   	 			         
+			    	   	 			            }
+			    	   	 			          }
+			    	   	 			              
+		    	   	 			            },
+			    	   	 			        {
+			    	   	 			              icon: 'glyphicon glyphicon-file',
+			    	   	 			              label: 'Cancel',
+			    	   	 			         	  centered: true,
+				    	   	 			          on: {
+				    	   	 			            click: function() {
+				    	   	 			                var updateBusinessDialog=Liferay.Util.Window.getById('updateBusiness');
+				    	   	 			           	 	updateBusinessDialog.destroy();	
+				    	   	 			            }
+				    	   	 			          }
+				    	   	 			    }
+		    	   	 			          ]
+		    	   	 			        }
+					            },
+					            id: 'updateBusiness',
+					            title: Liferay.Language.get('Business Information'),
+					        });
+					       
+					    }); 
+						
+					} else{
+						document.getElementById("<portlet:namespace/>addItemForm").submit();	  
+					}
+			   }
+			  }
+			});
+		
+	}
+	
+	function onAddItem() {
+		extractCodeFromEditor();
+		getBusinessAddress();
+	}
+	
+	function validateBusinessForm(form) {
+		
+		for(var i = 0 ; i <form.length; i++){
+			var name = 	form[i].name;
+			var value = form[i].value;
+			switch(name) {
+			
+				case "<portlet:namespace/>street1" : if(value.length >0 )  {
+														document.getElementById(name+'Err').style.display = "none";
+														break;
+													 }else{
+														document.getElementById(name+'Err').style.display = "block";
+														return false;
+													}
+				
+				case "<portlet:namespace/>companyName" : if(value.length >0 )  {
+														document.getElementById(name+'Err').style.display = "none";
+														break;
+													 }else{
+														document.getElementById(name+'Err').style.display = "block";
+														return false;
+													}
+				
+				
+				case "<portlet:namespace/>zip" : if(value.match(/^[0-9]{6}/))  {
+													document.getElementById(name+'Err').style.display = "none";
+													break;
+												}else{
+													document.getElementById(name+'Err').style.display = "block";
+													return false;
+												}
+				case "<portlet:namespace/>city" : 	if(value.match(/^[a-zA-Z]+$/))  {
+														document.getElementById(name+'Err').style.display = "none";
+														break;
+												}else{
+													document.getElementById(name+'Err').style.display = "block";
+													return false;
+												}
+					
+			}
+		}
+		return true;
+	}
+	function  <portlet:namespace />initEditor() {
+	    return "";
+	}
 </script>

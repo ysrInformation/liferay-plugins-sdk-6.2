@@ -39,7 +39,7 @@
 				so.orderId IN ([$ORDER_IDS$])
 			WHERE 
 				so.userId = ? 
-			[$LIMIT$];
+			order by so.createDate desc [$LIMIT$];
 		]]>
 	</sql>
 </custom-sql>

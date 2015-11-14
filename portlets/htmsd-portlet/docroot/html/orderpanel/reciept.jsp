@@ -2,13 +2,18 @@
 
 <head>
 	<link rel="stylesheet" type="text/css" href="<%= request.getContextPath()+"/css/main.css" %>"> 
+	<script src='<%=request.getContextPath() + "/js/jquery-barcode.min.js"%>' ></script>
+	<script src='<%=request.getContextPath() + "/js/jquery-barcode.js"%>' ></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 </head>
-
+	
 <%
 	int slno = 1;
 	int orderStatus = 0;
 	double totalPrice = 0;
+	double tax = 0;
 	long orderId = ParamUtil.getLong(request, "orderId");
+	long orderItemId = ParamUtil.getLong(request, "orderItemId");
 	
 	ShoppingOrder shoppingOrder = null;
 	try {
@@ -38,8 +43,10 @@
 	String altNumber = (Validator.isNotNull(shoppingOrder.getShippingAltMoble()) ? shoppingOrder.getShippingAltMoble():"N/A");
 	String mobileNumber = (Validator.isNotNull(shoppingOrder.getShippingMoble()) ? shoppingOrder.getShippingMoble():"N/A");
 
-	List<ShoppingOrderItem> shoppingOrderItems = CommonUtil.getShoppingOrderItems(orderId);
+	ShoppingOrderItem shoppingOrderItem = ShoppingOrderItemLocalServiceUtil.fetchShoppingOrderItem(orderItemId);
 	DecimalFormat decimalFormat = new DecimalFormat("#.00");
+	CommonUtil.isCategoryLive(shoppingOrderItem.getShoppingItemId());
+	ShoppingItem shoppingItem = CommonUtil.getShoppingItem(shoppingOrderItem.getShoppingItemId());
 %>
 
 <div id="print-area">
@@ -60,6 +67,9 @@
 		<div class="span5">
 			<strong><liferay-ui:message key="email"/></strong>
 			<label><%= emailAddress %></label>
+		</div>
+		<div class="span2">
+			<div id="bcTarget"></div>
 		</div>
 	</div>
 	<div class="row-fluid txtmargin">
@@ -86,31 +96,29 @@
 		<table style="width:100%;height: auto;">
 			<thead>
 				<tr>
-					<th><liferay-ui:message key="no"/></th>
 					<th><liferay-ui:message key="product-details"/></th>
 					<th><liferay-ui:message key="quantity"/></th>
+					<th><liferay-ui:message key="price"/></th>
+					<th><liferay-ui:message key="tax"/><%= " ("+shoppingItem.getTax()+" %)" %></th>
 					<th><liferay-ui:message key="total"/></th>
 				</tr>
 			</thead>
 			<tbody>
 				<%
-				for (ShoppingOrderItem shoppingOrderItem:shoppingOrderItems) {
-					double price = shoppingOrderItem.getTotalPrice();
-					totalPrice += price;
-					String productDetails = shoppingOrderItem.getProductCode()+"<br/>"+shoppingOrderItem.getName();
-					%> 
-					<tr>
-						<td><%= slno++  %></td>
-						<td><%= productDetails %></td>
-						<td><%= shoppingOrderItem.getQuantity() %></td>
-						<td><%= decimalFormat.format(price) %></td>
-					</tr>
-					<% 
-				} 
-				%>
+				double price = shoppingOrderItem.getTotalPrice();
+				String productDetails = shoppingOrderItem.getProductCode()+"<br/>"+shoppingOrderItem.getName();
+				tax = CommonUtil.calculateVat(price, shoppingItem.getTax());
+				double subTotal = shoppingOrderItem.getTotalPrice() - tax;
+				%> 
 				<tr>
-					<td><%= StringPool.BLANK %></td>
-					<td colspan="2" class="heading text-center"><liferay-ui:message key="amount-payable"/></td>
+					<td><%= productDetails %></td>
+					<td><%= shoppingOrderItem.getQuantity() %></td>
+					<td><%= decimalFormat.format(subTotal) %></td>
+					<td><%= decimalFormat.format(tax) %></td>
+					<td><%= decimalFormat.format(totalPrice)  %></td>
+				</tr>
+				<tr>
+					<td colspan="4" class="heading text-center"><liferay-ui:message key="amount-payable"/></td>
 					<td class="heading text-center"><%= CommonUtil.getPriceInNumberFormat(totalPrice, HConstants.RUPEE_SYMBOL) %></td>
 				</tr>
 			</tbody>	
@@ -119,6 +127,11 @@
 </div>
 
 <aui:script>
+$(document).ready(function(){
+	console.log("ready");
+	$("#bcTarget").barcode("6933068935011", "ean13" );
+});
+
 function printArticle() {
 	print();
 }

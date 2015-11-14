@@ -216,8 +216,17 @@
 			"friendlyURL": "/about-us"
 		},
 		{
-			"layoutTemplateId": "layout-column_column-1",
+			"layoutTemplateId": "1_2_columns_i",
 			"columns": [	
+				[
+					{
+                        "portletId": "56",
+                        "portletPreferences": {
+                            "articleId": "map",
+                            "groupId": "${groupId}",
+                        }
+                    }
+				],
 				[
 					{
                         "portletId": "56",
