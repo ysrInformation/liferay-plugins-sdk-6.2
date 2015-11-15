@@ -184,10 +184,12 @@ public class DashboardPortlet extends MVCPortlet {
 		List<Long> imageIds = new ArrayList<Long>();
 		ShoppingItem shoppingItem = null;
 		int status = ParamUtil.getInteger(uploadRequest, HConstants.status);
+		String articleId = StringPool.BLANK;
 		
 		String remark = ( status == HConstants.REJECT ) ? ParamUtil.getString(uploadRequest, HConstants.REMARK)  : StringPool.BLANK;
 		
 		if (itemId == 0) {
+		
 			//Adding items 
 			imageIds = saveFiles(uploadRequest, HConstants.IMAGE, HConstants.ITEM_FOLDER_NAME);
 			shoppingItem = ShoppingItemLocalServiceUtil.addItem(themeDisplay.getScopeGroupId(),
@@ -195,9 +197,11 @@ public class DashboardPortlet extends MVCPortlet {
 					name, description, sellerPrice, sellerPrice, tax, quantity, HConstants.NEW,
 					StringUtil.merge(imageIds, StringPool.COMMA), vedioURL,  getSmallImageId(), StringPool.BLANK);
 			itemId = shoppingItem.getItemId();
-			
 			ItemHistoryLocalServiceUtil.addItemHistory(itemId, currentUserId, currentUserName, currentUserEmail, HConstants.ITEM_ADDED, StringPool.BLANK);
+			articleId = HConstants.ITEM_ADDED_TEMPLATE;
+		
 		} else {
+		
 			//Updating items 
 				imageIds = updateImages(uploadRequest, HConstants.IMAGE, HConstants.IMAGE_ID);
 				shoppingItem = ShoppingItemLocalServiceUtil.updateItem(itemId,
@@ -205,7 +209,9 @@ public class DashboardPortlet extends MVCPortlet {
 						description, sellerPrice, totalPrice, tax, quantity, status,
 						StringUtil.merge(imageIds, StringPool.COMMA), vedioURL, 0, remark);
 				ItemHistoryLocalServiceUtil.addItemHistory(itemId, currentUserId, currentUserName, currentUserEmail, HConstants.ITEM_UPDATED, staffRemark);
+				articleId = HConstants.ITEM_ADDED_UPDATED_TEMPLATE;
 		}
+	
 		// Tag
 			updateTags(uploadRequest, itemId, themeDisplay);
 		
@@ -216,9 +222,12 @@ public class DashboardPortlet extends MVCPortlet {
 		//WholeSale
 		updateWholeSale(uploadRequest,itemId);
 		
+		String[] oldStr = {"[$USER_EMAIL$]", "[$USER_NAME$]", "[$ITEM_NAME$]", "[$PRODUCT_CODE$]", "[$DESCRIPTION$]", "[$TAX$]", "[$SELLER_PRICE$]", "[$QUANTITY$]"};
+		String[] newStr = {currentUserEmail, currentUserName, name, productCode, description, Double.toString(tax), Double.toString(sellerPrice), quantity == -1 ? "Unlimited Quantity" : String.valueOf(quantity)};
+		
 		
 		NotificationUtil.sendNotification(themeDisplay.getScopeGroupId(), 
-				themeDisplay.getUser().getFullName(), themeDisplay.getUser().getEmailAddress(), "EMAIL_NOTIFICATION");
+				themeDisplay.getUser().getFullName(), themeDisplay.getUser().getEmailAddress(), articleId, oldStr, newStr);
 		
 	} 
 	

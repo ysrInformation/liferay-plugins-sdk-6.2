@@ -12,6 +12,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.mail.MailMessage;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.DocumentException;
@@ -31,7 +32,7 @@ public class NotificationUtil {
 	 * @param email
 	 * @param articleId
 	 */
-	public static void sendNotification(long groupId, String userName, String email, String articleId) {
+	public static void sendNotification(long groupId, String userName, String email, String articleId,  String[] oldStr, String[] newStr) {
 		_log.info("Sedning Email to:"+userName+"<"+email+">");
 		JournalArticle journalArticle = null;
 		try {
@@ -51,6 +52,10 @@ public class NotificationUtil {
 			}
 			String subject = getValue(document, HConstants.EMAIL_SUBJECT);
 			String body = getValue(document, HConstants.EMAIL_MESSAGE);
+			
+			subject = StringUtil.replace(subject, oldStr, newStr);
+			body = StringUtil.replace(body, oldStr, newStr);
+			
 			sendMail(userName, email, body, subject);
 		}
 	}
