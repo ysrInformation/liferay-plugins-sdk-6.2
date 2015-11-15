@@ -24,6 +24,7 @@ import com.htmsd.slayer.service.ShoppingItemLocalServiceUtil;
 import com.htmsd.slayer.service.WholeSaleLocalServiceUtil;
 import com.htmsd.util.HConstants;
 import com.htmsd.util.NotificationUtil;
+import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
@@ -343,14 +344,13 @@ public class DashboardPortlet extends MVCPortlet {
 					try {
 						DLAppLocalServiceUtil.updateFileEntry(
 								themeDisplay.getUserId(), fileEntryId,
-								sourceFileName, contentType, sourceFileName,
+								sourceFileName, contentType, file.getName()+CounterLocalServiceUtil.increment(),
 								sourceFileName, StringPool.BLANK, true, resizeImage(file, 600, 600),
 								serviceContext);
-						
-					if(i == 1) {
+						if(i == 1) {
 						DLAppLocalServiceUtil.updateFileEntry(
 								themeDisplay.getUserId(), ParamUtil.getLong(uploadRequest, HConstants.SMALL_IMAGE),
-								sourceFileName, contentType, sourceFileName+HConstants.SMALL_IMAGE,
+								sourceFileName, contentType, sourceFileName+HConstants.SMALL_IMAGE+CounterLocalServiceUtil.increment(),
 								sourceFileName+HConstants.SMALL_IMAGE, StringPool.BLANK, true, resizeImage(file, 100, 100),
 								serviceContext);
 					}
@@ -421,10 +421,10 @@ public class DashboardPortlet extends MVCPortlet {
 			    	if(file.exists() && file.length() > 0) {
 			        	 contentType = MimeTypesUtil.getContentType(sourceFileName);	
 			        	 try {
-							fileEntry = DLAppLocalServiceUtil.addFileEntry(themeDisplay.getUserId(), repositoryId, folderId, sourceFileName, contentType, file.getName(), StringPool.BLANK, StringPool.BLANK,  resizeImage(file, 600, 600), serviceContext);
+							fileEntry = DLAppLocalServiceUtil.addFileEntry(themeDisplay.getUserId(), repositoryId, folderId, sourceFileName, contentType, file.getName()+CounterLocalServiceUtil.increment(), StringPool.BLANK, StringPool.BLANK,  resizeImage(file, 600, 600), serviceContext);
 							//Adding small Image
 							if(i == 1) {
-								FileEntry fileEntry2 =  DLAppLocalServiceUtil.addFileEntry(themeDisplay.getUserId(), repositoryId, folderId, sourceFileName+HConstants.SMALL_IMAGE, contentType, file.getName()+HConstants.SMALL_IMAGE, StringPool.BLANK, StringPool.BLANK,  resizeImage(file, 300, 300), serviceContext);
+								FileEntry fileEntry2 =  DLAppLocalServiceUtil.addFileEntry(themeDisplay.getUserId(), repositoryId, folderId, sourceFileName+HConstants.SMALL_IMAGE, contentType, file.getName()+HConstants.SMALL_IMAGE+CounterLocalServiceUtil.increment(), StringPool.BLANK, StringPool.BLANK,  resizeImage(file, 300, 300), serviceContext);
 								setSmallImageId(fileEntry2.getFileEntryId());	
 							}
 			        	 } catch (PortalException e) {

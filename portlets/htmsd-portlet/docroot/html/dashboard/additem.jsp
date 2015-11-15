@@ -392,6 +392,14 @@
 													document.getElementById(name+'Err').style.display = "block";
 													return false;
 												}
+				
+				case "<portlet:namespace/>tin" : 	if(value.match(/^[0-9]{9}/))  {
+														document.getElementById(name+'Err').style.display = "none";
+														break;
+													}else{
+														document.getElementById(name+'Err').style.display = "block";
+														return false;
+													}
 					
 			}
 		}

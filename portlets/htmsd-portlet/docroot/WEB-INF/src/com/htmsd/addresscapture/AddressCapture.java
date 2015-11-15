@@ -74,7 +74,7 @@ public class AddressCapture extends MVCPortlet {
 		int typeId = 0;
 
 		try {
-			typeId = ListTypeServiceUtil.getListTypes(Contact.class.getName() + ListTypeConstants.ADDRESS).get(tin.isEmpty() ? 2 : 0).getListTypeId();
+			typeId = ListTypeServiceUtil.getListTypes(Contact.class.getName() + ListTypeConstants.ADDRESS).get(tin.isEmpty() && companyName.isEmpty() ? 2 : 0).getListTypeId();
 		} catch (SystemException e) {
 			_log.error(e);
 		}
