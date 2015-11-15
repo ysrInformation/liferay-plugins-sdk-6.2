@@ -248,7 +248,7 @@
 }
 
 /*******Cart btn ***********/
-#cart-item-count {
+#cart-item-count, #cart-item-guest-count {
 	background-color: #fff;
 	border-radius: 50px;
 	color: #d8492d;

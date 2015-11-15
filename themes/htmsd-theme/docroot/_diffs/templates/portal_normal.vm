@@ -63,13 +63,29 @@
 					</button>
 				</div>
 				<div class="span2 center">
-					<a href="/cart">
-						<button class="cart-btn">
-							<i class="fa fa-shopping-cart cart-icon"></i>
-							<span class="cart-label"> Cart </span>
-							<span id="cart-item-count">&nbsp;0&nbsp;</span>
-						</button>	
-					</a>
+					#if (!$is_signed_in)
+					 	#set ($shoppingList = $request.getSession().getAttribute("SHOPPING_ITEMS"))
+				 		#if ($validator.isNotNull($shoppingList))
+					 		#set($count = $shoppingList.size())
+					 	#else
+							#set($count = 0)
+				 		#end
+			 			<a href="/cart">
+							<button class="cart-btn">
+								<i class="fa fa-shopping-cart cart-icon"></i>
+								<span class="cart-label"> Cart </span>
+								<span id="cart-item-guest-count">&nbsp;$count&nbsp;</span>
+							</button>	
+						</a>
+				 	#else
+					 	<a href="/cart">
+							<button class="cart-btn">
+								<i class="fa fa-shopping-cart cart-icon"></i>
+								<span class="cart-label"> Cart </span>
+								<span id="cart-item-count">&nbsp;0&nbsp;</span>
+							</button>	
+						</a>
+					#end
 				</div>
 			</div>	
 			#if ($has_navigation || $is_signed_in)
