@@ -143,6 +143,9 @@
 			</tbody>	
 		</table>
 	</div>
+	<div class="text-center">
+		<liferay-ui:journal-article articleId="RECIEPT_INFO" groupId="<%= themeDisplay.getScopeGroupId() %>"/>
+	</div>
 </div>
 
 <aui:script>
