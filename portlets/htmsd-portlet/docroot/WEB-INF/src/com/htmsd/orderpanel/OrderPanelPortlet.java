@@ -57,7 +57,7 @@ public class OrderPanelPortlet extends MVCPortlet {
 		
 		if (Validator.isNotNull(shoppingOrder)) {
 			NotificationUtil.sendNotification(shoppingOrder.getGroupId(), 
-					shoppingOrder.getUserName(), shoppingOrder.getShippingEmailAddress(), "EMAIL_NOTIFICATION");
+					shoppingOrder.getUserName(), shoppingOrder.getShippingEmailAddress(), "EMAIL_NOTIFICATION", new String[1],new String[1]);
 		}
 		
 		actionResponse.setWindowState(LiferayWindowState.NORMAL);

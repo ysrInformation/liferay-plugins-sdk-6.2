@@ -80,7 +80,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		addShoppingOrderItem(actionRequest, themeDisplay, shoppingOrder);
 		
 		NotificationUtil.sendNotification(themeDisplay.getScopeGroupId(), 
-				themeDisplay.getUser().getFullName(), themeDisplay.getUser().getEmailAddress(), "EMAIL_NOTIFICATION");
+				themeDisplay.getUser().getFullName(), themeDisplay.getUser().getEmailAddress(), "EMAIL_NOTIFICATION", new String[1],new String[1]);
 		
 		PortletConfig portletConfig = (PortletConfig) actionRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
 		String successMessage = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "you-order-has-been-registered-you-may-get-email-shortly");
@@ -249,7 +249,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		ShoppingOrderLocalServiceUtil.updateShoppingOrderItem((int)categoryId, orderItemId);
 		
 		NotificationUtil.sendNotification(themeDisplay.getScopeGroupId(), 
-				themeDisplay.getUser().getFullName(), themeDisplay.getUser().getEmailAddress(), "EMAIL_NOTIFICATION");
+				themeDisplay.getUser().getFullName(), themeDisplay.getUser().getEmailAddress(), "EMAIL_NOTIFICATION", new String[1],new String[1]);
 		
 		PortletConfig portletConfig = (PortletConfig) actionRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
 		String successMessage = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "you-have-requested-to-cancel-the-order-successfully");
