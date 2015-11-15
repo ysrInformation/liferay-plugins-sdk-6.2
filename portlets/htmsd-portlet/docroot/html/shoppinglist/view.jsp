@@ -84,14 +84,10 @@
 			$('#no-item-display').hide();
 			$('#loader-icon').hide();
 		}
-		console.info(searchParam);
-		console.info(searchParam !== 'null' && searchParam !== "");
 		if(searchParam != 'null' && searchParam != "") {
 			getSearchShoppingItems(0, <%=noOfItems%>);
-			console.info("1");
 		} else {
 			getShoppingItems(0, <%=noOfItems%>);
-			console.info("2");
 		}
 		
 		$('#<portlet:namespace/>sort-by option[value="<%=sortBy%>"').attr("selected", "selected")
