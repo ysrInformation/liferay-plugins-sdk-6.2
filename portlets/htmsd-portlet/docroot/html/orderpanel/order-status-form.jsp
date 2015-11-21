@@ -24,7 +24,7 @@
 		<aui:input name="orderId" type="hidden" value="<%= shoppingOrder.getOrderId() %>"/>
 		<aui:input name="tabName" type="hidden" value="<%= tabName %>"/>
 		
-		<aui:select id="orderStatus" name="orderStatus" label="order-status" showEmptyOption="true" required="true"> 
+		<aui:select id="orderStatus" name="orderStatus" label="order-status" showEmptyOption="true" required="true" onChange="checkCancelOrder(this.value);"> 
 			<c:if test="<%= Validator.isNotNull(orderStatusList) && !orderStatusList.isEmpty() %>">
 			<% 
 			for (AssetCategory assetCategory : orderStatusList) {
@@ -47,6 +47,16 @@
 </div>
 
 <script type="text/javascript"> 
+function checkCancelOrder(selectedOption) {
+	
+	var divId = document.getElementById('cancelReason');
+	if (selectedOption == '<%= orderStatusId %>') {
+		divId.style.display = "block";
+	} else {
+		divId.style.display = "none";
+	}
+}
+
 function updateStatus(){
 	 
 	 var orderstatus =  document.getElementById("<portlet:namespace/>orderStatus").value;
@@ -55,12 +65,6 @@ function updateStatus(){
 	 if (orderstatus.length == 0 || orderstatus == 'undefined' || orderstatus == 'null') {
 		 alert('Please select the order status');
 		 return false;
-	 }
-	 
-	 if (orderstatus == '<%= orderStatusId %>') {
-		 divId.style.display = "block";
-	 } else {
-		 divId.style.display = "none";
 	 }
 	 
 	 var message = '<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-update-the-status?")%>';
