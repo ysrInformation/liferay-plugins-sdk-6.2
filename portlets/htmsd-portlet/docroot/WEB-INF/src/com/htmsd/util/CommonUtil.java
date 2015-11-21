@@ -54,6 +54,7 @@ import com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.model.DLFileShortcut;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
+import com.liferay.portlet.expando.model.ExpandoBridge;
 
 public class CommonUtil {
 	
@@ -567,7 +568,7 @@ public class CommonUtil {
 	}
 	
 	public static double calculateVat(double totalPrice, double vatPercentage) {
-		double vat = 0;
+		double vat = 0.0;
 		vat = (totalPrice * vatPercentage) / (100 + vatPercentage);
 		return vat;
 	}
@@ -586,30 +587,20 @@ public class CommonUtil {
 		return quantity;
 	}
 	
-	public static boolean isCategoryLive(long itemId) {
-		
-		_log.info("Is Category Live ..."); 
-		Category category = null;
+	public static boolean isNumeric(String str) {
+	    return str.matches("[+-]?\\d*(\\.\\d+)?");
+	}
+	
+	public static String getSellerCompanyDetails(long userId, String attributeName) {
+		User user = null;
 		try {
-			category = ShoppingItemLocalServiceUtil.getShoppingItemCategory(itemId);	
-		} catch (Exception e) {
-			_log.error(e.getMessage());
-		}
-		
-		if (Validator.isNull(category)) return false;
-		
-		try {
-			if (category.getParentCategoryId() > 0) {
-				category = CategoryLocalServiceUtil.fetchCategory(category.getParentCategoryId());	
-			}
+			user = UserLocalServiceUtil.fetchUser(userId);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
-		_log.info(Validator.isNotNull(category) && category.getName().equals("Live")); 
-		return (Validator.isNotNull(category) && category.getName().equals("Live"));
-	}
-	
-	public static boolean isNumeric(String str) {
-	    return str.matches("[+-]?\\d*(\\.\\d+)?");
+		ExpandoBridge expandoBridge = user.getExpandoBridge();
+		String expandoValues = (Validator.isNotNull(expandoBridge)) ? 
+				(String) expandoBridge.getAttribute(attributeName) : "N/A";
+		return expandoValues;
 	}
 }

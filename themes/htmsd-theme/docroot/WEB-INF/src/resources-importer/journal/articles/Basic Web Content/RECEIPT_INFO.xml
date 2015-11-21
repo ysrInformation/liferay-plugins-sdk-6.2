@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+ 
+ <root available-locales="en_US" default-locale="en_US">
+ 	<dynamic-element name="content" type="text_area" index-type="keyword" index="0">
+		<dynamic-content language-id="en_US">
+	 	    <![CDATA[
+	 	    	<p>&nbsp;</p>
+
+				<p><span style="font-size:18px;"><em>The Item once sold we will not be replaced or refund</em></span></p>
+
+				<p><span style="font-size:18px;"><em>For any other queries please visit to our website : www.htmsdpets.in</em></span></p>
+	 		]]>
+ 		</dynamic-content>
+	</dynamic-element>
+ </root>

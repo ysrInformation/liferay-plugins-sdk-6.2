@@ -102,5 +102,6 @@ public interface HConstants {
 	public static final String RUPEE_SYMBOL = "Rs.";
 	
 	public static final String CURRENCY_PORTLET_PREFERENCE = "CURRENCY_PORTLET";
+	public static final String ASSET_VOCABULARY_ORDER_STATUS = "Order Status";
 	
 }
