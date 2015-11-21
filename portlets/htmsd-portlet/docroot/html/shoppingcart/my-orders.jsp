@@ -8,14 +8,15 @@
 	int totalCount = ShoppingOrderItemLocalServiceUtil.getOrderItemsCount(themeDisplay.getUserId());;
 	String curVal = (String) portletSession.getAttribute("currentCurrencyId", PortletSession.APPLICATION_SCOPE);
 	long currencyid = (Validator.isNull(curVal)) ?  0 : Long.valueOf(curVal);
-	List<ShoppingOrderItem> shoppingOrderItems = ShoppingOrderItemLocalServiceUtil.getShoppingOrderItems(themeDisplay.getUserId());
+	List<ShoppingOrder> shoppingOrderItems = ShoppingOrderLocalServiceUtil.getShoppingOrderByUserId(themeDisplay.getUserId());
 	SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
 %>
 
 <c:choose>
 	<c:when test='<%= Validator.isNotNull(shoppingOrderItems) && !shoppingOrderItems.isEmpty()  %>'>
 		<div class="main-div">
-			<% for (ShoppingOrderItem soi:shoppingOrderItems) { 
+			<% 
+			for (ShoppingOrder soi:shoppingOrderItems) { 
 				String total = CommonUtil.getPriceInNumberFormat(soi.getTotalPrice(), HConstants.RUPEE_SYMBOL);
 				ShoppingItem shoppingItem = CommonUtil.getShoppingItem(soi.getShoppingItemId());
 				long imageId = shoppingItem.getSmallImage();
@@ -34,22 +35,23 @@
 							<a href="<%= itemsDetails %>"><img src="<%= imageSRC %>" style="width: 100px; height: 100px"/></a> 
 						</div>
 						<div class="span4">
-							<div><a href="<%= itemsDetails %>"><%= soi.getName() %></a></div> 
-							<div><span class="qty">Qty : <%= soi.getQuantity() %></span></div> 
+							<div><a href="<%= itemsDetails %>"><%= shoppingItem.getName() %></a></div> 
+							<div><span class="qty"><liferay-ui:message key="shopping-qty"/> : <%= soi.getQuantity() %></span></div> 
 						</div>
 						<div class="span3">
 							<div><%= total %></div>
-							<div class="<%= status %>">Status : <%= status %></div>
+							<div class="<%= status %>"><liferay-ui:message key="status"/> : <%= status %></div>
 						</div>
 						<div class="span2" title="Cancel this item">
-							<portlet:actionURL var="cancelOrderURL" name="CancelOrder">
+							<portlet:renderURL var="cancelOrderURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>"> 
+								<portlet:param name="<%= HConstants.JSP_PAGE %>" value="/html/shoppingcart/capture-reason.jsp" />
 								<portlet:param name="orderId" value="<%= String.valueOf(soi.getOrderId()) %>"/>
-								<portlet:param name="orderItemId" value="<%= String.valueOf(soi.getItemId()) %>"/>
-							</portlet:actionURL>
-								<%
-									boolean isDisabled = (soi.getOrderStatus() == HConstants.PENDING) ? false : true;
-								%>
-							<a href="<%= cancelOrderURL %>"><aui:button cssClass="cancel-btn" type="button" 
+							</portlet:renderURL>
+							<%
+								boolean isDisabled = (soi.getOrderStatus() == HConstants.PENDING) ? false : true;
+								String cancelOrder = "javascript:showPopupDetails('"+cancelOrderURL+"','1000','Cancel Order');"; 
+							%>
+							<a href="<%= cancelOrder %>"><aui:button cssClass="cancel-btn" type="button" 
 								value='<%= LanguageUtil.get(locale, "cancel-order") %>' disabled="<%= isDisabled %>"/></a>
 						</div>
 					</div>

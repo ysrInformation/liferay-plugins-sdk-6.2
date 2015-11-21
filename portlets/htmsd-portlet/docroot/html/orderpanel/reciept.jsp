@@ -10,15 +10,12 @@
 </head>
 	
 <%
-	int orderStatus = 0;
 	long orderId = ParamUtil.getLong(request, "orderId");
-	long orderItemId = ParamUtil.getLong(request, "orderItemId");
 	
 	ShoppingOrder shoppingOrder = null;
 	try {
 		if (Validator.isNotNull(orderId)) {
 			shoppingOrder = ShoppingOrderLocalServiceUtil.fetchShoppingOrder(orderId);	
-			orderStatus = shoppingOrder.getOrderStatus();
 		}
 	} catch (Exception e){
 		System.out.println("No order exist"+e);
@@ -42,21 +39,23 @@
 	String mobileNumber = (Validator.isNotNull(shoppingOrder.getShippingMoble()) ? shoppingOrder.getShippingMoble():"N/A");
 	
 	DecimalFormat decimalFormat = new DecimalFormat("0.00");
-	ShoppingOrderItem shoppingOrderItem = ShoppingOrderItemLocalServiceUtil.fetchShoppingOrderItem(orderItemId);
-	ShoppingItem shoppingItem = CommonUtil.getShoppingItem(shoppingOrderItem.getShoppingItemId());
-	Category parentCategory = CommonUtil.getShoppingItemParentCategory(shoppingOrderItem.getShoppingItemId());
-	Category category = ShoppingItemLocalServiceUtil.getShoppingItemCategory(shoppingOrderItem.getShoppingItemId());
+	ShoppingItem shoppingItem = CommonUtil.getShoppingItem(shoppingOrder.getShoppingItemId());
+	Category parentCategory = CommonUtil.getShoppingItemParentCategory(shoppingOrder.getShoppingItemId());
+	Category category = ShoppingItemLocalServiceUtil.getShoppingItemCategory(shoppingOrder.getShoppingItemId());
 	
 	boolean isLiveCategory = Validator.isNotNull(parentCategory) && parentCategory.getName().equals("Live");
 	int colspan = (isLiveCategory) ? 3 : 5;
-	double totalPrice = shoppingOrderItem.getTotalPrice();
+	int quantity = shoppingOrder.getQuantity();
+	double totalPrice = shoppingOrder.getTotalPrice();
 	double tax = CommonUtil.calculateVat(totalPrice, shoppingItem.getTax());
-	double subTotal = shoppingOrderItem.getTotalPrice() - tax;
-	String productDetails = shoppingOrderItem.getProductCode()+"<br/>"+shoppingOrderItem.getName();
+	double subTotal = shoppingOrder.getTotalPrice() - tax;
+	String productCode = shoppingItem.getProductCode();
+	String itemName = shoppingItem.getName();
+	String productDetails = productCode +"<br/>"+ itemName;
 	String productType = (Validator.isNotNull(category.getName())) ? category.getName() : "N/A"; 
 	String tin = CommonUtil.getSellerCompanyDetails(shoppingItem.getUserId(), HConstants.TIN);
 	String companyName = CommonUtil.getSellerCompanyDetails(shoppingItem.getUserId(), HConstants.COMPANY_NAME);
-	String barCode = "6933068935011";
+	String barCode = (productCode.length() == HConstants.BAR_CODE_LENGTH) ? productCode : "6933068935011";
 %>
 
 <div id="print-area">
@@ -104,7 +103,7 @@
 		</div>
 		<div class="span4">
 			<strong><liferay-ui:message key="order-date"/></strong>
-			<label><%= HConstants.DATE_FORMAT.format(shoppingOrderItem.getCreateDate()) %></label> 
+			<label><%= HConstants.DATE_FORMAT.format(shoppingOrder.getCreateDate()) %></label> 
 		</div>
 		<div class="span4">
 			<strong><liferay-ui:message key="shipping-address"/></strong>
@@ -129,7 +128,7 @@
 				<tr>
 					<td><%= productType %></td>
 					<td><%= productDetails %></td>
-					<td><%= shoppingOrderItem.getQuantity() %></td>
+					<td><%= quantity %></td>
 					<c:if test="<%= !isLiveCategory %>">
 						<td><%= decimalFormat.format(subTotal) %></td>
 						<td><%= decimalFormat.format(tax) %></td>

@@ -1,15 +1,17 @@
 <%@ include file="/html/orderpanel/init.jsp"%>
 
 <%
-	long orderItemId = ParamUtil.getLong(request, "orderItemId");
+	long orderId = ParamUtil.getLong(request, "orderId");
 	String tabName = ParamUtil.getString(request, "tab1");
-	ShoppingOrderItem shoppingOrderItem = null;
+	ShoppingOrder shoppingOrder = null;
 	try {
-		shoppingOrderItem = ShoppingOrderItemLocalServiceUtil.fetchShoppingOrderItem(orderItemId);
+		shoppingOrder = ShoppingOrderLocalServiceUtil.fetchShoppingOrder(orderId);
 	} catch (Exception e) {
 		System.out.println("No Item found .."+e.getMessage());
 	}
+	boolean isOrderCancelled = false;
 	List<AssetCategory> orderStatusList = CommonUtil.getAssetCategoryList(themeDisplay.getScopeGroupId(), HConstants.ASSET_VOCABULARY_ORDER_STATUS);
+	long orderStatusId = ShoppingOrderLocalServiceUtil.getAssetCategoryIdByName(HConstants.CANCEL_ORDER_STATUS);
 %>
 
 <portlet:actionURL var="updateOrderURL" name="updateOrderStatus"/>
@@ -19,19 +21,24 @@
 <div class="update-status">
 	<aui:form method="post" action="<%= updateOrderURL %>" name="fm" id="fm" inlineLabels="true" target="_parent">  
 
-		<aui:input name="orderId" type="hidden" value="<%= shoppingOrderItem.getOrderId() %>"/>
-		<aui:input name="orderItemId" type="hidden" value="<%= shoppingOrderItem.getItemId() %>"/>
+		<aui:input name="orderId" type="hidden" value="<%= shoppingOrder.getOrderId() %>"/>
 		<aui:input name="tabName" type="hidden" value="<%= tabName %>"/>
 		
 		<aui:select id="orderStatus" name="orderStatus" label="order-status" showEmptyOption="true" required="true"> 
 			<c:if test="<%= Validator.isNotNull(orderStatusList) && !orderStatusList.isEmpty() %>">
 			<% 
-			for (AssetCategory assetCategory : orderStatusList) { 
+			for (AssetCategory assetCategory : orderStatusList) {
 				%><aui:option label="<%= assetCategory.getName() %>" value="<%= assetCategory.getCategoryId() %>"/><% 
 			}
 			%>
 			</c:if>
 		</aui:select>
+		
+		<div id="cancelReason" style="display:none;">
+			<aui:input name="cancelReason" label="please-specify-the-reason" type="textarea" cols="30" rows="5" >
+				<aui:validator name="required" errorMessage="please-enter-the-reason-why-you-want-to-cancel-this-order"/> 
+			</aui:input>
+		</div>
 	
 		<aui:button-row>
 			<aui:button type="button" cssClass="btn-primary" value="update" onClick="updateStatus();"/> 
@@ -43,10 +50,17 @@
 function updateStatus(){
 	 
 	 var orderstatus =  document.getElementById("<portlet:namespace/>orderStatus").value;
-	
+	 var divId = document.getElementById("cancelReason");
+	 
 	 if (orderstatus.length == 0 || orderstatus == 'undefined' || orderstatus == 'null') {
 		 alert('Please select the order status');
 		 return false;
+	 }
+	 
+	 if (orderstatus == '<%= orderStatusId %>') {
+		 divId.style = "block";
+	 } else {
+		 divId.style = "none";
 	 }
 	 
 	 var message = '<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-update-the-status?")%>';

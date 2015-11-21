@@ -2,23 +2,20 @@
 
 <%
 	ResultRow row = (ResultRow)request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
-	ShoppingOrderItem shoppingOrderItem = (ShoppingOrderItem) row.getObject();
+	ShoppingOrder shoppingOrderItem = (ShoppingOrder) row.getObject();
 	
 	long orderId = shoppingOrderItem.getOrderId();
-	long orderItemId = shoppingOrderItem.getItemId();
 	String tabName = ParamUtil.getString(request, "tab1", "Pending"); 
 	
 	PortletURL  updateOrderStatus = renderResponse.createRenderURL();
 	updateOrderStatus.setWindowState(LiferayWindowState.POP_UP);
 	updateOrderStatus.setParameter(HConstants.JSP_PAGE, "/html/orderpanel/order-status-form.jsp");
 	updateOrderStatus.setParameter("orderId", String.valueOf(orderId));
-	updateOrderStatus.setParameter("orderItemId", String.valueOf(orderItemId));
 	
 	PortletURL  viewRecieptURL = renderResponse.createRenderURL();
 	viewRecieptURL.setWindowState(LiferayWindowState.POP_UP);
 	viewRecieptURL.setParameter(HConstants.JSP_PAGE, "/html/orderpanel/reciept.jsp");
 	viewRecieptURL.setParameter("orderId", String.valueOf(orderId));
-	viewRecieptURL.setParameter("orderItemId", String.valueOf(orderItemId));
 	
 	if (Validator.isNotNull(tabName)) {
 		updateOrderStatus.setParameter("tab1", tabName); 

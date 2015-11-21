@@ -14,7 +14,6 @@
 
 package com.htmsd.slayer.service.impl;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,7 +22,7 @@ import java.util.List;
 import com.htmsd.slayer.model.ShoppingOrder;
 import com.htmsd.slayer.model.ShoppingOrderItem;
 import com.htmsd.slayer.model.impl.ShoppingOrderImpl;
-import com.htmsd.slayer.service.ShoppingOrderItemLocalServiceUtil;
+import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
 import com.htmsd.slayer.service.base.ShoppingOrderLocalServiceBaseImpl;
 import com.htmsd.util.CommonUtil;
 import com.htmsd.util.HConstants;
@@ -62,7 +61,8 @@ public class ShoppingOrderLocalServiceImpl
 	 *
 	 * Never reference this interface directly. Always use {@link com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil} to access the shopping order local service.
 	 */
-	public ShoppingOrder insertShoppingOrder(int orderStatus,long userId, long companyId, long groupId,
+	public ShoppingOrder insertShoppingOrder(int orderStatus, int quantity, long shoppingItemId, long sellerId, 
+			long userId, long companyId, long groupId, double totalPrice, String sellerName, String cancelReason,
 			String shippingFirstName, String shippingLastName, String shippingStreet, String shippingCity,
 			String shippingZip, String shippingEmailAddress, String shippingState, String shippingCountry,
 			String shippingMoble, String shippingAltMoble){
@@ -93,6 +93,14 @@ public class ShoppingOrderLocalServiceImpl
 		shoppingOrder.setShippingMoble(shippingMoble);
 		shoppingOrder.setShippingAltMoble(shippingAltMoble);
 		
+		shoppingOrder.setShoppingItemId(shoppingItemId);
+		shoppingOrder.setCancelReason(cancelReason);
+		shoppingOrder.setQuantity(quantity);
+		shoppingOrder.setTotalPrice(totalPrice);
+		shoppingOrder.setSellerId(sellerId);
+		shoppingOrder.setSellerName(sellerName);
+		shoppingOrder.setUserName(shippingFirstName+StringPool.SPACE+shippingLastName); 
+		
 		try {
 			shoppingOrder = shoppingOrderLocalService.addShoppingOrder(shoppingOrder);
 		} catch (SystemException e) {
@@ -107,7 +115,7 @@ public class ShoppingOrderLocalServiceImpl
 	 * @param orderStatus
 	 * @param orderId
 	 */
-	public void updateShoppingOrder(int orderStatus, long orderId) {
+	public void updateShoppingOrder(int orderStatus, long orderId, String cancelReason) {
 		
 		ShoppingOrder shoppingOrder = null;
 		try {
@@ -120,6 +128,7 @@ public class ShoppingOrderLocalServiceImpl
 		
 		shoppingOrder.setOrderStatus(orderStatus);
 		shoppingOrder.setModifiedDate(new Date());
+		shoppingOrder.setCancelReason(cancelReason);
 		
 		try {
 			shoppingOrderLocalService.updateShoppingOrder(shoppingOrder);
@@ -158,21 +167,21 @@ public class ShoppingOrderLocalServiceImpl
 		return shoppingOrders;
 	}
 	
-	public List<ShoppingOrderItem> getShoppingOrderByTabNames(int start, int end, String tabName) {
+	public List<ShoppingOrder> getShoppingOrderByTabNames(int start, int end, String tabName) {
 		
-		List<ShoppingOrderItem> shoppingOrders = new ArrayList<ShoppingOrderItem>();
+		List<ShoppingOrder> shoppingOrders = new ArrayList<ShoppingOrder>();
 		boolean isPendingOrderTab = tabName.equalsIgnoreCase("Pending");
 		boolean isShippingOrderTab = tabName.equalsIgnoreCase("Shipping");
 		boolean isOrderCancelledTab = tabName.equalsIgnoreCase("Order Cancelled");
 		
 		if (isPendingOrderTab) {
-			shoppingOrders = getOrderItems(HConstants.PENDING, start, end);
+			shoppingOrders = getShoppingOrders(HConstants.PENDING, start, end);
 		} else if (isShippingOrderTab) {
-			shoppingOrders = getOrderItems(getOrderStatusByTabName("Shipping"), start, end); 
+			shoppingOrders = getShoppingOrders(getOrderStatusByTabName("Shipping"), start, end); 
 		} else if(isOrderCancelledTab) { 
-			shoppingOrders = getOrderItems(getOrderStatusByTabName("Order Cancelled"), start, end);
+			shoppingOrders = getShoppingOrders(getOrderStatusByTabName("Order Cancelled"), start, end);
 		} else {
-			shoppingOrders = getOrderItems(getOrderStatusByTabName("Delivered"), start, end);
+			shoppingOrders = getShoppingOrders(getOrderStatusByTabName("Delivered"), start, end);
 		}
 		
 		return shoppingOrders;
@@ -202,14 +211,17 @@ public class ShoppingOrderLocalServiceImpl
 		return count;
 	}
 	
-	public  List<ShoppingOrderItem> searchItems(String keyword, String tabName, int start, int end) {
+	public  List<ShoppingOrder> searchItems(String keyword, String tabName, int start, int end) {
 		
 		System.out.println("Searched Method  >>>>>>>>>> Keyword is ::"+keyword); 
 		String likeKeyword = StringUtil.quote(keyword, StringPool.PERCENT);
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(ShoppingOrderItem.class);
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(ShoppingOrder.class);
 		Junction junctionOR = RestrictionsFactoryUtil.disjunction();
 		
-		Property property = PropertyFactoryUtil.forName("name");
+		Property property = PropertyFactoryUtil.forName("sellerName");
+		junctionOR.add(property.like(likeKeyword));
+		
+		property = PropertyFactoryUtil.forName("userName");
 		junctionOR.add(property.like(likeKeyword));
 		
 		if (CommonUtil.isNumeric(keyword)){
@@ -220,7 +232,7 @@ public class ShoppingOrderLocalServiceImpl
 		if (keyword.startsWith("HT")) {
 			String orderId = keyword.substring(7, keyword.length());
 			System.out.println("Order ItemId is ==>"+Long.valueOf(orderId)); 
-			junctionOR.add(RestrictionsFactoryUtil.eq("itemId", Long.valueOf(orderId)));
+			junctionOR.add(RestrictionsFactoryUtil.eq("orderId", Long.valueOf(orderId)));
 		}
 		
 		if (keyword.contains("-")) {
@@ -234,9 +246,9 @@ public class ShoppingOrderLocalServiceImpl
 		
 		dynamicQuery.add(RestrictionsFactoryUtil.eq("orderStatus", getOrderStatusByTabName(tabName)));
 		
-		List<ShoppingOrderItem> searchList = new ArrayList<ShoppingOrderItem>();
+		List<ShoppingOrder> searchList = new ArrayList<ShoppingOrder>();
 		try {
-			searchList =  ShoppingOrderItemLocalServiceUtil.dynamicQuery(dynamicQuery, start, end);
+			searchList =  ShoppingOrderLocalServiceUtil.dynamicQuery(dynamicQuery, start, end);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
@@ -249,10 +261,13 @@ public class ShoppingOrderLocalServiceImpl
 		System.out.println("searchCount Method <:::> Keyword is ::"+keyword); 
 		String likeKeyword = StringUtil.quote(keyword, StringPool.PERCENT);
 		
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(ShoppingOrderItem.class);
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(ShoppingOrder.class);
 		Junction junctionOR = RestrictionsFactoryUtil.disjunction();
 		
-		Property property = PropertyFactoryUtil.forName("name");
+		Property property = PropertyFactoryUtil.forName("sellerName");
+		junctionOR.add(property.like(likeKeyword));
+		
+		property = PropertyFactoryUtil.forName("userName");
 		junctionOR.add(property.like(likeKeyword));
 		
 		if (CommonUtil.isNumeric(keyword)){
@@ -262,7 +277,7 @@ public class ShoppingOrderLocalServiceImpl
 		
 		if (keyword.startsWith("HT")) {
 			String orderId = keyword.substring(7, keyword.length());
-			junctionOR.add(RestrictionsFactoryUtil.eq("itemId", Long.valueOf(orderId)));
+			junctionOR.add(RestrictionsFactoryUtil.eq("orderId", Long.valueOf(orderId)));
 		}
 		
 		if (keyword.contains("-")) {
@@ -278,7 +293,7 @@ public class ShoppingOrderLocalServiceImpl
 
 		int searchCount = 0;
 		try {
-			searchCount = (int) ShoppingOrderItemLocalServiceUtil.dynamicQueryCount(dynamicQuery);
+			searchCount = (int) ShoppingOrderLocalServiceUtil.dynamicQueryCount(dynamicQuery);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
