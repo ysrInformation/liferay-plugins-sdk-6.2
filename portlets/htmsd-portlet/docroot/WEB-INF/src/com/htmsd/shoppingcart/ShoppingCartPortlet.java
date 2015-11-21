@@ -16,10 +16,12 @@ import com.htmsd.slayer.model.Invoice;
 import com.htmsd.slayer.model.ShoppingItem;
 import com.htmsd.slayer.model.ShoppingItem_Cart;
 import com.htmsd.slayer.model.ShoppingOrder;
+import com.htmsd.slayer.model.WholeSale;
 import com.htmsd.slayer.service.InvoiceLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingItemLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingItem_CartLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
+import com.htmsd.slayer.service.WholeSaleLocalServiceUtil;
 import com.htmsd.util.CommonUtil;
 import com.htmsd.util.HConstants;
 import com.htmsd.util.NotificationUtil;
@@ -163,19 +165,13 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		HttpSession session = PortalUtil.getHttpServletRequest(resourceRequest).getSession();
 		List<ShoppingBean> shoppingCartList = CommonUtil.getGuestUserList(session);
 		List<ShoppingBean> newShoppingCartList = new ArrayList<ShoppingBean>();
-		
+		itemPrice = getWholeSalePrice(quantity, itemId, itemPrice);
+				
 		if (id > 0) {
 			double totalPrice = quantity * itemPrice;
-			try {
-				ShoppingItem_Cart shoppingItem_Cart =  ShoppingItem_CartLocalServiceUtil.fetchShoppingItem_Cart(id);
-				shoppingItem_Cart.setQuantity(quantity);
-				shoppingItem_Cart.setTotalPrice(totalPrice);
-				ShoppingItem_CartLocalServiceUtil.updateShoppingItem_Cart(shoppingItem_Cart);
-			} catch (SystemException e) {
-				e.printStackTrace();
-			}
+			ShoppingItem_CartLocalServiceUtil.updateShoppingItem_Cart(id, quantity, totalPrice);
 		} else {
-			if (Validator.isNotNull(shoppingCartList) && shoppingCartList.size() > 0){
+			if (Validator.isNotNull(shoppingCartList) && shoppingCartList.size() > 0) {
 				for (ShoppingBean shoppingBean:shoppingCartList) {
 					if (itemId == shoppingBean.getItemId()) {
 						double total = quantity * itemPrice;
@@ -259,6 +255,22 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		SessionMessages.add(actionRequest, "request_processed", successMessage);
 		actionResponse.setRenderParameter(HConstants.JSP_PAGE, HConstants.PAGE_SHOPPING_CART_DETAILS); 
 		actionResponse.setRenderParameter("tab1", "my-orders");
+	}
+	
+	
+	private double getWholeSalePrice(int quantity, long itemId, double itemPrice) {
+		
+		List<WholeSale> wholesaleList = WholeSaleLocalServiceUtil.getWholeSaleByQty(itemId, quantity);
+		
+		if (Validator.isNotNull(wholesaleList)) {
+			for (WholeSale wholeSale: wholesaleList) {
+				if (quantity == wholeSale.getQuantity() || quantity >= wholeSale.getQuantity()) {
+					itemPrice = wholeSale.getPrice(); 
+				}
+			}
+		}
+		
+		return itemPrice;
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(ShoppingCartPortlet.class.getName());
