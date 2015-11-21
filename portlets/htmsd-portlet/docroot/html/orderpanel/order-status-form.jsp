@@ -58,9 +58,9 @@ function updateStatus(){
 	 }
 	 
 	 if (orderstatus == '<%= orderStatusId %>') {
-		 divId.style = "block";
+		 divId.style.display = "block";
 	 } else {
-		 divId.style = "none";
+		 divId.style.display = "none";
 	 }
 	 
 	 var message = '<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-update-the-status?")%>';
