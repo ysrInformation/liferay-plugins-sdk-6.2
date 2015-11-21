@@ -1,20 +1,37 @@
 package com.htmsd.orderpanel;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
+import javax.portlet.WindowStateException;
 
 import com.htmsd.slayer.model.ShoppingOrder;
 import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
 import com.htmsd.util.NotificationUtil;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
@@ -62,6 +79,65 @@ public class OrderPanelPortlet extends MVCPortlet {
 		
 		actionResponse.setWindowState(LiferayWindowState.NORMAL);
 		actionResponse.setRenderParameter("tab1", tabName); 
+	}
+	
+	/**
+	 * Method for generating Invoice
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws MalformedURLException
+	 * @throws FileNotFoundException
+	 * @throws DocumentException
+	 * @throws SystemException
+	 * @throws WindowStateException 
+	 */
+	public void generateInvoice(ActionRequest actionRequest, ActionResponse actionResponse) 
+				throws MalformedURLException, FileNotFoundException, DocumentException, SystemException, WindowStateException {
+		
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		long orderId = ParamUtil.getLong(actionRequest, "orderId");
+		String tabName = ParamUtil.getString(actionRequest, "tabName");
+		String tempFolderPath = SystemProperties.get(SystemProperties.TMP_DIR)+File.separator+"liferay" + File.separator + "receipts";
+		String timeStamp = new SimpleDateFormat("ddMMyyyyhhmm").format(new Date());
+		String tempFileName = "Reciept"+timeStamp+".pdf";
+		String filePath=tempFolderPath+File.separator+tempFileName;	
+		File tempFolder = new File(tempFolderPath);
+		if (!tempFolder.exists()) {
+			tempFolder.mkdir();
+		}
+		
+		Document document = new Document(PageSize.A4,50,50,50,50);
+		PdfWriter writer = PdfWriter.getInstance(document,new FileOutputStream(filePath));
+
+		document.open();
+		URL imageUrl = actionRequest.getPortletSession().getPortletContext().getResource("/images/logo.png");
+		PdfPTable headerTable = GenerateInvoice.generateHeader(imageUrl, themeDisplay.getCompanyId(), orderId);
+		
+		PdfPTable parenttable = new PdfPTable(1);
+		parenttable.setWidthPercentage(100);
+		parenttable.setSpacingBefore(20f);
+		parenttable.setSpacingAfter(5f);
+		
+		PdfPCell cellTable = new PdfPCell(headerTable);
+		parenttable.addCell(cellTable);
+		
+		document.add(parenttable);
+
+		document.close();
+		writer.close();
+		
+		String articleId = "SEND_INVOICE";
+		ShoppingOrder shoppingOrder = ShoppingOrderLocalServiceUtil.fetchShoppingOrder(orderId);
+		
+		if (Validator.isNotNull(shoppingOrder)) {
+			String[] placeHolders = new String[]{"[$USER$]"};
+			String[] values = new String[] {shoppingOrder.getUserName()};
+			NotificationUtil.sendReceipt(themeDisplay.getScopeGroupId(), shoppingOrder.getShippingEmailAddress(),
+					articleId, shoppingOrder.getUserName(), filePath, tempFileName, placeHolders, values);
+		}
+		
+		actionResponse.setWindowState(LiferayWindowState.NORMAL);
+		actionResponse.setRenderParameter("tab1", tabName);  
 	}
 
 	private final Log _log = LogFactoryUtil.getLog(OrderPanelPortlet.class);

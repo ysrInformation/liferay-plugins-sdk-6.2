@@ -17,9 +17,14 @@
 	viewRecieptURL.setParameter(HConstants.JSP_PAGE, "/html/orderpanel/reciept.jsp");
 	viewRecieptURL.setParameter("orderId", String.valueOf(orderId));
 	
+	PortletURL sendInvoiceURL = renderResponse.createActionURL();
+	sendInvoiceURL.setParameter(ActionRequest.ACTION_NAME, "generateInvoice");
+	sendInvoiceURL.setParameter("orderId", String.valueOf(orderId));
+	
 	if (Validator.isNotNull(tabName)) {
 		updateOrderStatus.setParameter("tab1", tabName); 
 		viewRecieptURL.setParameter("tab1", tabName);
+		sendInvoiceURL.setParameter("tabName", tabName);
 	}
 	
 	String updateStatus = "javascript:showPopup('"+updateOrderStatus.toString()+"','"+"Update Order Status','1200"+"');";
@@ -29,7 +34,7 @@
 <liferay-ui:icon-menu>
 	<liferay-ui:icon image="view" message="view-reciept" url="<%= viewReciept %>" />
 	<liferay-ui:icon image="edit" message="update-status"  url="<%= updateStatus  %>" />
-	<%-- <liferay-ui:icon image="mail" message="send-mail" url="#" /> --%>
+	<liferay-ui:icon image="post" message="send-invoice" url="<%= sendInvoiceURL.toString() %>" /> 
 </liferay-ui:icon-menu>
 
 <script type="text/javascript">

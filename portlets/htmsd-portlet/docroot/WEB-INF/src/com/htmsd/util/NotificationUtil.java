@@ -1,5 +1,6 @@
 package com.htmsd.util;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 
 import javax.mail.internet.InternetAddress;
@@ -103,5 +104,43 @@ public class NotificationUtil {
 	private static String getValue(Document document,String name) {
 		Node node = document.selectSingleNode("/root/dynamic-element[@name='"  + name + "']/dynamic-content");
 		return node.getText();
+	}
+	
+	public static void sendReceipt(long groupId, String email, String articleId, String userName, 
+			String filePath, String fileName, String[] oldStr, String[] newStr) {
+		
+		_log.info("Sedning Email to:"+userName+"<"+email+">");
+		JournalArticle journalArticle = null;
+		try {
+			journalArticle = JournalArticleLocalServiceUtil.getArticle(groupId, articleId);
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		if (Validator.isNotNull(journalArticle)) {
+			Document document = null;
+			try {
+				document = SAXReaderUtil.read(journalArticle.getContent());
+			} catch (DocumentException e) {
+				e.printStackTrace();
+			}
+			String subject = getValue(document, HConstants.EMAIL_SUBJECT);
+			String body = getValue(document, HConstants.EMAIL_MESSAGE);
+			
+			subject = StringUtil.replace(subject, oldStr, newStr);
+			body = StringUtil.replace(body, oldStr, newStr);
+			
+			File receiptFile = new File(filePath);
+			MailMessage mailMessage = new MailMessage();
+			mailMessage.setFrom(getInternetAddress("H.T.M.S.D PET'S", PropsUtil.get(PropsKeys.ADMIN_EMAIL_FROM_ADDRESS)));
+			mailMessage.setTo(getInternetAddress(userName, email));
+			mailMessage.setSubject(subject);
+			mailMessage.setBody(body);
+			mailMessage.setHTMLFormat(true);
+			mailMessage.addFileAttachment(receiptFile, fileName); 
+			MailServiceUtil.sendEmail(mailMessage);
+		}
 	}
 }
