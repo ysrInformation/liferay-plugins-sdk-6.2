@@ -11,6 +11,7 @@ import java.util.Date;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
 import javax.portlet.WindowStateException;
 
@@ -24,9 +25,12 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
+import com.liferay.portal.kernel.servlet.SessionMessages;
+import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.kernel.util.Validator;
@@ -136,6 +140,9 @@ public class OrderPanelPortlet extends MVCPortlet {
 					articleId, shoppingOrder.getUserName(), filePath, tempFileName, placeHolders, values);
 		}
 		
+		PortletConfig portletConfig = (PortletConfig) actionRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
+		String successMessage = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "reciept-has-been-sent-to-the-user");
+		SessionMessages.add(actionRequest, "request_processed", successMessage);
 		actionResponse.setWindowState(LiferayWindowState.NORMAL);
 		actionResponse.setRenderParameter("tab1", tabName);  
 	}
