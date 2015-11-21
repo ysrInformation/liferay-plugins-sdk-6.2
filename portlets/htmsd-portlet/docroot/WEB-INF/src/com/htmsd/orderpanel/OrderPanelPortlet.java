@@ -43,10 +43,10 @@ public class OrderPanelPortlet extends MVCPortlet {
 		_log.info("In updateOrderStatus ..."); 
 		int orderStatus = ParamUtil.getInteger(actionRequest, "orderStatus");
 		long orderId = ParamUtil.getLong(actionRequest, "orderId");
-		long orderItemId = ParamUtil.getLong(actionRequest, "orderItemId");
 		String tabName = ParamUtil.getString(actionRequest, "tabName");
+		String cancelReason = ParamUtil.getString(actionRequest, "cancelReason");
 		
-		ShoppingOrderLocalServiceUtil.updateShoppingOrderItem(orderStatus, orderItemId);
+		ShoppingOrderLocalServiceUtil.updateShoppingOrder(orderStatus, orderId, cancelReason); 
 		
 		ShoppingOrder shoppingOrder = null;
 		try {
@@ -65,5 +65,4 @@ public class OrderPanelPortlet extends MVCPortlet {
 	}
 
 	private final Log _log = LogFactoryUtil.getLog(OrderPanelPortlet.class);
-
 }
