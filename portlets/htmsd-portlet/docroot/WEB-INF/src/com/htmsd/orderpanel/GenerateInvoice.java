@@ -1,7 +1,6 @@
 package com.htmsd.orderpanel;
 
 import java.net.URL;
-import java.text.DecimalFormat;
 import java.util.Date;
 
 import com.htmsd.slayer.model.Category;
@@ -30,7 +29,8 @@ import com.liferay.portal.kernel.util.Validator;
 
 public class GenerateInvoice {
 	
-	public static PdfPTable generateHeader(URL imageUrl , long companyId, long orderId) {
+	public static PdfPTable generateHeader(URL imageUrl , long companyId, long orderId,
+			long currencyId, double currencyRate) {
 		
 		PdfPTable pdftable = new PdfPTable(1);
 		try {
@@ -74,7 +74,7 @@ public class GenerateInvoice {
 			userDesCell.setBorder(Rectangle.NO_BORDER);
 			pdftable.addCell(userDesCell);
 
-			PdfPCell productDesCell = new PdfPCell(generateProductDetailsTable(shoppingOrder.getUserId(), shoppingOrder));
+			PdfPCell productDesCell = new PdfPCell(generateProductDetailsTable(shoppingOrder.getUserId(), currencyId, shoppingOrder, currencyRate));
 			productDesCell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			productDesCell.setPaddingLeft(10f);
 			productDesCell.setPaddingRight(10f);
@@ -89,9 +89,10 @@ public class GenerateInvoice {
 
 			PdfPTable receiptTable = new  PdfPTable(2);
 			receiptTable.setWidths(new float[]{0.8f, 1.5f});
-
+			
+			double totalPrice = (currencyRate == 0) ? shoppingOrder.getTotalPrice() : shoppingOrder.getTotalPrice() / currencyRate;
 			receiptTable.addCell(createLabelCell("Amount in words      :",Rectangle.NO_BORDER));
-			receiptTable.addCell(createValueCell(NumberWordConverter.convert((int)shoppingOrder.getTotalPrice())+" Only",Rectangle.NO_BORDER));
+			receiptTable.addCell(createValueCell(NumberWordConverter.convert((int)totalPrice)+" Only",Rectangle.NO_BORDER));
 			receiptTable.addCell(createLabelCell("Receipt Center       :",Rectangle.NO_BORDER));
 			receiptTable.addCell(createValueCell(CommonUtil.getSellerCompanyDetails(shoppingOrder.getSellerId(), HConstants.COMPANY_NAME), Rectangle.NO_BORDER));
 			receiptInformationCell.addElement(receiptTable);
@@ -140,10 +141,9 @@ public class GenerateInvoice {
 		return table;
 	}
 	
-	public static PdfPTable generateProductDetailsTable(long userId, ShoppingOrder shoppingOrder) 
-			throws DocumentException {
+	public static PdfPTable generateProductDetailsTable(long userId, long currencyId, ShoppingOrder shoppingOrder, 
+			double currencyRate) throws DocumentException {
 		
-		DecimalFormat decimalFormat = new DecimalFormat("0.00");
 		ShoppingItem shoppingItem = CommonUtil.getShoppingItem(shoppingOrder.getShoppingItemId());
 		Category parentCategory = CommonUtil.getShoppingItemParentCategory(shoppingOrder.getShoppingItemId());
 		Category category = ShoppingItemLocalServiceUtil.getShoppingItemCategory(shoppingOrder.getShoppingItemId());
@@ -166,23 +166,28 @@ public class GenerateInvoice {
 		}
 		pdftable.addCell(createLabelCellForProduct("Sub Total",Rectangle.BOTTOM|Rectangle.TOP|Rectangle.RIGHT|Rectangle.LEFT));
 		
-		String productDetails = shoppingItem.getProductCode() + "\n" + shoppingItem.getName();
+		double price = (currencyRate == 0) ? shoppingItem.getTotalPrice() : shoppingItem.getTotalPrice() / currencyRate;
+		double taxPrice = CommonUtil.calculateVat(shoppingOrder.getTotalPrice(), shoppingItem.getTax());
+		double subTotal = shoppingOrder.getTotalPrice() - taxPrice;
+		double totalPrice = (currencyRate == 0) ? shoppingOrder.getTotalPrice() : shoppingOrder.getTotalPrice() / currencyRate;
+		String unitPrice = CommonUtil.getPriceFormat(price, currencyId);
 		String quantity =  String.valueOf(shoppingOrder.getQuantity());
-		String totalPrice = CommonUtil.getPriceInNumberFormat(shoppingOrder.getTotalPrice(), HConstants.RUPEE_SYMBOL);
-		String unitPrice = decimalFormat.format(shoppingItem.getTotalPrice());
-		String tax = decimalFormat.format(CommonUtil.calculateVat(shoppingOrder.getTotalPrice(), shoppingItem.getTax()));
-		double subTotal = shoppingOrder.getTotalPrice() - (CommonUtil.calculateVat(shoppingOrder.getTotalPrice(), shoppingItem.getTax()));
+		String productDetails = shoppingItem.getProductCode() + "\n" + shoppingItem.getName();
+		String currencySymbol = CommonUtil.getCurrencySymbol(currencyId);
+		
+		taxPrice = (currencyRate == 0) ? taxPrice : taxPrice / currencyRate;
+		subTotal = (currencyRate == 0) ? subTotal : subTotal / currencyRate;
 		
 		//Table Body
-		pdftable.addCell(createValueCell(String.valueOf(1), Rectangle.RECTANGLE));
-		pdftable.addCell(createValueCell((Validator.isNotNull(category.getName())) ? category.getName() : "N/A", Rectangle.RECTANGLE));
-		pdftable.addCell(createValueCell(productDetails, Rectangle.RECTANGLE));
-		pdftable.addCell(createValueCell(quantity, Rectangle.RECTANGLE));
+		pdftable.addCell(createProductValueCell(String.valueOf(1), Rectangle.RECTANGLE));
+		pdftable.addCell(createProductValueCell((Validator.isNotNull(category.getName())) ? category.getName() : "N/A", Rectangle.RECTANGLE));
+		pdftable.addCell(createProductValueCell(productDetails, Rectangle.RECTANGLE));
+		pdftable.addCell(createProductValueCell(quantity, Rectangle.RECTANGLE));
 		if (!isLiveCategory) {
-			pdftable.addCell(createValueCell(unitPrice, Rectangle.RECTANGLE));
-			pdftable.addCell(createValueCell(tax, Rectangle.RECTANGLE));
+			pdftable.addCell(createProductValueCell(unitPrice, Rectangle.RECTANGLE));
+			pdftable.addCell(createProductValueCell(CommonUtil.getPriceFormat(taxPrice, currencyId), Rectangle.RECTANGLE));
 		}
-		pdftable.addCell(createValueCell(decimalFormat.format(subTotal), Rectangle.RECTANGLE));
+		pdftable.addCell(createProductValueCell(CommonUtil.getPriceFormat(subTotal, currencyId), Rectangle.RECTANGLE)); 
 		
 		//footer
 		int length = isLiveCategory ? 3 : 5;
@@ -190,7 +195,7 @@ public class GenerateInvoice {
 			pdftable.addCell(createLabelCell(StringPool.BLANK, Rectangle.NO_BORDER));
 		}
 		pdftable.addCell(createLabelCell("Grand Total",Rectangle.RECTANGLE));
-		pdftable.addCell(createLabelCell(totalPrice, Rectangle.RECTANGLE));
+		pdftable.addCell(createLabelCell(CommonUtil.getPriceInNumberFormat(totalPrice, currencySymbol), Rectangle.RECTANGLE));
 		
 		return pdftable;
 	}
@@ -225,6 +230,18 @@ public class GenerateInvoice {
 		PdfPCell cell = new PdfPCell(new Phrase(text,font));
 		cell.setBorder(border);
 		cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+		cell.setVerticalAlignment(Element.ALIGN_LEFT);
+		cell.setPaddingTop(5f);
+		cell.setPaddingBottom(5f);
+		cell.setMinimumHeight(25f);
+		return cell;
+	}
+	
+	private static PdfPCell createProductValueCell(String text,int border) {
+		Font font = new Font(FontFamily.HELVETICA, 9, Font.NORMAL, BaseColor.BLACK);
+		PdfPCell cell = new PdfPCell(new Phrase(text,font));
+		cell.setBorder(border);
+		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		cell.setVerticalAlignment(Element.ALIGN_LEFT);
 		cell.setPaddingTop(5f);
 		cell.setPaddingBottom(5f);

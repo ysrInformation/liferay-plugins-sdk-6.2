@@ -15,6 +15,7 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
+import javax.portlet.PortletSession;
 import javax.portlet.WindowStateException;
 
 import com.htmsd.slayer.model.ShoppingItem;
@@ -23,6 +24,7 @@ import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
 import com.htmsd.util.CommonUtil;
 import com.htmsd.util.HConstants;
 import com.htmsd.util.NotificationUtil;
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.PageSize;
@@ -106,6 +108,8 @@ public class OrderPanelPortlet extends MVCPortlet {
 				throws MalformedURLException, FileNotFoundException, DocumentException, SystemException, WindowStateException {
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		PortletSession portletSession = actionRequest.getPortletSession();
+		
 		long orderId = ParamUtil.getLong(actionRequest, "orderId");
 		String tabName = ParamUtil.getString(actionRequest, "tabName");
 		String tempFolderPath = SystemProperties.get(SystemProperties.TMP_DIR)+File.separator+"liferay" + File.separator + "receipts";
@@ -117,12 +121,16 @@ public class OrderPanelPortlet extends MVCPortlet {
 			tempFolder.mkdir();
 		}
 		
+		String currentCurrencyId = (String) portletSession.getAttribute("currentCurrencyId", PortletSession.APPLICATION_SCOPE);
+		long currencyId = (Validator.isNull(currentCurrencyId)) ?  0 : Long.valueOf(currentCurrencyId);
+		double currencyRate = CommonUtil.getCurrentRate(currencyId);
+		
 		Document document = new Document(PageSize.A4,50,50,50,50);
 		PdfWriter writer = PdfWriter.getInstance(document,new FileOutputStream(filePath));
 
 		document.open();
 		URL imageUrl = actionRequest.getPortletSession().getPortletContext().getResource("/images/logo.png");
-		PdfPTable headerTable = GenerateInvoice.generateHeader(imageUrl, themeDisplay.getCompanyId(), orderId);
+		PdfPTable headerTable = GenerateInvoice.generateHeader(imageUrl, themeDisplay.getCompanyId(), orderId, currencyId, currencyRate);
 		
 		PdfPTable parenttable = new PdfPTable(1);
 		parenttable.setWidthPercentage(100);
@@ -130,6 +138,7 @@ public class OrderPanelPortlet extends MVCPortlet {
 		parenttable.setSpacingAfter(5f);
 		
 		PdfPCell cellTable = new PdfPCell(headerTable);
+		cellTable.setBackgroundColor(BaseColor.YELLOW); 
 		parenttable.addCell(cellTable);
 		
 		document.add(parenttable);
