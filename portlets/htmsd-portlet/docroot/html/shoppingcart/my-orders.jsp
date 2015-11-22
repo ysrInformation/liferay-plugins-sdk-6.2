@@ -6,10 +6,11 @@
 <%
 	String noOfItems  = ParamUtil.getString(request, "noOfItems", "8");
 	int totalCount = ShoppingOrderItemLocalServiceUtil.getOrderItemsCount(themeDisplay.getUserId());;
-	String curVal = (String) portletSession.getAttribute("currentCurrencyId", PortletSession.APPLICATION_SCOPE);
-	long currencyid = (Validator.isNull(curVal)) ?  0 : Long.valueOf(curVal);
 	List<ShoppingOrder> shoppingOrderItems = ShoppingOrderLocalServiceUtil.getShoppingOrderByUserId(themeDisplay.getUserId());
 	SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
+	String currentCurrencyid = (String) portletSession.getAttribute("currentCurrencyId", PortletSession.APPLICATION_SCOPE);
+	long currencyId2 = (Validator.isNull(currentCurrencyid)) ?  0 : Long.valueOf(currentCurrencyid);
+	String currencySymbol = CommonUtil.getCurrencySymbol(Long.valueOf(currencyId2));
 %>
 
 <c:choose>
@@ -17,7 +18,9 @@
 		<div class="main-div">
 			<% 
 			for (ShoppingOrder soi:shoppingOrderItems) { 
-				String total = CommonUtil.getPriceInNumberFormat(soi.getTotalPrice(), HConstants.RUPEE_SYMBOL);
+				double currentRate = CommonUtil.getCurrentRate(Long.valueOf(currencyId2));
+				double totalPrice = (currentRate == 0) ? soi.getTotalPrice() : soi.getTotalPrice() / currentRate;
+				String total = CommonUtil.getPriceFormat(totalPrice, currencyId2);
 				ShoppingItem shoppingItem = CommonUtil.getShoppingItem(soi.getShoppingItemId());
 				long imageId = shoppingItem.getSmallImage();
 				String imageSRC = CommonUtil.getThumbnailpath(imageId, themeDisplay.getScopeGroupId(), false);
@@ -57,10 +60,10 @@
 					</div>
 					<div class="row-fluid">
 						<div class="span5">
-							<span>Date : <%= sdf.format(soi.getCreateDate()) %></span>
+							<span><liferay-ui:message key="date"/> : <%= sdf.format(soi.getCreateDate()) %></span>
 						</div>
 						<div class="pull-right">
-							<span class="order-total">Order Total : <%= total %></span>
+							<span class="order-total"><liferay-ui:message key="order-total"/> : <%= CommonUtil.getPriceInNumberFormat(totalPrice, currencySymbol) %></span>
 						</div>
 					</div>
 				</div>
@@ -126,7 +129,7 @@ function getShoppingItems(s, e) {
 			p_auth: Liferay.authToken,
 			userId : '<%= themeDisplay.getUserId() %>',
 			groupId : <%=themeDisplay.getScopeGroupId()%>,
-			currencyId : '<%= currencyid %>',
+			currencyId : '<%= currencyId2 %>',
 			start : s,
 			end: e,
 		},
@@ -184,13 +187,14 @@ function render(data) {
 }
 
 function actionURL(data, portletId) {
-	
-	var ajaxURL = Liferay.PortletURL.createRenderURL();
-	ajaxURL.setPortletId(portletId);
-	ajaxURL.setParameter('action', "javax.portlet.action");
-	ajaxURL.setParameter('orderId', data.orderId);
-	ajaxURL.setParameter('orderItemId', data.orderItemId);
-	return ajaxURL;
+	AUI().use('liferay-portlet-url', function(A) {
+		var ajaxURL = Liferay.PortletURL.createRenderURL();
+		ajaxURL.setPortletId(portletId);
+		ajaxURL.setParameter('action', "javax.portlet.action");
+		ajaxURL.setParameter('orderId', data.orderId);
+		ajaxURL.setParameter('orderItemId', data.orderItemId);
+		return ajaxURL;
+	});
 }
 
 function disableButton(status) {
@@ -225,5 +229,4 @@ function showPopupDetails(url, width, title){
     		popup.titleNode.html(title);
 	});
 }
-
 </aui:script>

@@ -4,6 +4,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Calendar"%>
+<%@page import="javax.portlet.PortletSession"%>
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="java.util.Collections"%>
 <%@page import="java.text.DecimalFormat"%>

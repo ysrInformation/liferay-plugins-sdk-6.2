@@ -42,13 +42,19 @@
 	ShoppingItem shoppingItem = CommonUtil.getShoppingItem(shoppingOrder.getShoppingItemId());
 	Category parentCategory = CommonUtil.getShoppingItemParentCategory(shoppingOrder.getShoppingItemId());
 	Category category = ShoppingItemLocalServiceUtil.getShoppingItemCategory(shoppingOrder.getShoppingItemId());
+	String val2 = (String) portletSession.getAttribute("currentCurrencyId", PortletSession.APPLICATION_SCOPE);
+	long currencyId1 = (Validator.isNull(val2)) ?  0 : Long.valueOf(val2);
+	String currencySymbol = CommonUtil.getCurrencySymbol(Long.valueOf(currencyId1));
 	
+	double currentRate = CommonUtil.getCurrentRate(Long.valueOf(currencyId1));
 	boolean isLiveCategory = Validator.isNotNull(parentCategory) && parentCategory.getName().equals("Live");
 	int colspan = (isLiveCategory) ? 3 : 5;
 	int quantity = shoppingOrder.getQuantity();
-	double totalPrice = shoppingOrder.getTotalPrice();
+	double totalPrice = (currentRate == 0) ? shoppingOrder.getTotalPrice() :shoppingOrder.getTotalPrice() / currentRate;
 	double tax = CommonUtil.calculateVat(totalPrice, shoppingItem.getTax());
 	double subTotal = shoppingOrder.getTotalPrice() - tax;
+	tax = (currentRate == 0) ? tax : tax / currentRate;
+	subTotal = (currentRate == 0) ? subTotal : subTotal / currentRate;
 	String productCode = shoppingItem.getProductCode();
 	String itemName = shoppingItem.getName();
 	String productDetails = productCode +"<br/>"+ itemName;
@@ -137,7 +143,7 @@
 				</tr>
 				<tr>
 					<td colspan="<%= colspan %>" class="heading text-center"><liferay-ui:message key="amount-payable"/></td>
-					<td class="heading text-center"><%= CommonUtil.getPriceInNumberFormat(totalPrice, HConstants.RUPEE_SYMBOL) %></td>
+					<td class="heading text-center"><%= CommonUtil.getPriceInNumberFormat(totalPrice, currencySymbol) %></td>
 				</tr>
 			</tbody>	
 		</table>

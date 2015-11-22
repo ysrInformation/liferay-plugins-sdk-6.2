@@ -19,6 +19,12 @@
 	
 	PortletURL searchURL = renderResponse.createActionURL();
 	searchURL.setParameter(ActionRequest.ACTION_NAME, "processAction");
+
+	String val2 = (String) portletSession.getAttribute("currentCurrencyId", PortletSession.APPLICATION_SCOPE);
+	long currencyId1 = (Validator.isNull(val2)) ?  0 : Long.valueOf(val2);
+	System.out.println("CurrencyID ==>"+CommonUtil.getCurrencySymbol(currencyId1));
+
+	double currentRate = CommonUtil.getCurrentRate(Long.valueOf(currencyId1));
 %>
 
 <div class="orderlist">
@@ -62,6 +68,7 @@
 	        	indexVar="indexVar" keyProperty="orderId">
 	           
 	            <% 
+	            double totalPrice = (currentRate == 0) ? shoppingOrder.getTotalPrice() : shoppingOrder.getTotalPrice() / currentRate;
 	           	String userName = shoppingOrder.getUserName();
 	           	String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
 	           	String orderId = HConstants.HTMSD + currentYear.substring(2, 4) + shoppingOrder.getOrderId();
@@ -104,7 +111,7 @@
 	            </liferay-ui:search-container-column-text>
 	            
 	            <liferay-ui:search-container-column-text name="total" >
-	            	<%= CommonUtil.getPriceInNumberFormat(shoppingOrder.getTotalPrice(), HConstants.RUPEE_SYMBOL) %> 
+	            	<%= CommonUtil.getPriceFormat(totalPrice, currencyId1)%> 
 	            </liferay-ui:search-container-column-text>
 	            
 	            <liferay-ui:search-container-column-jsp name="action"  path="/html/orderpanel/action.jsp"/> 

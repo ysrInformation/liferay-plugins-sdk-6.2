@@ -9,6 +9,10 @@
 	
 	PortletURL checkoutURL = renderResponse.createRenderURL();
 	checkoutURL.setParameter("jspPage", "/html/shoppingcart/checkout.jsp");
+
+	String currentCurrencyid = (String) portletSession.getAttribute("currentCurrencyId", PortletSession.APPLICATION_SCOPE);
+	long currencyId2 = (Validator.isNull(currentCurrencyid)) ?  0 : Long.valueOf(currentCurrencyid);
+	String currencySymbol = CommonUtil.getCurrencySymbol(Long.valueOf(currencyId2));
 %>
 
 <portlet:resourceURL var="removeItemURL"> 
@@ -58,10 +62,11 @@
 					ShoppingItem shoppingItem = CommonUtil.getShoppingItem(itemId);
 					if (Validator.isNotNull(shoppingItem)) {
 						itemExist = true;
-						double price = shpCtItem.getTotalPrice();
-						totalPrice += price;
 						int quantity[] = CommonUtil.getItemsQuantity(itemId, cartId, session);
 						int qtyLength = quantity.length;
+						double currentRate = CommonUtil.getCurrentRate(Long.valueOf(currencyId2));
+						double price = (currentRate == 0) ? shpCtItem.getTotalPrice() : shpCtItem.getTotalPrice() / currentRate;
+						totalPrice += price;
 						String updatetotalPrice = "javascript:updatetotalPrice(this.value,'"+shpCtItem.getCartItemId()+"','"+getTotalPriceURL+"','"+shoppingItem.getTotalPrice()+"','"+itemId+"');";
 						String removeCartItem = "javascript:removeItems('"+shoppingItem.getItemId()+"','"+removeItemURL+"');";
 						%>
@@ -114,8 +119,8 @@
 									</div>
 								</td>
 								<td style="width:20%">
-									<div >
-										<h5><%= CommonUtil.getPriceInNumberFormat(price, HConstants.RUPEE_SYMBOL) %></h5>
+									<div>
+										<h5><%= CommonUtil.getPriceFormat(price, currencyId2) %></h5>
 									</div>
 								</td>
 							</tr>
@@ -131,7 +136,7 @@
 						<td style="width:20%" colspan="3">
 							<div class="pull-right price-div">
 								<span class="price-text"><liferay-ui:message key="amount-payable"/>:</span> 
-								<span class="price"><%= CommonUtil.getPriceInNumberFormat(totalPrice, HConstants.RUPEE_SYMBOL) %></span>
+								<span class="price"><%= CommonUtil.getPriceInNumberFormat(totalPrice, currencySymbol) %></span> 
 							</div>
 						</td>
 					</tr>
