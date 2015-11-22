@@ -1,7 +1,9 @@
 package com.htmsd.shoppingcart;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.portlet.ActionRequest;
@@ -12,6 +14,7 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpSession;
 
+import com.htmsd.orderpanel.GenerateInvoice;
 import com.htmsd.slayer.model.Invoice;
 import com.htmsd.slayer.model.ShoppingItem;
 import com.htmsd.slayer.model.ShoppingItem_Cart;
@@ -62,9 +65,6 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		
 		addShoppingOrderItems(actionRequest);
 		
-		NotificationUtil.sendNotification(themeDisplay.getScopeGroupId(), 
-				themeDisplay.getUser().getFullName(), themeDisplay.getUser().getEmailAddress(), "EMAIL_NOTIFICATION", new String[1], new String[1]);
-		
 		PortletConfig portletConfig = (PortletConfig) actionRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
 		String successMessage = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "you-order-has-been-registered-you-may-get-email-shortly");
 		SessionMessages.add(actionRequest, "request_processed", successMessage);
@@ -109,6 +109,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 				long shoppingItemId = shoppingItem.getItemId();
 				double totalPrice = shoppingItem_Cart.getTotalPrice();
 				String sellerName = CommonUtil.getUserFullName(sellerId);  
+				String articleId = "ORDER_COMFIRMATION";
 				
 				ShoppingOrder shoppingOrder = ShoppingOrderLocalServiceUtil.insertShoppingOrder(orderStatus, orderQuantity, 
 						shoppingItemId, sellerId, userId, companyId, groupId, totalPrice, sellerName, StringPool.BLANK, shippingFirstName, 
@@ -127,6 +128,9 @@ public class ShoppingCartPortlet extends MVCPortlet {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
+					
+					NotificationUtil.sendNotification(themeDisplay.getScopeGroupId(), shoppingOrder.getUserName(),
+							shoppingOrder.getShippingEmailAddress(), articleId, getOrderTokens(), getValueTokens(shoppingOrder)); 
 				}
 				
 				//deleting items from shoppingItem_Cart table. 
@@ -271,6 +275,35 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		}
 		
 		return itemPrice;
+	}
+	
+	private static String[] getOrderTokens(){
+		return new String[] {
+				"[$USER_NAME$]","[$ORDER_ID$]","[$PRODUCT_DETAILS$]","[$ITEM_PRICE$]","[$QTY$]",
+				"[$SUB_TOTAL$]","[$TOTAL$]","[$MOBILE_NO$]","[$ADDRESS$]"
+		};
+	}
+	
+	private static String[] getValueTokens(ShoppingOrder shoppingOrder) {
+		
+		DecimalFormat df = new DecimalFormat("0.00");
+		String[] valueTokens = new String[9];
+		
+		String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+       	String orderId = HConstants.HTMSD + currentYear.substring(2, 4) + shoppingOrder.getOrderId();
+		ShoppingItem shoppingItem = CommonUtil.getShoppingItem(shoppingOrder.getShoppingItemId());
+		
+		valueTokens[0] = shoppingOrder.getUserName();
+		valueTokens[1] = orderId;
+		valueTokens[2] = (Validator.isNotNull(shoppingItem)? shoppingItem.getProductCode()+ StringPool.DASH +shoppingItem.getName():StringPool.DASH);
+		valueTokens[3] = df.format(Validator.isNotNull(shoppingItem)? shoppingItem.getTotalPrice() : 0);
+		valueTokens[4] = String.valueOf(shoppingOrder.getQuantity());
+		valueTokens[5] = df.format(shoppingOrder.getTotalPrice());
+		valueTokens[6] = CommonUtil.getPriceInNumberFormat(shoppingOrder.getTotalPrice(), HConstants.RUPEE_SYMBOL);
+		valueTokens[7] = shoppingOrder.getShippingMoble();
+		valueTokens[8] = GenerateInvoice.getAddress(shoppingOrder); 
+		
+		return valueTokens;
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(ShoppingCartPortlet.class.getName());

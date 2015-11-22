@@ -39,7 +39,7 @@ public class GenerateInvoice {
 			pdftable.getDefaultCell().setBorder(Rectangle.NO_BORDER); 
 			pdftable.setWidthPercentage(100);
 			pdftable.setSpacingBefore(20f);
-			pdftable.setSpacingAfter(5f);
+			pdftable.setSpacingAfter(10f);
 
 			Image htmsdLogo = Image.getInstance(imageUrl);
 			htmsdLogo.setAlignment(Image.ALIGN_CENTER);
@@ -53,7 +53,7 @@ public class GenerateInvoice {
 			headerFont.setStyle(Font.BOLD);
 
 			Paragraph headerParagraph = new Paragraph("Receipt",headerFont);
-			headerParagraph.add("\nH.T.M.S.D.PET'S");
+			headerParagraph.add("\nH.T.M.S.D. PET'S");
 			headerParagraph.add("\nBREADERS & RESELLER");
 			headerParagraph.setAlignment(Paragraph.ALIGN_CENTER);
 			headerParagraph.setSpacingBefore(20f);
@@ -68,12 +68,16 @@ public class GenerateInvoice {
 			headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			headerCell.setBorder(Rectangle.NO_BORDER);
 			pdftable.addCell(headerCell);
-			pdftable.addCell(generateUserDetailsTable(companyId, shoppingOrder.getUserId(), shoppingOrder));
+			
+			PdfPCell userDesCell = new PdfPCell(generateUserDetailsTable(companyId, shoppingOrder.getUserId(), shoppingOrder));
+			userDesCell.setPadding(20f); 
+			userDesCell.setBorder(Rectangle.NO_BORDER);
+			pdftable.addCell(userDesCell);
 
 			PdfPCell productDesCell = new PdfPCell(generateProductDetailsTable(shoppingOrder.getUserId(), shoppingOrder));
 			productDesCell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			productDesCell.setPaddingLeft(10f);
-			productDesCell.setPaddingRight(5f);
+			productDesCell.setPaddingRight(10f);
 			productDesCell.setPaddingBottom(5f);
 			productDesCell.setBorder(Rectangle.NO_BORDER);
 			pdftable.addCell(productDesCell);
