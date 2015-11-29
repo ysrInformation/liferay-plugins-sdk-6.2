@@ -1,20 +1,45 @@
 package com.htmsd.orderpanel;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
+import javax.portlet.PortletSession;
+import javax.portlet.WindowStateException;
 
 import com.htmsd.slayer.model.ShoppingOrder;
+import com.htmsd.slayer.service.ShoppingCartLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
+import com.htmsd.util.CommonUtil;
 import com.htmsd.util.NotificationUtil;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
+import com.liferay.portal.kernel.servlet.SessionMessages;
+import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
@@ -43,10 +68,11 @@ public class OrderPanelPortlet extends MVCPortlet {
 		_log.info("In updateOrderStatus ..."); 
 		int orderStatus = ParamUtil.getInteger(actionRequest, "orderStatus");
 		long orderId = ParamUtil.getLong(actionRequest, "orderId");
-		long orderItemId = ParamUtil.getLong(actionRequest, "orderItemId");
 		String tabName = ParamUtil.getString(actionRequest, "tabName");
+		String cancelReason = ParamUtil.getString(actionRequest, "cancelReason");
+		String articleId = ShoppingCartLocalServiceUtil.getArticleId((int)orderStatus);
 		
-		ShoppingOrderLocalServiceUtil.updateShoppingOrderItem(orderStatus, orderItemId);
+		ShoppingOrderLocalServiceUtil.updateShoppingOrder(orderStatus, orderId, cancelReason); 
 		
 		ShoppingOrder shoppingOrder = null;
 		try {
@@ -56,14 +82,84 @@ public class OrderPanelPortlet extends MVCPortlet {
 		}
 		
 		if (Validator.isNotNull(shoppingOrder)) {
+			String[] tokens = ShoppingCartLocalServiceUtil.getOrderTokens();
+			String[] values = ShoppingCartLocalServiceUtil.getValueTokens(shoppingOrder);
 			NotificationUtil.sendNotification(shoppingOrder.getGroupId(), 
-					shoppingOrder.getUserName(), shoppingOrder.getShippingEmailAddress(), "EMAIL_NOTIFICATION", new String[1],new String[1]);
+					shoppingOrder.getUserName(), shoppingOrder.getShippingEmailAddress(), articleId, tokens, values);
 		}
 		
 		actionResponse.setWindowState(LiferayWindowState.NORMAL);
 		actionResponse.setRenderParameter("tab1", tabName); 
 	}
+	
+	/**
+	 * Method for generating Invoice
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws MalformedURLException
+	 * @throws FileNotFoundException
+	 * @throws DocumentException
+	 * @throws SystemException
+	 * @throws WindowStateException 
+	 */
+	public void generateInvoice(ActionRequest actionRequest, ActionResponse actionResponse) 
+				throws MalformedURLException, FileNotFoundException, DocumentException, SystemException, WindowStateException {
+		
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		PortletSession portletSession = actionRequest.getPortletSession();
+		
+		long orderId = ParamUtil.getLong(actionRequest, "orderId");
+		String tabName = ParamUtil.getString(actionRequest, "tabName");
+		String tempFolderPath = SystemProperties.get(SystemProperties.TMP_DIR)+File.separator+"liferay" + File.separator + "receipts";
+		String timeStamp = new SimpleDateFormat("ddMMyyyyhhmm").format(new Date());
+		String tempFileName = "Reciept"+timeStamp+".pdf";
+		String filePath=tempFolderPath+File.separator+tempFileName;	
+		File tempFolder = new File(tempFolderPath);
+		if (!tempFolder.exists()) {
+			tempFolder.mkdir();
+		}
+		
+		String currentCurrencyId = (String) portletSession.getAttribute("currentCurrencyId", PortletSession.APPLICATION_SCOPE);
+		long currencyId = (Validator.isNull(currentCurrencyId)) ?  0 : Long.valueOf(currentCurrencyId);
+		double currencyRate = CommonUtil.getCurrentRate(currencyId);
+		
+		Document document = new Document(PageSize.A4,50,50,50,50);
+		PdfWriter writer = PdfWriter.getInstance(document,new FileOutputStream(filePath));
+
+		document.open();
+		URL imageUrl = actionRequest.getPortletSession().getPortletContext().getResource("/images/logo.png");
+		PdfPTable headerTable = GenerateInvoice.generateHeader(imageUrl, themeDisplay.getCompanyId(), orderId, currencyId, currencyRate);
+		
+		PdfPTable parenttable = new PdfPTable(1);
+		parenttable.setWidthPercentage(100);
+		parenttable.setSpacingBefore(20f);
+		parenttable.setSpacingAfter(5f);
+		
+		PdfPCell cellTable = new PdfPCell(headerTable);
+		cellTable.setBackgroundColor(BaseColor.WHITE); 
+		parenttable.addCell(cellTable);
+		
+		document.add(parenttable);
+
+		document.close();
+		writer.close();
+		
+		String articleId = "SEND_INVOICE";
+		ShoppingOrder shoppingOrder = ShoppingOrderLocalServiceUtil.fetchShoppingOrder(orderId);
+		
+		if (Validator.isNotNull(shoppingOrder)) {
+			String[] placeHolders = new String[]{"[$USER$]"};
+			String[] values = new String[] {shoppingOrder.getUserName()};
+			NotificationUtil.sendReceipt(themeDisplay.getScopeGroupId(), shoppingOrder.getShippingEmailAddress(),
+					articleId, shoppingOrder.getUserName(), filePath, tempFileName, placeHolders, values);
+		}
+		
+		PortletConfig portletConfig = (PortletConfig) actionRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
+		String successMessage = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "reciept-has-been-sent-to-the-user");
+		SessionMessages.add(actionRequest, "request_processed", successMessage);
+		actionResponse.setWindowState(LiferayWindowState.NORMAL);
+		actionResponse.setRenderParameter("tab1", tabName);  
+	}
 
 	private final Log _log = LogFactoryUtil.getLog(OrderPanelPortlet.class);
-
 }

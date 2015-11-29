@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US" default-locale="en_US">
+	<dynamic-element name="Subject" type="text" index-type="keyword" index="0">
+		<dynamic-content language-id="en_US"><![CDATA[Order [$ORDER_ID$] on htmsdpets.com has been delivered]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element name="Message" type="text_area" index-type="keyword" index="0">
+		<dynamic-content language-id="en_US">
+			<![CDATA[
+			 	<p><strong>Dear [$USER_NAME$],</strong></p>
+				
+				<p>Greetings from htnsdpets.com!</p>
+				
+				<p>This is to inform you that the Order [$ORDER_ID$] has been delivered successfully !!.</p>
+				
+				<p>Please find the summary of your order :</p>
+				
+				<table border="1" cellpadding="1" cellspacing="1" style="width: 500px;">
+					<thead>
+						<tr>
+							<th scope="col" style="background:magenta;"><span style="color:#000000;">Product Details</span></th>
+							<th scope="col" style="background:magenta;"><span style="color:#000000;">Item Price</span></th>
+							<th scope="col" style="background:magenta;"><span style="color:#000000;">Qty</span></th>
+							<th scope="col" style="background:magenta;"><span style="color:#000000;">Subtotal</span></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td style="text-align: center;">[$PRODUCT_DETAILS$]</td>
+							<td style="text-align: center;">[$ITEM_PRICE$]</td>
+							<td style="text-align: center;">[$QTY$]</td>
+							<td style="text-align: center;">[$SUB_TOTAL$]</td>
+						</tr>
+						<tr>
+							<td colspan="3" rowspan="1" style="text-align: center;"><strong>AMOUNT PAID</strong></td>
+							<td style="text-align: center;">[$TOTAL$]</td>
+						</tr>
+					</tbody>
+				</table>
+				
+				<p>&nbsp;</p>
+				
+				<p>Regards</p>
+				
+				<p>Htmsdpets Admin</p>
+			]]>
+		</dynamic-content>
+	</dynamic-element>
+</root>

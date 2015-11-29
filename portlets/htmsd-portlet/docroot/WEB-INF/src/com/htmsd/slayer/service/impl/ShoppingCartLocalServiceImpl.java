@@ -14,12 +14,21 @@
 
 package com.htmsd.slayer.service.impl;
 
+import java.text.DecimalFormat;
+import java.util.Calendar;
 import java.util.Date;
 
+import com.htmsd.orderpanel.GenerateInvoice;
 import com.htmsd.slayer.model.ShoppingCart;
+import com.htmsd.slayer.model.ShoppingItem;
+import com.htmsd.slayer.model.ShoppingOrder;
 import com.htmsd.slayer.service.base.ShoppingCartLocalServiceBaseImpl;
+import com.htmsd.util.CommonUtil;
+import com.htmsd.util.HConstants;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portlet.asset.model.AssetCategory;
 
 /**
  * The implementation of the shopping cart local service.
@@ -78,5 +87,50 @@ public class ShoppingCartLocalServiceImpl
 	
 	public ShoppingCart getShoppingCartByUserId(long userId) throws SystemException {
 		return shoppingCartPersistence.fetchByUserId(userId);
+	}
+	
+	public  String[] getOrderTokens(){
+		return new String[] {
+				"[$USER_NAME$]","[$ORDER_ID$]","[$PRODUCT_DETAILS$]","[$ITEM_PRICE$]","[$QTY$]",
+				"[$SUB_TOTAL$]","[$TOTAL$]","[$MOBILE_NO$]","[$ADDRESS$]"
+		};
+	}
+	
+	public String[] getValueTokens(ShoppingOrder shoppingOrder) {
+		
+		DecimalFormat df = new DecimalFormat("0.00");
+		String[] valueTokens = new String[9];
+		
+		String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+       	String orderId = HConstants.HTMSD + currentYear.substring(2, 4) + shoppingOrder.getOrderId();
+		ShoppingItem shoppingItem = CommonUtil.getShoppingItem(shoppingOrder.getShoppingItemId());
+		
+		valueTokens[0] = shoppingOrder.getUserName();
+		valueTokens[1] = orderId;
+		valueTokens[2] = (Validator.isNotNull(shoppingItem)? shoppingItem.getProductCode()+ StringPool.DASH +shoppingItem.getName():StringPool.DASH);
+		valueTokens[3] = df.format(Validator.isNotNull(shoppingItem)? shoppingItem.getTotalPrice() : 0);
+		valueTokens[4] = String.valueOf(shoppingOrder.getQuantity());
+		valueTokens[5] = df.format(shoppingOrder.getTotalPrice());
+		valueTokens[6] = CommonUtil.getPriceInNumberFormat(shoppingOrder.getTotalPrice(), HConstants.RUPEE_SYMBOL);
+		valueTokens[7] = shoppingOrder.getShippingMoble();
+		valueTokens[8] = GenerateInvoice.getAddress(shoppingOrder); 
+		
+		return valueTokens;
+	}
+	
+	public String getArticleId(int orderStatus) {
+		
+		String articleId = StringPool.BLANK;
+		AssetCategory category = CommonUtil.getAssetCategoryById(orderStatus);
+		if (Validator.isNull(category)) return StringPool.BLANK;
+		
+		if (category.getName().equals(HConstants.CANCEL_ORDER_STATUS)) {
+			articleId = "ORDER_CANCELLED";
+		} else if (category.getName().equals(HConstants.DELIVERED_STATUS)) {
+			articleId = "ORDER_DELIVERED";
+		} else if (category.getName().equals(HConstants.SHIPPING_STATUS)) {
+			articleId = "ORDER_SHIPPED";
+		}
+		return articleId;
 	}
 }

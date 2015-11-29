@@ -21,6 +21,7 @@ import com.htmsd.slayer.NoSuchShoppingItem_CartException;
 import com.htmsd.slayer.model.ShoppingCart;
 import com.htmsd.slayer.model.ShoppingItem_Cart;
 import com.htmsd.slayer.service.ShoppingCartLocalServiceUtil;
+import com.htmsd.slayer.service.ShoppingItem_CartLocalServiceUtil;
 import com.htmsd.slayer.service.base.ShoppingItem_CartLocalServiceBaseImpl;
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -129,5 +130,19 @@ public class ShoppingItem_CartLocalServiceImpl
 	
 	public List<ShoppingItem_Cart> getShoppingItemByItemId(long itemId) throws SystemException {
 		return shoppingItem_CartPersistence.findByItemId(itemId);
+	}
+	
+	public ShoppingItem_Cart updateShoppingItem_Cart(long id, int quantity, double totalPrice) {
+		
+		ShoppingItem_Cart shoppingItem_Cart =  null;
+		try {
+			shoppingItem_Cart =  fetchShoppingItem_Cart(id);
+			shoppingItem_Cart.setQuantity(quantity);
+			shoppingItem_Cart.setTotalPrice(totalPrice);
+			updateShoppingItem_Cart(shoppingItem_Cart);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		return shoppingItem_Cart;
 	}
 }

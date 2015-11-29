@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US" default-locale="en_US">
+	<dynamic-element name="Subject" type="text" index-type="keyword" index="0">
+		<dynamic-content language-id="en_US"><![CDATA[Cancellation of your order [$ORDER_ID$] / Feedback Requested]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element name="Message" type="text_area" index-type="keyword" index="0">
+		<dynamic-content language-id="en_US">
+			<![CDATA[ 
+				<p><strong>Hi [$USER_NAME$],</strong></p>
+
+				<p>Greetings from Htmsdpets.com!</p>
+				
+				<p>We would like to inform you that we are processing your cancellation request for the following items in the Order [$ORDER_ID$]</p>
+				
+				<table border="1" cellpadding="1" cellspacing="1" style="width: 500px;">
+					<thead>
+						<tr>
+							<th scope="col">ITEM</th>
+							<th scope="col">CANCELLED QTY</th>
+							<th scope="col">PRICE/UNIT</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td style="text-align: center;">[$PRODUCT_DETAILS$]</td>
+							<td style="text-align: center;">[$QTY$]</td>
+							<td style="text-align: center;"><strong>[$TOTAL$]</strong></td>
+						</tr>
+					</tbody>
+				</table>
+				
+				<hr/>
+				
+				<p>&nbsp;</p>
+				
+				<p>Please note that items were already dispatched by the Seller and we have initiated cancel request with the courier partner. In case delivery is attempted, feel free to reject the shipment with the reason as already cancelled.</p>
+				
+				<p>&nbsp;</p>
+				
+				<p>Regards,</p>
+				
+				<p>HTMSD Admin</p>
+			]]>
+			</dynamic-content>
+	</dynamic-element>
+</root>

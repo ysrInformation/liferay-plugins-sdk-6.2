@@ -158,6 +158,13 @@
 		<column name="shippingMoble" type="String"/>
 		<column name="shippingAltMoble" type="String"/>
 		
+		<column name="quantity" type="int"/>
+		<column name="sellerId" type="long"/>
+		<column name="shoppingItemId" type="long"/>
+		<column name="totalPrice" type="double"/>
+		<column name="sellerName" type="String"/>
+		<column name="cancelReason" type="String"/>
+		
 		<!-- Finder methods -->
 		<finder return-type="Collection" name="UserId">
 			<finder-column name="userId"/>

@@ -2,27 +2,29 @@
 
 <%
 	ResultRow row = (ResultRow)request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
-	ShoppingOrderItem shoppingOrderItem = (ShoppingOrderItem) row.getObject();
+	ShoppingOrder shoppingOrderItem = (ShoppingOrder) row.getObject();
 	
 	long orderId = shoppingOrderItem.getOrderId();
-	long orderItemId = shoppingOrderItem.getItemId();
 	String tabName = ParamUtil.getString(request, "tab1", "Pending"); 
 	
 	PortletURL  updateOrderStatus = renderResponse.createRenderURL();
 	updateOrderStatus.setWindowState(LiferayWindowState.POP_UP);
 	updateOrderStatus.setParameter(HConstants.JSP_PAGE, "/html/orderpanel/order-status-form.jsp");
 	updateOrderStatus.setParameter("orderId", String.valueOf(orderId));
-	updateOrderStatus.setParameter("orderItemId", String.valueOf(orderItemId));
 	
 	PortletURL  viewRecieptURL = renderResponse.createRenderURL();
 	viewRecieptURL.setWindowState(LiferayWindowState.POP_UP);
 	viewRecieptURL.setParameter(HConstants.JSP_PAGE, "/html/orderpanel/reciept.jsp");
 	viewRecieptURL.setParameter("orderId", String.valueOf(orderId));
-	viewRecieptURL.setParameter("orderItemId", String.valueOf(orderItemId));
+	
+	PortletURL sendInvoiceURL = renderResponse.createActionURL();
+	sendInvoiceURL.setParameter(ActionRequest.ACTION_NAME, "generateInvoice");
+	sendInvoiceURL.setParameter("orderId", String.valueOf(orderId));
 	
 	if (Validator.isNotNull(tabName)) {
 		updateOrderStatus.setParameter("tab1", tabName); 
 		viewRecieptURL.setParameter("tab1", tabName);
+		sendInvoiceURL.setParameter("tabName", tabName);
 	}
 	
 	String updateStatus = "javascript:showPopup('"+updateOrderStatus.toString()+"','"+"Update Order Status','1200"+"');";
@@ -32,7 +34,7 @@
 <liferay-ui:icon-menu>
 	<liferay-ui:icon image="view" message="view-reciept" url="<%= viewReciept %>" />
 	<liferay-ui:icon image="edit" message="update-status"  url="<%= updateStatus  %>" />
-	<%-- <liferay-ui:icon image="mail" message="send-mail" url="#" /> --%>
+	<liferay-ui:icon image="post" message="send-invoice" url="<%= sendInvoiceURL.toString() %>" /> 
 </liferay-ui:icon-menu>
 
 <script type="text/javascript">

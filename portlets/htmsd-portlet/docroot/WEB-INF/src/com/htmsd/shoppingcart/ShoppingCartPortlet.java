@@ -1,7 +1,9 @@
 package com.htmsd.shoppingcart;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.portlet.ActionRequest;
@@ -12,16 +14,19 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpSession;
 
+import com.htmsd.orderpanel.GenerateInvoice;
 import com.htmsd.slayer.model.Invoice;
+import com.htmsd.slayer.model.ShoppingCart;
 import com.htmsd.slayer.model.ShoppingItem;
 import com.htmsd.slayer.model.ShoppingItem_Cart;
 import com.htmsd.slayer.model.ShoppingOrder;
-import com.htmsd.slayer.model.ShoppingOrderItem;
+import com.htmsd.slayer.model.WholeSale;
 import com.htmsd.slayer.service.InvoiceLocalServiceUtil;
+import com.htmsd.slayer.service.ShoppingCartLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingItemLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingItem_CartLocalServiceUtil;
-import com.htmsd.slayer.service.ShoppingOrderItemLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
+import com.htmsd.slayer.service.WholeSaleLocalServiceUtil;
 import com.htmsd.util.CommonUtil;
 import com.htmsd.util.HConstants;
 import com.htmsd.util.NotificationUtil;
@@ -35,6 +40,7 @@ import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -59,28 +65,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		_log.info("In checkout method ..."); 
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		
-		String shippingFirstName = ParamUtil.getString(actionRequest, "firstName");
-		String shippingLastName = ParamUtil.getString(actionRequest, "lastName");
-		String shippingEmailAddress = ParamUtil.getString(actionRequest, "email");
-		String shippingMoble = ParamUtil.getString(actionRequest, "mobileNumber");
-		String shippingAltMoble = ParamUtil.getString(actionRequest, "altNumber");
-		String shippingStreet = ParamUtil.getString(actionRequest, "street");
-		String shippingCity = ParamUtil.getString(actionRequest, "city");
-		String shippingZip = ParamUtil.getString(actionRequest, "zip");
-		String shippingCountry = ParamUtil.getString(actionRequest, "country");
-		String shippingState = ParamUtil.getString(actionRequest, "state");
-		
-		ShoppingOrder shoppingOrder = ShoppingOrderLocalServiceUtil.insertShoppingOrder(HConstants.PENDING, 
-				themeDisplay.getUserId(),themeDisplay.getCompanyId(),themeDisplay.getScopeGroupId(),
-				shippingFirstName, shippingLastName, shippingStreet, shippingCity, shippingZip, 
-				shippingEmailAddress, shippingState, shippingCountry, shippingMoble, shippingAltMoble);
-		
-		_log.info("orderId is ==>"+shoppingOrder.getOrderId()); 
-		Invoice invoice = InvoiceLocalServiceUtil.insertInvoice(themeDisplay.getUserId(), shoppingOrder.getOrderId());
-		addShoppingOrderItem(actionRequest, themeDisplay, shoppingOrder);
-		
-		NotificationUtil.sendNotification(themeDisplay.getScopeGroupId(), 
-				themeDisplay.getUser().getFullName(), themeDisplay.getUser().getEmailAddress(), "EMAIL_NOTIFICATION", new String[1],new String[1]);
+		addShoppingOrderItems(actionRequest);
 		
 		PortletConfig portletConfig = (PortletConfig) actionRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
 		String successMessage = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "you-order-has-been-registered-you-may-get-email-shortly");
@@ -94,43 +79,71 @@ public class ShoppingCartPortlet extends MVCPortlet {
 	 * @param themeDisplay
 	 * @param shoppingOrder
 	 */
-	private void addShoppingOrderItem(ActionRequest actionRequest, ThemeDisplay themeDisplay, ShoppingOrder shoppingOrder) {
+	private void addShoppingOrderItems(ActionRequest actionRequest) {
 		
-		double totalPrice = 0;
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		List<ShoppingItem_Cart> shoppingItem_Carts = CommonUtil.getUserCartItems(themeDisplay.getUserId());
+		
+		String shippingFirstName = ParamUtil.getString(actionRequest, "firstName");
+		String shippingLastName = ParamUtil.getString(actionRequest, "lastName");
+		String shippingEmailAddress = ParamUtil.getString(actionRequest, "email");
+		String shippingMoble = ParamUtil.getString(actionRequest, "mobileNumber");
+		String shippingAltMoble = ParamUtil.getString(actionRequest, "altNumber");
+		String shippingStreet = ParamUtil.getString(actionRequest, "street");
+		String shippingCity = ParamUtil.getString(actionRequest, "city");
+		String shippingZip = ParamUtil.getString(actionRequest, "zip");
+		String shippingCountry = ParamUtil.getString(actionRequest, "country");
+		String shippingState = ParamUtil.getString(actionRequest, "state");
 		
 		if (Validator.isNotNull(shoppingItem_Carts) && shoppingItem_Carts.size() > 0) {
 			for (ShoppingItem_Cart shoppingItem_Cart:shoppingItem_Carts) {
 				
 				ShoppingItem shoppingItem = CommonUtil.getShoppingItem(shoppingItem_Cart.getItemId()); 
-				long quantity = shoppingItem.getQuantity() - shoppingItem_Cart.getQuantity();
-				if (Validator.isNotNull(shoppingItem)) {
-					totalPrice = shoppingItem_Cart.getTotalPrice();
-					ShoppingOrderItem shoppingOrderItem = ShoppingOrderItemLocalServiceUtil
-						.insertShoppingOrderItem(shoppingItem_Cart.getQuantity(), HConstants.PENDING, totalPrice, themeDisplay.getUserId(), 
-						themeDisplay.getCompanyId(), themeDisplay.getScopeGroupId(), shoppingOrder.getOrderId(), shoppingItem.getItemId(),
-						shoppingItem.getName(), shoppingItem.getDescription(), shoppingItem.getProductCode());
+
+				if (Validator.isNull(shoppingItem)) continue;
 					
-					Invoice invoice = InvoiceLocalServiceUtil.insertInvoice(themeDisplay.getUserId(), shoppingOrderItem.getItemId());
-					//updating shoppingItem quantity
-					if (Validator.isNotNull(shoppingOrderItem)) {
-						try {
-							ShoppingItem shoppingItem2 = ShoppingItemLocalServiceUtil.fetchShoppingItem(shoppingOrderItem.getShoppingItemId());
-							shoppingItem2.setQuantity(quantity);
-							ShoppingItemLocalServiceUtil.updateShoppingItem(shoppingItem2);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
-					
-					//deleting items from shoppingItem_Cart table. 
+				int orderStatus = HConstants.PENDING;
+				int orderQuantity = shoppingItem_Cart.getQuantity();
+				long userId = themeDisplay.getUserId();
+				long groupId = themeDisplay.getScopeGroupId();
+				long companyId = themeDisplay.getCompanyId();
+				long sellerId = shoppingItem.getUserId();
+				long shoppingItemId = shoppingItem.getItemId();
+				double totalPrice = shoppingItem_Cart.getTotalPrice();
+				String sellerName = CommonUtil.getUserFullName(sellerId);  
+				String articleId = "ORDER_COMFIRMATION";
+				
+				ShoppingOrder shoppingOrder = ShoppingOrderLocalServiceUtil.insertShoppingOrder(orderStatus, orderQuantity, 
+						shoppingItemId, sellerId, userId, companyId, groupId, totalPrice, sellerName, StringPool.BLANK, shippingFirstName, 
+						shippingLastName, shippingStreet, shippingCity, shippingZip, shippingEmailAddress, shippingState,
+						shippingCountry, shippingMoble, shippingAltMoble);
+				
+				Invoice invoice = InvoiceLocalServiceUtil.insertInvoice(themeDisplay.getUserId(), shoppingOrder.getOrderId());
+				
+				//updating shoppingItem quantity
+				if (Validator.isNotNull(shoppingOrder)) {
 					try {
-						ShoppingItem_CartLocalServiceUtil.deleteShoppingItem_Cart(shoppingItem_Cart.getId());
-					} catch (PortalException e) {
-						e.printStackTrace();
-					} catch (SystemException e) {
+						long quantity = shoppingItem.getQuantity() - shoppingItem_Cart.getQuantity();
+						ShoppingItem shoppingItem2 = ShoppingItemLocalServiceUtil.fetchShoppingItem(shoppingOrder.getShoppingItemId());
+						shoppingItem2.setQuantity(quantity);
+						ShoppingItemLocalServiceUtil.updateShoppingItem(shoppingItem2);
+					} catch (Exception e) {
 						e.printStackTrace();
 					}
+					
+					String[] tokens = ShoppingCartLocalServiceUtil.getOrderTokens();
+					String[] values = ShoppingCartLocalServiceUtil.getValueTokens(shoppingOrder);
+					NotificationUtil.sendNotification(themeDisplay.getScopeGroupId(), shoppingOrder.getUserName(),
+							shoppingOrder.getShippingEmailAddress(), articleId, tokens, values); 
+				}
+				
+				//deleting items from shoppingItem_Cart table. 
+				try {
+					ShoppingItem_CartLocalServiceUtil.deleteShoppingItem_Cart(shoppingItem_Cart.getId());
+				} catch (PortalException e) {
+					e.printStackTrace();
+				} catch (SystemException e) {
+					e.printStackTrace();
 				}
 			}
 		} 
@@ -160,19 +173,13 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		HttpSession session = PortalUtil.getHttpServletRequest(resourceRequest).getSession();
 		List<ShoppingBean> shoppingCartList = CommonUtil.getGuestUserList(session);
 		List<ShoppingBean> newShoppingCartList = new ArrayList<ShoppingBean>();
-		
+		itemPrice = getWholeSalePrice(quantity, itemId, itemPrice);
+				
 		if (id > 0) {
 			double totalPrice = quantity * itemPrice;
-			try {
-				ShoppingItem_Cart shoppingItem_Cart =  ShoppingItem_CartLocalServiceUtil.fetchShoppingItem_Cart(id);
-				shoppingItem_Cart.setQuantity(quantity);
-				shoppingItem_Cart.setTotalPrice(totalPrice);
-				ShoppingItem_CartLocalServiceUtil.updateShoppingItem_Cart(shoppingItem_Cart);
-			} catch (SystemException e) {
-				e.printStackTrace();
-			}
+			ShoppingItem_CartLocalServiceUtil.updateShoppingItem_Cart(id, quantity, totalPrice);
 		} else {
-			if (Validator.isNotNull(shoppingCartList) && shoppingCartList.size() > 0){
+			if (Validator.isNotNull(shoppingCartList) && shoppingCartList.size() > 0) {
 				for (ShoppingBean shoppingBean:shoppingCartList) {
 					if (itemId == shoppingBean.getItemId()) {
 						double total = quantity * itemPrice;
@@ -243,19 +250,47 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		_log.info("Inside CancelOrder method ..."); 
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		long orderId = ParamUtil.getLong(actionRequest, "orderId");
-		long orderItemId = ParamUtil.getLong(actionRequest, "orderItemId");
-		long categoryId = ShoppingOrderLocalServiceUtil.getAssetCategoryIdByName(HConstants.CANCEL_ORDER_STATUS);
-	
-		ShoppingOrderLocalServiceUtil.updateShoppingOrderItem((int)categoryId, orderItemId);
+		long orderStatus = ShoppingOrderLocalServiceUtil.getAssetCategoryIdByName(HConstants.CANCEL_ORDER_STATUS);
+		String cancelReason = ParamUtil.getString(actionRequest, "cancelReason");
+		String articleId = ShoppingCartLocalServiceUtil.getArticleId((int)orderStatus);
 		
-		NotificationUtil.sendNotification(themeDisplay.getScopeGroupId(), 
-				themeDisplay.getUser().getFullName(), themeDisplay.getUser().getEmailAddress(), "EMAIL_NOTIFICATION", new String[1],new String[1]);
+		ShoppingOrderLocalServiceUtil.updateShoppingOrder((int)orderStatus, orderId, cancelReason);
+		
+		ShoppingOrder shoppingOrder = null;
+		try {
+			shoppingOrder = ShoppingOrderLocalServiceUtil.fetchShoppingOrder(orderId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		if (Validator.isNotNull(shoppingOrder)) {
+			String[] tokens = ShoppingCartLocalServiceUtil.getOrderTokens();
+			String[] values = ShoppingCartLocalServiceUtil.getValueTokens(shoppingOrder);
+			NotificationUtil.sendNotification(themeDisplay.getScopeGroupId(), 
+					shoppingOrder.getUserName(), shoppingOrder.getShippingEmailAddress(), articleId, tokens, values);
+		}
 		
 		PortletConfig portletConfig = (PortletConfig) actionRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
 		String successMessage = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "you-have-requested-to-cancel-the-order-successfully");
 		SessionMessages.add(actionRequest, "request_processed", successMessage);
 		actionResponse.setRenderParameter(HConstants.JSP_PAGE, HConstants.PAGE_SHOPPING_CART_DETAILS); 
 		actionResponse.setRenderParameter("tab1", "my-orders");
+	}
+	
+	
+	private double getWholeSalePrice(int quantity, long itemId, double itemPrice) {
+		
+		List<WholeSale> wholesaleList = WholeSaleLocalServiceUtil.getWholeSaleByQty(itemId, quantity);
+		
+		if (Validator.isNotNull(wholesaleList)) {
+			for (WholeSale wholeSale: wholesaleList) {
+				if (quantity == wholeSale.getQuantity() || quantity >= wholeSale.getQuantity()) {
+					itemPrice = wholeSale.getPrice(); 
+				}
+			}
+		}
+		
+		return itemPrice;
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(ShoppingCartPortlet.class.getName());

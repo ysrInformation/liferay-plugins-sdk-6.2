@@ -603,4 +603,14 @@ public class CommonUtil {
 				(String) expandoBridge.getAttribute(attributeName) : "N/A";
 		return expandoValues;
 	}
+	
+	public static String getUserFullName(long userId) {
+		User user = null;
+		try {
+			user = UserLocalServiceUtil.fetchUser(userId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		return (Validator.isNotNull(user) ? user.getFullName() : StringPool.BLANK);
+	}
 }

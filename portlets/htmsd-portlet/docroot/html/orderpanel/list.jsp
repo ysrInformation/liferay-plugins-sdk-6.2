@@ -3,7 +3,7 @@
 <%
 	int slno = 1;
 	PortletURL iteratorURL = renderResponse.createRenderURL();
-	iteratorURL.setParameter("jspPage", "/html/orderpanel/view.jsp");
+	iteratorURL.setParameter(HConstants.JSP_PAGE, "/html/orderpanel/view.jsp");
 	
 	String tabName = ParamUtil.getString(request, "tab1", "Pending"); 
 	String orderByCol = ParamUtil.getString(request, "orderByCol","createDate");
@@ -15,10 +15,16 @@
 	}
 	
 	int orderStatus = ShoppingOrderLocalServiceUtil.getOrderStatusByTabName(tabName);
-	List<ShoppingOrderItem> shoppingOrders = new ArrayList<ShoppingOrderItem>();
+	List<ShoppingOrder> shoppingOrders = new ArrayList<ShoppingOrder>();
 	
 	PortletURL searchURL = renderResponse.createActionURL();
 	searchURL.setParameter(ActionRequest.ACTION_NAME, "processAction");
+
+	String val2 = (String) portletSession.getAttribute("currentCurrencyId", PortletSession.APPLICATION_SCOPE);
+	long currencyId1 = (Validator.isNull(val2)) ?  0 : Long.valueOf(val2);
+	System.out.println("CurrencyID ==>"+CommonUtil.getCurrencySymbol(currencyId1));
+
+	double currentRate = CommonUtil.getCurrentRate(Long.valueOf(currencyId1));
 %>
 
 <div class="orderlist">
@@ -41,9 +47,9 @@
 			 			searchContainer.getEnd(), tabName) : ShoppingOrderLocalServiceUtil.searchItems(keyword, tabName, searchContainer.getStart(),
 			 					searchContainer.getEnd());
 			 				
-				List<ShoppingOrderItem> copy_itemList = new ArrayList<ShoppingOrderItem>();
+				List<ShoppingOrder> copy_itemList = new ArrayList<ShoppingOrder>();
 				copy_itemList.addAll(shoppingOrders);
-			 	Comparator<ShoppingOrderItem> beanComparator = new BeanComparator(orderByCol);
+			 	Comparator<ShoppingOrder> beanComparator = new BeanComparator(orderByCol);
 				Collections.sort(copy_itemList, beanComparator);			
 				if (orderByType.equals("desc")) {
 					Collections.reverse(copy_itemList);
@@ -58,22 +64,21 @@
 				%>
 			</liferay-ui:search-container-results>		
 	        
-	        <liferay-ui:search-container-row className="com.htmsd.slayer.model.ShoppingOrderItem" modelVar="shoppingOrder" indexVar="indexVar" keyProperty="orderId">
+	        <liferay-ui:search-container-row className="com.htmsd.slayer.model.ShoppingOrder" modelVar="shoppingOrder" 
+	        	indexVar="indexVar" keyProperty="orderId">
 	           
 	            <% 
-	            ShoppingOrder shoppingOrder2 = ShoppingOrderLocalServiceUtil.fetchShoppingOrder(shoppingOrder.getOrderId());
-	            
-	           	String userName = Validator.isNotNull(shoppingOrder) ? shoppingOrder2.getShippingFirstName()
-	           			.concat(StringPool.SPACE).concat(shoppingOrder2.getShippingLastName()):"N/A";
+	            double totalPrice = (currentRate == 0) ? shoppingOrder.getTotalPrice() : shoppingOrder.getTotalPrice() / currentRate;
+	           	String userName = shoppingOrder.getUserName();
 	           	String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
-	           	String orderId = HConstants.HTMSD + currentYear.substring(2, 4) + shoppingOrder.getItemId();
+	           	String orderId = HConstants.HTMSD + currentYear.substring(2, 4) + shoppingOrder.getOrderId();
 	           	String status = CommonUtil.getOrderStatus(shoppingOrder.getOrderStatus());
 	           	String orderedDate = HConstants.DATE_FORMAT.format(shoppingOrder.getCreateDate()); 
-	            String sellerName = StringPool.BLANK;
+	            String sellerName = shoppingOrder.getSellerName();
+	            String itemName = StringPool.BLANK;
 	            try {
 	            	ShoppingItem shoppingItem = CommonUtil.getShoppingItem(shoppingOrder.getShoppingItemId());
-	            	User seller =  UserLocalServiceUtil.fetchUser(shoppingItem.getUserId());
-	            	sellerName = (Validator.isNotNull(seller)) ? seller.getFullName() : "N/A";
+	            	itemName = Validator.isNotNull(shoppingItem) ?shoppingItem.getName() : "N/A"; 
 	            } catch(Exception e) {
 	            	System.out.println(e);
 	            }
@@ -94,7 +99,7 @@
 	            		<portlet:param name="<%= Constants.CMD %>" value="itemsDetails"/> 
 	            	</portlet:renderURL>
 	            	<% String itemsDetails = "javascript:showPopupDetails('"+itemDetailsURL+"','1200','Product Details');"; %>
-	            	<a href="<%= itemsDetails %>" ><%= shoppingOrder.getName() %></a>
+	            	<a href="<%= itemsDetails %>" ><%= itemName %></a>
 	            </liferay-ui:search-container-column-text> 
 	    
 	    		<liferay-ui:search-container-column-text name="order-date" value="<%= orderedDate %>" orderable="true" orderableProperty="createDate"/>
@@ -106,7 +111,7 @@
 	            </liferay-ui:search-container-column-text>
 	            
 	            <liferay-ui:search-container-column-text name="total" >
-	            	<%= CommonUtil.getPriceInNumberFormat(shoppingOrder.getTotalPrice(), HConstants.RUPEE_SYMBOL) %> 
+	            	<%= CommonUtil.getPriceFormat(totalPrice, currencyId1)%> 
 	            </liferay-ui:search-container-column-text>
 	            
 	            <liferay-ui:search-container-column-jsp name="action"  path="/html/orderpanel/action.jsp"/> 
