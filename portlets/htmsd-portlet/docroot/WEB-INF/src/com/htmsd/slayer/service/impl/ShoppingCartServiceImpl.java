@@ -107,7 +107,7 @@ public class ShoppingCartServiceImpl extends ShoppingCartServiceBaseImpl {
 	private void getItemJSONArray(JSONArray jsonArray,
 			List<ShoppingOrder> orderItems, long currencyId, long groupId) {
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
 		for (ShoppingOrder orderItem : orderItems) {
 
 			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
