@@ -222,9 +222,9 @@ function createRenderURL(jspPath, itemId, orderId, showItemDetail) {
 
 function disableButton(status) {
 	
-	var flag = false;
+	var flag = true;
 	if (status == '<%= HConstants.PENDING %>') {
-		flag = true;
+		flag = false;
 	}
 	return flag;
 }
