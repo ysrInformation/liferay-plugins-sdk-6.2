@@ -1,3 +1,4 @@
+<%@page import="com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil"%>
 <%@page import="com.liferay.portal.model.User"%>
 <%@page import="com.liferay.portal.service.UserLocalServiceUtil"%>
 <%@page import="com.liferay.portal.service.UserLocalService"%>
@@ -135,7 +136,11 @@
 			</liferay-ui:search-container-column-text>
 			
 		<liferay-ui:search-container-column-text name="total-sold" >
-			
+			<%
+				int orderStatus = (int) ShoppingOrderLocalServiceUtil.getAssetCategoryIdByName(HConstants.DELIVERED_STATUS);
+				int itemsSold = ShoppingOrderLocalServiceUtil.getTotalItemsSold(orderStatus, item.getItemId());
+			%>
+			<%= itemsSold %>
 		</liferay-ui:search-container-column-text>
 		</c:if>
 		

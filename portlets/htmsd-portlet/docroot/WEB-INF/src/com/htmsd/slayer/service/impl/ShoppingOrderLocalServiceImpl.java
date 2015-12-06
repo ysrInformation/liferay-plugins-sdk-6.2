@@ -374,4 +374,40 @@ public class ShoppingOrderLocalServiceImpl
 
 		return returnDate;
 	}
+	
+	public List<ShoppingOrder> getItemsByItemId_OrderStatus(int orderStatus, long itemId) throws SystemException{
+		return shoppingOrderPersistence.findByItemId_OrderStatus(itemId, orderStatus);
+	}
+	
+	public int getTotalItemsSold(int orderStatus, long itemId) {
+		
+		List<ShoppingOrder> shoppingOrders = new ArrayList<ShoppingOrder>();
+		try {
+			shoppingOrders = getItemsByItemId_OrderStatus(orderStatus, itemId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return (Validator.isNotNull(shoppingOrders) ? shoppingOrders.size():0); 
+	}
+	
+	public List<ShoppingOrder> getShoppingOrderByUserId(int start, int end, long userId) {
+		List<ShoppingOrder> shoppingOrders = new ArrayList<ShoppingOrder>();
+		try {
+			shoppingOrders = shoppingOrderPersistence.findByUserId(userId, start, end);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		return shoppingOrders;
+	}
+	
+	public int getItemsCountByUserId(long userId) {
+		int count = 0;
+		try {
+			count = shoppingOrderPersistence.countByUserId(userId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		return (Validator.isNotNull(count)? count : 0); 
+	}
 }

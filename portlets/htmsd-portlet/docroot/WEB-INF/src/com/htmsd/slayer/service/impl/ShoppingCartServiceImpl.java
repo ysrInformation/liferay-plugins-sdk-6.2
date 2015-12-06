@@ -22,6 +22,7 @@ import com.htmsd.slayer.NoSuchShoppingCartException;
 import com.htmsd.slayer.model.ShoppingCart;
 import com.htmsd.slayer.model.ShoppingItem;
 import com.htmsd.slayer.model.ShoppingItem_Cart;
+import com.htmsd.slayer.model.ShoppingOrder;
 import com.htmsd.slayer.model.ShoppingOrderItem;
 import com.htmsd.slayer.service.ShoppingItemLocalServiceUtil;
 import com.htmsd.slayer.service.base.ShoppingCartServiceBaseImpl;
@@ -96,18 +97,18 @@ public class ShoppingCartServiceImpl extends ShoppingCartServiceBaseImpl {
 		_log.info("Getting Shopping Item List Start:"+start+" End:"+end);
 		
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
-		List<ShoppingOrderItem> shoppingOrderItems = new ArrayList<ShoppingOrderItem>();
-		shoppingOrderItems = shoppingOrderItemLocalService.getShoppingOrderItems(start, end, userId);
+		List<ShoppingOrder> shoppingOrderItems = new ArrayList<ShoppingOrder>();
+		shoppingOrderItems = shoppingOrderLocalService.getShoppingOrderByUserId(start, end, userId);
 		getItemJSONArray(jsonArray, shoppingOrderItems, currencyId, groupId);
 		_log.info(jsonArray);
 		return jsonArray;
 	}
 
 	private void getItemJSONArray(JSONArray jsonArray,
-			List<ShoppingOrderItem> orderItems, long currencyId, long groupId) {
+			List<ShoppingOrder> orderItems, long currencyId, long groupId) {
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-		for (ShoppingOrderItem orderItem : orderItems) {
+		for (ShoppingOrder orderItem : orderItems) {
 
 			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 			ShoppingItem shoppingItem = null;
@@ -124,9 +125,7 @@ public class ShoppingCartServiceImpl extends ShoppingCartServiceBaseImpl {
 			
 			jsonObject.put(HConstants.ITEM_ID, shoppingItem.getItemId());
 			jsonObject.put(HConstants.NAME, shoppingItem.getName());
-			jsonObject.put(HConstants.DESCRIPTION, StringUtil.shorten(shoppingItem.getDescription(), 50, ". . ."));
 			jsonObject.put(HConstants.TOTAL_PRICE, total);
-			jsonObject.put("orderItemId", orderItem.getItemId());
 			jsonObject.put("orderId", orderItem.getOrderId());
 			jsonObject.put("quantity", orderItem.getQuantity());
 			jsonObject.put("orderDate", sdf.format(orderItem.getCreateDate()));
