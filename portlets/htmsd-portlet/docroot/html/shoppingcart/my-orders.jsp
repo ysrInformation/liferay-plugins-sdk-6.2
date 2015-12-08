@@ -177,14 +177,16 @@ function render(data) {
 			var cancelOrder = "javascript:showPopupDetails('"+cancelURL+"','1000','Cancel Order')";
 			
 			console.log('itemURL ::'+itemURL); 
-			 
+			console.log("orderstatus :"+item.orderStatus);
+			var disableBtn = (item.orderStatus == '<%= HConstants.PENDING %>') ? '' : 'disabled="'+true+'"';
+			
 			myOrdersDiv += '<div class="item-details">';
 			myOrdersDiv += '<div class="row-fluid first-item">';
 			myOrdersDiv += '<div class="span3 item-Image"><a href="'+itemsDetails+'"><img src="'+imageSrc+'" style="width: 100px; height: 100px"/></a></div>';
 			myOrdersDiv += '<div class="span4"><div title="'+itemName+'"><a href="'+itemsDetails+'">'+itemName+'</a></div><div><span class="qty">QTY : '+quantity+'</span></div></div>';
 			myOrdersDiv += '<div class="span3"><div>'+formatPrice(total)+'</div><div class="'+status+'">Status : '+status+'</div></div>'; 
 			myOrdersDiv += '<div class="span2" title="Cancel this item"><a href="'+cancelOrder+'">'; 
-			myOrdersDiv += '<button type="button" disabled="'+disableButton(status)+'" class="btn cancel-btn"> Cancel Order </button>';
+			myOrdersDiv += '<button type="button" '+disableBtn+' class="btn cancel-btn"> Cancel Order </button>';
 			myOrdersDiv += '</a></div>';
 			myOrdersDiv += '</div>';  
 			myOrdersDiv += '<div class="row-fluid"><div class="span5"><span>Date : '+orderDate+'</span></div><div class="pull-right"><span class="order-total">Order Total : '+ formatPrice(total) +'</span></div></div>';
@@ -218,15 +220,6 @@ function createRenderURL(jspPath, itemId, orderId, showItemDetail) {
 		renderURL = ajaxURL.toString();
 	});
 	return renderURL;
-}
-
-function disableButton(status) {
-	
-	var flag = true;
-	if (status == '<%= HConstants.PENDING %>') {
-		flag = false;
-	}
-	return flag;
 }
 
 showPopupDetails = function(url, width, title) {
