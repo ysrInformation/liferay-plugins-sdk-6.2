@@ -345,52 +345,21 @@ public class CommonUtil {
 		return orderStatusString;
 	}
 	
-	public static int[] getItemsQuantity(long itemId, long cartId, HttpSession httpSession) {
+	public static int[] getItemsQuantity(long itemId) {
 		
-		int allUserQuantity = 0;
 		int remainingQnty = 0;
-		int userQnty = 0;
 		long totalStock = 0l;
 		int[] quantityArray = null;
-		ShoppingItem_Cart shoppingItem_Cart = null;
 		ShoppingItem shoppingItem = CommonUtil.getShoppingItem(itemId);
-		List<ShoppingItem_Cart> shoppingItem_Carts = new ArrayList<ShoppingItem_Cart>();
 		
 		if (Validator.isNotNull(shoppingItem)) {
 			totalStock = shoppingItem.getQuantity();
-			try {
-				shoppingItem_Carts = ShoppingItem_CartLocalServiceUtil.getShoppingItemByItemId(itemId);
-			} catch (SystemException e) {
-				e.printStackTrace();
-				_log.error("No items exist with this Id ::"+e.getMessage()); 
-			}
-			try {
-				shoppingItem_Cart = ShoppingItem_CartLocalServiceUtil.findByCartAndItemId(cartId, itemId);
-			} catch (NoSuchShoppingItem_CartException e) {
-				_log.error("No such Item exist with the cartId ::"+e.getMessage()); 
-			} catch (SystemException e) {
-				e.printStackTrace();
-			}
-			
-			if (Validator.isNotNull(shoppingItem_Carts) && shoppingItem_Carts.size() > 0) {
-				for (ShoppingItem_Cart shoppingItem_cart : shoppingItem_Carts) {
-					allUserQuantity += shoppingItem_cart.getQuantity();
-				}
-			}
-			
-			if (cartId == 0 || Validator.isNull(shoppingItem_Cart)) {
-				userQnty =  getGuestUserQuantity(itemId, httpSession);
-			} else {
-				userQnty = (shoppingItem_Cart.getQuantity() > 0) ? shoppingItem_Cart.getQuantity()  : 0; 
-			}
 		}
 		
-		if ((allUserQuantity) < totalStock) {
-			remainingQnty = ((int) totalStock - allUserQuantity) + userQnty;
-		} else if(totalStock == -1) {
-			remainingQnty = HConstants.MAX_QUANTITY + userQnty;
+		if (totalStock == -1 ){
+			remainingQnty = HConstants.MAX_QUANTITY;
 		} else {
-			remainingQnty = userQnty;
+			remainingQnty = (int) totalStock;
 		}
 		
 		quantityArray = new int[remainingQnty];
