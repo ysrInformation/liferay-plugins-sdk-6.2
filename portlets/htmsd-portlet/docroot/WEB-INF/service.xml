@@ -173,6 +173,11 @@
 		<finder return-type="Collection" name="OrderStatus">
 			<finder-column name="orderStatus"/>
 		</finder>
+		
+		<finder return-type="Collection" name="ItemId_OrderStatus">
+			<finder-column name="shoppingItemId"/>
+			<finder-column name="orderStatus"/>
+		</finder>
 
 	</entity>
 	
