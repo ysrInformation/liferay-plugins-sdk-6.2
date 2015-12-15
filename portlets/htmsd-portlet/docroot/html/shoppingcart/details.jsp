@@ -62,7 +62,7 @@
 					ShoppingItem shoppingItem = CommonUtil.getShoppingItem(itemId);
 					if (Validator.isNotNull(shoppingItem)) {
 						itemExist = true;
-						int quantity[] = CommonUtil.getItemsQuantity(itemId, cartId, session);
+						int quantity[] = CommonUtil.getItemsQuantity(itemId);
 						int qtyLength = quantity.length;
 						double currentRate = CommonUtil.getCurrentRate(Long.valueOf(currencyId2));
 						double price = (currentRate == 0) ? shpCtItem.getTotalPrice() : shpCtItem.getTotalPrice() / currentRate;
