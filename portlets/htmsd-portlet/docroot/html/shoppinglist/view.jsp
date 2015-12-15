@@ -28,6 +28,7 @@
 <style>
 	#no-item-display {
 		text-align: center;
+		display: none;
 	}
 </style>
 <aui:input name="len" type="hidden"/>
@@ -64,7 +65,7 @@
 	<img src="<%=request.getContextPath()%>/images/loader.gif" style="width: 100px; height: 100px"/>
 </div>
 
-<div onclick="javascript:loadProducts()" id="load-button">
+<div onclick="javascript:loadProducts()" id="load-button" style="display: none;">
 	<div id="loader-div">
 		<div>
 			<liferay-ui:message key="view-more"/>
@@ -79,11 +80,13 @@
 	var portletId = '<%= themeDisplay.getPortletDisplay().getId() %>';
 	var searchParam = '<%=searchParam%>';
 	
-	$(function() {
+	$(window).load(function(){
 		if(<%=totalCount%> != 0) {
-			$('#no-item-display').hide();
 			$('#loader-icon').hide();
+		} else {
+			$('#no-item-display').show();
 		}
+	
 		if(searchParam != 'null' && searchParam != "") {
 			getSearchShoppingItems(0, <%=noOfItems%>);
 		} else {
@@ -94,7 +97,9 @@
 		window.onload = $("#<portlet:namespace/>len").val(<%=noOfItems%>);
 		$('#current_count').html(dataLen);
 	});
-	
+	$(window).ready(function(){
+		$('#load-button').show();
+	});
 	<c:choose>
 		<c:when test="<%=Validator.isNotNull(searchParam) && !searchParam.isEmpty()%>">
 			function loadProducts() {
