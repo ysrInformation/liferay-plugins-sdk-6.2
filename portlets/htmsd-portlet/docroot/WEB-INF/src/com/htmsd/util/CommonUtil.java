@@ -582,4 +582,19 @@ public class CommonUtil {
 		}
 		return (Validator.isNotNull(user) ? user.getFullName() : StringPool.BLANK);
 	}
+	
+	public static String getAddressBuilder(long regionId, long countryId, String street, String city, String zip) {
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append(street);
+		sb.append(StringPool.COMMA_AND_SPACE);
+		sb.append(city);
+		sb.append(StringPool.COMMA_AND_SPACE);
+		sb.append(CommonUtil.getState(regionId)); 
+		sb.append(StringPool.SPACE);
+		sb.append(CommonUtil.getCountry(countryId)); 
+		sb.append(StringPool.COMMA_AND_SPACE);
+		sb.append(zip);
+		return sb.toString();
+	}
 }
