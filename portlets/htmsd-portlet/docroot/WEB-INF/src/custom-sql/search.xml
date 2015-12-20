@@ -23,7 +23,7 @@
                     AND NOT si.quantity = 0
                     AND si.status = 1
                     AND si.name like ?
-                    OR ast.name like ? 
+                    AND ast.name like ? 
    				[$sort]
 		 	]]>
 	</sql>
