@@ -149,8 +149,8 @@ public class ShoppingItemFinderImpl extends BasePersistenceImpl<ShoppingItem>
 		query.addEntity("ShoppingItem", ShoppingItemImpl.class);
 		
 		QueryPos queryPos = QueryPos.getInstance(query);
-		queryPos.add(StringPool.PERCENT + tagName+ StringPool.PERCENT);
-		queryPos.add(StringPool.PERCENT + tagName+ StringPool.PERCENT);
+		queryPos.add(StringPool.PERCENT + tagName);
+		queryPos.add(StringPool.PERCENT + tagName);
 		
 		return (List<ShoppingItem>) QueryUtil.list(query, getDialect(), start, end);
 	}
@@ -167,8 +167,8 @@ public class ShoppingItemFinderImpl extends BasePersistenceImpl<ShoppingItem>
 		query.addEntity("ShoppingItem", ShoppingItemImpl.class);
 		
 		QueryPos queryPos = QueryPos.getInstance(query);
-		queryPos.add(StringPool.PERCENT + tagName+ StringPool.PERCENT );
-		queryPos.add(StringPool.PERCENT + tagName+ StringPool.PERCENT);
+		queryPos.add(StringPool.PERCENT + tagName);
+		queryPos.add(StringPool.PERCENT + tagName);
 		
 		return query.list().size();
 	}
