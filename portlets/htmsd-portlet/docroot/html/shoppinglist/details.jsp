@@ -75,6 +75,12 @@
 						</div>
 						<div class="add-to-cart-item-price" id="itemPrice">
 						</div>
+						<c:if test='<%= Validator.isNotNull(cmd) && cmd.equalsIgnoreCase("itemsDetails") %>'>
+							<div class="add-to-cart-item-price" id="itemPrice">
+								<% price = (currentRate == 0) ? price :  price / currentRate; %>
+								<%= CommonUtil.getPriceFormat(price, currencyId) %>
+							</div>
+						</c:if>
 						<div class="add-to-cart-item-quantity" >
 							<c:if test="<%= wholeSales.size() > 0 %>">
 								<table class="qty-discounts">
