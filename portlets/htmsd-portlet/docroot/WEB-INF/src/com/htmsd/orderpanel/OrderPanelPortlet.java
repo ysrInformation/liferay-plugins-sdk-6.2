@@ -1,11 +1,8 @@
 package com.htmsd.orderpanel;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -19,15 +16,8 @@ import javax.portlet.WindowStateException;
 import com.htmsd.slayer.model.ShoppingOrder;
 import com.htmsd.slayer.service.ShoppingCartLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
-import com.htmsd.util.CommonUtil;
 import com.htmsd.util.NotificationUtil;
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
@@ -36,9 +26,10 @@ import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.User;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
@@ -110,39 +101,13 @@ public class OrderPanelPortlet extends MVCPortlet {
 		
 		long orderId = ParamUtil.getLong(actionRequest, "orderId");
 		String tabName = ParamUtil.getString(actionRequest, "tabName");
-		String tempFolderPath = SystemProperties.get(SystemProperties.TMP_DIR)+File.separator+"liferay" + File.separator + "receipts";
+		String isSeller = ParamUtil.getString(actionRequest, "isSeller");
+		
 		String timeStamp = new SimpleDateFormat("ddMMyyyyhhmm").format(new Date());
 		String tempFileName = "Reciept"+timeStamp+".pdf";
-		String filePath=tempFolderPath+File.separator+tempFileName;	
-		File tempFolder = new File(tempFolderPath);
-		if (!tempFolder.exists()) {
-			tempFolder.mkdir();
-		}
+		String filePath = GenerateInvoice.getFilePath(tempFileName);
 		
-		String currentCurrencyId = (String) portletSession.getAttribute("currentCurrencyId", PortletSession.APPLICATION_SCOPE);
-		long currencyId = (Validator.isNull(currentCurrencyId)) ?  0 : Long.valueOf(currentCurrencyId);
-		double currencyRate = CommonUtil.getCurrentRate(currencyId);
-		
-		Document document = new Document(PageSize.A4,50,50,50,50);
-		PdfWriter writer = PdfWriter.getInstance(document,new FileOutputStream(filePath));
-
-		document.open();
-		URL imageUrl = actionRequest.getPortletSession().getPortletContext().getResource("/images/logo.png");
-		PdfPTable headerTable = GenerateInvoice.generateHeader(imageUrl, themeDisplay.getCompanyId(), orderId, currencyId, currencyRate);
-		
-		PdfPTable parenttable = new PdfPTable(1);
-		parenttable.setWidthPercentage(100);
-		parenttable.setSpacingBefore(20f);
-		parenttable.setSpacingAfter(5f);
-		
-		PdfPCell cellTable = new PdfPCell(headerTable);
-		cellTable.setBackgroundColor(BaseColor.WHITE); 
-		parenttable.addCell(cellTable);
-		
-		document.add(parenttable);
-
-		document.close();
-		writer.close();
+		GenerateInvoice.generateInvoice(actionRequest, portletSession, orderId, themeDisplay.getCompanyId(), filePath);
 		
 		String articleId = "SEND_INVOICE";
 		ShoppingOrder shoppingOrder = ShoppingOrderLocalServiceUtil.fetchShoppingOrder(orderId);
@@ -150,7 +115,9 @@ public class OrderPanelPortlet extends MVCPortlet {
 		if (Validator.isNotNull(shoppingOrder)) {
 			String[] placeHolders = new String[]{"[$USER$]"};
 			String[] values = new String[] {shoppingOrder.getUserName()};
-			NotificationUtil.sendReceipt(themeDisplay.getScopeGroupId(), shoppingOrder.getShippingEmailAddress(),
+			User seller = UserLocalServiceUtil.fetchUser(shoppingOrder.getSellerId());
+			String emailAddress = (isSeller.equals("true") ? seller.getEmailAddress() : shoppingOrder.getShippingEmailAddress());
+			NotificationUtil.sendReceipt(themeDisplay.getScopeGroupId(), emailAddress,
 					articleId, shoppingOrder.getUserName(), filePath, tempFileName, placeHolders, values);
 		}
 		
