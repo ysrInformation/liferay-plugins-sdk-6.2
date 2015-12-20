@@ -21,18 +21,12 @@
 		System.out.println("No order exist"+e);
 	}
 	
-	StringBuilder sb = new StringBuilder();
-	sb.append(shoppingOrder.getShippingStreet());
-	sb.append(StringPool.COMMA_AND_SPACE);
-	sb.append(shoppingOrder.getShippingCity());
-	sb.append(StringPool.COMMA_AND_SPACE);
-	sb.append(CommonUtil.getState(Long.parseLong(shoppingOrder.getShippingState()))); 
-	sb.append(StringPool.SPACE);
-	sb.append(CommonUtil.getCountry(Long.parseLong(shoppingOrder.getShippingCountry()))); 
-	sb.append(StringPool.COMMA_AND_SPACE);
-	sb.append(shoppingOrder.getShippingZip());
-	
-	String shippingAddress = sb.toString();
+	String[] billingAddressArray = CommonUtil.getUserAddress(shoppingOrder.getSellerId());
+	String shippingAddress = CommonUtil.getAddressBuilder(Long.parseLong(shoppingOrder.getShippingState()), Long.parseLong(shoppingOrder.getShippingCountry()), 
+			shoppingOrder.getShippingStreet(), shoppingOrder.getShippingCity(), shoppingOrder.getShippingZip());
+	String billingAddress = CommonUtil.getAddressBuilder(Long.parseLong(billingAddressArray[4]), Long.parseLong(billingAddressArray[3]), 
+			billingAddressArray[0], billingAddressArray[1], billingAddressArray[2]);
+
 	String emailAddress = shoppingOrder.getShippingEmailAddress();
 	String fullName = shoppingOrder.getShippingFirstName().concat(StringPool.SPACE).concat(shoppingOrder.getShippingLastName());
 	String altNumber = (Validator.isNotNull(shoppingOrder.getShippingAltMoble()) ? shoppingOrder.getShippingAltMoble():"N/A");
@@ -48,7 +42,7 @@
 	
 	double currentRate = CommonUtil.getCurrentRate(Long.valueOf(currencyId1));
 	boolean isLiveCategory = Validator.isNotNull(parentCategory) && parentCategory.getName().equals("Live");
-	int colspan = (isLiveCategory) ? 3 : 5;
+	int colspan = (isLiveCategory) ? 4 : 6;
 	int quantity = shoppingOrder.getQuantity();
 	double totalPrice = (currentRate == 0) ? shoppingOrder.getTotalPrice() :shoppingOrder.getTotalPrice() / currentRate;
 	double tax = CommonUtil.calculateVat(totalPrice, shoppingItem.getTax());
@@ -61,11 +55,10 @@
 	String productType = (Validator.isNotNull(category.getName())) ? category.getName() : "N/A"; 
 	String tin = CommonUtil.getSellerCompanyDetails(shoppingItem.getUserId(), HConstants.TIN);
 	String companyName = CommonUtil.getSellerCompanyDetails(shoppingItem.getUserId(), HConstants.COMPANY_NAME);
-	String barCode = (productCode.length() == HConstants.BAR_CODE_LENGTH) ? productCode : "6933068935011";
 %>
 
 <div id="print-area">
-	<aui:input id="barCode" name="barCode" type="hidden" value="<%= barCode %>"/> 
+	<aui:input id="barCode" name="barCode" type="hidden" value="<%= productCode %>"/> 
 	<div class="print-btn">
 		<liferay-ui:icon-menu>
 			<liferay-ui:icon image="print" url="javascript:printArticle();" message="print"  />
@@ -85,7 +78,8 @@
 			<label><%= emailAddress %></label>
 		</div>
 		<div class="span4">
-			<div id="bcTarget"></div>
+			<strong><liferay-ui:message key="payment-method"/></strong>
+			<label><%= HConstants.CASH_ON_DELIVERY %></label>
 		</div>
 	</div>
 	<div class="row-fluid txtmargin">
@@ -112,14 +106,28 @@
 			<label><%= HConstants.DATE_FORMAT.format(shoppingOrder.getCreateDate()) %></label> 
 		</div>
 		<div class="span4">
+			<strong><liferay-ui:message key="company-name"/></strong>
+			<label><%= companyName.isEmpty() ? "N/A" : companyName %></label>
+		</div>
+	</div>
+	<div class="row-fluid txtmargin">
+		<div class="span4">
+			<strong><liferay-ui:message key="billing-address"/></strong>
+			<label><%= billingAddress %></label>
+		</div>
+		<div class="span4">
 			<strong><liferay-ui:message key="shipping-address"/></strong>
 			<label><%= shippingAddress %></label>
+		</div>
+		<div class="span4">
+			<div id="bcTarget"></div>
 		</div>
 	</div>
 	<div class="order-details"> 
 		<table style="width:100%;height: auto;">
 			<thead>
 				<tr>
+					<th><liferay-ui:message key="no"/></th>
 					<th><liferay-ui:message key="product-type"/></th>
 					<th><liferay-ui:message key="product-details"/></th>
 					<th><liferay-ui:message key="quantity"/></th>
@@ -132,6 +140,7 @@
 			</thead>
 			<tbody>
 				<tr>
+					<td><%= 1 %></td>
 					<td><%= productType %></td>
 					<td><%= productDetails %></td>
 					<td><%= quantity %></td>
@@ -157,7 +166,9 @@
 $(document).ready(function(){
 	console.log("ready");
 	var barCodeNumber = $("#<portlet:namespace/>barCode").val();
-	$("#bcTarget").barcode(barCodeNumber, "ean13" );
+	<c:if test="<%= (productCode.length() == HConstants.BAR_CODE_LENGTH) %>">
+		$("#bcTarget").barcode(barCodeNumber, "ean13");
+	</c:if>
 });
 
 function printArticle() {
