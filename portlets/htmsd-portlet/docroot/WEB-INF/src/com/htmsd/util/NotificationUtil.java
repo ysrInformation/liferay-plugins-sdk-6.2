@@ -28,7 +28,6 @@ public class NotificationUtil {
 	
 	private static Log _log = LogFactoryUtil.getLog(NotificationUtil.class);
 	
-	
 	/**
 	 * Send Email Notification
 	 * @param groupId
