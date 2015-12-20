@@ -11,6 +11,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.mail.MailMessage;
+import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -19,6 +20,7 @@ import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.DocumentException;
 import com.liferay.portal.kernel.xml.Node;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
+import com.liferay.portal.security.auth.CompanyThreadLocal;
 import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.service.JournalArticleLocalServiceUtil;
 
@@ -70,7 +72,13 @@ public class NotificationUtil {
 	 */
 	private static void sendMail(String userName, String email, String body, String subject) {
 		MailMessage mailMessage = new MailMessage();
-		mailMessage.setFrom(getInternetAddress("H.T.M.S.D PET'S", PropsUtil.get(PropsKeys.ADMIN_EMAIL_FROM_ADDRESS)));
+		try {
+			mailMessage.setFrom(getInternetAddress("H.T.M.S.D PET'S",
+					PrefsPropsUtil.getString(CompanyThreadLocal.getCompanyId(),
+							PropsKeys.ADMIN_EMAIL_FROM_ADDRESS)));
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
 		mailMessage.setTo(getInternetAddress(userName, email));
 		mailMessage.setSubject(subject);
 		mailMessage.setBody(body);
@@ -134,7 +142,14 @@ public class NotificationUtil {
 			
 			File receiptFile = new File(filePath);
 			MailMessage mailMessage = new MailMessage();
-			mailMessage.setFrom(getInternetAddress("H.T.M.S.D PET'S", PropsUtil.get(PropsKeys.ADMIN_EMAIL_FROM_ADDRESS)));
+			try {
+				mailMessage.setFrom(getInternetAddress("H.T.M.S.D PET'S",
+						PrefsPropsUtil.getString(
+								CompanyThreadLocal.getCompanyId(),
+								PropsKeys.ADMIN_EMAIL_FROM_ADDRESS)));
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
 			mailMessage.setTo(getInternetAddress(userName, email));
 			mailMessage.setSubject(subject);
 			mailMessage.setBody(body);
