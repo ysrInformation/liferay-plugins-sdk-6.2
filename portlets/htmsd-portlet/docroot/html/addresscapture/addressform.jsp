@@ -1,3 +1,5 @@
+<%@page import="com.liferay.portal.kernel.util.TextFormatter"%>
+<%@page import="com.liferay.portal.model.Country"%>
 <%@page import="com.liferay.portal.service.CountryServiceUtil"%>
 <%@page import="com.liferay.portal.model.ListTypeConstants"%>
 <%@page import="com.liferay.portal.model.Contact"%>
@@ -31,9 +33,14 @@
 			</aui:input>
 			
 			<aui:select label="country" name="countryId" showEmptyOption="true" >
-				<c:forEach var="country" items="<%=CountryServiceUtil.getCountries() %>">
-					<aui:option value="${country.countryId}"  label="${country.name}" />
-				</c:forEach>
+				<%
+					for(Country country : CountryServiceUtil.getCountries()) {
+						%>
+							<aui:option value="<%=country.getCountryId() %>"  
+								label="<%=TextFormatter.format(country.getName(themeDisplay.getLocale()), TextFormatter.J) %>" />
+						<%
+					}
+				%>
 			</aui:select>
 			
 			<aui:select label="region"  name="regionId" />
