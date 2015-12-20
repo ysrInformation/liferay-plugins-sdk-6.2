@@ -1,7 +1,14 @@
 package com.htmsd.orderpanel;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
+
+import javax.portlet.ActionRequest;
+import javax.portlet.PortletSession;
 
 import com.htmsd.slayer.model.Category;
 import com.htmsd.slayer.model.ShoppingItem;
@@ -12,22 +19,57 @@ import com.htmsd.util.CommonUtil;
 import com.htmsd.util.HConstants;
 import com.htmsd.util.NumberWordConverter;
 import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Font.FontFamily;
 import com.itextpdf.text.Image;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.kernel.util.Validator;
 
 public class GenerateInvoice {
+	
+	public static void generateInvoice(ActionRequest actionRequest, PortletSession portletSession, 
+			long orderId, long companyId, String filePath) throws DocumentException,
+			FileNotFoundException, MalformedURLException {
+		
+		String currentCurrencyId = (String) portletSession.getAttribute("currentCurrencyId", PortletSession.APPLICATION_SCOPE);
+		long currencyId = (Validator.isNull(currentCurrencyId)) ?  0 : Long.valueOf(currentCurrencyId);
+		double currencyRate = CommonUtil.getCurrentRate(currencyId);
+		
+		Document document = new Document(PageSize.A4,50,50,50,50);
+		PdfWriter writer = PdfWriter.getInstance(document,new FileOutputStream(filePath));
+
+		document.open();
+		
+		URL imageUrl = actionRequest.getPortletSession().getPortletContext().getResource("/images/logo.png");
+		PdfPTable headerTable = generateHeader(imageUrl, companyId, orderId, currencyId, currencyRate);
+		
+		PdfPTable parenttable = new PdfPTable(1);
+		parenttable.setWidthPercentage(100);
+		parenttable.setSpacingBefore(20f);
+		parenttable.setSpacingAfter(5f);
+		
+		PdfPCell cellTable = new PdfPCell(headerTable);
+		cellTable.setBackgroundColor(BaseColor.WHITE); 
+		parenttable.addCell(cellTable);
+		
+		document.add(parenttable);
+
+		document.close();
+		writer.close();
+	}
 	
 	public static PdfPTable generateHeader(URL imageUrl , long companyId, long orderId,
 			long currencyId, double currencyRate) {
@@ -261,5 +303,16 @@ public class GenerateInvoice {
 		sb.append(",\n");
 		sb.append(shoppingOrder.getShippingZip());
 		return sb.toString();
+	}
+	
+	public static String getFilePath(String fileName) {
+		
+		String tempFolderPath = SystemProperties.get(SystemProperties.TMP_DIR)+File.separator+"liferay" + File.separator + "receipts";
+		String filePath = tempFolderPath+File.separator+fileName;	
+		File tempFolder = new File(tempFolderPath);
+		if (!tempFolder.exists()) {
+			tempFolder.mkdir();
+		}
+		return filePath;
 	}
 }

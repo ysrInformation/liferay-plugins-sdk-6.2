@@ -1,22 +1,24 @@
 package com.htmsd.shoppingcart;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.DecimalFormat;
+import java.net.MalformedURLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
+import javax.portlet.PortletSession;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpSession;
 
 import com.htmsd.orderpanel.GenerateInvoice;
 import com.htmsd.slayer.model.Invoice;
-import com.htmsd.slayer.model.ShoppingCart;
 import com.htmsd.slayer.model.ShoppingItem;
 import com.htmsd.slayer.model.ShoppingItem_Cart;
 import com.htmsd.slayer.model.ShoppingOrder;
@@ -31,6 +33,7 @@ import com.htmsd.util.CommonUtil;
 import com.htmsd.util.HConstants;
 import com.htmsd.util.NotificationUtil;
 import com.htmsd.util.ShoppingBean;
+import com.itextpdf.text.DocumentException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
@@ -43,6 +46,8 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.User;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
@@ -82,6 +87,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 	private void addShoppingOrderItems(ActionRequest actionRequest) {
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		PortletSession portletSession = actionRequest.getPortletSession();
 		List<ShoppingItem_Cart> shoppingItem_Carts = CommonUtil.getUserCartItems(themeDisplay.getUserId());
 		
 		String shippingFirstName = ParamUtil.getString(actionRequest, "firstName");
@@ -112,6 +118,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 				double totalPrice = shoppingItem_Cart.getTotalPrice();
 				String sellerName = CommonUtil.getUserFullName(sellerId);  
 				String articleId = "ORDER_COMFIRMATION";
+				String emailAddress = StringPool.BLANK;
 				
 				ShoppingOrder shoppingOrder = ShoppingOrderLocalServiceUtil.insertShoppingOrder(orderStatus, orderQuantity, 
 						shoppingItemId, sellerId, userId, companyId, groupId, totalPrice, sellerName, StringPool.BLANK, shippingFirstName, 
@@ -135,6 +142,9 @@ public class ShoppingCartPortlet extends MVCPortlet {
 					String[] values = ShoppingCartLocalServiceUtil.getValueTokens(shoppingOrder);
 					NotificationUtil.sendNotification(themeDisplay.getScopeGroupId(), shoppingOrder.getUserName(),
 							shoppingOrder.getShippingEmailAddress(), articleId, tokens, values); 
+					
+					//send receipt to seller
+					sendInvoiceToSeller(actionRequest, portletSession, groupId, companyId, sellerId, emailAddress, shoppingOrder);
 				}
 				
 				//deleting items from shoppingItem_Cart table. 
@@ -147,6 +157,39 @@ public class ShoppingCartPortlet extends MVCPortlet {
 				}
 			}
 		} 
+	}
+
+	protected void sendInvoiceToSeller(ActionRequest actionRequest, PortletSession portletSession, 
+			long groupId, long companyId, long sellerId, String emailAddress, ShoppingOrder shoppingOrder) {
+		
+		String fileName = "Reciept"+new SimpleDateFormat("ddMMyyyyhhmm").format(new Date())+".pdf";
+		try {
+			GenerateInvoice.generateInvoice(actionRequest, portletSession, shoppingOrder.getOrderId(), companyId, GenerateInvoice.getFilePath(fileName));
+		} catch (FileNotFoundException e) {
+			_log.info("File not found due to:"+e);
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+			_log.info("URL not formed correctly :"+e);
+		} catch (DocumentException e) {
+			e.printStackTrace();
+			_log.info("error occured in document :"+e); 
+		}
+		
+		try {
+			User seller = UserLocalServiceUtil.fetchUser(sellerId);
+			emailAddress = (Validator.isNull(seller)) ? StringPool.BLANK : seller.getEmailAddress();
+		} catch (SystemException e) {
+			e.printStackTrace();
+			_log.info("email not found"+e);
+		}
+		
+		if (!emailAddress.isEmpty()) {
+			NotificationUtil.sendReceipt(groupId, emailAddress, "SEND_INVOICE", shoppingOrder.getUserName(),
+					GenerateInvoice.getFilePath(fileName), fileName, new String[]{"[$USER$]"}, new String[]{shoppingOrder.getUserName()});
+		} else {
+			_log.info("Email of seller not found.."); 
+		}
 	}
 	
 	public void serveResource(ResourceRequest resourceRequest,
@@ -276,7 +319,6 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		actionResponse.setRenderParameter(HConstants.JSP_PAGE, HConstants.PAGE_SHOPPING_CART_DETAILS); 
 		actionResponse.setRenderParameter("tab1", "my-orders");
 	}
-	
 	
 	private double getWholeSalePrice(int quantity, long itemId, double itemPrice) {
 		

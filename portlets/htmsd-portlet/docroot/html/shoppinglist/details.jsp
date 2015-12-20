@@ -73,8 +73,17 @@
 						<div class="add-to-cart-item-code">
 							<liferay-ui:message key="product-code"/>: <%=shoppingItem.getProductCode() %>
 						</div>
-						<div class="add-to-cart-item-price" id="itemPrice">
-						</div>
+						<c:choose>
+							<c:when test='<%= Validator.isNotNull(cmd) && cmd.equalsIgnoreCase("itemsDetails") %>'>
+								<div class="add-to-cart-item-price" id="itemPrice">
+									<% price = (currentRate == 0) ? price :  price / currentRate; %>
+									<%= CommonUtil.getPriceFormat(price, currencyId) %>
+								</div>
+							</c:when>
+							<c:otherwise>
+								<div class="add-to-cart-item-price" id="itemPrice"></div>
+							</c:otherwise>
+						</c:choose>
 						<div class="add-to-cart-item-quantity" >
 							<c:if test="<%= wholeSales.size() > 0 %>">
 								<table class="qty-discounts">

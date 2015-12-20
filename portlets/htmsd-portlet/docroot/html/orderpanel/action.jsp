@@ -34,7 +34,10 @@
 <liferay-ui:icon-menu>
 	<liferay-ui:icon image="view" message="view-reciept" url="<%= viewReciept %>" />
 	<liferay-ui:icon image="edit" message="update-status"  url="<%= updateStatus  %>" />
-	<liferay-ui:icon image="post" message="send-invoice" url="<%= sendInvoiceURL.toString() %>" /> 
+	<% sendInvoiceURL.setParameter("isSeller", "true"); %>
+	<liferay-ui:icon image="post" message="send-invoice-to-seller" url="<%= sendInvoiceURL.toString() %>" />
+	<% sendInvoiceURL.setParameter("isSeller", "false"); %> 
+	<liferay-ui:icon image="post" message="send-invoice-to-customer" url="<%= sendInvoiceURL.toString() %>" />
 </liferay-ui:icon-menu>
 
 <script type="text/javascript">
