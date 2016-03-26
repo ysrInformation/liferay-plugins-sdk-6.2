@@ -61,7 +61,7 @@
 			<hint name="max-length">500</hint>
 		</field>
 		<field name="description" type="String">
-			<hint name="max-length">5000</hint>
+			<hint name="max-length">40000</hint>
 		</field>
 		<field name="sellerPrice" type="Double" />
 		<field name="totalPrice" type="Double" />
