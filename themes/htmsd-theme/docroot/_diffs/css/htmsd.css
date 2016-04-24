@@ -13,8 +13,11 @@
 	left: 0px;
 }
 
-.text-color-white {
-	color: white;
+.text-color-red {
+    color: #e0476a !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 #bg_top_fixed_heigth {
