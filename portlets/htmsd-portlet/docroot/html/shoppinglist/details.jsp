@@ -73,6 +73,9 @@
 						<div class="add-to-cart-item-code">
 							<liferay-ui:message key="product-code"/>: <%=shoppingItem.getProductCode() %>
 						</div>
+						<div class="add-to-cart-item-code">
+							<liferay-ui:message key="product-stock"/>: <%=shoppingItem.getQuantity() %>
+						</div>
 						<c:choose>
 							<c:when test='<%= Validator.isNotNull(cmd) && cmd.equalsIgnoreCase("itemsDetails") %>'>
 								<div class="add-to-cart-item-price" id="itemPrice">

@@ -29,21 +29,21 @@
 			<aui:col width="25">
 				<aui:input name="<%=HConstants.PRODUCT_CODE %>" />
 			</aui:col>
-			
-			<aui:col width="25">
-				<aui:select name="<%=HConstants.PARENT_CATEGORY_ID %>" label="category"  required="true" showEmptyOption="true">
-					<c:forEach items="<%=parentCategories %>" var="parentCategory">   
-						<aui:option label="${parentCategory.name}"  value="${parentCategory.categoryId}"/>
-					</c:forEach>
-				</aui:select>
-			</aui:col>
-			
-			<aui:col width="25">
-				<aui:select name="<%=HConstants.CATEGORY_ID %>" label="sub-category"  required="true" showEmptyOption="true">
-				</aui:select>
-			</aui:col>
+			<c:if test="<%=isAdmin || isStaff%>">
+				<aui:col width="25">
+					<aui:select name="<%=HConstants.PARENT_CATEGORY_ID %>" label="category"  required="true" showEmptyOption="true">
+						<c:forEach items="<%=parentCategories %>" var="parentCategory">   
+							<aui:option label="${parentCategory.name}"  value="${parentCategory.categoryId}"/>
+						</c:forEach>
+					</aui:select>
+				</aui:col>
+				
+				<aui:col width="25">
+					<aui:select name="<%=HConstants.CATEGORY_ID %>" label="sub-category"  required="true" showEmptyOption="true">
+					</aui:select>
+				</aui:col>
+			</c:if>
 		</aui:layout>
-		
 		
 		<liferay-ui:message key="description" />
 		<liferay-ui:input-editor cssClass="editor_padding"/>
@@ -145,16 +145,16 @@
 			</div>
 			
 		</aui:layout>
-		<div id="tags">
+		<%-- <div id="tags">
 			<liferay-ui:message key="tags" />
 			<liferay-ui:asset-tags-selector className="<%=ShoppingItem.class.getName() %>" />
-		</div>
+		</div> --%>
 		<aui:input name="terms"  type="checkbox" required="true" label="" inlineField="true" />
 		<aui:a href="http://www.google.com">Terms of user</aui:a>
 		And
 		<aui:a href="http://www.google.com">Posting Policies</aui:a>
 		<aui:button-row>
-			<aui:button type="button" value="add-item"  onClick="onAddItem();" />
+			<aui:button type="submit" value="add-item" />
 			<aui:button type="reset" value="reset" />
 		</aui:button-row>
 	</aui:form>
@@ -166,6 +166,12 @@
 	
 	$( document ).ready(function() {
 		$("img[src='']").hide();
+	});
+	
+	AUI().ready(function(A) {
+		 AUI().use('aui-base','aui-io-request', 'aui-form-validator', 'aui-overlay-context-panel', function(A){
+			getBusinessAddress();
+		 });
 	});
 	
 	function readURL(input,id) {
@@ -211,22 +217,22 @@
 			 	fullwholeSaleDiv.style.display = "none";
 		 	}
 		}); 
-		 
-		A.one("#<portlet:namespace /><%=HConstants.PARENT_CATEGORY_ID%>").on('change',function(e){
-			var parentCategoryId =  A.one("#<portlet:namespace /><%=HConstants.PARENT_CATEGORY_ID%>").val();
-			A.io.request('<%=getCategoryURL%>', {
-				dataType: 'json',
-				data: {
-					'<portlet:namespace/>parentCategoryId' : parentCategoryId
-				   },
-				  on: {
-				   success: function() {
-					   setCategory(this.get('responseData'));
-				   }
-				  }
-				});
-		});
-		
+		<c:if test="<%=isAdmin || isStaff%>">
+			A.one("#<portlet:namespace /><%=HConstants.PARENT_CATEGORY_ID%>").on('change',function(e){
+				var parentCategoryId =  A.one("#<portlet:namespace /><%=HConstants.PARENT_CATEGORY_ID%>").val();
+				A.io.request('<%=getCategoryURL%>', {
+					dataType: 'json',
+					data: {
+						'<portlet:namespace/>parentCategoryId' : parentCategoryId
+					   },
+					  on: {
+					   success: function() {
+						   setCategory(this.get('responseData'));
+					   }
+					  }
+					});
+			});
+		</c:if>
 	});
 	function extractCodeFromEditor() {
         var x = document.<portlet:namespace />addItemForm.<portlet:namespace /><%=HConstants.DESCRIPTION%>.value = window.<portlet:namespace />editor.getHTML();
@@ -265,14 +271,14 @@
 	});
 	
 	function getBusinessAddress() {
-		var A = AUI();
-		var cat = A.one('#<portlet:namespace/><%=HConstants.PARENT_CATEGORY_ID %>').attr('value');
+		<%-- var cat = A.one('#<portlet:namespace/><%=HConstants.PARENT_CATEGORY_ID %>').attr('value'); --%>
 		
-		A.io.request('<%=getBusinessAddrURL%>', {
+		AUI().io.request('<%=getBusinessAddrURL%>', {
 			dataType: 'json',
-			data: {
+			async:false,
+			/* data: {
 				'<portlet:namespace/>categoryId' : cat
-			   },
+			   }, */
 			  on: {
 			   success: function() {
 					if(this.get('responseData')[0] == 'false'){
@@ -339,19 +345,12 @@
 					        });
 					       
 					    }); 
-						
-					} else{
-						document.getElementById("<portlet:namespace/>addItemForm").submit();	  
-					}
+						return false;
+					} 
 			   }
 			  }
 			});
 		
-	}
-	
-	function onAddItem() {
-		extractCodeFromEditor();
-		getBusinessAddress();
 	}
 	
 	function validateBusinessForm(form) {
@@ -393,13 +392,13 @@
 													return false;
 												}
 				
-				case "<portlet:namespace/>tin" : 	if(value.match(/^[0-9]{9}/))  {
+				/* case "<portlet:namespace/>tin" : 	if(value.match(/^[0-9]{9}/))  {
 														document.getElementById(name+'Err').style.display = "none";
 														break;
 													}else{
 														document.getElementById(name+'Err').style.display = "block";
 														return false;
-													}
+													} */
 					
 			}
 		}

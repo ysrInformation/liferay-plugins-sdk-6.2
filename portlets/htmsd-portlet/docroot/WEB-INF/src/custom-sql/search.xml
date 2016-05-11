@@ -3,27 +3,9 @@
 	<sql
 		id="com.htmsd.slayer.service.persistence.ShoppingItemFinderImpl.findItemByTagName">
 		   <![CDATA[
-			    SELECT 
-			  		DISTINCT
-					si.* 
-				FROM 
-					AssetEntry ae
-				INNER JOIN
-					AssetEntries_AssetTags ae_at
-				ON
-					ae.entryId = ae_at.entryId
-                INNER JOIN 
-					AssetTag ast
-				ON 
-					ast.tagId = ae_at.tagId
-				INNER JOIN  
-					htmsd_ShoppingItem si
-				ON 
-					si.itemId = ae.classPK
-                    AND NOT si.quantity = 0
-                    AND si.status = 1
-                    AND si.name like ?
-                    AND ast.name like ? 
+			    SELECT DISTINCT si.* FROM htmsd_ShoppingItem si where 
+			    NOT si.quantity = 0 
+			    AND si.status = 1 AND (si.name like ? OR si.productCode like ?)
    				[$sort]
 		 	]]>
 	</sql>

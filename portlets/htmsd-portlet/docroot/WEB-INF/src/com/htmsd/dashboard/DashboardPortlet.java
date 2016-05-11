@@ -84,15 +84,15 @@ public class DashboardPortlet extends MVCPortlet {
 			jsonArray.put(jsonObject);
 		}
 	} else {
-		long categoryId = ParamUtil.getLong(resourceRequest, HConstants.CATEGORY_ID);
+		/*long categoryId = ParamUtil.getLong(resourceRequest, HConstants.CATEGORY_ID);
 		Category category = null;
 		try {
 			category = CategoryLocalServiceUtil.fetchCategory(categoryId);
 		} catch (SystemException e) {
 			_log.error(e);
-		}
-		if(Validator.isNotNull(category) && !category.getName().equalsIgnoreCase("Live")){
-			
+		}*/
+		
+		//if(Validator.isNotNull(category) && !category.getName().equalsIgnoreCase("Live")){
 			int typeId = 0;
 			try {
 				typeId = ListTypeServiceUtil.getListTypes(Contact.class.getName() + ListTypeConstants.ADDRESS).get(0).getListTypeId();
@@ -115,10 +115,10 @@ public class DashboardPortlet extends MVCPortlet {
 			}
 		}
 		
-	}
-	PrintWriter printWriter = resourceResponse.getWriter();
-	printWriter.write(jsonArray.toString());
-	printWriter.flush();
+	//}
+		PrintWriter printWriter = resourceResponse.getWriter();
+		printWriter.write(jsonArray.toString());
+		printWriter.flush();
 	}
 	
 	

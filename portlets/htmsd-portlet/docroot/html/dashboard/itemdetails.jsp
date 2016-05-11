@@ -87,7 +87,7 @@
 					</aui:col>
 					
 					<aui:col width="25">
-						<aui:select name="<%=HConstants.PARENT_CATEGORY_ID %>" label="category"  required="true" showEmptyOption="true">
+						<aui:select name="<%=HConstants.PARENT_CATEGORY_ID %>" label="category"  required="true" showEmptyOption="true" disabled="<%=(isAdmin || isStaff)%>">
 							<%
 								
 								for(Category parentCategory : parentCategories) {
@@ -100,7 +100,7 @@
 						</aui:select>
 					</aui:col>
 					<aui:col width="25">
-						<aui:select name="<%=HConstants.CATEGORY_ID %>" label="sub-category" showEmptyOption="true" required="true"></aui:select>
+						<aui:select name="<%=HConstants.CATEGORY_ID %>" label="sub-category" showEmptyOption="true" required="true" disabled="<%=(isAdmin || isStaff)%>"></aui:select>
 					</aui:col>
 				</aui:layout>
 				
@@ -234,10 +234,10 @@
 						%>
 					</div>	
 				</aui:layout>
-				<div id="tags">
+				<%-- <div id="tags">
 					<liferay-ui:message key="tags" />
 					<liferay-ui:asset-tags-selector className="<%=ShoppingItem.class.getName() %>" classPK="<%=itemId %>" />
-				</div>		
+				</div>	 --%>	
 				<c:if test="<%=isAdmin%>">
 					<aui:select name="<%=HConstants.status %>" showEmptyOption="true" required="true" >
 						<aui:option value="<%=HConstants.APPROVE%>" label="approve" />

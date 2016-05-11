@@ -24,6 +24,9 @@
 				<aui:input id="tin"  type="text" name="tin" />
 				<p id="<portlet:namespace/>tinErr" style="display:none;">Please Enter Valid Tin Number</p>
 				
+				<aui:input id="cst"  type="text" name="cst" />
+				<p id="<portlet:namespace/>tinErr" style="display:none;">Please Enter Valid Tin Number</p>
+				
 				
 				<aui:input  name="city" />
 				<p id="<portlet:namespace/>cityErr" style="display:none;">Please Enter Valid City </p>
