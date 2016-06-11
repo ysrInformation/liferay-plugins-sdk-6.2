@@ -11,7 +11,7 @@
 		searchParam = searchParam.trim();
 	String noOfItems  = portletPreferences.getValue("noOfItems", "8");
 	String categoryToDisplay  = portletPreferences.getValue("categoryToDisplay", "-1");
-	String sortBy = ParamUtil.getString(request, "sortBy", "totalPrice DESC");
+	String sortBy = ParamUtil.getString(request, "sortBy", "createDate DESC");
 	int totalCount = ShoppingItemLocalServiceUtil.getItemByCategoryCount(Long.valueOf(categoryToDisplay));
 	
 	if(Validator.isNotNull(searchParam) && !searchParam.isEmpty()) {

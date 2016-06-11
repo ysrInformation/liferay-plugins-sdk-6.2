@@ -311,6 +311,14 @@ public class ShoppingCartPortlet extends MVCPortlet {
 			String[] values = ShoppingCartLocalServiceUtil.getValueTokens(shoppingOrder);
 			NotificationUtil.sendNotification(themeDisplay.getScopeGroupId(), 
 					shoppingOrder.getUserName(), shoppingOrder.getShippingEmailAddress(), articleId, tokens, values);
+			
+			try {
+				ShoppingItem shoppingItem = ShoppingItemLocalServiceUtil.fetchShoppingItem(shoppingOrder.getShoppingItemId());
+				shoppingItem.setQuantity(shoppingItem.getQuantity() + shoppingOrder.getQuantity());
+				ShoppingItemLocalServiceUtil.updateShoppingItem(shoppingItem);
+			} catch (SystemException e) {
+				_log.error(e.getMessage());
+			}			
 		}
 		
 		PortletConfig portletConfig = (PortletConfig) actionRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
