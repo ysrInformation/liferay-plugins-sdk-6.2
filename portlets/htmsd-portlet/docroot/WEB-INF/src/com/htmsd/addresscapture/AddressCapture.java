@@ -57,6 +57,7 @@ public class AddressCapture extends MVCPortlet {
 		long regionId = ParamUtil.getLong(actionRequest, "regionId");
 		String zip = ParamUtil.getString(actionRequest, "zip");
 		String tin = ParamUtil.getString(actionRequest, "tin");
+		String cst = ParamUtil.getString(actionRequest, "cst");
 		String companyName = ParamUtil.getString(actionRequest, "companyName");
 		
 		
@@ -88,7 +89,7 @@ public class AddressCapture extends MVCPortlet {
 		}
 		
 		
-		updateCompanyInfo(companyName, tin, themeDisplay.getUser());
+		updateCompanyInfo(companyName, tin, cst, themeDisplay.getUser());
 		SessionMessages.add(actionRequest, "request_processed","Your Address Save Thank you!!");
 		actionResponse.setWindowState(LiferayWindowState.NORMAL);
 	}
@@ -100,11 +101,12 @@ public class AddressCapture extends MVCPortlet {
 	 *@param actionRequest
 	`*@param actionresponse
 	 **/
-	private void updateCompanyInfo(String companyName, String tin, User user) {
+	private void updateCompanyInfo(String companyName, String tin, String cst, User user) {
 		
 		ExpandoBridge expandoBridge = user.getExpandoBridge();
 		expandoBridge.setAttribute(HConstants.COMPANY_NAME, companyName);
 		expandoBridge.setAttribute(HConstants.TIN, tin);
+		expandoBridge.setAttribute(HConstants.CST, cst);
 	}
 
 
