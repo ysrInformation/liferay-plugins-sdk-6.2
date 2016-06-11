@@ -50,101 +50,56 @@ AUI().use(
 ---------------------------------------------------------------------------------
 ADT Video Gallery 
 
+<head>
+<style>
+#lightGallery.row {
+    width:100%;
+   
+}
+#lightGallery.row li {
+ list-style-type:none;
+    width:33%;
+    float:left;
+}
+
+#lightGallery img{
+margin-top: 90px;
+}
+</style>
+</head>
+
 <div class="row-fluid">
-    
-	<#list entries as entry>
-		
-		<#assign entry = entry />
-		<#assign assetRenderer = entry.getAssetRenderer() />
-		<#assign Uuid = assetRenderer.getUuid() >
-		<#assign VideoURL = assetRenderer.getURLDownload(themeDisplay) >
-		
-    	
-    	
-    	<div class="span4" width="400px" height="400px">
-    		<span rel=".${Uuid}"  vidURL="${VideoURL}" ed="${Uuid}" classpk="${entry.getClassPK()}"  classname="${entry.getClassName()}" 
-    		class="vedioInfoId"  title="${entry.getTitle(locale)}">
-    			<img alt="" src="${assetRenderer.getURLImagePreview(renderRequest)}" class="vedioThum" width="200px" height="200px" style="cursor:pointer"/>
-    		</span>
-            <div><strong>${entry.getTitle(locale)}</strong></div>
-			${entry.getCreateDate()?string("EEEE, MMMM dd, yyyy")}
-			<br/>
-				Views : <strong>${entry.getViewCount()}</strong>
-		  	 </div>
-		
-		<#if entry_index%3==2>
-                    </div>
-                    <div class="row-fluid">
-         </#if>
-    </#list>
-
-</div>
-
-
-<div id="videoBoxId"  style="display:none; ">
-    	 <video width="450" height="200" controls>
-             <source src='' type="video/mp4">
-             <source src='' type="video/ogg">
-             Your browser does not support the video tag.
-        </video>
-                        	 
-</div>
+	<ul id="lightGallery" class="row" style="margin-left:auto;"> 
+        <#if entries?has_content>
+        	<#list entries as entry>
+               
+               <#assign videoURL = entry.getDescriptionCurrentValue()>
+                <#assign index = videoURL?last_index_of("v=")+2>
+                <#if index == 1>
+                     <#assign index = videoURL?last_index_of("/")+1>
+                </#if>
+              <#assign videoThumnail = "http://img.youtube.com/vi/"+videoURL?substring(index)+"/default.jpg" >
+               
+               
+                    <li data-src = "${videoURL}">
+                        <a href="#">
+                            
+                             <img width="300px" height="300px" src="${videoThumnail}"></img>
+                        </a>
+                        <div><strong>${entry.getTitle(locale)}</strong></div>
+            		 </li>
+    		 
+            </#list>
+        </#if>		      						
+	</ul>	  
+</div>	
 
 
 <script>
-$(document).ready(function(){
-  
-    $('.vedioInfoId').click(function(event){
-      
-        var vedioBox = document.getElementById('videoBoxId');
-        var vidURL=$(this).attr('vidURL');
-        var vidID=$(this).attr('ed');
-        var title = $(this).attr('title');
-        var classname=$(this).attr('classname');
-        var classpk=$(this).attr('classpk');
-        $("source").attr('src',vidURL);
-         
-		createDialog(vedioBox.innerHTML, title);
-		incrementCount(classname, classpk);
-      
+$(document).ready(function() {
+    $("#lightGallery").lightGallery({
+    	mode : 'fade',
+    	thumbnail : false
     });
-	
 });
-
-function createDialog(content, title) {
- 
-	AUI().ready(function(A) {
-			AUI().use('aui-base','liferay-util-window', function(A) {
-				Liferay.Util.Window.getWindow({
-					title : title,
-					dialog: {
-						destroyOnHide: true,
-						cache: false,
-						resizable : false,
-						draggable : false,
-						modal: true,
-						width:500,
-						height:300,
-						centered: true,
-						cssClass: "videoModal",
-						bodyContent: content
-					}
-				});
-			});
-		});
-}
-
-function incrementCount(classname, classpk) {
-	  Liferay.Service(
-      '/assetentry/increment-view-counter',
-      {
-        className: classname,
-        classPK: classpk
-      },
-      function(obj) {
-        //console.log(obj);
-      }
-    );
-}
-
 </script>
