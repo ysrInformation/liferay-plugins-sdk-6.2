@@ -118,7 +118,7 @@
 								<%
 									Category parenCategory = CommonUtil.getShoppingItemParentCategory(shoppingItem.getItemId());
 									String btnName =  LanguageUtil.get(pageContext, "add-to-cart");
-									if (parenCategory.getName().contains("live")) btnName = LanguageUtil.get(pageContext, "request-for-adoption");
+									if (parenCategory.getName().contains("live") || parenCategory.getName().contains("Live")) btnName = LanguageUtil.get(pageContext, "request-for-adoption");
 								%>
 								<aui:button name="add-to-cart" type="submit" cssClass="add-to-cart" value='<%= btnName %>'/>
 							</div>
