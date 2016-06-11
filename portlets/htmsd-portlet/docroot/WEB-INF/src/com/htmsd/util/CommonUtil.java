@@ -72,23 +72,21 @@ public class CommonUtil {
 		_log.info(" get Thumbnail ");
 
 		String thumbnail = StringPool.BLANK;
-		FileEntry fileEntry = null;
+		FileEntry documentFileEntry = null;
 		DLFileShortcut dlFileShortcut = null;
 
 		try {
-			fileEntry = DLAppLocalServiceUtil.getFileEntry(fileEntryId);
+			documentFileEntry = DLAppLocalServiceUtil.getFileEntry(fileEntryId);
 			thumbnail = "/documents/"
-					+ groupId
-					+ StringPool.SLASH
-					+ fileEntry .getFolderId()
-					+ StringPool.SLASH
-					+ HttpUtil.encodeURL(HtmlUtil.unescape(String.valueOf(fileEntry .getTitle())))
-					+ StringPool.SLASH
-					+ fileEntry.getUuid()
-					+ "?version=" + fileEntry .getVersion()
-					+ "&t=" + fileEntry.getFileVersion().getModifiedDate().getTime();
+					+ documentFileEntry.getGroupId()
+					+ StringPool.FORWARD_SLASH
+					+ documentFileEntry.getFolderId()
+					+ StringPool.FORWARD_SLASH
+					+ documentFileEntry.getTitle()
+					+ StringPool.FORWARD_SLASH 
+					+ documentFileEntry.getUuid();
 			if (isThumbnail) {
-				thumbnail+= "&imageThumbnail=1";
+				//thumbnail+= "&imageThumbnail=1";
 			}
 
 		} catch (Exception e) {
