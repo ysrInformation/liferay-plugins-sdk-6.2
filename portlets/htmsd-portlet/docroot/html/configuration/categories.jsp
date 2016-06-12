@@ -14,7 +14,7 @@
 <portlet:actionURL var="deleteSetURL" name="deleteCategorySet" />
 
 <aui:fieldset>
-	<aui:form action="<%=addCategoryURL %>" method="POST">
+	<aui:form action="<%=addCategoryURL %>" name="fm1" >
 		<aui:input name="<%=HConstants.NAME %>"  required="true"/>
 		<aui:input name="<%=HConstants.DESCRIPTION %>" required="true" type="textarea" />
 		<c:if test='<%=tabs1.equals("Category")%>'>
@@ -28,7 +28,7 @@
 	</aui:form>
 </aui:fieldset>
 
-<aui:form action="<%=deleteSetURL %>"  method="POST">
+<aui:form action="<%=deleteSetURL %>"  name="fm2">
 	<aui:button type="submit" value="delete"  />
 	
 	<liferay-ui:search-container delta="10"   emptyResultsMessage="No Items to display" iteratorURL="<%=iteratorURL%>"  rowChecker="<%= new RowChecker(renderResponse)%>">
