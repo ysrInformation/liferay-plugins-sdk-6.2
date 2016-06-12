@@ -156,7 +156,7 @@
 		And
 		<aui:a href="http://www.google.com">Posting Policies</aui:a>
 		<aui:button-row>
-			<aui:button type="submit" value="add-item" />
+			<aui:button type="submit" value="add-item" onClick="onAddItem();"/>
 			<aui:button type="reset" value="reset" />
 		</aui:button-row>
 	</aui:form>
@@ -353,6 +353,10 @@
 			  }
 			});
 		
+	}
+	
+	function onAddItem() {
+		extractCodeFromEditor();
 	}
 	
 	function validateBusinessForm(form) {

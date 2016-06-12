@@ -59,7 +59,13 @@
 			
 			<c:if test='<%=tabs1.equals("Category")%>'>
 				<liferay-ui:search-container-column-text name="parent-category">
-					<%=CategoryLocalServiceUtil.getCategory(category.getParentCategoryId()).getName()%>
+					<%
+						String parentName = "NA";
+						try {
+							parentName = CategoryLocalServiceUtil.getCategory(category.getParentCategoryId()).getName();	
+						} catch (Exception e) {}
+					%>
+					<%= parentName %>
 				</liferay-ui:search-container-column-text>
 			</c:if>
 			
