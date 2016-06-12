@@ -4,16 +4,16 @@
 	<info
 		organisation="com.liferay"
 		module="com.liferay.sdk.dependencies.com.liferay.ant.bnd"
-		revision="working@Khan"
+		revision="working@KHAN-PC"
 		conf="default"
 		confs="default, internal"
-		date="20150809204018"/>
+		date="20151206185621"/>
 	<dependencies>
 		<module organisation="com.liferay" name="com.liferay.ant.bnd">
 			<revision name="1.0.9" status="release" pubdate="20150325024958" resolver="liferay-public" artresolver="default" homepage="" downloaded="false" searched="false" default="false" conf="default, compile, runtime, master" position="0">
 				<license name="LGPL 2.1" url="http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt"/>
 				<metadata-artifact status="no" details="" size="2776" time="0" location="E:\Learning\Liferay\Projects\htmsdpets\liferay-plugins-sdk-6.2\.ivy\cache\com.liferay\com.liferay.ant.bnd\ivy-1.0.9.xml" searched="false" original-local-location="E:\Learning\Liferay\Projects\htmsdpets\liferay-plugins-sdk-6.2\.ivy\cache\com.liferay\com.liferay.ant.bnd\ivy-1.0.9.xml.original" origin-is-local="false" origin-location="http://cdn.repository.liferay.com/nexus/content/groups/public/com/liferay/com.liferay.ant.bnd/1.0.9/com.liferay.ant.bnd-1.0.9.pom"/>
-				<caller organisation="com.liferay" name="com.liferay.sdk.dependencies.com.liferay.ant.bnd" conf="default" rev="1.0.9" rev-constraint-default="1.0.9" rev-constraint-dynamic="1.0.9" callerrev="working@Khan"/>
+				<caller organisation="com.liferay" name="com.liferay.sdk.dependencies.com.liferay.ant.bnd" conf="default" rev="1.0.9" rev-constraint-default="1.0.9" rev-constraint-dynamic="1.0.9" callerrev="working@KHAN-PC"/>
 				<artifacts>
 					<artifact name="com.liferay.ant.bnd" type="jar" ext="jar" status="no" details="" size="23879" time="0" location="E:\Learning\Liferay\Projects\htmsdpets\liferay-plugins-sdk-6.2\.ivy\cache\com.liferay\com.liferay.ant.bnd\jars\com.liferay.ant.bnd-1.0.9.jar">
 						<origin-location is-local="false" location="http://cdn.repository.liferay.com/nexus/content/groups/public/com/liferay/com.liferay.ant.bnd/1.0.9/com.liferay.ant.bnd-1.0.9.jar"/>
