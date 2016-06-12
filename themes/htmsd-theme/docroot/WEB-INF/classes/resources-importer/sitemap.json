@@ -10,8 +10,32 @@
 			    ]
 			], 
 		    "friendlyURL": "/system-admin",
-		    "name": "System admin",
-		    "title": "System admin"
+		    "name": "Dashboard",
+		    "title": "Dashboard"
+	    },
+	    {
+	    	"columns": [
+				[
+					{
+			            "portletId": "5_WAR_htmsdportlet"
+			        }
+			    ]
+			], 
+		    "friendlyURL": "/order-panel",
+		    "name": "Order Panel",
+		    "title": "Order Panel"
+	    },
+	    {
+	    	"columns": [
+				[
+					{
+			            "portletId": "2_WAR_htmsdportlet"
+			        }
+			    ]
+			], 
+		    "friendlyURL": "/configuration",
+		    "name": "Configuration",
+		    "title": "Configuration"
 	    }
 	],
 	"publicPages": [
@@ -35,7 +59,7 @@
 					{
                         "portletId": "56",
                         "portletPreferences": {
-                            "articleId": "ABOUT_US",
+                            "articleId": "ABOUT_US_HOME",
                             "groupId": "${groupId}",
                         }
                     }
@@ -80,19 +104,10 @@
 			"columns": [
 				[
 					{
-			            "portletId": "3_WAR_htmsdportlet"
-			        }
-			    ]
-			],    
-			"title": "Pet Foods",
-			"name": "Pet Foods",
-			"friendlyURL": "/pet-food"
-		},
-		{
-			"columns": [
-				[
-					{
-			            "portletId": "3_WAR_htmsdportlet"
+			            "portletId": "3_WAR_htmsdportlet",
+			            "portletPreferences": {
+			            	"noOfItems":"8"
+			            }
 			        }
 			    ]
 			], 
@@ -104,7 +119,10 @@
 			"columns": [
 				[
 					{
-			            "portletId": "3_WAR_htmsdportlet"
+			            "portletId": "3_WAR_htmsdportlet",
+			            "portletPreferences": {
+			            	"noOfItems":"8"
+			            }
 			        }
 			    ]
 			], 
@@ -116,7 +134,10 @@
 			"columns": [
 				[
 					{
-			            "portletId": "3_WAR_htmsdportlet"
+			            "portletId": "3_WAR_htmsdportlet",
+			            "portletPreferences": {
+			            	"noOfItems":"8"
+			            }
 			        }
 			    ]
 			], 
@@ -128,7 +149,10 @@
 			"columns": [
 				[
 					{
-			            "portletId": "3_WAR_htmsdportlet"
+			            "portletId": "3_WAR_htmsdportlet",
+			            "portletPreferences": {
+			            	"noOfItems":"8"
+			            }
 			        }
 			    ]
 			], 
@@ -140,7 +164,10 @@
 			"columns": [
 				[
 					{
-			            "portletId": "3_WAR_htmsdportlet"
+			            "portletId": "3_WAR_htmsdportlet",
+			            "portletPreferences": {
+			            	"noOfItems":"8"
+			            }
 			        }
 			    ]
 			], 
@@ -149,11 +176,85 @@
 			"friendlyURL": "/fish"
 		},
 		{
+			"columns": [
+				[
+					{
+			            "portletId": "101"
+			        }
+			    ]
+			],
+			"title": "Gallery",
+			"name": "Gallery",
+			"friendlyURL": "/gallery"
+		},
+		{
+			"columns": [
+				[
+					{
+			            "portletId": "101"
+			        }
+			    ]
+			],
+			"title": "Videos",
+			"name": "Videos",
+			"friendlyURL": "/video"
+		},
+		{
+			"columns": [	
+				[
+					{
+                        "portletId": "56",
+                        "portletPreferences": {
+                            "articleId": "ABOUT_US_PAGE",
+                            "groupId": "${groupId}",
+                        }
+                    }
+				]
+			],
 			"title": "About Us",
 			"name": "About Us",
 			"friendlyURL": "/about-us"
 		},
 		{
+			"layoutTemplateId": "1_2_columns_i",
+			"columns": [	
+				[
+					{
+                        "portletId": "56",
+                        "portletPreferences": {
+                            "articleId": "map",
+                            "groupId": "${groupId}",
+                        }
+                    }
+				],
+				[
+					{
+                        "portletId": "56",
+                        "portletPreferences": {
+                            "articleId": "CONTACT_US",
+                            "groupId": "${groupId}",
+                        }
+                    }
+				],
+				[
+                    {
+                        "portletId": "1_WAR_webformportlet_INSTANCE_${groupId}",
+                        "portletPreferences": {
+                        	"title" : "Contact Us",
+							"description" : "",
+							"fieldLabel1": "Name",
+							"fieldType1": "text",
+							"fieldLabel2": "Email",
+							"fieldType2": "text",
+							"fieldLabel3": "Phone",
+							"fieldType3": "text",
+							"fieldLabel4":"Message",
+							"fieldType4": "textarea"
+						}						
+                    }
+                ]
+			],
+		
 			"title": "Contact Us",
 			"name": "Contact Us",
 			"friendlyURL": "/contact-us"
@@ -169,6 +270,50 @@
 			"title": "Sell",
 			"name": "Sell",
 			"friendlyURL": "/sell",
+			"hidden": "true"
+		},
+		{	
+			"columns": [
+				[
+					{
+			            "portletId": "4_WAR_htmsdportlet"
+			        }
+			    ]
+			], 
+			"title": "Cart",
+			"name": "Cart",
+			"friendlyURL": "/cart",
+			"hidden": "true"
+		},
+		{	
+			"columns": [
+				[
+					{
+			            "portletId": "3_WAR_htmsdportlet"
+			        }
+			    ]
+			], 
+			"title": "Search",
+			"name": "Search",
+			"friendlyURL": "/search",
+			"hidden": "true"
+		},
+		{	
+			"title": "Legal Notice",
+			"name": "Legal Notice",
+			"friendlyURL": "/legal-notice",
+			"hidden": "true"
+		},
+		{	
+			"title": "Terms And Conditions",
+			"name": "Terms And Conditions",
+			"friendlyURL": "/terms-and-conditions",
+			"hidden": "true"
+		},
+		{	
+			"title": "Privacy Policy",
+			"name": "Privacy Policy",
+			"friendlyURL": "/privacy-policy",
 			"hidden": "true"
 		}
 	]

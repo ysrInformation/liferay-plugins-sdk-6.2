@@ -4,16 +4,16 @@
 	<info
 		organisation="com.liferay"
 		module="com.liferay.sdk.dependencies.com.liferay.jasper.jspc"
-		revision="working@Khan"
+		revision="working@KHAN-PC"
 		conf="default"
 		confs="default, internal"
-		date="20150809204018"/>
+		date="20151206185621"/>
 	<dependencies>
 		<module organisation="com.liferay" name="com.liferay.jasper.jspc">
 			<revision name="1.0.3" status="release" pubdate="20150416034604" resolver="liferay-public" artresolver="default" homepage="" downloaded="false" searched="false" default="false" conf="default, compile, runtime, master" position="0">
 				<license name="LGPL 2.1" url="http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt"/>
 				<metadata-artifact status="no" details="" size="3137" time="0" location="E:\Learning\Liferay\Projects\htmsdpets\liferay-plugins-sdk-6.2\.ivy\cache\com.liferay\com.liferay.jasper.jspc\ivy-1.0.3.xml" searched="false" original-local-location="E:\Learning\Liferay\Projects\htmsdpets\liferay-plugins-sdk-6.2\.ivy\cache\com.liferay\com.liferay.jasper.jspc\ivy-1.0.3.xml.original" origin-is-local="false" origin-location="http://cdn.repository.liferay.com/nexus/content/groups/public/com/liferay/com.liferay.jasper.jspc/1.0.3/com.liferay.jasper.jspc-1.0.3.pom"/>
-				<caller organisation="com.liferay" name="com.liferay.sdk.dependencies.com.liferay.jasper.jspc" conf="default" rev="1.0.3" rev-constraint-default="1.0.3" rev-constraint-dynamic="1.0.3" callerrev="working@Khan"/>
+				<caller organisation="com.liferay" name="com.liferay.sdk.dependencies.com.liferay.jasper.jspc" conf="default" rev="1.0.3" rev-constraint-default="1.0.3" rev-constraint-dynamic="1.0.3" callerrev="working@KHAN-PC"/>
 				<artifacts>
 					<artifact name="com.liferay.jasper.jspc" type="jar" ext="jar" status="no" details="" size="4274" time="0" location="E:\Learning\Liferay\Projects\htmsdpets\liferay-plugins-sdk-6.2\.ivy\cache\com.liferay\com.liferay.jasper.jspc\jars\com.liferay.jasper.jspc-1.0.3.jar">
 						<origin-location is-local="false" location="http://cdn.repository.liferay.com/nexus/content/groups/public/com/liferay/com.liferay.jasper.jspc/1.0.3/com.liferay.jasper.jspc-1.0.3.jar"/>
