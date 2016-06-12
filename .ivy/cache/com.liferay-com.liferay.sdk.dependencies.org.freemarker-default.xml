@@ -4,16 +4,16 @@
 	<info
 		organisation="com.liferay"
 		module="com.liferay.sdk.dependencies.org.freemarker"
-		revision="working@Khan"
+		revision="working@KHAN-PC"
 		conf="default"
 		confs="default, internal"
-		date="20150809204019"/>
+		date="20151206185623"/>
 	<dependencies>
 		<module organisation="com.liferay" name="org.freemarker">
 			<revision name="2.3.17.LIFERAY-PATCHED-1" status="release" pubdate="20150110035900" resolver="liferay-public" artresolver="default" homepage="" downloaded="false" searched="false" default="false" conf="default, compile, runtime, master" position="0">
 				<license name="LGPL 2.1" url="http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt"/>
 				<metadata-artifact status="no" details="" size="2624" time="0" location="E:\Learning\Liferay\Projects\htmsdpets\liferay-plugins-sdk-6.2\.ivy\cache\com.liferay\org.freemarker\ivy-2.3.17.LIFERAY-PATCHED-1.xml" searched="false" original-local-location="E:\Learning\Liferay\Projects\htmsdpets\liferay-plugins-sdk-6.2\.ivy\cache\com.liferay\org.freemarker\ivy-2.3.17.LIFERAY-PATCHED-1.xml.original" origin-is-local="false" origin-location="http://cdn.repository.liferay.com/nexus/content/groups/public/com/liferay/org.freemarker/2.3.17.LIFERAY-PATCHED-1/org.freemarker-2.3.17.LIFERAY-PATCHED-1.pom"/>
-				<caller organisation="com.liferay" name="com.liferay.sdk.dependencies.org.freemarker" conf="default" rev="2.3.17.LIFERAY-PATCHED-1" rev-constraint-default="2.3.17.LIFERAY-PATCHED-1" rev-constraint-dynamic="2.3.17.LIFERAY-PATCHED-1" callerrev="working@Khan"/>
+				<caller organisation="com.liferay" name="com.liferay.sdk.dependencies.org.freemarker" conf="default" rev="2.3.17.LIFERAY-PATCHED-1" rev-constraint-default="2.3.17.LIFERAY-PATCHED-1" rev-constraint-dynamic="2.3.17.LIFERAY-PATCHED-1" callerrev="working@KHAN-PC"/>
 				<artifacts>
 					<artifact name="org.freemarker" type="jar" ext="jar" status="no" details="" size="936509" time="0" location="E:\Learning\Liferay\Projects\htmsdpets\liferay-plugins-sdk-6.2\.ivy\cache\com.liferay\org.freemarker\jars\org.freemarker-2.3.17.LIFERAY-PATCHED-1.jar">
 						<origin-location is-local="false" location="http://cdn.repository.liferay.com/nexus/content/groups/public/com/liferay/org.freemarker/2.3.17.LIFERAY-PATCHED-1/org.freemarker-2.3.17.LIFERAY-PATCHED-1.jar"/>

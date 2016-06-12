@@ -10,10 +10,14 @@
 	background-color: #6f8720;
 	width: 100%;
 	color: #e2e2e2;
+	left: 0px;
 }
 
-.text-color-white {
-	color: white;
+.text-color-red {
+    color: #e0476a !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 #bg_top_fixed_heigth {
@@ -24,7 +28,8 @@
 	background-color: #6f8720;
 	width: 100%;
 	color: #e2e2e2;
-	height: 35%;
+	height: 195px;
+	left: 0px;
 }
 
 #bg_footer {
@@ -37,6 +42,11 @@
 	color: #E2E2E2;
 	width: 100%;
 	position: absolute;
+	left: 0px;
+}
+
+.margin_left_zero {
+	margin-left: 0px !important;
 }
 
 /*------------Navigation CSS----------------*/
@@ -241,7 +251,7 @@
 }
 
 /*******Cart btn ***********/
-#cart-item-count {
+#cart-item-count, #cart-item-guest-count {
 	background-color: #fff;
 	border-radius: 50px;
 	color: #d8492d;
@@ -252,8 +262,12 @@
 .cart-btn {
 	background: #d8492d none repeat scroll 0 0;
 	text-align: center;
-	padding: 4.5px;
-	
+	width: 100%;
+	height: 41px;
+	border: 0 none;
+	border-radius: 5px;
+	color: white;
+	text-transform: uppercase;
 }
 
 .cart-btn:HOVER {
@@ -273,20 +287,84 @@
 }
 
 /****Search Input****/
+
 #search {
 	border: 1px solid #d8492d;
-	height: 32px;
-	width: 300px;
+	box-shadow: 0 0 2px 0 inset;
+	height: 40px;
+	padding: 0 10px;
+	width: 72%;
+	border-radius : 5px 0 0 5px;
 }
 
 .search-btn {
 	background: #d8492d none repeat scroll 0 0;
 	border: 0 none;
+	border-radius: 0 5px 5px 0 !important;
 	color: white;
-	height: 35px;
-	width: 50px;
+	height: 42px;
+	width: 20%;
+}
+.center {
+	text-align: center;
+	vertical-align: middle;
+	margin-top: 15px;
 }
 
 .search-btn:HOVER {
 	background: #62C000;
+}
+
+.sticky {
+	background: rgba(0, 0, 0, 0)
+		url("../images/bg.png") repeat scroll 0 0;
+	padding-left: 4.6%;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 1000;
+	left:0;
+	right:0;
+}
+.fixed_div {
+	height: 85px;
+}
+
+
+/*****Scroll to Top****/
+.scroll-top-wrapper {
+    position: fixed;
+	opacity: 0;
+	visibility: hidden;
+	overflow: hidden;
+	text-align: center;
+	z-index: 99999999;
+    background-color: #777777;
+	color: #eeeeee;
+	width: 50px;
+	height: 48px;
+	line-height: 48px;
+	right: 30px;
+	bottom: 30px;
+	padding-top: 2px;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	border-bottom-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+	-webkit-transition: all 0.5s ease-in-out;
+	-moz-transition: all 0.5s ease-in-out;
+	-ms-transition: all 0.5s ease-in-out;
+	-o-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
+}
+.scroll-top-wrapper:hover {
+	background-color: #888888;
+}
+.scroll-top-wrapper.show {
+    visibility:visible;
+    cursor:pointer;
+	opacity: 1.0;
+}
+.scroll-top-wrapper i.fa {
+	line-height: inherit;
 }

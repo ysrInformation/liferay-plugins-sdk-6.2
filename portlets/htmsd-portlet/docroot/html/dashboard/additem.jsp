@@ -74,7 +74,7 @@
 		<aui:input name="<%=HConstants.VEDIO_URL %>" >
 			<aui:validator name="url" />
 		</aui:input>
-		
+		<h4><liferay-ui:message key="comission" /></h4>
 		<aui:layout>
 			<aui:column>
 				<aui:input name="<%=HConstants.PRICE %>" required="true">

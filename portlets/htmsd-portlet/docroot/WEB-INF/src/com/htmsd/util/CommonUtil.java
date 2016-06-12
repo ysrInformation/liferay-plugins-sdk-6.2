@@ -392,7 +392,7 @@ public class CommonUtil {
 	
 	public static String getCurrencySymbol(long currencyId) {
 		Currency currencyRates = getCurrency(currencyId);
-		if (Validator.isNull(currencyRates)) return HConstants.RUPPEE_SYMBOL;
+		if (Validator.isNull(currencyRates)) return HConstants.RUPEE_SYMBOL;
         java.util.Currency currency = java.util.Currency.getInstance(currencyRates.getCurrencyCode());
         
         return currency.getSymbol();
