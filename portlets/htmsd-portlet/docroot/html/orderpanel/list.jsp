@@ -113,7 +113,15 @@
 	            <liferay-ui:search-container-column-text name="total" >
 	            	<%= CommonUtil.getPriceFormat(totalPrice, currencyId1)%> 
 	            </liferay-ui:search-container-column-text>
-	            
+	            <%
+	            	if (tabName.equalsIgnoreCase("Order Cancelled")) {
+	            		%>
+				            <liferay-ui:search-container-column-text name="cancel-reason" >
+				            	<%= shoppingOrder.getCancelReason() %>
+				            </liferay-ui:search-container-column-text>
+	            		<%
+	            	} 
+	            %>
 	            <liferay-ui:search-container-column-jsp name="action"  path="/html/orderpanel/action.jsp"/> 
 	
 	        </liferay-ui:search-container-row>
