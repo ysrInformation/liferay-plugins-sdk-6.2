@@ -146,7 +146,7 @@
 		
 		
 		
-		<liferay-ui:search-container-column-text name="">
+		<liferay-ui:search-container-column-text name="action">
 			<%
 				PortletURL itemDetailURL = renderResponse.createRenderURL();
 				itemDetailURL.setParameter("jspPage", "/html/dashboard/itemdetails.jsp");
