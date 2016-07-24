@@ -595,4 +595,17 @@ public class CommonUtil {
 		sb.append(zip);
 		return sb.toString();
 	}
+	
+	public static String toJavaScriptArray(String[] arr){
+	    StringBuffer sb = new StringBuffer();
+	    sb.append("[");
+	    for(int i=0; i<arr.length; i++){
+	        sb.append("\"").append(arr[i]).append("\"");
+	        if(i+1 < arr.length){
+	            sb.append(",");
+	        }
+	    }
+	    sb.append("]");
+	    return sb.toString();
+	}
 }

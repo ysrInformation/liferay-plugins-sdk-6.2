@@ -2,6 +2,9 @@
 <%@page import="com.liferay.portal.util.PortalUtil"%>
 <%@include file="/html/shoppinglist/init.jsp" %>
 
+<link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet"></link>
+<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js" ></script>
+
 <%
 	HttpServletRequest httpRequest = PortalUtil.getOriginalServletRequest(request);
 	String searchParam = httpRequest.getParameter("search-param");
@@ -23,7 +26,8 @@
 			totalCount = ShoppingItemLocalServiceUtil.getItemByCategoryCount(Long.valueOf(categoryToDisplay));
 		}
 	}
-	
+	String[] autoCompleteList = ShoppingItemLocalServiceUtil.getAutoCompleteItems();
+	String autoCompleteListToString = CommonUtil.toJavaScriptArray(autoCompleteList);
 %>
 <style>
 	#no-item-display {
@@ -236,5 +240,12 @@
 	
 	$(function() {
 		$('#search').val('<%=searchParam%>');
+		
+		var autoCompleteList = <%= autoCompleteListToString %>;
+		console.info(autoCompleteList);
+		
+		$("#search").autocomplete({
+		    source: autoCompleteList
+	    });
 	})
 </aui:script>

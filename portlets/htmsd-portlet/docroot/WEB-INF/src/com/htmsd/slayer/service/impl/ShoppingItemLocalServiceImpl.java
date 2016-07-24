@@ -515,5 +515,25 @@ public class ShoppingItemLocalServiceImpl
 		return shoppingItemFinder.getShoppingItemCategory(itemId);
 	}
 	
+	public String[] getAutoCompleteItems(){
+		List<ShoppingItem> shoppingItems = null;
+		try {
+			shoppingItems = ShoppingItemLocalServiceUtil.getShoppingItems(-1, shoppingItemLocalService.getShoppingItemsCount());
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		String[] autoCompleteList = new String[shoppingItems.size()];
+		if(Validator.isNotNull(shoppingItems) && shoppingItems.size()>0){
+			for(int i=0; i < shoppingItems.size(); i++) {
+				ShoppingItem shoppingItem = shoppingItems.get(i);
+				String productNameAndCode = (shoppingItem.getProductCode().isEmpty()) 
+						? shoppingItem.getName() : shoppingItem.getProductCode() + " - " +shoppingItem.getName();
+				autoCompleteList[i] =  productNameAndCode;
+			}
+		}
+		return autoCompleteList;
+	}
+	
 	private Log _log = LogFactoryUtil.getLog(ShoppingItemLocalServiceImpl.class);
 }
