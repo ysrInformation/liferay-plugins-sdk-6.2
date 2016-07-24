@@ -49,6 +49,8 @@
 		<portlet-name>4</portlet-name>
 		<icon>/icon.png</icon>
 		<configuration-action-class>com.liferay.portal.kernel.portlet.DefaultConfigurationAction</configuration-action-class>
+		<user-notification-definitions>com/htmsd/shoppingcart/custom-usernotification-definition.xml</user-notification-definitions>
+		<user-notification-handler-class>com.htmsd.shoppingcart.UserNotificationHandler</user-notification-handler-class>
 		<action-url-redirect>true</action-url-redirect>
 		<private-session-attributes>false</private-session-attributes>
 		<header-portlet-css>/css/main.css</header-portlet-css>

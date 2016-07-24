@@ -36,6 +36,8 @@ import com.htmsd.util.ShoppingBean;
 import com.itextpdf.text.DocumentException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -47,7 +49,10 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
@@ -143,6 +148,11 @@ public class ShoppingCartPortlet extends MVCPortlet {
 					NotificationUtil.sendNotification(themeDisplay.getScopeGroupId(), shoppingOrder.getUserName(),
 							shoppingOrder.getShippingEmailAddress(), articleId, tokens, values); 
 					
+					String notificationContent = "<p><strong>Hi [$USER_NAME$],</strong></p><p>Thank you for your order!</p><p>you have ordered [$Product_details$]</p>";
+					notificationContent = notificationContent.replace("[$USER_NAME$]", shoppingOrder.getUserName());
+					notificationContent = notificationContent.replace("[$Product_details$]", CommonUtil.getShoppingItem(shoppingOrder.getShoppingItemId()).getName());
+					sendUserNotification(userId, notificationContent, actionRequest);
+
 					//send receipt to seller
 					sendInvoiceToSeller(actionRequest, portletSession, groupId, companyId, sellerId, emailAddress, shoppingOrder);
 				}
@@ -312,6 +322,12 @@ public class ShoppingCartPortlet extends MVCPortlet {
 			NotificationUtil.sendNotification(themeDisplay.getScopeGroupId(), 
 					shoppingOrder.getUserName(), shoppingOrder.getShippingEmailAddress(), articleId, tokens, values);
 			
+			ShoppingItem _shoppingItem = CommonUtil.getShoppingItem(shoppingOrder.getShoppingItemId());
+			String notificationContent = "<p><strong>Hi [$USER_NAME$],</strong></p><p>You have recently cancel an order and the details are [$Product_details$]</p>";
+			notificationContent = notificationContent.replace("[$USER_NAME$]", shoppingOrder.getUserName());
+			notificationContent = notificationContent.replace("[$Product_details$]",_shoppingItem.getProductCode()+" - "+_shoppingItem.getName());
+			sendUserNotification(shoppingOrder.getUserId(), notificationContent, actionRequest);
+			
 			try {
 				ShoppingItem shoppingItem = ShoppingItemLocalServiceUtil.fetchShoppingItem(shoppingOrder.getShoppingItemId());
 				shoppingItem.setQuantity(shoppingItem.getQuantity() + shoppingOrder.getQuantity());
@@ -341,6 +357,31 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		}
 		
 		return itemPrice;
+	}
+	
+	public void sendUserNotification(long userId, String notificationContent, 
+			ActionRequest actionRequest) {
+		
+		ServiceContext serviceContext = null;
+		try {
+			serviceContext = ServiceContextFactory.getInstance(actionRequest);
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		JSONObject payloadJSON = JSONFactoryUtil.createJSONObject();
+		payloadJSON.put("userId", userId);
+		payloadJSON.put("notificationContent", notificationContent);
+		
+		try {
+			UserNotificationEventLocalServiceUtil.addUserNotificationEvent(
+					userId, UserNotificationHandler.PORTLET_ID,
+					(new Date()).getTime(), userId, payloadJSON.toString(), false, serviceContext);
+		} catch (Exception e) {
+			_log.error("Error while sending the notification -"+e);
+		}
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(ShoppingCartPortlet.class.getName());

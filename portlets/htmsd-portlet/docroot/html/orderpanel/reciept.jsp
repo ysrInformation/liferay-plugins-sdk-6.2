@@ -46,7 +46,8 @@
 	int quantity = shoppingOrder.getQuantity();
 	double totalPrice = (currentRate == 0) ? shoppingOrder.getTotalPrice() :shoppingOrder.getTotalPrice() / currentRate;
 	double tax = CommonUtil.calculateVat(totalPrice, shoppingItem.getTax());
-	double subTotal = shoppingOrder.getTotalPrice() - tax;
+	//double subTotal = shoppingOrder.getTotalPrice() - tax;
+	double subTotal = shoppingItem.getTotalPrice() / quantity;
 	tax = (currentRate == 0) ? tax : tax / currentRate;
 	subTotal = (currentRate == 0) ? subTotal : subTotal / currentRate;
 	String productCode = shoppingItem.getProductCode();
@@ -133,7 +134,7 @@
 					<th><liferay-ui:message key="quantity"/></th>
 					<c:if test="<%= !isLiveCategory %>">  
 						<th><liferay-ui:message key="price"/></th>
-						<th><liferay-ui:message key="tax"/><%= " ("+shoppingItem.getTax()+" %)" %></th>
+						<th><liferay-ui:message key="label-commission"/><%= " ("+shoppingItem.getTax()+" %)" %></th>
 					</c:if>
 					<th><liferay-ui:message key="total"/></th>
 				</tr>
@@ -142,7 +143,14 @@
 				<tr>
 					<td><%= 1 %></td>
 					<td><%= productType %></td>
-					<td><%= productDetails %></td>
+					<td>
+						<%= productDetails %>
+						<c:when test='<%= Validator.isNotNull(shoppingItem) && shoppingItem.getSmallImage() > 0 %>'> 
+							<div class="product-image">
+								<img height="100" width="100" src="<%= CommonUtil.getThumbnailpath(shoppingItem.getSmallImage(), themeDisplay.getScopeGroupId(), false) %>">
+							</div>
+						</c:when>
+					</td>
 					<td><%= quantity %></td>
 					<c:if test="<%= !isLiveCategory %>">
 						<td><%= decimalFormat.format(subTotal) %></td>
