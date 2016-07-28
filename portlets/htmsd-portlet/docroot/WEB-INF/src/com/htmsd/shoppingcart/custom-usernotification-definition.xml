@@ -3,7 +3,7 @@
 
 <user-notification-definitions>
 	<definition>
-		<notification-type>${com.example.notifications.ExampleUserNotificationHandler.PORTLET_ID}</notification-type>
+		<notification-type>${com.htmsd.shoppingcart.UserNotificationHandler.PORTLET_ID}</notification-type>
 		<description>receive-a-notification-when-example-triggered</description>
 		<delivery-type>
 			<name>email</name>

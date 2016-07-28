@@ -37,6 +37,8 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.theme.ThemeDisplay;
 
 public class GenerateInvoice {
 	
@@ -44,6 +46,7 @@ public class GenerateInvoice {
 			long orderId, long companyId, String filePath) throws DocumentException,
 			FileNotFoundException, MalformedURLException {
 		
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		String currentCurrencyId = (String) portletSession.getAttribute("currentCurrencyId", PortletSession.APPLICATION_SCOPE);
 		long currencyId = (Validator.isNull(currentCurrencyId)) ?  0 : Long.valueOf(currentCurrencyId);
 		double currencyRate = CommonUtil.getCurrentRate(currencyId);
@@ -54,7 +57,7 @@ public class GenerateInvoice {
 		document.open();
 		
 		URL imageUrl = actionRequest.getPortletSession().getPortletContext().getResource("/images/logo.png");
-		PdfPTable headerTable = generateHeader(imageUrl, companyId, orderId, currencyId, currencyRate);
+		PdfPTable headerTable = generateHeader(imageUrl, companyId, orderId, currencyId, themeDisplay.getScopeGroupId() ,currencyRate);
 		
 		PdfPTable parenttable = new PdfPTable(1);
 		parenttable.setWidthPercentage(100);
@@ -72,7 +75,7 @@ public class GenerateInvoice {
 	}
 	
 	public static PdfPTable generateHeader(URL imageUrl , long companyId, long orderId,
-			long currencyId, double currencyRate) {
+			long currencyId, long groupId, double currencyRate) {
 		
 		PdfPTable pdftable = new PdfPTable(1);
 		try {
@@ -116,7 +119,7 @@ public class GenerateInvoice {
 			userDesCell.setBorder(Rectangle.NO_BORDER);
 			pdftable.addCell(userDesCell);
 
-			PdfPCell productDesCell = new PdfPCell(generateProductDetailsTable(shoppingOrder.getUserId(), currencyId, shoppingOrder, currencyRate));
+			PdfPCell productDesCell = new PdfPCell(generateProductDetailsTable(shoppingOrder.getUserId(), currencyId, groupId, shoppingOrder, currencyRate));
 			productDesCell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			productDesCell.setPaddingLeft(10f);
 			productDesCell.setPaddingRight(10f);
@@ -183,7 +186,7 @@ public class GenerateInvoice {
 		return table;
 	}
 	
-	public static PdfPTable generateProductDetailsTable(long userId, long currencyId, ShoppingOrder shoppingOrder, 
+	public static PdfPTable generateProductDetailsTable(long userId, long currencyId, long groupId, ShoppingOrder shoppingOrder, 
 			double currencyRate) throws DocumentException {
 		
 		ShoppingItem shoppingItem = CommonUtil.getShoppingItem(shoppingOrder.getShoppingItemId());
@@ -204,7 +207,7 @@ public class GenerateInvoice {
 		pdftable.addCell(createLabelCellForProduct("Quantity",Rectangle.BOTTOM|Rectangle.TOP|Rectangle.RIGHT|Rectangle.LEFT));
 		if (!isLiveCategory) {
 			pdftable.addCell(createLabelCellForProduct("Price/Unit",Rectangle.BOTTOM|Rectangle.TOP|Rectangle.RIGHT|Rectangle.LEFT));
-			pdftable.addCell(createLabelCellForProduct("Tax ( "+shoppingItem.getTax()+" %)",Rectangle.BOTTOM|Rectangle.TOP|Rectangle.RIGHT|Rectangle.LEFT));
+			pdftable.addCell(createLabelCellForProduct("Commission ( "+shoppingItem.getTax()+" %)",Rectangle.BOTTOM|Rectangle.TOP|Rectangle.RIGHT|Rectangle.LEFT));
 		}
 		pdftable.addCell(createLabelCellForProduct("Sub Total",Rectangle.BOTTOM|Rectangle.TOP|Rectangle.RIGHT|Rectangle.LEFT));
 		
@@ -223,7 +226,7 @@ public class GenerateInvoice {
 		//Table Body
 		pdftable.addCell(createProductValueCell(String.valueOf(1), Rectangle.RECTANGLE));
 		pdftable.addCell(createProductValueCell((Validator.isNotNull(category.getName())) ? category.getName() : "N/A", Rectangle.RECTANGLE));
-		pdftable.addCell(createProductValueCell(productDetails, Rectangle.RECTANGLE));
+		pdftable.addCell(createProductValueCell(getProductDetails(shoppingItem, groupId), Rectangle.RECTANGLE));
 		pdftable.addCell(createProductValueCell(quantity, Rectangle.RECTANGLE));
 		if (!isLiveCategory) {
 			pdftable.addCell(createProductValueCell(unitPrice, Rectangle.RECTANGLE));
@@ -302,6 +305,20 @@ public class GenerateInvoice {
 		sb.append(CommonUtil.getCountry(Long.parseLong(shoppingOrder.getShippingCountry()))); 
 		sb.append(",\n");
 		sb.append(shoppingOrder.getShippingZip());
+		return sb.toString();
+	}
+	
+	public static String getProductDetails(ShoppingItem shoppingItem, long groupId){
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append(shoppingItem.getProductCode());
+		sb.append(StringPool.SPACE+StringPool.DASH+StringPool.SPACE);
+		sb.append(shoppingItem.getName());
+		sb.append("\n");
+		if (shoppingItem.getSmallImage() > 0) {
+			String img = "<div><img width='100' height='100' src='"+CommonUtil.getThumbnailpath(shoppingItem.getSmallImage(), groupId, false)+"'></div>";
+			sb.append(img);
+		}
 		return sb.toString();
 	}
 	
