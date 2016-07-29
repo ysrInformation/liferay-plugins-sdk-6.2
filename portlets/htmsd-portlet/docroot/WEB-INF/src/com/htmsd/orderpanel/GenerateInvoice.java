@@ -316,8 +316,8 @@ public class GenerateInvoice {
 		sb.append(shoppingItem.getName());
 		sb.append("\n");
 		if (shoppingItem.getSmallImage() > 0) {
-			String img = "<div><img width='100' height='100' src='"+CommonUtil.getThumbnailpath(shoppingItem.getSmallImage(), groupId, false)+"'></div>";
-			sb.append(img);
+			//String img = "<div><img class=\'product-image\' src='"+CommonUtil.getThumbnailpath(shoppingItem.getSmallImage(), groupId, false)+"'></div>";
+			//sb.append(img);
 		}
 		return sb.toString();
 	}

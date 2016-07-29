@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -148,7 +149,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 					NotificationUtil.sendNotification(themeDisplay.getScopeGroupId(), shoppingOrder.getUserName(),
 							shoppingOrder.getShippingEmailAddress(), articleId, tokens, values); 
 					
-					String notificationContent = "<p><strong>Hi [$USER_NAME$],</strong></p><p>Thank you for your order!</p><p>you have ordered [$Product_details$]</p>";
+					String notificationContent = "<p><strong>Hi [$USER_NAME$],</strong></p><p>Thank you for ordering from our website!</p><p>You have ordered a [$Product_details$]</p>";
 					notificationContent = notificationContent.replace("[$USER_NAME$]", shoppingOrder.getUserName());
 					notificationContent = notificationContent.replace("[$Product_details$]", CommonUtil.getShoppingItem(shoppingOrder.getShoppingItemId()).getName());
 					sendUserNotification(userId, notificationContent, actionRequest);
@@ -195,8 +196,13 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		}
 		
 		if (!emailAddress.isEmpty()) {
+			ShoppingItem _shoppingItem = CommonUtil.getShoppingItem(shoppingOrder.getShoppingItemId());
 			NotificationUtil.sendReceipt(groupId, emailAddress, "SEND_INVOICE", shoppingOrder.getUserName(),
 					GenerateInvoice.getFilePath(fileName), fileName, new String[]{"[$USER$]"}, new String[]{shoppingOrder.getUserName()});
+			String notificationContent = "<p><strong>Hi [$USER_NAME$],</strong></p><p>You have received an invoice from admin for the item [$Product_details$]</p>";
+			notificationContent = notificationContent.replace("[$USER_NAME$]", shoppingOrder.getUserName());
+			notificationContent = notificationContent.replace("[$Product_details$]",_shoppingItem.getName());
+			sendUserNotification(shoppingOrder.getUserId(), notificationContent, actionRequest);
 		} else {
 			_log.info("Email of seller not found.."); 
 		}
@@ -323,9 +329,11 @@ public class ShoppingCartPortlet extends MVCPortlet {
 					shoppingOrder.getUserName(), shoppingOrder.getShippingEmailAddress(), articleId, tokens, values);
 			
 			ShoppingItem _shoppingItem = CommonUtil.getShoppingItem(shoppingOrder.getShoppingItemId());
-			String notificationContent = "<p><strong>Hi [$USER_NAME$],</strong></p><p>You have recently cancel an order and the details are [$Product_details$]</p>";
+			String notificationContent = "<p><strong>Hi [$USER_NAME$],</strong></p><p>You have recently cancelled an order.The order number which has been cancelled is [$Product_details$]</p>";
+			String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+           	String orderID = HConstants.HTMSD + currentYear.substring(2, 4) + shoppingOrder.getOrderId();
 			notificationContent = notificationContent.replace("[$USER_NAME$]", shoppingOrder.getUserName());
-			notificationContent = notificationContent.replace("[$Product_details$]",_shoppingItem.getProductCode()+" - "+_shoppingItem.getName());
+			notificationContent = notificationContent.replace("[$Product_details$]",orderID+" - "+_shoppingItem.getName());
 			sendUserNotification(shoppingOrder.getUserId(), notificationContent, actionRequest);
 			
 			try {

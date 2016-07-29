@@ -145,11 +145,11 @@
 					<td><%= productType %></td>
 					<td>
 						<%= productDetails %>
-						<c:when test='<%= Validator.isNotNull(shoppingItem) && shoppingItem.getSmallImage() > 0 %>'> 
-							<div class="product-image">
-								<img height="100" width="100" src="<%= CommonUtil.getThumbnailpath(shoppingItem.getSmallImage(), themeDisplay.getScopeGroupId(), false) %>">
+						<c:if test='<%= Validator.isNotNull(shoppingItem) && shoppingItem.getSmallImage() > 0 %>'> 
+							<div class="orderdetails-image">
+								<img  src="<%= CommonUtil.getThumbnailpath(shoppingItem.getSmallImage(), themeDisplay.getScopeGroupId(), false) %>">
 							</div>
-						</c:when>
+						</c:if>
 					</td>
 					<td><%= quantity %></td>
 					<c:if test="<%= !isLiveCategory %>">
