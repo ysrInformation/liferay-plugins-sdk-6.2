@@ -34,6 +34,9 @@ import com.liferay.portal.kernel.dao.orm.Property;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -409,5 +412,25 @@ public class ShoppingOrderLocalServiceImpl
 			e.printStackTrace();
 		}
 		return (Validator.isNotNull(count)? count : 0); 
+	}
+	
+	public JSONObject getOrderAutoCompleteList(String tabName) {
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+		List<ShoppingOrder> shoppingOrders = getShoppingOrderByTabNames(-1, -1, tabName);
+       	String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+       	
+		if (Validator.isNotNull(shoppingOrders)) {
+			for (ShoppingOrder shoppingOrder : shoppingOrders) {
+				if (Validator.isNotNull(shoppingOrder)) {
+					String orderId = HConstants.HTMSD + currentYear.substring(2, 4) + shoppingOrder.getOrderId();
+					jsonArray.put(shoppingOrder.getSellerName());
+					jsonArray.put(shoppingOrder.getUserName());
+					jsonArray.put(orderId);
+				}
+			}
+		}
+		jsonObject.put("autocompleteData", jsonArray);
+		return jsonObject;
 	}
 }

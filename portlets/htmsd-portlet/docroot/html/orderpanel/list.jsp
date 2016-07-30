@@ -1,8 +1,6 @@
+<%@page import="com.liferay.portal.kernel.json.JSONObject"%>
 <%@page import="com.htmsd.slayer.service.ShoppingItemLocalServiceUtil"%>
 <%@ include file="/html/orderpanel/init.jsp"%>
-
-<link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet"></link>
-<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js" ></script>
 
 <%
 	int slno = 1;
@@ -29,8 +27,7 @@
 	System.out.println("CurrencyID ==>"+CommonUtil.getCurrencySymbol(currencyId1));
 
 	double currentRate = CommonUtil.getCurrentRate(Long.valueOf(currencyId1));
-	String[] autoCompleteList = ShoppingItemLocalServiceUtil.getAutoCompleteItems();
-	String autoCompleteListToString = CommonUtil.toJavaScriptArray(autoCompleteList);
+	JSONObject autoCompleteJSON = ShoppingOrderLocalServiceUtil.getOrderAutoCompleteList(tabName);
 %>
 
 <div class="orderlist">
@@ -162,12 +159,11 @@ function showPopupDetails(url, width, title){
 }
 
 $(function(){
-	var autoCompleteList = <%= autoCompleteListToString %>;
-	console.info("autocomplete :"+autoCompleteList);
+	var jsonData = <%= autoCompleteJSON %>;
+	console.info("autocomplete :"+jsonData.autocompleteData);
 	
 	$("#<portlet:namespace/>keywords").autocomplete({
-	    source: autoCompleteList
+	    source: jsonData.autocompleteData
     });
 });
 </script>
-
