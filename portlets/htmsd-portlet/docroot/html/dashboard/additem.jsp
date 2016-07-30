@@ -82,7 +82,7 @@
 				</aui:input>
 			</aui:column>
 			<aui:column>
-				<aui:input name="<%=HConstants.TAX %>">
+				<aui:input name="<%=HConstants.TAX %>" label="label-commission">
 					<aui:validator  name="custom"  errorMessage="Please enter valid Percentage" >
 						function (val, fieldNode, ruleValue) {
 							var result = false;

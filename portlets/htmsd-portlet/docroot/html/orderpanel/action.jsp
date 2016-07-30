@@ -27,19 +27,25 @@
 		sendInvoiceURL.setParameter("tabName", tabName);
 	}
 	
+	ShoppingItem shoppingItem = CommonUtil.getShoppingItem(shoppingOrderItem.getShoppingItemId());
 	String updateStatus = "javascript:showPopup('"+updateOrderStatus.toString()+"','"+"Update Order Status','1200"+"');";
 	String viewReciept = "javascript:showPopup('"+viewRecieptURL.toString()+"','"+"View Receipt','1200"+"');";
 %>
-
-<liferay-ui:icon-menu>
-	<liferay-ui:icon image="view" message="view-reciept" url="<%= viewReciept %>" />
-	<liferay-ui:icon image="edit" message="update-status"  url="<%= updateStatus  %>" />
-	<% sendInvoiceURL.setParameter("isSeller", "true"); %>
-	<liferay-ui:icon image="post" message="send-invoice-to-seller" url="<%= sendInvoiceURL.toString() %>" />
-	<% sendInvoiceURL.setParameter("isSeller", "false"); %> 
-	<liferay-ui:icon image="post" message="send-invoice-to-customer" url="<%= sendInvoiceURL.toString() %>" />
-</liferay-ui:icon-menu>
-
+<c:choose>
+	<c:when test='<%= Validator.isNotNull(shoppingItem) %>'>
+		<liferay-ui:icon-menu>
+			<liferay-ui:icon image="view" message="view-reciept" url="<%= viewReciept %>" />
+			<liferay-ui:icon image="edit" message="update-status"  url="<%= updateStatus  %>" />
+			<% sendInvoiceURL.setParameter("isSeller", "true"); %>
+			<liferay-ui:icon image="post" message="send-invoice-to-seller" url="<%= sendInvoiceURL.toString() %>" />
+			<% sendInvoiceURL.setParameter("isSeller", "false"); %> 
+			<liferay-ui:icon image="post" message="send-invoice-to-customer" url="<%= sendInvoiceURL.toString() %>" />
+		</liferay-ui:icon-menu>
+	</c:when> 
+	<c:otherwise>
+		<span class="Order Cancelled"><liferay-ui:message key="no-action"/></span>
+	</c:otherwise>
+</c:choose>
 <script type="text/javascript">
 function showPopup(url, title, width) {
 	
