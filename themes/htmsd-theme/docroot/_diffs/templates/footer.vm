@@ -79,6 +79,8 @@
 		</div>
 	</div>
 	<div class="text-center">
-		<h5>Copyright © 2015 @ H.T.M.S.D Pet's </h5>
+		#set ($date = $dateUtil)
+		#set ($currentYear = $date.getCurrentDate("yyyy", $locale))
+		<h5>Copyright © $currentYear @ $site_name </h5>
 	</div>	
 </footer>
