@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.htmsd.slayer.model.ShoppingItem;
+import com.htmsd.slayer.service.ShoppingItemLocalServiceUtil;
 import com.htmsd.slayer.service.base.ShoppingItemServiceBaseImpl;
 import com.htmsd.util.CommonUtil;
 import com.htmsd.util.HConstants;
@@ -113,5 +114,29 @@ public class ShoppingItemServiceImpl extends ShoppingItemServiceBaseImpl {
 			jsonObject.put(HConstants.IMAGE, CommonUtil.getThumbnailpath(imageId, groupId, false));
 			jsonArray.put(jsonObject);
 		}
+	}
+	
+	@AccessControlled(guestAccessEnabled=true)
+	public JSONObject getAutocompleteItems() {
+		_log.info("In getAutocompleteItems .."); 
+		List<ShoppingItem> shoppingItems = null;
+		try {
+			shoppingItems = ShoppingItemLocalServiceUtil.getShoppingItems(-1, -1);
+		} catch (SystemException e) {
+			_log.error("No items found :-"+e);
+		}
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+		if (Validator.isNotNull(shoppingItems)) {
+			for (ShoppingItem shoppingItem: shoppingItems) {
+				if ((Validator.isNotNull(shoppingItem)) && !shoppingItem.getProductCode().isEmpty()) {
+					jsonArray.put(shoppingItem.getProductCode());
+					jsonArray.put(shoppingItem.getName());
+				}
+			}
+		}
+		
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+		jsonObject.put("autoCompleteData", jsonArray); 
+		return jsonObject;
 	}
 }
