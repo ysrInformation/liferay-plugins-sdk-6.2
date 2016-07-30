@@ -6,9 +6,6 @@
 <%@page import="com.htmsd.dashboard.DashboardPortlet"%>
 <%@include file="/html/dashboard/init.jsp" %>
 
-<link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet"></link>
-<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js" ></script>
-
 <%
 	String redirectURL = themeDisplay.getURLCurrent();
 	String orderByCol = ParamUtil.getString(request, "orderByCol","createDate");
@@ -21,8 +18,6 @@
     PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("jspPage", "/html/dashboard/admin.jsp");
 	iteratorURL.setParameter("tab1", tabs1);
-	String[] autoCompleteList = ShoppingItemLocalServiceUtil.getAutoCompleteItems();
-	String autoCompleteListToString = CommonUtil.toJavaScriptArray(autoCompleteList);
 %>
 
 <portlet:renderURL  var="addItemURL">
@@ -176,13 +171,18 @@
 	 	 var checkBoxs  = $(":checkbox").on("click",function(){
 			btns.toggle(checkBoxs.is(":checked"));
 		});
-	 	 
-		var autoCompleteList = <%= autoCompleteListToString %>;
-		console.info("autocomplete :"+autoCompleteList);
-		
-		$("#<portlet:namespace/>keywords").autocomplete({
-		    source: autoCompleteList
-	    });
+
+		AUI().use('aui-base', function(A) {
+			Liferay.Service('/htmsd-portlet.shoppingitem/get-autocomplete-items',
+		  		function(data) {
+		  			var autocompleteData = data.autoCompleteData;
+		  			console.log(autocompleteData);
+					$("#<portlet:namespace/>keywords").autocomplete({
+						source : autocompleteData
+					});
+		  		}
+		  	);
+		});
  	});
 	
 	function changeAction(action) {
