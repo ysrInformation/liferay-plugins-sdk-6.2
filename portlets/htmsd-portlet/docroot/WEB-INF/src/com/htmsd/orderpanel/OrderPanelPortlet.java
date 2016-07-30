@@ -13,8 +13,10 @@ import javax.portlet.PortletException;
 import javax.portlet.PortletSession;
 import javax.portlet.WindowStateException;
 
+import com.htmsd.slayer.model.ShoppingItem;
 import com.htmsd.slayer.model.ShoppingOrder;
 import com.htmsd.slayer.service.ShoppingCartLocalServiceUtil;
+import com.htmsd.slayer.service.ShoppingItemLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
 import com.htmsd.util.NotificationUtil;
 import com.itextpdf.text.DocumentException;
@@ -77,6 +79,18 @@ public class OrderPanelPortlet extends MVCPortlet {
 			String[] values = ShoppingCartLocalServiceUtil.getValueTokens(shoppingOrder);
 			NotificationUtil.sendNotification(shoppingOrder.getGroupId(), 
 					shoppingOrder.getUserName(), shoppingOrder.getShippingEmailAddress(), articleId, tokens, values);
+			
+			//updating shoppingitem if order is cancelled.
+			int cancelStatusId = ShoppingOrderLocalServiceUtil.getOrderStatusByTabName("Order Cancelled");
+			if (orderStatus == cancelStatusId) {
+				try {
+					ShoppingItem shoppingItem = ShoppingItemLocalServiceUtil.fetchShoppingItem(shoppingOrder.getShoppingItemId());
+					shoppingItem.setQuantity(shoppingItem.getQuantity() + shoppingOrder.getQuantity());
+					ShoppingItemLocalServiceUtil.updateShoppingItem(shoppingItem);
+				} catch (SystemException e) {
+					_log.error(e.getMessage());
+				}			
+			}
 		}
 		
 		actionResponse.setWindowState(LiferayWindowState.NORMAL);

@@ -94,6 +94,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		PortletSession portletSession = actionRequest.getPortletSession();
+		PortletConfig portletConfig = (PortletConfig) actionRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
 		List<ShoppingItem_Cart> shoppingItem_Carts = CommonUtil.getUserCartItems(themeDisplay.getUserId());
 		
 		String shippingFirstName = ParamUtil.getString(actionRequest, "firstName");
@@ -149,7 +150,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 					NotificationUtil.sendNotification(themeDisplay.getScopeGroupId(), shoppingOrder.getUserName(),
 							shoppingOrder.getShippingEmailAddress(), articleId, tokens, values); 
 					
-					String notificationContent = "<p><strong>Hi [$USER_NAME$],</strong></p><p>Thank you for ordering from our website!</p><p>You have ordered a [$Product_details$]</p>";
+					String notificationContent = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "order-confirmed-notification-message");
 					notificationContent = notificationContent.replace("[$USER_NAME$]", shoppingOrder.getUserName());
 					notificationContent = notificationContent.replace("[$Product_details$]", CommonUtil.getShoppingItem(shoppingOrder.getShoppingItemId()).getName());
 					sendUserNotification(userId, notificationContent, actionRequest);
@@ -173,6 +174,8 @@ public class ShoppingCartPortlet extends MVCPortlet {
 	protected void sendInvoiceToSeller(ActionRequest actionRequest, PortletSession portletSession, 
 			long groupId, long companyId, long sellerId, String emailAddress, ShoppingOrder shoppingOrder) {
 		
+		PortletConfig portletConfig = (PortletConfig) actionRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		String fileName = "Reciept"+new SimpleDateFormat("ddMMyyyyhhmm").format(new Date())+".pdf";
 		try {
 			GenerateInvoice.generateInvoice(actionRequest, portletSession, shoppingOrder.getOrderId(), companyId, GenerateInvoice.getFilePath(fileName));
@@ -192,14 +195,14 @@ public class ShoppingCartPortlet extends MVCPortlet {
 			emailAddress = (Validator.isNull(seller)) ? StringPool.BLANK : seller.getEmailAddress();
 		} catch (SystemException e) {
 			e.printStackTrace();
-			_log.info("email not found"+e);
+			_log.info("email not found :"+e);
 		}
 		
 		if (!emailAddress.isEmpty()) {
 			ShoppingItem _shoppingItem = CommonUtil.getShoppingItem(shoppingOrder.getShoppingItemId());
 			NotificationUtil.sendReceipt(groupId, emailAddress, "SEND_INVOICE", shoppingOrder.getUserName(),
 					GenerateInvoice.getFilePath(fileName), fileName, new String[]{"[$USER$]"}, new String[]{shoppingOrder.getUserName()});
-			String notificationContent = "<p><strong>Hi [$USER_NAME$],</strong></p><p>You have received an invoice from admin for the item [$Product_details$]</p>";
+			String notificationContent = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "invoice-sent-notification-message");
 			notificationContent = notificationContent.replace("[$USER_NAME$]", shoppingOrder.getUserName());
 			notificationContent = notificationContent.replace("[$Product_details$]",_shoppingItem.getName());
 			sendUserNotification(shoppingOrder.getUserId(), notificationContent, actionRequest);
@@ -307,6 +310,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 			ActionResponse actionResponse) throws IOException, PortletException {
 	
 		_log.info("Inside CancelOrder method ..."); 
+		PortletConfig portletConfig = (PortletConfig) actionRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		long orderId = ParamUtil.getLong(actionRequest, "orderId");
 		long orderStatus = ShoppingOrderLocalServiceUtil.getAssetCategoryIdByName(HConstants.CANCEL_ORDER_STATUS);
@@ -329,7 +333,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 					shoppingOrder.getUserName(), shoppingOrder.getShippingEmailAddress(), articleId, tokens, values);
 			
 			ShoppingItem _shoppingItem = CommonUtil.getShoppingItem(shoppingOrder.getShoppingItemId());
-			String notificationContent = "<p><strong>Hi [$USER_NAME$],</strong></p><p>You have recently cancelled an order.The order number which has been cancelled is [$Product_details$]</p>";
+			String notificationContent = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "cancel-order-notification-message");
 			String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
            	String orderID = HConstants.HTMSD + currentYear.substring(2, 4) + shoppingOrder.getOrderId();
 			notificationContent = notificationContent.replace("[$USER_NAME$]", shoppingOrder.getUserName());
@@ -345,7 +349,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 			}			
 		}
 		
-		PortletConfig portletConfig = (PortletConfig) actionRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
+		
 		String successMessage = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "you-have-requested-to-cancel-the-order-successfully");
 		SessionMessages.add(actionRequest, "request_processed", successMessage);
 		actionResponse.setRenderParameter(HConstants.JSP_PAGE, HConstants.PAGE_SHOPPING_CART_DETAILS); 
