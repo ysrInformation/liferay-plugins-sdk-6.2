@@ -134,10 +134,10 @@
 							<th><liferay-ui:message key="product-type"/></th>
 							<th><liferay-ui:message key="product-details"/></th>
 							<th><liferay-ui:message key="quantity"/></th>
-							<c:if test="<%= !isLiveCategory %>">  
+							<%-- <c:if test="<%= !isLiveCategory %>"> --%>  
 								<th><liferay-ui:message key="price"/></th>
 								<th><liferay-ui:message key="label-commission"/><%= " ("+shoppingItem.getTax()+" %)" %></th>
-							</c:if>
+							<%-- </c:if> --%>
 							<th><liferay-ui:message key="total"/></th>
 						</tr>
 					</thead>
@@ -156,7 +156,7 @@
 							<td><%= quantity %></td>
 							<c:if test="<%= !isLiveCategory %>">
 								<td><%= decimalFormat.format(subTotal) %></td>
-								<td><%= decimalFormat.format(tax) %></td>
+								<td><%= decimalFormat.format( totalPrice * (shoppingItem.getTax() / 100)) %></td>
 							</c:if>
 							<td><%= decimalFormat.format(totalPrice)  %></td>
 						</tr>
