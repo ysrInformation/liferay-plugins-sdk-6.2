@@ -145,9 +145,11 @@ function getOrderItems(s, e) {
 				
 				if (dataLen == parseInt(<%= totalCount %>)) {
 					$('#load-button').hide();
+					$('#loader-icon').hide();
 				}
 			} else {
 				$('#load-button').hide();
+				$('#loader-icon').hide();
 				$("#<portlet:namespace/>len").val(s);
 			}
 		},

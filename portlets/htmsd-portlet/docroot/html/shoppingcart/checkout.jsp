@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.util.PortalUtil"%>
 <%@ include file="/html/shoppingcart/init.jsp"%>
 
 <portlet:actionURL var="checkoutURL" name="checkout"/>
@@ -5,6 +6,12 @@
 <%
 	String[] addressArray = new String[6];
 	addressArray = CommonUtil.getUserAddress(themeDisplay.getUserId());
+	
+	HttpServletRequest httpRequest = PortalUtil.getOriginalServletRequest(request);
+	boolean singleCheckout = ParamUtil.getBoolean(httpRequest, "singleCheckout");
+	long shoppingCartItemId = ParamUtil.getLong(httpRequest, "shoppingCartItemId"); 
+	System.out.println("shoppingCartItemId : "+shoppingCartItemId);
+	System.out.println("singleCheckout : "+singleCheckout);
 	
 	long countryId = Long.parseLong(addressArray[3]);
 	long regionId = Long.parseLong(addressArray[4]);
@@ -20,7 +27,8 @@
 <liferay-ui:header title="please-in-the-details" backURL="<%= backURL.toString() %>"/>
 
 <aui:form action="<%= checkoutURL %>" name="fm"  method="post" inlineLabels="true">
-
+	<aui:input name="shoppingCartItemId" type="hidden" value="<%= shoppingCartItemId %>"/>
+	<aui:input name="singleCheckout" type="hidden" value="<%= singleCheckout %>"/>
 	<aui:column columnWidth="50" first="true"> 
 		
 		<aui:column columnWidth="30">

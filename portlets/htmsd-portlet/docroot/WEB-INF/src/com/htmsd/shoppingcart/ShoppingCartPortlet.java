@@ -90,13 +90,15 @@ public class ShoppingCartPortlet extends MVCPortlet {
 	 * @param themeDisplay
 	 * @param shoppingOrder
 	 */
-	private void addShoppingOrderItems(ActionRequest actionRequest) {
+	protected void addShoppingOrderItems(ActionRequest actionRequest) {
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		PortletSession portletSession = actionRequest.getPortletSession();
 		PortletConfig portletConfig = (PortletConfig) actionRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
 		List<ShoppingItem_Cart> shoppingItem_Carts = CommonUtil.getUserCartItems(themeDisplay.getUserId());
 		
+		boolean singleCheckout = ParamUtil.getBoolean(actionRequest, "singleCheckout");
+		long shoppingCartItemId = ParamUtil.getLong(actionRequest, "shoppingCartItemId");
 		String shippingFirstName = ParamUtil.getString(actionRequest, "firstName");
 		String shippingLastName = ParamUtil.getString(actionRequest, "lastName");
 		String shippingEmailAddress = ParamUtil.getString(actionRequest, "email");
@@ -108,67 +110,111 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		String shippingCountry = ParamUtil.getString(actionRequest, "country");
 		String shippingState = ParamUtil.getString(actionRequest, "state");
 		
-		if (Validator.isNotNull(shoppingItem_Carts) && shoppingItem_Carts.size() > 0) {
-			for (ShoppingItem_Cart shoppingItem_Cart:shoppingItem_Carts) {
-				
-				ShoppingItem shoppingItem = CommonUtil.getShoppingItem(shoppingItem_Cart.getItemId()); 
+		if (!singleCheckout) {
+			_log.info(" In checkout with bulk items.."); 
+			if (Validator.isNotNull(shoppingItem_Carts) && shoppingItem_Carts.size() > 0) {
+				for (ShoppingItem_Cart shoppingItem_Cart:shoppingItem_Carts) {
+					
+					ShoppingItem shoppingItem = CommonUtil.getShoppingItem(shoppingItem_Cart.getItemId()); 
 
-				if (Validator.isNull(shoppingItem)) continue;
+					if (Validator.isNull(shoppingItem)) continue;
+						
+					int orderStatus = HConstants.PENDING;
+					int orderQuantity = shoppingItem_Cart.getQuantity();
+					long userId = themeDisplay.getUserId();
+					long groupId = themeDisplay.getScopeGroupId();
+					long companyId = themeDisplay.getCompanyId();
+					long sellerId = shoppingItem.getUserId();
+					long shoppingItemId = shoppingItem.getItemId();
+					double totalPrice = shoppingItem_Cart.getTotalPrice();
+					String sellerName = CommonUtil.getUserFullName(sellerId);  
+					String articleId = "ORDER_COMFIRMATION";
+					String emailAddress = StringPool.BLANK;
 					
-				int orderStatus = HConstants.PENDING;
-				int orderQuantity = shoppingItem_Cart.getQuantity();
-				long userId = themeDisplay.getUserId();
-				long groupId = themeDisplay.getScopeGroupId();
-				long companyId = themeDisplay.getCompanyId();
-				long sellerId = shoppingItem.getUserId();
-				long shoppingItemId = shoppingItem.getItemId();
-				double totalPrice = shoppingItem_Cart.getTotalPrice();
-				String sellerName = CommonUtil.getUserFullName(sellerId);  
-				String articleId = "ORDER_COMFIRMATION";
-				String emailAddress = StringPool.BLANK;
-				
-				ShoppingOrder shoppingOrder = ShoppingOrderLocalServiceUtil.insertShoppingOrder(orderStatus, orderQuantity, 
-						shoppingItemId, sellerId, userId, companyId, groupId, totalPrice, sellerName, StringPool.BLANK, shippingFirstName, 
-						shippingLastName, shippingStreet, shippingCity, shippingZip, shippingEmailAddress, shippingState,
-						shippingCountry, shippingMoble, shippingAltMoble);
-				
-				Invoice invoice = InvoiceLocalServiceUtil.insertInvoice(themeDisplay.getUserId(), shoppingOrder.getOrderId());
-				
-				//updating shoppingItem quantity
-				if (Validator.isNotNull(shoppingOrder)) {
-					try {
-						long quantity = shoppingItem.getQuantity() - shoppingItem_Cart.getQuantity();
-						ShoppingItem shoppingItem2 = ShoppingItemLocalServiceUtil.fetchShoppingItem(shoppingOrder.getShoppingItemId());
-						shoppingItem2.setQuantity(quantity);
-						ShoppingItemLocalServiceUtil.updateShoppingItem(shoppingItem2);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					
-					String[] tokens = ShoppingCartLocalServiceUtil.getOrderTokens();
-					String[] values = ShoppingCartLocalServiceUtil.getValueTokens(shoppingOrder);
-					NotificationUtil.sendNotification(themeDisplay.getScopeGroupId(), shoppingOrder.getUserName(),
-							shoppingOrder.getShippingEmailAddress(), articleId, tokens, values); 
-					
-					String notificationContent = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "order-confirmed-notification-message");
-					notificationContent = notificationContent.replace("[$USER_NAME$]", shoppingOrder.getUserName());
-					notificationContent = notificationContent.replace("[$Product_details$]", CommonUtil.getShoppingItem(shoppingOrder.getShoppingItemId()).getName());
-					sendUserNotification(userId, notificationContent, actionRequest);
-
-					//send receipt to seller
-					sendInvoiceToSeller(actionRequest, portletSession, groupId, companyId, sellerId, emailAddress, shoppingOrder);
+					addItemToShoppingorder(actionRequest, themeDisplay, portletSession, portletConfig, shippingFirstName, 
+							shippingLastName, shippingEmailAddress, shippingMoble, shippingAltMoble, shippingStreet, shippingCity,
+							shippingZip, shippingCountry, shippingState, shoppingItem_Cart, shoppingItem, orderStatus, orderQuantity, userId, 
+							groupId, companyId,	sellerId, shoppingItemId, totalPrice, sellerName, articleId, emailAddress);
 				}
-				
-				//deleting items from shoppingItem_Cart table. 
+			} 
+		} else {
+			_log.info(" In checkout with single items..");
+			if (shoppingCartItemId > 0 && singleCheckout) {
+				ShoppingItem_Cart shoppingItem_Cart = null;
 				try {
-					ShoppingItem_CartLocalServiceUtil.deleteShoppingItem_Cart(shoppingItem_Cart.getId());
-				} catch (PortalException e) {
+					shoppingItem_Cart = ShoppingItem_CartLocalServiceUtil.getShoppingItem_Cart(shoppingCartItemId);
+				} catch (Exception e) {
 					e.printStackTrace();
-				} catch (SystemException e) {
-					e.printStackTrace();
+				}
+				if (Validator.isNotNull(shoppingItem_Cart)) {
+					ShoppingItem shoppingItem = CommonUtil.getShoppingItem(shoppingItem_Cart.getItemId()); 
+					int orderStatus = HConstants.PENDING;
+					int orderQuantity = shoppingItem_Cart.getQuantity();
+					long sellerId = shoppingItem.getUserId();
+					long shoppingItemId = shoppingItem.getItemId();
+					double totalPrice = shoppingItem_Cart.getTotalPrice();
+					String sellerName = CommonUtil.getUserFullName(sellerId);  
+					String articleId = "ORDER_COMFIRMATION";
+					String emailAddress = StringPool.BLANK;
+					
+					addItemToShoppingorder(actionRequest, themeDisplay, portletSession, portletConfig, shippingFirstName, 
+							shippingLastName, shippingEmailAddress, shippingMoble, shippingAltMoble, shippingStreet, shippingCity,
+							shippingZip, shippingCountry, shippingState, shoppingItem_Cart, shoppingItem, orderStatus, orderQuantity, themeDisplay.getUserId(), 
+							themeDisplay.getScopeGroupId(), themeDisplay.getCompanyId(), shoppingItem.getUserId(), shoppingItemId, 
+							totalPrice, sellerName, articleId, emailAddress);
 				}
 			}
-		} 
+		}
+	}
+
+	protected void addItemToShoppingorder(ActionRequest actionRequest, ThemeDisplay themeDisplay,
+			PortletSession portletSession, PortletConfig portletConfig, String shippingFirstName,
+			String shippingLastName, String shippingEmailAddress, String shippingMoble, String shippingAltMoble,
+			String shippingStreet, String shippingCity, String shippingZip, String shippingCountry,
+			String shippingState, ShoppingItem_Cart shoppingItem_Cart, ShoppingItem shoppingItem, int orderStatus,
+			int orderQuantity, long userId, long groupId, long companyId, long sellerId, long shoppingItemId,
+			double totalPrice, String sellerName, String articleId, String emailAddress) {
+		
+		ShoppingOrder shoppingOrder = ShoppingOrderLocalServiceUtil.insertShoppingOrder(orderStatus, orderQuantity, 
+				shoppingItemId, sellerId, userId, companyId, groupId, totalPrice, sellerName, StringPool.BLANK, shippingFirstName, 
+				shippingLastName, shippingStreet, shippingCity, shippingZip, shippingEmailAddress, shippingState,
+				shippingCountry, shippingMoble, shippingAltMoble);
+		
+		Invoice invoice = InvoiceLocalServiceUtil.insertInvoice(themeDisplay.getUserId(), shoppingOrder.getOrderId());
+		
+		//updating shoppingItem quantity
+		if (Validator.isNotNull(shoppingOrder)) {
+			try {
+				long quantity = shoppingItem.getQuantity() - shoppingItem_Cart.getQuantity();
+				ShoppingItem shoppingItem2 = ShoppingItemLocalServiceUtil.fetchShoppingItem(shoppingOrder.getShoppingItemId());
+				shoppingItem2.setQuantity(quantity);
+				ShoppingItemLocalServiceUtil.updateShoppingItem(shoppingItem2);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			String[] tokens = ShoppingCartLocalServiceUtil.getOrderTokens();
+			String[] values = ShoppingCartLocalServiceUtil.getValueTokens(shoppingOrder);
+			NotificationUtil.sendNotification(themeDisplay.getScopeGroupId(), shoppingOrder.getUserName(),
+					shoppingOrder.getShippingEmailAddress(), articleId, tokens, values); 
+			
+			String notificationContent = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "order-confirmed-notification-message");
+			notificationContent = notificationContent.replace("[$USER_NAME$]", shoppingOrder.getUserName());
+			notificationContent = notificationContent.replace("[$Product_details$]", CommonUtil.getShoppingItem(shoppingOrder.getShoppingItemId()).getName());
+			sendUserNotification(userId, notificationContent, actionRequest);
+
+			//send receipt to seller
+			sendInvoiceToSeller(actionRequest, portletSession, groupId, companyId, sellerId, emailAddress, shoppingOrder);
+		}
+		
+		//deleting items from shoppingItem_Cart table. 
+		try {
+			ShoppingItem_CartLocalServiceUtil.deleteShoppingItem_Cart(shoppingItem_Cart.getId());
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
 	}
 
 	protected void sendInvoiceToSeller(ActionRequest actionRequest, PortletSession portletSession, 

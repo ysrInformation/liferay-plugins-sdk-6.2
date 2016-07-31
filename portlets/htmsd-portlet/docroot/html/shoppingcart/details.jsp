@@ -42,6 +42,7 @@
 		shoppingItemsList = CommonUtil.getGuestUserList(session);
 	}
 	String continueShoppingURL = themeDisplay.getPortalURL()+"/web/guest/exotic-pet-birds";
+	String tdstyle = (themeDisplay.isSignedIn()) ? "style='width:40%'" : "style='width:60%'"; 
 %>
 
 <div class="cart-details-page">
@@ -50,9 +51,12 @@
 			<table width="100%" class="cart-table">
 				<thead class="cart-head">
 					<tr class="cart-head-row">
-						<td style="width:60%"><liferay-ui:message key="shopping-item"/></td>
+						<td <%= tdstyle %>><liferay-ui:message key="shopping-item"/></td> 
 						<td style="width:20%"><liferay-ui:message key="shopping-qty"/></td>
 						<td style="width:20%"><liferay-ui:message key="shopping-price"/></td>
+						<c:if test='<%= themeDisplay.isSignedIn() %>'> 
+							<td style="width:20%"></td>
+						</c:if>
 					</tr>
 				</thead>
 				<% 
@@ -69,10 +73,11 @@
 						totalPrice += price;
 						String updatetotalPrice = "javascript:updatetotalPrice(this.value,'"+shpCtItem.getCartItemId()+"','"+getTotalPriceURL+"','"+shoppingItem.getTotalPrice()+"','"+itemId+"');";
 						String removeCartItem = "javascript:removeItems('"+shoppingItem.getItemId()+"','"+removeItemURL+"');";
+						String confirmCheckOut = "javascript:confirmCheckout('"+checkOutURL+"','"+shpCtItem.getCartItemId()+"')"; 
 						%>
 						<tbody>
 							<tr>
-								<td class="product-info" style="width:60%">
+								<td class="product-info" <%= tdstyle %>> 
 									<div >
 										<div class="row-fluid">
 											<div class="span4">
@@ -123,17 +128,24 @@
 										<h5><%= CommonUtil.getPriceFormat(price, currencyId2) %></h5>
 									</div>
 								</td>
+								<c:if test='<%= themeDisplay.isSignedIn() %>'> 
+									<td style="width:20%">
+										<div>
+											<aui:button type="button" cssClass="btn-primary" value='<%= LanguageUtil.get(portletConfig, locale, "place-order") %>' onClick="<%= confirmCheckOut %>"/>					
+										</div>
+									</td>
+								</c:if>
 							</tr>
 						</tbody><% 
 					}
 				} 
 				%>
 				<c:if test='<%= !itemExist %>'>
-					<tr><td colspan="3"><liferay-ui:message key="no-items-in-cart"/></td></tr>
+					<tr><td colspan="<%= (themeDisplay.isSignedIn() ? 4 : 3) %>"><liferay-ui:message key="no-items-in-cart"/></td></tr>
 				</c:if>
 				<tfoot class="cart-footer">
 					<tr>
-						<td style="width:20%" colspan="3">
+						<td style="width:20%" colspan="<%= (themeDisplay.isSignedIn() ? 4 : 3) %>">
 							<div class="pull-right price-div">
 								<span class="price-text"><liferay-ui:message key="amount-payable"/>:</span> 
 								<span class="price"><%= CommonUtil.getPriceInNumberFormat(totalPrice, currencySymbol) %></span> 
@@ -234,5 +246,9 @@ function updatetotalPrice(quantity, Id, url, price, itemid) {
 			alert("Something went wrong !!Please try again..");
 		}
 	});
+}
+
+function confirmCheckout(url, id) {	
+	window.location.href = 	url + '&<portlet:namespace/>shoppingCartItemId='+id+ '&<portlet:namespace/>singleCheckout='+true; 
 }
 </aui:script>
