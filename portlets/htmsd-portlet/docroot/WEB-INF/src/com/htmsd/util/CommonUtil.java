@@ -418,6 +418,7 @@ public class CommonUtil {
 	public static String getPriceFormat(double price, long currencyId) {
 		String priceInString = StringPool.BLANK;
 		NumberFormat df = NumberFormat.getInstance();
+		df.setMinimumFractionDigits(2); 
 		String symbol = getCurrencySymbol(currencyId);
 		try {
 			java.util.Currency currency = java.util.Currency.getInstance(symbol);
