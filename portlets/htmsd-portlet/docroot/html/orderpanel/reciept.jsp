@@ -42,12 +42,13 @@
 	
 	double currentRate = CommonUtil.getCurrentRate(Long.valueOf(currencyId1));
 	boolean isLiveCategory = Validator.isNotNull(parentCategory) && parentCategory.getName().equals("Live");
-	int colspan = (isLiveCategory) ? 4 : 6;
+	/* int colspan = (isLiveCategory) ? 4 : 6; */
+	int colspan = 6;
 	int quantity = shoppingOrder.getQuantity();
 	double totalPrice = (currentRate == 0) ? shoppingOrder.getTotalPrice() :shoppingOrder.getTotalPrice() / currentRate;
 	double tax = CommonUtil.calculateVat(totalPrice, (Validator.isNotNull(shoppingItem)) ? shoppingItem.getTax() : 0);
 	//double subTotal = shoppingOrder.getTotalPrice() - tax;
-	double subTotal = shoppingItem.getTotalPrice() / quantity;
+	double subTotal = Validator.isNotNull(shoppingItem) ? shoppingItem.getTotalPrice() : 0;
 	tax = (currentRate == 0) ? tax : tax / currentRate;
 	subTotal = (currentRate == 0) ? subTotal : subTotal / currentRate;
 	String productCode = Validator.isNotNull(shoppingItem) ? shoppingItem.getProductCode() : "N/A";
@@ -154,10 +155,10 @@
 								</c:if>
 							</td>
 							<td><%= quantity %></td>
-							<c:if test="<%= !isLiveCategory %>">
+							<%-- <c:if test="<%= !isLiveCategory %>"> --%>
 								<td><%= decimalFormat.format(subTotal) %></td>
 								<td><%= decimalFormat.format( totalPrice * (shoppingItem.getTax() / 100)) %></td>
-							</c:if>
+							<%-- </c:if> --%>
 							<td><%= decimalFormat.format(totalPrice)  %></td>
 						</tr>
 						<tr>
