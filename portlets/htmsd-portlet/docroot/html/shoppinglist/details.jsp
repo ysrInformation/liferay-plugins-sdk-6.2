@@ -20,6 +20,7 @@
 			String currencySymbol = CommonUtil.getCurrencySymbol(Long.valueOf(currencyId));
 			double currentRate = CommonUtil.getCurrentRate(Long.valueOf(currencyId));
 			List<WholeSale> wholeSales = WholeSaleLocalServiceUtil.getWholeSaleItem(shoppingItem.getItemId());
+			String stock = (shoppingItem.getQuantity() == -1) ? "Unlimited" : String.valueOf(shoppingItem.getQuantity());
 		%>
 		<liferay-ui:error key="item-exist" message="item-already-exist"/>
 		<aui:fieldset>
@@ -74,7 +75,7 @@
 							<liferay-ui:message key="product-code"/>: <%=shoppingItem.getProductCode() %>
 						</div>
 						<div class="add-to-cart-item-code">
-							<liferay-ui:message key="product-stock"/>: <%=shoppingItem.getQuantity() %>
+							<liferay-ui:message key="product-stock"/>: <%= stock %>
 						</div>
 						<c:choose>
 							<c:when test='<%= Validator.isNotNull(cmd) && cmd.equalsIgnoreCase("itemsDetails") %>'>
