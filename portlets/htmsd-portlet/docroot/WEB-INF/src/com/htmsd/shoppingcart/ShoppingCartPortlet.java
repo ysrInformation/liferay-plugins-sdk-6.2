@@ -251,7 +251,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 			String notificationContent = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "invoice-sent-notification-message");
 			notificationContent = notificationContent.replace("[$USER_NAME$]", shoppingOrder.getUserName());
 			notificationContent = notificationContent.replace("[$Product_details$]",_shoppingItem.getName());
-			sendUserNotification(shoppingOrder.getUserId(), notificationContent, actionRequest);
+			sendUserNotification(sellerId, notificationContent, actionRequest);
 		} else {
 			_log.info("Email of seller not found.."); 
 		}

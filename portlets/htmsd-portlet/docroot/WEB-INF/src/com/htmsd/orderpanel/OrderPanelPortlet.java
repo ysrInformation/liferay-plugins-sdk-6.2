@@ -74,7 +74,7 @@ public class OrderPanelPortlet extends MVCPortlet {
 			e.printStackTrace();
 		}
 		
-		if (Validator.isNotNull(shoppingOrder)) {
+		if (Validator.isNotNull(shoppingOrder) && !articleId.isEmpty()) {
 			String[] tokens = ShoppingCartLocalServiceUtil.getOrderTokens();
 			String[] values = ShoppingCartLocalServiceUtil.getValueTokens(shoppingOrder);
 			NotificationUtil.sendNotification(shoppingOrder.getGroupId(), 

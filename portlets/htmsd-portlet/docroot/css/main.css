@@ -341,3 +341,8 @@
 	height: 100px;
 	width: 100px;
 }
+
+.Order.Review {
+	color : #FF4500;
+	font-weight: bold;
+}

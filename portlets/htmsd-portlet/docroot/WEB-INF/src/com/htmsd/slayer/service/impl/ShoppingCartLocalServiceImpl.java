@@ -130,6 +130,8 @@ public class ShoppingCartLocalServiceImpl
 			articleId = "ORDER_DELIVERED";
 		} else if (category.getName().equals(HConstants.SHIPPING_STATUS)) {
 			articleId = "ORDER_SHIPPED";
+		} else if (category.getName().equals(HConstants.ORDER_REVIEW_STATUS)) {
+			articleId = StringPool.BLANK;
 		}
 		return articleId;
 	}

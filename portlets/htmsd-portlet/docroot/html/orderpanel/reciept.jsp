@@ -57,6 +57,7 @@
 	String productType = (Validator.isNotNull(category.getName())) ? category.getName() : "N/A"; 
 	String tin = CommonUtil.getSellerCompanyDetails(shoppingItem.getUserId(), HConstants.TIN);
 	String companyName = CommonUtil.getSellerCompanyDetails(shoppingItem.getUserId(), HConstants.COMPANY_NAME);
+	String status = " ( Status : <i class='"+CommonUtil.getOrderStatus(shoppingOrder.getOrderStatus())+"'>"+CommonUtil.getOrderStatus(shoppingOrder.getOrderStatus())+"</i>)";
 %>
 
 <c:choose>
@@ -103,7 +104,7 @@
 			<div class="row-fluid txtmargin">
 				<div class="span4">
 					<strong><liferay-ui:message key="bill-no"/></strong>
-					<label><%= CommonUtil.getBillNumber(orderId) %></label>
+					<label><%= CommonUtil.getBillNumber(orderId) + " "+status %></label>
 				</div>
 				<div class="span4">
 					<strong><liferay-ui:message key="order-date"/></strong>

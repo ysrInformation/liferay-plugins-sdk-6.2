@@ -176,6 +176,7 @@ public class ShoppingOrderLocalServiceImpl
 		boolean isPendingOrderTab = tabName.equalsIgnoreCase("Pending");
 		boolean isShippingOrderTab = tabName.equalsIgnoreCase("Shipping");
 		boolean isOrderCancelledTab = tabName.equalsIgnoreCase("Order Cancelled");
+		boolean isOrderReviewTab = tabName.equalsIgnoreCase("Order Review");
 		
 		if (isPendingOrderTab) {
 			shoppingOrders = getShoppingOrders(HConstants.PENDING, start, end);
@@ -183,6 +184,8 @@ public class ShoppingOrderLocalServiceImpl
 			shoppingOrders = getShoppingOrders(getOrderStatusByTabName("Shipping"), start, end); 
 		} else if(isOrderCancelledTab) { 
 			shoppingOrders = getShoppingOrders(getOrderStatusByTabName("Order Cancelled"), start, end);
+		} else if (isOrderReviewTab) { 
+			shoppingOrders = getShoppingOrders(getOrderStatusByTabName("Order Review"), start, end);
 		} else {
 			shoppingOrders = getShoppingOrders(getOrderStatusByTabName("Delivered"), start, end);
 		}
@@ -314,6 +317,8 @@ public class ShoppingOrderLocalServiceImpl
 				orderStatus = (int) getAssetCategoryIdByName(HConstants.SHIPPING_STATUS);
 			} else if (tabName.equalsIgnoreCase("Order Cancelled")) {
 				orderStatus = (int) getAssetCategoryIdByName(HConstants.CANCEL_ORDER_STATUS);
+			} else if (tabName.equalsIgnoreCase("Order Review")) {
+				orderStatus = (int) getAssetCategoryIdByName(HConstants.ORDER_REVIEW_STATUS);
 			} else {
 				orderStatus = (int) getAssetCategoryIdByName(HConstants.DELIVERED_STATUS);
 			}

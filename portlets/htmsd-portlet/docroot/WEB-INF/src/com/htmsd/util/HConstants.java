@@ -84,6 +84,7 @@ public interface HConstants {
 	public static String PROCESSING_STATUS = "Processing";
 	public static String ORDER_CANCELLED_STATUS = "Order Cancelled";
 	public static String CANCEL_ORDER_STATUS = "Cancel Order";
+	public static String ORDER_REVIEW_STATUS = "Order Review";
 
 	public static DateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
 
