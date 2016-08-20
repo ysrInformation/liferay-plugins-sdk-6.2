@@ -37,6 +37,8 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -64,6 +66,9 @@ public class ShoppingOrderLocalServiceImpl
 	 *
 	 * Never reference this interface directly. Always use {@link com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil} to access the shopping order local service.
 	 */
+	
+	public Log _log = LogFactoryUtil.getLog(ShoppingOrderLocalServiceImpl.class);
+	
 	public ShoppingOrder insertShoppingOrder(int orderStatus, int quantity, long shoppingItemId, long sellerId, 
 			long userId, long companyId, long groupId, double totalPrice, String sellerName, String cancelReason,
 			String shippingFirstName, String shippingLastName, String shippingStreet, String shippingCity,
@@ -217,9 +222,14 @@ public class ShoppingOrderLocalServiceImpl
 		return count;
 	}
 	
-	public  List<ShoppingOrder> searchItems(String keyword, String tabName, int start, int end) {
+	public List<ShoppingOrder> searchItems(String keyword, String tabName, int start, int end) {
+		return searchShoppingOrder(start, end, 0, false, keyword, tabName);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<ShoppingOrder> searchShoppingOrder(int start, int end, long sellerId, boolean isSellerList, String keyword, String tabName) {
 		
-		System.out.println("Searched Method  >>>>>>>>>> Keyword is ::"+keyword); 
+		_log.info("In searchShoppingOrder keyword is :-->> "+keyword); 
 		String likeKeyword = StringUtil.quote(keyword, StringPool.PERCENT);
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(ShoppingOrder.class);
 		Junction junctionOR = RestrictionsFactoryUtil.disjunction();
@@ -237,7 +247,7 @@ public class ShoppingOrderLocalServiceImpl
 		
 		if (keyword.startsWith("HT")) {
 			String orderId = keyword.substring(7, keyword.length());
-			System.out.println("Order ItemId is ==>"+Long.valueOf(orderId)); 
+			_log.info("Order ItemId is ==>"+Long.valueOf(orderId)); 
 			junctionOR.add(RestrictionsFactoryUtil.eq("orderId", Long.valueOf(orderId)));
 		}
 		
@@ -250,7 +260,11 @@ public class ShoppingOrderLocalServiceImpl
 		
 		dynamicQuery.add(junctionOR);
 		
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("orderStatus", getOrderStatusByTabName(tabName)));
+		if (isSellerList) {
+			dynamicQuery.add(RestrictionsFactoryUtil.eq("sellerId", sellerId));
+		} else {
+			dynamicQuery.add(RestrictionsFactoryUtil.eq("orderStatus", getOrderStatusByTabName(tabName)));
+		}
 		
 		List<ShoppingOrder> searchList = new ArrayList<ShoppingOrder>();
 		try {
@@ -263,8 +277,13 @@ public class ShoppingOrderLocalServiceImpl
 	}
 	
 	public int searchCount(String tabName, String keyword) {
+		return searchCount(0, false, tabName, keyword);
+	}
+	
+	public int searchCount(long sellerId, boolean isSellerList, String tabName, String keyword) {
 		
-		System.out.println("searchCount Method <:::> Keyword is ::"+keyword); 
+		_log.info("searchCount for Keyword :"+keyword); 
+		
 		String likeKeyword = StringUtil.quote(keyword, StringPool.PERCENT);
 		
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(ShoppingOrder.class);
@@ -295,7 +314,11 @@ public class ShoppingOrderLocalServiceImpl
 		
 		dynamicQuery.add(junctionOR);
 		
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("orderStatus", getOrderStatusByTabName(tabName)));
+		if (isSellerList) {
+			dynamicQuery.add(RestrictionsFactoryUtil.eq("sellerId", sellerId));
+		} else {
+			dynamicQuery.add(RestrictionsFactoryUtil.eq("orderStatus", getOrderStatusByTabName(tabName)));
+		}
 
 		int searchCount = 0;
 		try {
@@ -437,5 +460,33 @@ public class ShoppingOrderLocalServiceImpl
 		}
 		jsonObject.put("autocompleteData", jsonArray);
 		return jsonObject;
+	}
+	
+	public List<ShoppingOrder> getShoppingOrderListBySellerId(int start, int end, long sellerId) {
+		List<ShoppingOrder> shoppingOrders = new ArrayList<ShoppingOrder>();
+		try {
+			shoppingOrders = shoppingOrderPersistence.findBySellerId(sellerId, start, end);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		return shoppingOrders;
+	}
+	
+	public int getCountBySellerId(long sellerId) {
+		int count = 0;
+		try {
+			count = shoppingOrderPersistence.countBySellerId(sellerId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		return count;
+	}
+	
+	public int sellerSearchCount(long sellerId, String keyword) {
+		return searchCount(sellerId, true, StringPool.BLANK, keyword);
+	}
+	
+	public List<ShoppingOrder> searchSellerItems(int start, int end, long sellerId, String keyword) {
+		return searchShoppingOrder(start, end, sellerId, true, keyword, StringPool.BLANK);
 	}
 }

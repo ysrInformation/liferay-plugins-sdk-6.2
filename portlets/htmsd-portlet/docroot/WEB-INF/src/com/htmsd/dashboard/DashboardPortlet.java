@@ -18,9 +18,12 @@ import javax.portlet.ResourceResponse;
 import com.htmsd.addresscapture.AddressCapture;
 import com.htmsd.slayer.model.Category;
 import com.htmsd.slayer.model.ShoppingItem;
+import com.htmsd.slayer.model.ShoppingOrder;
 import com.htmsd.slayer.service.CategoryLocalServiceUtil;
 import com.htmsd.slayer.service.ItemHistoryLocalServiceUtil;
+import com.htmsd.slayer.service.ShoppingCartLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingItemLocalServiceUtil;
+import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
 import com.htmsd.slayer.service.WholeSaleLocalServiceUtil;
 import com.htmsd.util.HConstants;
 import com.htmsd.util.NotificationUtil;
@@ -83,6 +86,9 @@ public class DashboardPortlet extends MVCPortlet {
 			jsonObject.put("categoryId", category.getCategoryId());
 			jsonArray.put(jsonObject);
 		}
+	} else if(resourceId.equals("changeOrderStatus")) {
+		long orderId = ParamUtil.getLong(resourceRequest, "orderId");
+		changeOrderStatus(orderId);
 	} else {
 		/*long categoryId = ParamUtil.getLong(resourceRequest, HConstants.CATEGORY_ID);
 		Category category = null;
@@ -121,7 +127,39 @@ public class DashboardPortlet extends MVCPortlet {
 		printWriter.flush();
 	}
 	
-	
+
+	/**
+	 * Method to changeOrderStatus
+	 * @param actionRequest
+	 * @param actionResponse
+	 *  @throws IOException
+	 * @throws PortletException
+	 */
+	private void changeOrderStatus(long orderId) {
+		if (orderId > 0) {
+			
+			int orderStatus = ShoppingOrderLocalServiceUtil.getOrderStatusByTabName(HConstants.SHIPPING_STATUS);
+			String articleId = ShoppingCartLocalServiceUtil.getArticleId(orderStatus);
+			
+			ShoppingOrderLocalServiceUtil.updateShoppingOrder(orderStatus, orderId, StringPool.BLANK); 
+			
+			ShoppingOrder shoppingOrder = null;
+			try {
+				shoppingOrder = ShoppingOrderLocalServiceUtil.fetchShoppingOrder(orderId);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			
+			if (Validator.isNotNull(shoppingOrder) && !articleId.isEmpty()) {
+				String[] tokens = ShoppingCartLocalServiceUtil.getOrderTokens();
+				String[] values = ShoppingCartLocalServiceUtil.getValueTokens(shoppingOrder);
+				NotificationUtil.sendNotification(shoppingOrder.getGroupId(), 
+						shoppingOrder.getUserName(), shoppingOrder.getShippingEmailAddress(), articleId, tokens, values);
+			}
+		}
+	}
+
+
 	/**
 	 * Method to saveBusiness for saving user business info
 	 * @param actionRequest

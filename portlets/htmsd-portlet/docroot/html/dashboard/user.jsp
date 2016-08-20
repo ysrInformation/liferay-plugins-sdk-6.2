@@ -57,7 +57,7 @@
 			<%=item.getStatus() == HConstants.APPROVE ? "Listed" : (item.getStatus() == HConstants.REJECT ? "Rejected" : "New")%>
 		</liferay-ui:search-container-column-text>
 		
-		<liferay-ui:search-container-column-text name="stock">
+		<liferay-ui:search-container-column-text name="product-stock">
 			<c:if test='<%=item.getStatus() == HConstants.APPROVE %>'>
 			<%=item.getQuantity() == -1 ? LanguageUtil.get(portletConfig,themeDisplay.getLocale(),"unlimited") : item.getQuantity() %>
 			
@@ -104,7 +104,7 @@ function showStockForm(url) {
 					id: 'showstockDialog',
 					uri: url
 				},
-				title: Liferay.Language.get('stock'),
+				title: Liferay.Language.get('product-stock'),
 				uri: url
 			});
 			

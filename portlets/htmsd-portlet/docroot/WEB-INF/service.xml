@@ -183,6 +183,10 @@
 			<finder-column name="shoppingItemId"/>
 			<finder-column name="orderStatus"/>
 		</finder>
+		
+		<finder return-type="Collection" name="SellerId">
+			<finder-column name="sellerId"/>
+		</finder>
 
 	</entity>
 	

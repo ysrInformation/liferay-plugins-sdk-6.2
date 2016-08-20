@@ -98,7 +98,7 @@
 				</div>
 				<div class="span4">
 					<strong><liferay-ui:message key="tin"/></strong>
-					<label><%= tin.isEmpty() ? "N/A" : tin %></label>		
+					<label><%= (tin == null || tin.isEmpty()) ? "N/A" : tin %></label>		
 				</div>
 			</div>
 			<div class="row-fluid txtmargin">
@@ -112,7 +112,7 @@
 				</div>
 				<div class="span4">
 					<strong><liferay-ui:message key="company-name"/></strong>
-					<label><%= companyName.isEmpty() ? "N/A" : companyName %></label>
+					<label><%= (companyName == null || companyName.isEmpty()) ? "N/A" : companyName %></label>
 				</div>
 			</div>
 			<div class="row-fluid txtmargin">

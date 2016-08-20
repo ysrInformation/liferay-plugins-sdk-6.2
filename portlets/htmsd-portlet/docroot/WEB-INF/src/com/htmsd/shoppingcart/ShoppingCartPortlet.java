@@ -249,7 +249,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 			NotificationUtil.sendReceipt(groupId, emailAddress, "SEND_INVOICE", shoppingOrder.getUserName(),
 					GenerateInvoice.getFilePath(fileName), fileName, new String[]{"[$USER$]"}, new String[]{shoppingOrder.getUserName()});
 			String notificationContent = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "invoice-sent-notification-message");
-			notificationContent = notificationContent.replace("[$USER_NAME$]", shoppingOrder.getUserName());
+			notificationContent = notificationContent.replace("[$USER_NAME$]", _shoppingItem.getUserName());
 			notificationContent = notificationContent.replace("[$Product_details$]",_shoppingItem.getName());
 			sendUserNotification(sellerId, notificationContent, actionRequest);
 		} else {
