@@ -5,7 +5,7 @@
 <%
 	int slno = 1;
 	PortletURL iteratorURL = renderResponse.createRenderURL();
-	iteratorURL.setParameter(HConstants.JSP_PAGE, "/html/orderpanel/view.jsp");
+	iteratorURL.setParameter(HConstants.JSP_PAGE, "/html/orderpanel/list.jsp");
 	
 	String tabName = ParamUtil.getString(request, "tab1", "Pending"); 
 	String orderByCol = ParamUtil.getString(request, "orderByCol","createDate");
