@@ -1,5 +1,6 @@
 package com.htmsd.util;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -7,6 +8,13 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
+
+import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.params.HttpMethodParams;
 
 import com.htmsd.slayer.NoSuchShoppingItem_CartException;
 import com.htmsd.slayer.model.Category;
@@ -30,6 +38,9 @@ import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.PortletClassLoaderUtil;
@@ -608,5 +619,30 @@ public class CommonUtil {
 	    }
 	    sb.append("]");
 	    return sb.toString();
+	}
+	
+	public static JSONObject invoker(String URL) {
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+		HttpClient client = new HttpClient();
+	    GetMethod method = new GetMethod(URL);
+	    method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, 
+	    		new DefaultHttpMethodRetryHandler(3, false));
+		try {
+			int statusCode = client.executeMethod(method);
+			byte[] responseBody = method.getResponseBody();
+			if (statusCode == HttpStatus.SC_OK) {
+				jsonObject = JSONFactoryUtil.createJSONObject(new String(responseBody));
+			}
+			System.out.println(new String(responseBody));
+		} catch (HttpException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		} finally {
+			method.releaseConnection();
+		}
+		return jsonObject;
 	}
 }

@@ -106,4 +106,9 @@ public interface HConstants {
 	public static final String ASSET_VOCABULARY_ORDER_STATUS = "Order Status";
 	public static final int BAR_CODE_LENGTH = 13;
 	public static final String CST = "CST";
+	
+	//OTP
+	public static final String OTP_API_KEY = "a7a482de-64a1-11e6-a8cd-00163ef91450";
+	public static final String OTP_SEND_ENDPOINT ="https://2factor.in/API/V1/"+OTP_API_KEY+"/SMS/${user_phone_no}/AUTOGEN";
+	public static final String OTP_VERIFY_ENDPOINT = "https://2factor.in/API/V1/"+OTP_API_KEY+"/SMS/VERIFY/${session_id}/${otp}";
 }

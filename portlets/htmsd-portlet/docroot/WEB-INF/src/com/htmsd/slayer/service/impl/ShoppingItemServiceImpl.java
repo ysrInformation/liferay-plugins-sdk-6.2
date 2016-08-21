@@ -139,4 +139,26 @@ public class ShoppingItemServiceImpl extends ShoppingItemServiceBaseImpl {
 		jsonObject.put("autoCompleteData", jsonArray); 
 		return jsonObject;
 	}
+	
+	@AccessControlled(guestAccessEnabled=true)
+	public JSONObject sendOTP(String phoneNumber) {
+		String URL = HConstants.OTP_SEND_ENDPOINT;
+		URL = URL.replace("${user_phone_no}", phoneNumber);
+		
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+		System.out.println(URL);
+		jsonObject = CommonUtil.invoker(URL);
+		return jsonObject;
+	}
+	
+	@AccessControlled(guestAccessEnabled=true)
+	public JSONObject verifyOTP(String sessionId, String otp) {
+		String URL = HConstants.OTP_VERIFY_ENDPOINT;
+		URL = URL.replace("${session_id}", sessionId);
+		URL = URL.replace("${otp}", otp);
+		
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+		jsonObject = CommonUtil.invoker(URL);
+		return jsonObject;
+	}
 }
