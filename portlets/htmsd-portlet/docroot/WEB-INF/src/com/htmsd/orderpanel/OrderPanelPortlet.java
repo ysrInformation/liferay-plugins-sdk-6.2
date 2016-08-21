@@ -18,6 +18,7 @@ import com.htmsd.slayer.model.ShoppingOrder;
 import com.htmsd.slayer.service.ShoppingCartLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingItemLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
+import com.htmsd.util.CommonUtil;
 import com.htmsd.util.NotificationUtil;
 import com.itextpdf.text.DocumentException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -111,6 +112,7 @@ public class OrderPanelPortlet extends MVCPortlet {
 				throws MalformedURLException, FileNotFoundException, DocumentException, SystemException, WindowStateException {
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		PortletConfig portletConfig = (PortletConfig) actionRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
 		PortletSession portletSession = actionRequest.getPortletSession();
 		
 		long orderId = ParamUtil.getLong(actionRequest, "orderId");
@@ -133,9 +135,18 @@ public class OrderPanelPortlet extends MVCPortlet {
 			String emailAddress = (isSeller.equals("true") ? seller.getEmailAddress() : shoppingOrder.getShippingEmailAddress());
 			NotificationUtil.sendReceipt(themeDisplay.getScopeGroupId(), emailAddress,
 					articleId, shoppingOrder.getUserName(), filePath, tempFileName, placeHolders, values);
+			
+			ShoppingItem _shoppingItem = CommonUtil.getShoppingItem(shoppingOrder.getShoppingItemId());
+			if (Validator.isNotNull(_shoppingItem)) {
+				long userId = (isSeller.equals("true")) ? shoppingOrder.getSellerId() : shoppingOrder.getUserId();
+				String userName = (isSeller.equals("true")) ? _shoppingItem.getUserName() : shoppingOrder.getUserName();
+				String notificationContent = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "invoice-sent-notification-message");
+				notificationContent = notificationContent.replace("[$USER_NAME$]", userName);
+				notificationContent = notificationContent.replace("[$Product_details$]",_shoppingItem.getName());
+				NotificationUtil.sendUserNotification(userId, notificationContent, actionRequest);
+			}
 		}
 		
-		PortletConfig portletConfig = (PortletConfig) actionRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
 		String successMessage = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "reciept-has-been-sent-to-the-user");
 		SessionMessages.add(actionRequest, "request_processed", successMessage);
 		actionResponse.setWindowState(LiferayWindowState.NORMAL);

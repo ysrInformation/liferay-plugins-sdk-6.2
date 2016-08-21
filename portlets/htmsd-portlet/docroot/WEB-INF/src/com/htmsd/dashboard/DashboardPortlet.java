@@ -11,6 +11,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
@@ -36,11 +37,13 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
+import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
@@ -200,6 +203,7 @@ public class DashboardPortlet extends MVCPortlet {
 		
 		UploadPortletRequest uploadRequest = PortalUtil.getUploadPortletRequest(actionRequest);
 		ThemeDisplay themeDisplay=(ThemeDisplay)uploadRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		PortletConfig portletConfig = (PortletConfig) actionRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
 		
 		long itemId = ParamUtil.getLong(uploadRequest, HConstants.ITEM_ID);
 		long userId  = ParamUtil.getLong(uploadRequest, "userId");
@@ -225,6 +229,7 @@ public class DashboardPortlet extends MVCPortlet {
 		String articleId = StringPool.BLANK;
 		
 		String remark = ( status == HConstants.REJECT ) ? ParamUtil.getString(uploadRequest, HConstants.REMARK)  : StringPool.BLANK;
+		String addupdateMessage = (itemId == 0) ? "added" : "updated"; 
 		
 		if (itemId == 0) {
 		
@@ -263,9 +268,14 @@ public class DashboardPortlet extends MVCPortlet {
 		String[] oldStr = {"[$USER_EMAIL$]", "[$USER_NAME$]", "[$ITEM_NAME$]", "[$PRODUCT_CODE$]", "[$DESCRIPTION$]", "[$TAX$]", "[$SELLER_PRICE$]", "[$QUANTITY$]"};
 		String[] newStr = {currentUserEmail, currentUserName, name, productCode, description, Double.toString(tax), Double.toString(sellerPrice), quantity == -1 ? "Unlimited Quantity" : String.valueOf(quantity)};
 		
-		
 		NotificationUtil.sendNotification(themeDisplay.getScopeGroupId(), 
 				themeDisplay.getUser().getFullName(), themeDisplay.getUser().getEmailAddress(), articleId, oldStr, newStr);
+		
+		String notificationContent = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "item-add-update-notification-message");
+		notificationContent = notificationContent.replace("[$USER_NAME$]", currentUserName);
+		notificationContent = notificationContent.replace("[$Product_details$]", name);
+		notificationContent = notificationContent.replace("[$ADDED_UPDATED$]", addupdateMessage);
+		NotificationUtil.sendUserNotification(currentUserId, notificationContent, actionRequest);
 		
 	} 
 	

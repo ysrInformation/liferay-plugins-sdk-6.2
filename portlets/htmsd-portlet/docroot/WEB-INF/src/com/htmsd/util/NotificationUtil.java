@@ -2,12 +2,17 @@ package com.htmsd.util;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 
 import javax.mail.internet.InternetAddress;
+import javax.portlet.ActionRequest;
 
+import com.htmsd.shoppingcart.UserNotificationHandler;
 import com.liferay.mail.service.MailServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.mail.MailMessage;
@@ -21,6 +26,9 @@ import com.liferay.portal.kernel.xml.DocumentException;
 import com.liferay.portal.kernel.xml.Node;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
+import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.ServiceContextFactory;
+import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.service.JournalArticleLocalServiceUtil;
 
@@ -156,6 +164,31 @@ public class NotificationUtil {
 			mailMessage.setHTMLFormat(true);
 			mailMessage.addFileAttachment(receiptFile, fileName); 
 			MailServiceUtil.sendEmail(mailMessage);
+		}
+	}
+	
+	public static void sendUserNotification(long userId, String notificationContent, 
+			ActionRequest actionRequest) {
+		
+		ServiceContext serviceContext = null;
+		try {
+			serviceContext = ServiceContextFactory.getInstance(actionRequest);
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		JSONObject payloadJSON = JSONFactoryUtil.createJSONObject();
+		payloadJSON.put("userId", userId);
+		payloadJSON.put("notificationContent", notificationContent);
+		
+		try {
+			UserNotificationEventLocalServiceUtil.addUserNotificationEvent(
+					userId, UserNotificationHandler.PORTLET_ID,
+					(new Date()).getTime(), userId, payloadJSON.toString(), false, serviceContext);
+		} catch (Exception e) {
+			_log.error("Error while sending the notification -"+e);
 		}
 	}
 }

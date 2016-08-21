@@ -201,7 +201,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 			String notificationContent = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "order-confirmed-notification-message");
 			notificationContent = notificationContent.replace("[$USER_NAME$]", shoppingOrder.getUserName());
 			notificationContent = notificationContent.replace("[$Product_details$]", CommonUtil.getShoppingItem(shoppingOrder.getShoppingItemId()).getName());
-			sendUserNotification(userId, notificationContent, actionRequest);
+			NotificationUtil.sendUserNotification(userId, notificationContent, actionRequest);
 
 			//send receipt to seller
 			sendInvoiceToSeller(actionRequest, portletSession, groupId, companyId, sellerId, emailAddress, shoppingOrder);
@@ -251,7 +251,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 			String notificationContent = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "invoice-sent-notification-message");
 			notificationContent = notificationContent.replace("[$USER_NAME$]", _shoppingItem.getUserName());
 			notificationContent = notificationContent.replace("[$Product_details$]",_shoppingItem.getName());
-			sendUserNotification(sellerId, notificationContent, actionRequest);
+			NotificationUtil.sendUserNotification(sellerId, notificationContent, actionRequest);
 		} else {
 			_log.info("Email of seller not found.."); 
 		}
@@ -384,7 +384,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
            	String orderID = HConstants.HTMSD + currentYear.substring(2, 4) + shoppingOrder.getOrderId();
 			notificationContent = notificationContent.replace("[$USER_NAME$]", shoppingOrder.getUserName());
 			notificationContent = notificationContent.replace("[$Product_details$]",orderID+" - "+_shoppingItem.getName());
-			sendUserNotification(shoppingOrder.getUserId(), notificationContent, actionRequest);
+			NotificationUtil.sendUserNotification(shoppingOrder.getUserId(), notificationContent, actionRequest);
 			
 			try {
 				ShoppingItem shoppingItem = ShoppingItemLocalServiceUtil.fetchShoppingItem(shoppingOrder.getShoppingItemId());
@@ -417,30 +417,5 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		return itemPrice;
 	}
 	
-	public void sendUserNotification(long userId, String notificationContent, 
-			ActionRequest actionRequest) {
-		
-		ServiceContext serviceContext = null;
-		try {
-			serviceContext = ServiceContextFactory.getInstance(actionRequest);
-		} catch (PortalException e) {
-			e.printStackTrace();
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		
-		JSONObject payloadJSON = JSONFactoryUtil.createJSONObject();
-		payloadJSON.put("userId", userId);
-		payloadJSON.put("notificationContent", notificationContent);
-		
-		try {
-			UserNotificationEventLocalServiceUtil.addUserNotificationEvent(
-					userId, UserNotificationHandler.PORTLET_ID,
-					(new Date()).getTime(), userId, payloadJSON.toString(), false, serviceContext);
-		} catch (Exception e) {
-			_log.error("Error while sending the notification -"+e);
-		}
-	}
-
 	private static final Log _log = LogFactoryUtil.getLog(ShoppingCartPortlet.class.getName());
 }
