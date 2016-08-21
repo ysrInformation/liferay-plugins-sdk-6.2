@@ -25,6 +25,7 @@ import com.htmsd.slayer.model.ShoppingItem_Cart;
 import com.htmsd.slayer.model.ShoppingOrder;
 import com.htmsd.slayer.model.ShoppingOrderItem;
 import com.htmsd.slayer.service.ShoppingItemLocalServiceUtil;
+import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
 import com.htmsd.slayer.service.base.ShoppingCartServiceBaseImpl;
 import com.htmsd.util.CommonUtil;
 import com.htmsd.util.HConstants;
@@ -122,6 +123,10 @@ public class ShoppingCartServiceImpl extends ShoppingCartServiceBaseImpl {
 			double currencyRate = CommonUtil.getCurrentRate(currencyId);
 			double total = (currencyRate == 0) ? orderItem.getTotalPrice() :  orderItem.getTotalPrice() / currencyRate; 
 			long imageId = shoppingItem.getSmallImage();
+			String status = CommonUtil.getOrderStatus(orderItem.getOrderStatus());
+			status = status.equals(HConstants.ORDER_REVIEW_STATUS) ? HConstants.PROCESSING_STATUS : status;
+			int orderReviewId = (int) ShoppingOrderLocalServiceUtil.getAssetCategoryIdByName(HConstants.ORDER_REVIEW_STATUS);
+			int orderStatus = (orderItem.getOrderStatus() == orderReviewId) ? HConstants.PENDING : orderItem.getOrderStatus();
 			
 			jsonObject.put(HConstants.ITEM_ID, shoppingItem.getItemId());
 			jsonObject.put(HConstants.NAME, shoppingItem.getName());
@@ -129,8 +134,8 @@ public class ShoppingCartServiceImpl extends ShoppingCartServiceBaseImpl {
 			jsonObject.put("orderId", orderItem.getOrderId());
 			jsonObject.put("quantity", orderItem.getQuantity());
 			jsonObject.put("orderDate", sdf.format(orderItem.getCreateDate()));
-			jsonObject.put("orderStatus", orderItem.getOrderStatus());
-			jsonObject.put("status", CommonUtil.getOrderStatus(orderItem.getOrderStatus()));
+			jsonObject.put("orderStatus", orderStatus);
+			jsonObject.put("status", status);
 			jsonObject.put(HConstants.IMAGE, CommonUtil.getThumbnailpath(imageId, groupId, false));
 			jsonArray.put(jsonObject);
 		}

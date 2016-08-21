@@ -77,8 +77,17 @@
 		<h4><liferay-ui:message key="comission" /></h4>
 		<aui:layout>
 			<aui:column>
-				<aui:input name="<%=HConstants.PRICE %>" required="true">
+				<aui:input name="<%=HConstants.PRICE %>" required="true"> 
 					<aui:validator name="number" />
+					<aui:validator name="custom" errorMessage="Please enter a valid price">
+						function (val, fieldNode, ruleValue) {
+							var result = true;
+							if (val.length == 0 || val <= 0) {
+								result = false;
+							}
+							return result;
+						}
+					</aui:validator>
 				</aui:input>
 			</aui:column>
 			<aui:column>
@@ -97,6 +106,15 @@
 			<aui:column>
 				<aui:input name="<%=HConstants.QUANTITY %>">
 					<aui:validator name="number" />
+					<aui:validator name="custom" errorMessage="Please enter a valid quantity">
+						function (val, fieldNode, ruleValue) {
+							var result = true;
+							if (val.length == 0 || val <= 0) {
+								result = false;
+							}
+							return result;
+						}
+					</aui:validator>
 				</aui:input>
 			</aui:column>	
 			<aui:column >
