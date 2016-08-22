@@ -41,7 +41,6 @@
 <%
 	String val = (String) portletSession.getAttribute("currentCurrencyId", PortletSession.APPLICATION_SCOPE);
 	long currencyId = (Validator.isNull(val)) ?  0 : Long.valueOf(val);
-	System.out.println(CommonUtil.getCurrencySymbol(currencyId));
 %>	
 <aui:script>
 	function formatPrice(number) {
