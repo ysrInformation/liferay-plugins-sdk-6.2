@@ -1,0 +1,7 @@
+/* Dockbar css */
+
+.aui .whiteTheme .dockbar .navbar-inner, .aui .dockbar-split .dockbar .navbar-inner,
+.aui .whiteTheme .dockbar .navbar-inner .nav > li, .aui .dockbar-split .dockbar .navbar-inner .nav > li {
+    background-color: #00a161;
+    background-image: none;
+}

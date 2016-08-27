@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+
+#parse ($init)
+
+#set ($bg = "")
+
+#if("/home" == $layout.getFriendlyURL())
+	#set ($bg = "bg")
+#end
+
+<html class="$root_css_class" dir="#language ("lang.dir")" lang="$w3c_language_id">
+
+	<head>
+		<title>$the_title - $company_name</title>
+	
+		<meta content="initial-scale=1.0, width=device-width" name="viewport" />
+	
+		$theme.include($top_head_include)
+		
+		<link href="//code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet"></link>
+		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.css rel="Stylesheet"></link>
+
+		<script type="text/javascript" src="$javascript_folder/jquery-1.11.3.min.js"></script>
+		<script type="text/javascript" src="$javascript_folder/lightGallery.min.js"></script>
+		<script type="text/javascript" src="$javascript_folder/jquery-ui.js" ></script>
+	</head>
+	
+	<body class="$css_class $bg">
+	
+	<div id="bg_top_fixed_heigth" class="bg">
+	</div>
+	
+	<a href="#main-content" id="skip-to-content">#language ("skip-to-content")</a>
+	
+	$theme.include($body_top_include)
+	<link rel="stylesheet" href="$css_folder/font-awesome.min.css">
+	
+	#dockbar()
+	
+	<div class="container-fluid" id="wrapper">
+		<header id="banner" role="banner">
+			<div class="topHeader">
+				<div class="topHeaderWrapper row-fluid">
+					<div class="span4">
+						<ul>
+							<li class="currency">
+								$theme.runtime("7_WAR_htmsdportlet")
+							</li>
+							<li class="langPortlet">
+								$theme.runtime("82")
+							</li>
+						</ul>
+					</div>
+					<div class="span8">
+						<div class="social-icons">
+							<ul class="contact">
+								<li class="socials-icons">
+									<a class="facebook" title="Share in Facebook" data-toggle="tooltip" href="#"><i class="fa fa-facebook fa-lg"></i></a>
+								</li>
+								<li class="socials-icons">
+									<a class="twitter" title="Share in Twitter" data-toggle="tooltip" href="#"><i class="fa fa-twitter fa-lg"></i></a>
+								</li>
+								<li class="socials-icons">
+									<a class="google-plus" title="Share in Google +" data-toggle="tooltip" href="#"><i class="fa fa-google-plus fa-lg"></i></a>
+								</li>
+								<li class="socials-icons">
+									<a class="youtube"  data-toggle="tooltip" href="#"><i class="fa fa-youtube fa-lg"></i></a>
+								</li>
+								<!--<li class="socials-icons">
+									<a class="pinterest" title="Share in Pinterest" data-toggle="tooltip" href="#"><i class="fa fa-pinterest fa-2x"></i></a>
+								</li>
+								<li class="socials-icons">
+									<a class="skype" title="Connect with Skype" data-toggle="tooltip" href="#"><i class="fa fa-skype fa-2x"></i></a>
+								</li>-->
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="fixed_div"></div>
+			<div id="search-div" class="row-fluid">
+				<div class="mainHeadWrapper">			
+					<div id="heading" class="span3">
+						<h1 class="site-title">
+							<a class="$logo_css_class" href="$site_default_url" title="#language_format ("go-to-x", [$site_name])">
+								<img alt="$logo_description" height="65" src="$site_logo" width="65" />
+			
+								#if ($show_site_name)
+									<span class="site-name" title="#language_format ("go-to-x", [$site_name])">
+										$site_name
+									</span>
+								#end
+							</a>
+			
+						</h1>
+			
+						<h2 class="page-title">
+							<span>$the_title</span>
+						</h2>
+					</div>
+					<div class="span9">
+						#if ($has_navigation || $is_signed_in)
+							#parse ("$full_templates_path/navigation.vm")
+						#end
+					</div>
+					<!--<div class="span6 center">
+						<input id="search" placeholder="Search"/><button id="srch-btn" class="search-btn" onClick="javascript:searchItems();">
+							<i class="fa fa-search"></i> SEARCH
+						</button>
+					</div>
+					<div class="span2 center">
+						#if (!$is_signed_in)
+							#set ($shoppingList = $request.getSession().getAttribute("SHOPPING_ITEMS"))
+							#if ($validator.isNotNull($shoppingList))
+								#set($count = $shoppingList.size())
+							#else
+								#set($count = 0)
+							#end
+							<a href="/cart">
+								<button class="cart-btn">
+									<i class="fa fa-shopping-cart cart-icon"></i>
+									<span class="cart-label"> Cart </span>
+									<span id="cart-item-guest-count">&nbsp;$count&nbsp;</span>
+								</button>	
+							</a>
+						#else
+							<a href="/cart">
+								<button class="cart-btn">
+									<i class="fa fa-shopping-cart cart-icon"></i>
+									<span class="cart-label"> Cart </span>
+									<span id="cart-item-count">&nbsp;0&nbsp;</span>
+								</button>	
+							</a>
+						#end
+					</div>-->
+				</div>
+			</div>
+		</header>
+		<div id="content">
+			#if("/home" != $layout.getFriendlyURL())
+				<nav id="breadcrumbs">#breadcrumbs()</nav>
+			#end	
+	
+			#if ($selectable)
+				$theme.include($content_include)
+			#else
+				$portletDisplay.recycle()
+	
+				$portletDisplay.setTitle($the_title)
+	
+				$theme.wrapPortlet("portlet.vm", $content_include)
+			#end
+		</div>
+		
+	</div>
+	
+	$theme.include($body_bottom_include)
+	
+	$theme.include($bottom_include)
+	
+	#parse ("$full_templates_path/footer.vm")
+
+	<div class="scroll-top-wrapper ">
+		<span class="scroll-top-inner">
+			<i class="fa fa-2x fa-arrow-circle-up"></i>
+		</span>
+	</div>
+</body>
+<script>
+	var isMobile = {
+	    Android: function() {
+	        return navigator.userAgent.match(/Android/i);
+	    },
+	    BlackBerry: function() {
+	        return navigator.userAgent.match(/BlackBerry/i);
+	    },
+	    iOS: function() {
+	        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+	    },
+	    Opera: function() {
+	        return navigator.userAgent.match(/Opera Mini/i);
+	    },
+	    Windows: function() {
+	        return navigator.userAgent.match(/IEMobile/i);
+	    },
+	    any: function() {
+	        return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+	    }
+	};
+	//Search 
+	var elTop = $('#search-div').offset().top;
+	var mobile = !isMobile.any();
+   	$(window).scroll(function() {
+   		if(mobile) {
+	        $('#search-div').toggleClass('sticky', $(window).scrollTop() > elTop);
+	        $('#fixed_div').toggleClass('fixed_div', $(window).scrollTop() > elTop);
+    	} else {
+    		$('#srch-btn').html('<i class="fa fa-search"></i>');
+    	}
+    });
+    
+    //Scroll to Top
+	$(function(){
+	 
+		$(document).on( 'scroll', function(){
+	 
+			if ($(window).scrollTop() > 100) {
+				$('.scroll-top-wrapper').addClass('show');
+			} else {
+				$('.scroll-top-wrapper').removeClass('show');
+			}
+		});
+		$('.scroll-top-wrapper').on('click', scrollToTop);
+		
+		// auto complete code
+		AUI().use('aui-base', function(A) {
+			Liferay.Service('/htmsd-portlet.shoppingitem/get-autocomplete-items',
+		  		function(data) {
+		  			var autocompleteData = data.autoCompleteData;
+		  			console.log(autocompleteData);
+					$("#search").autocomplete({
+						source : autocompleteData
+					});
+		  		}
+		  	);
+		});
+	});
+	 
+	function scrollToTop() {
+		verticalOffset = typeof(verticalOffset) != 'undefined' ? verticalOffset : 0;
+		element = $('body');
+		offset = element.offset();
+		offsetTop = offset.top;
+		$('html, body').animate({scrollTop: offsetTop}, 500, 'linear');
+	}
+	
+	AUI().use('aui-base', function(A) {
+		Liferay.Service('/htmsd-portlet.shoppingcart/get-shopping-cart-item-count', {
+			userId: $user_id
+		}, function(obj) {
+			$('#cart-item-count').html("&nbsp;"+obj+"&nbsp;");
+		});
+	});
+	
+	function searchItems() {
+		var searchParam = $('#search').val();
+		if(searchParam) {
+			window.location.href = '/search?search-param=' + searchParam;
+		} 
+	}
+</script>
+</html>

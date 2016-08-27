@@ -1,0 +1,28 @@
+<div class="row-fluid div-bg">
+    #foreach($title in $Text.getSiblings())
+        <div>
+		    <div class="item">
+			   <!-- <div class="icon">
+				    <i class="fa fa-$title.Icon.getData() fa-5x"></i>
+				</div>-->
+                <div class="desc">
+                    <h3>$title.getData()</h3>
+					<p>$title.Content.getData()</p>
+				</div>
+				<div class="aboutus-btn" >
+				    <a href="$title.Pagelink.getData()"><button class="btn btn-primary">Read More</button></a>
+				</div>
+			</div><!-- end service item -->
+		</div>
+    #end
+</div>
+<style>
+
+.div-bg {
+	background: transparent url("/htmsd-theme/images/bg.png") repeat scroll 0% 0%;
+}
+
+.desc {
+  text-align: center;
+}
+</style>
