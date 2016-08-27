@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<root available-locales="en_US" default-locale="en_US">
+ 	<dynamic-element name="Text" type="text" index-type="keyword" index="0">
+ 		<!-- <dynamic-element name="Icon" index="0" type="text" index-type="keyword">
+ 			<dynamic-content language-id="en_US"><![CDATA[]]></dynamic-content>
+ 		</dynamic-element> -->
+ 		<dynamic-element name="Content" index="0" type="text_area" index-type="keyword">
+ 			<dynamic-content language-id="en_US"><![CDATA[<p style="text-align: justify;">Our Establishment is since years,But we are coming up with on-line business for the first time ,Our Aim is not only to breed pets but also tp resource them.We are into the dealing of pets food pet accessories ,Exotic birds,tropical dishes,Animals...</p>]]></dynamic-content>
+ 		</dynamic-element>
+ 		<dynamic-element name="Pagelink" index="0" type="text" index-type="keyword">
+ 			<dynamic-content language-id="en_US"><![CDATA[/about-us]]></dynamic-content>
+ 		</dynamic-element>
+ 		<dynamic-content language-id="en_US"><![CDATA[ABOUT US]]></dynamic-content>
+ 	</dynamic-element>
+ </root>

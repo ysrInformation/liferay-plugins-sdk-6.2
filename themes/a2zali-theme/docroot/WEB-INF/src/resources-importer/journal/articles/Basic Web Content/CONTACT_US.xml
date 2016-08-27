@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+ <root available-locales="en_US" default-locale="en_US">
+ 	<dynamic-element name="content" type="text_area" index-type="keyword" index="0">
+		<dynamic-content language-id="en_US">
+ 		<![CDATA[
+<div class="panel panel-default">
+<div class="panel-body">
+<div class="row">
+<div class="col-sm-3">
+<p style="margin-left: 40px;"><strong><span style="font-size:18px;">ADDRESS :</span></strong></p>
+
+<p style="margin-left: 80px;"><strong>HTMSDPETS</strong></p>
+
+<address style="margin-left: 80px;"># 422, O.T.C. ROAD,COTTONPETS<br />
+BANGALORE-560 053</address>
+</div>
+
+<div class="col-sm-3" style="margin-left: 80px;"><strong>Telephone</strong><br />
++91 94486 94482<br />
+&nbsp;</div>
+
+<div class="col-sm-3" style="margin-left: 40px;">&nbsp;</div>
+</div>
+</div>
+</div>
+		]]>
+		</dynamic-content>
+	</dynamic-element> </root>

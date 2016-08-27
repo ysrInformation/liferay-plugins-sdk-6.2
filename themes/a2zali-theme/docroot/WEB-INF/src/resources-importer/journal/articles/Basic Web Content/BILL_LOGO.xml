@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+ 
+ <root available-locales="en_US" default-locale="en_US">
+ 	<dynamic-element name="image" type="document_library" index-type="">
+		<dynamic-content>
+	 		<![CDATA[[$FILE=bill-logo.png$]]]>
+ 		</dynamic-content>
+	</dynamic-element>
+ </root>

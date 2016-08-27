@@ -1,0 +1,9 @@
+<div class="bg">
+    <img src="${Image.getData()}"/>
+    
+</div>
+<style>
+    .bg {
+        background: transparent url("/htmsd-theme/images/bg.png") repeat scroll 0% 0%;
+    }
+</style>

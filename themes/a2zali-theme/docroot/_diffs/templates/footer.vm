@@ -1,0 +1,72 @@
+<footer id="bg_footer" role="contentinfo">
+	<div class="footer_wrapper">
+		<div class="row-fluid">
+			<div class="span3 ">
+				<div class="footer_label">
+					Contact Us
+				</div>
+				<ul>
+					<li>Locaction : HTMSDPETS</li>
+					<li># 422, O.T.C. Road,Cottonpet</li>
+					<li>Bangalore-560 053</li>
+					<li>Phone : +91 94486 94482</li>
+					<li>+ 080-22874092</li>
+					<li>E-mail : info@brainos.in</li>
+				</ul>
+				<!--<div class="row-fluid">
+					
+				</div>-->
+			</div>	
+			<div class="span3">
+				<script>
+					(function(d, s, id) {
+					  var js, fjs = d.getElementsByTagName(s)[0];
+					  if (d.getElementById(id)) return;
+					  js = d.createElement(s); js.id = id;
+					  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5&appId=551534068335626";
+					  fjs.parentNode.insertBefore(js, fjs);
+					}(document, 'script', 'facebook-jssdk'));
+				</script>
+				<div class="fb-page" data-href="https://www.facebook.com/facebook" data-width="100%" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true" data-show-posts="false">
+					<div class="fb-xfbml-parse-ignore">
+						<blockquote cite="https://www.facebook.com/facebook">
+							<a href="https://www.facebook.com/facebook">Facebook</a>
+						</blockquote>
+					</div>
+				</div>
+			</div>
+	
+			<div class="span3">
+				<div class="footer_label">
+					Quick Links
+				</div>
+				<ul class="quick_links">
+					<li><a href="/home">Home </a></li>
+					<li><a href="/about-us">About US </a></li>
+					<li><a href="/contact-us">Contact US </a></li>
+					<li><a href="/legal-notice">Legal Notice </a></li>
+					<li><a href="/terms-and-conditions">Terms And Conditions </a></li>
+					<li><a href="/privacy-policy">Privacy Policy </a></li>
+				</ul>
+			</div>
+			<div class="span3">
+				<div class="visa_card">
+					<img class="visa" src="$images_folder/cod.jpg"/>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	<div class="footer_bottom">
+		<div class="copyRight row-fluid">
+			<div class="span6">
+				#set ($date = $dateUtil)
+				#set ($currentYear = $date.getCurrentDate("yyyy", $locale))
+				<h5>Copyright © $currentYear @ $site_name </h5>
+			</div>
+			<div class="span6 text-right">
+				<img src="$images_folder/payment-options.png">
+			</div>
+		</div>	
+	</div>
+</footer>
