@@ -52,28 +52,7 @@
 						</ul>
 					</div>
 					<div class="span8">
-						<div class="social-icons">
-							<ul class="contact">
-								<li class="socials-icons">
-									<a class="facebook" title="Share in Facebook" data-toggle="tooltip" href="#"><i class="fa fa-facebook fa-lg"></i></a>
-								</li>
-								<li class="socials-icons">
-									<a class="twitter" title="Share in Twitter" data-toggle="tooltip" href="#"><i class="fa fa-twitter fa-lg"></i></a>
-								</li>
-								<li class="socials-icons">
-									<a class="google-plus" title="Share in Google +" data-toggle="tooltip" href="#"><i class="fa fa-google-plus fa-lg"></i></a>
-								</li>
-								<li class="socials-icons">
-									<a class="youtube"  data-toggle="tooltip" href="#"><i class="fa fa-youtube fa-lg"></i></a>
-								</li>
-								<!--<li class="socials-icons">
-									<a class="pinterest" title="Share in Pinterest" data-toggle="tooltip" href="#"><i class="fa fa-pinterest fa-2x"></i></a>
-								</li>
-								<li class="socials-icons">
-									<a class="skype" title="Connect with Skype" data-toggle="tooltip" href="#"><i class="fa fa-skype fa-2x"></i></a>
-								</li>-->
-							</ul>
-						</div>
+						
 					</div>
 				</div>
 			</div>
@@ -164,6 +143,25 @@
 		<span class="scroll-top-inner">
 			<i class="fa fa-2x fa-arrow-circle-up"></i>
 		</span>
+	</div>
+	<div class="" id="rightbar">
+		<div class="clearfix rightbar_2" id="rightbar_inner">
+			<div class="rightbar_wrap" id="rightbar_cart">
+				<a title="View my shopping cart" class="rightbar_tri icon_wrap" href="http://transformer.sunnytoo.com/twelfth/en/order" id="rightbar-shopping_cart"> 
+					<i class="icon-basket icon_btn icon-0x"></i> 
+					<span class="icon_text">Cart</span> 
+					<span style="display: none;" class="ajax_cart_quantity amount_circle simple_hidden ">0</span> 
+				</a>
+			</div> 
+			<div id="to_top_wrap">
+				<div id="to_top">
+					<a title="Back to top" class="icon_wrap disabled" href="http://transformer.sunnytoo.com/twelfth/en/#top_bar">
+						<i class="icon-up-open-2 icon-0x"></i>
+						<span class="icon_text">Top</span>
+					</a>
+				</div>
+			</div>
+		</div>
 	</div>
 </body>
 <script>
