@@ -23,6 +23,8 @@
 		<script type="text/javascript" src="$javascript_folder/jquery-1.11.3.min.js"></script>
 		<script type="text/javascript" src="$javascript_folder/lightGallery.min.js"></script>
 		<script type="text/javascript" src="$javascript_folder/jquery-ui.js" ></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+		
 	</head>
 	
 	<body class="$css_class $bg">

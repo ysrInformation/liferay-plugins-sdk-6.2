@@ -414,6 +414,14 @@
 	display: none;
 }
 
+.dockbar .navbar-inner li {
+	border-right: 1px solid #222;
+}
+
+.dockbar .navbar-inner li:first-child, .topHeader ul li:first-child {
+    border-left: 1px solid #222;
+}
+
 #wrapper {
   padding: 0;
 }
@@ -495,6 +503,22 @@ li.langPortlet form select {
 .div-bg .aboutus-btn {
 	margin-top: 8%;
 	text-align: center;
+}
+
+.homeCarousel .carousel-caption {
+	background: none;
+	color: #fff;
+	text-align: center;
+	top: 120px;
+}
+
+#shopping_list .product {
+    border: 0;
+}
+
+#shopping_list .product:hover {
+  border: 0 none;
+  box-shadow: none;
 }
 
 #hrefFm {

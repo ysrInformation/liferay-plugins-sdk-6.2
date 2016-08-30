@@ -1,4 +1,4 @@
-body.blackTheme.bg {
+body.blackTheme {
   background: #000 !important;
 }
 
@@ -24,14 +24,6 @@ body.blackTheme.bg {
 
 .blackTheme .dockbar li.currency .control-group {
 	margin-bottom: 0;
-}
-
-.blackTheme .dockbar > ul li {
-	border-left: 1px solid #222;
-}
-
-.blackTheme .dockbar > ul li:last-child {
-	border-right: 1px solid #222;
 }
 
 .aui .blackTheme .dockbar .nav li.dropdown.open > .dropdown-toggle, .aui .blackTheme .dockbar .nav li.dropdown.active > .dropdown-toggle, 
@@ -101,7 +93,7 @@ body.blackTheme.bg {
 	color: #fff;
 }
 
-.blackTheme .portlet-layout.row-fluid.bg_footer {
+.blackTheme.bg .portlet-layout.row-fluid.bg_footer {
 	background-color: #282828;
 }
 
