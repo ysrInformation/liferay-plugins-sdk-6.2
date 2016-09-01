@@ -38,20 +38,7 @@
 </div>
 
 <script type="text/javascript">
-    AUI().ready(
-        'aui-carousel',
-        function(A) {
-            new A.Carousel({
-                contentBox: '#${content_id} .carousel',
-                height: $height.data,
-                intervalTime: $duration.data,
-                height: '100%',
-                width: '100%'
-            }).render();
-        }
-    );
-   
     $('.carousel').carousel({
-      interval: 500000
+      interval: ($duration.data * 1000)
     })
 </script>

@@ -74,7 +74,7 @@ $(function(){
 
 	AUI().use('aui-base', function(A) {
 		Liferay.Service('/htmsd-portlet.shoppingcart/get-shopping-cart-item-count', {
-			userId: $user_id
+			userId: Liferay.ThemeDisplay.getUserId()
 		}, function(obj) {
 			$('#cart-item-count').html("&nbsp;"+obj+"&nbsp;");
 		});
