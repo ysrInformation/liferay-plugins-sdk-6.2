@@ -25,9 +25,9 @@
 			</aui:nav-item>
 		</c:if>
 		
-		<li class="currency">
+		<!-- <li class="currency">
 			<liferay-portlet:runtime portletName="7_WAR_htmsdportlet" />
-		</li>
+		</li> -->
 		<li>
 			<a href="/sell"> Sell </a>
 		</li>
