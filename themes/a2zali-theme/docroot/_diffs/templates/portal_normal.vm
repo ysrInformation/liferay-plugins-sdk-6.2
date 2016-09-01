@@ -141,15 +141,18 @@
 	
 	#parse ("$full_templates_path/footer.vm")
 
-	<div class="scroll-top-wrapper ">
-		<span class="scroll-top-inner">
-			<i class="fa fa-2x fa-arrow-circle-up"></i>
-		</span>
-	</div>
+	<!--
+		<div class="scroll-top-wrapper ">
+			<span class="scroll-top-inner">
+				<i class="fa fa-2x fa-arrow-circle-up"></i>
+			</span>
+		</div>
+	-->	
+	
 	<div class="" id="rightbar">
 		<div class="clearfix rightbar_2" id="rightbar_inner">
 			<div class="rightbar_wrap" id="rightbar_cart">
-				<a title="View my shopping cart" class="rightbar_tri icon_wrap" href="http://transformer.sunnytoo.com/twelfth/en/order" id="rightbar-shopping_cart"> 
+				<a title="View my shopping cart" class="rightbar_tri icon_wrap" href="" id="rightbar-shopping_cart"> 
 					<i class="icon-basket icon_btn icon-0x"></i> 
 					<span class="icon_text">Cart</span> 
 					<span style="display: none;" class="ajax_cart_quantity amount_circle simple_hidden ">0</span> 
@@ -157,7 +160,7 @@
 			</div> 
 			<div id="to_top_wrap">
 				<div id="to_top">
-					<a title="Back to top" class="icon_wrap disabled" href="http://transformer.sunnytoo.com/twelfth/en/#top_bar">
+					<a title="Back to top" class="icon_wrap disabled" href="javascript:void(0);">
 						<i class="icon-up-open-2 icon-0x"></i>
 						<span class="icon_text">Top</span>
 					</a>
@@ -167,86 +170,7 @@
 	</div>
 </body>
 <script>
-	var isMobile = {
-	    Android: function() {
-	        return navigator.userAgent.match(/Android/i);
-	    },
-	    BlackBerry: function() {
-	        return navigator.userAgent.match(/BlackBerry/i);
-	    },
-	    iOS: function() {
-	        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
-	    },
-	    Opera: function() {
-	        return navigator.userAgent.match(/Opera Mini/i);
-	    },
-	    Windows: function() {
-	        return navigator.userAgent.match(/IEMobile/i);
-	    },
-	    any: function() {
-	        return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
-	    }
-	};
-	//Search 
-	var elTop = $('#search-div').offset().top;
-	var mobile = !isMobile.any();
-   	$(window).scroll(function() {
-   		if(mobile) {
-	        $('#search-div').toggleClass('sticky', $(window).scrollTop() > elTop);
-	        $('#fixed_div').toggleClass('fixed_div', $(window).scrollTop() > elTop);
-    	} else {
-    		$('#srch-btn').html('<i class="fa fa-search"></i>');
-    	}
-    });
-    
-    //Scroll to Top
-	$(function(){
-	 
-		$(document).on( 'scroll', function(){
-	 
-			if ($(window).scrollTop() > 100) {
-				$('.scroll-top-wrapper').addClass('show');
-			} else {
-				$('.scroll-top-wrapper').removeClass('show');
-			}
-		});
-		$('.scroll-top-wrapper').on('click', scrollToTop);
-		
-		// auto complete code
-		AUI().use('aui-base', function(A) {
-			Liferay.Service('/htmsd-portlet.shoppingitem/get-autocomplete-items',
-		  		function(data) {
-		  			var autocompleteData = data.autoCompleteData;
-		  			console.log(autocompleteData);
-					$("#search").autocomplete({
-						source : autocompleteData
-					});
-		  		}
-		  	);
-		});
-	});
-	 
-	function scrollToTop() {
-		verticalOffset = typeof(verticalOffset) != 'undefined' ? verticalOffset : 0;
-		element = $('body');
-		offset = element.offset();
-		offsetTop = offset.top;
-		$('html, body').animate({scrollTop: offsetTop}, 500, 'linear');
-	}
 	
-	AUI().use('aui-base', function(A) {
-		Liferay.Service('/htmsd-portlet.shoppingcart/get-shopping-cart-item-count', {
-			userId: $user_id
-		}, function(obj) {
-			$('#cart-item-count').html("&nbsp;"+obj+"&nbsp;");
-		});
-	});
 	
-	function searchItems() {
-		var searchParam = $('#search').val();
-		if(searchParam) {
-			window.location.href = '/search?search-param=' + searchParam;
-		} 
-	}
 </script>
 </html>

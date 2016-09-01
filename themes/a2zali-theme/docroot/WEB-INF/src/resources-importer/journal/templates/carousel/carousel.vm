@@ -2,47 +2,56 @@
 #set ($content_id = "carousel-${article_id}")
 
 <style>
-	.carousel-container .carousel-item {
-		height: 100%;
-		width: 100%;
-	}
+    .carousel-container .carousel-item {
+        height: 100%;
+        width: 100%;
+    }
 
-	#${content_id} {
-		height: ${height.data}px;
-	}
+    #${content_id} {
+        height: ${height.data}px;
+    }
 </style>
 
-<div class="carousel-container thumbnail" id="$content_id">
-	<div class="carousel">
-		#foreach ($item in $carousel-item.siblings)
-			#set ($carousel_item_class = "carousel-item")
+<div class="carousel slide homeCarousel" id="$content_id">
+    <div class="carousel-inner">
+        #foreach ($item in $carousel-item.siblings)
+            #set ($carousel_item_class = "item")
 
-			#if ($velocityCount == 1)
-				#set ($carousel_item_class = "$carousel_item_class carousel-item-active")
-			#end
-			<img class="$carousel_item_class" src="${item.image.data}">
-				#if ($item.tagline.data != "")
-					<span class="tagline">
-						<h2>$item.data</h2>
-						$item.tagline.data
-					</span>
-				#end
-			</img>
-		#end
-	</div>
+            #if ($velocityCount == 1)
+                #set ($carousel_item_class = "$carousel_item_class active")
+            #end
+            <div class="$carousel_item_class">
+                <img class="" src="${item.image.data}"/>
+                #if ($item.tagline.data != "")
+                    <div class="container">
+                        <div class="carousel-caption">
+                            <h2>$item.data</h2>
+                            $item.tagline.data
+                        </div>
+                    </div>
+                #end
+            </div>
+        #end
+    </div>
+    <a data-slide="prev" href="#$content_id" class="left carousel-control">‹</a>
+    <a data-slide="next" href="#$content_id" class="right carousel-control">›</a>
 </div>
 
 <script type="text/javascript">
-	AUI().ready(
-		'aui-carousel',
-		function(A) {
-			new A.Carousel({
-				contentBox: '#${content_id} .carousel',
-				height: $height.data,
-				intervalTime: $duration.data,
-				height: '100%',
-				width: '100%'
-			}).render();
-		}
-	);
+    AUI().ready(
+        'aui-carousel',
+        function(A) {
+            new A.Carousel({
+                contentBox: '#${content_id} .carousel',
+                height: $height.data,
+                intervalTime: $duration.data,
+                height: '100%',
+                width: '100%'
+            }).render();
+        }
+    );
+   
+    $('.carousel').carousel({
+      interval: 500000
+    })
 </script>
