@@ -1,6 +1,5 @@
 #set ($article_id = $reserved-article-id.getData())
 #set ($content_id = "carousel-${article_id}")
-
 <style>
     .carousel-container .carousel-item {
         height: 100%;
@@ -11,7 +10,6 @@
         height: ${height.data}px;
     }
 </style>
-
 <div class="carousel slide homeCarousel" id="$content_id">
     <div class="carousel-inner">
         #foreach ($item in $carousel-item.siblings)
@@ -33,12 +31,11 @@
             </div>
         #end
     </div>
-    <a data-slide="prev" href="#$content_id" class="left carousel-control">‹</a>
-    <a data-slide="next" href="#$content_id" class="right carousel-control">›</a>
+    <a data-slide="prev" href="#$content_id" class="left carousel-control">â€¹</a>
+    <a data-slide="next" href="#$content_id" class="right carousel-control">â€º</a>
 </div>
-
 <script type="text/javascript">
     $('.carousel').carousel({
-      interval: ($duration.data * 1000)
+		interval: ($duration.data * 1000)
     })
 </script>
