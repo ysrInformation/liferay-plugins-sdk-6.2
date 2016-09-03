@@ -167,25 +167,26 @@ function showPopupDetails(url, width, title){
 }
 
 function updateOrderStatus(url, orderid) {
-	$.ajax({
-		url : url,
-		type : "GET",
-		data : {
-			<portlet:namespace/>orderId:orderid
-		},
-		success : function(data) {
-			location.reload();
-		},
-		error : function() {
-			alert("Something went wrong !!Please try again..");
-		}
-	});
+	var msg = "<liferay-ui:message key='update-order-status-confirm-msg'/>";
+	if(confirm(msg)) {
+		$.ajax({
+			url : url,
+			type : "GET",
+			data : {
+				<portlet:namespace/>orderId:orderid
+			},
+			success : function(data) {
+				location.reload();
+			},
+			error : function() {
+				alert("Something went wrong !!Please try again..");
+			}
+		});
+	}
 }
 
 $(function(){
 	var jsonData = <%= autoCompleteJSON %>;
-	console.info("autocomplete :"+jsonData.autocompleteData);
-	
 	$("#<portlet:namespace/>keywords").autocomplete({
 	    source: jsonData.autocompleteData
     });

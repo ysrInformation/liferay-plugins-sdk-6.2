@@ -255,7 +255,7 @@
 	padding: 5px 0 !important;
 }
 
-.Processing, .Shipping, .Delivered {
+.Shipping, .Delivered {
 	color : green;
 	font-weight: bold;
 }
@@ -342,7 +342,7 @@
 	width: 100px;
 }
 
-.Order.Review {
+.Order.Review, .Processing {
 	color : #FF4500;
 	font-weight: bold;
 }
