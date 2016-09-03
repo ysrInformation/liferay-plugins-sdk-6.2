@@ -3,11 +3,13 @@
 <%
 	long userId = themeDisplay.getUserId();
 	String redirectURL = themeDisplay.getURLCurrent();
+	String tabs1 = ParamUtil.getString(request, "tab2", "Add Items");
 	List<ShoppingItem> itemList = new ArrayList<ShoppingItem>();
 	String orderByCol = ParamUtil.getString(request, "orderByCol", "createDate");
 	String orderByType = ParamUtil.getString(request, "orderByType","desc");
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("jspPage", "/html/dashboard/user.jsp");
+	iteratorURL.setParameter("tab2", tabs1);
 %>
 
 <portlet:renderURL var="addItemsURL">
@@ -15,10 +17,19 @@
 	<portlet:param name="backURL" value="<%=redirectURL %>"/>
 </portlet:renderURL>
 
+<%-- <aui:button  href="<%=addItemsURL.toString() %>" value="add-item"/> --%>
+<aui:nav-bar>
+	<aui:nav>
+		<aui:nav-item href="<%= addItemsURL.toString() %>" iconCssClass="icon-plus" label="add-item"/>
+	</aui:nav>
+	<%-- 
+		<aui:nav-bar-search cssClass="form-search pull-right">
+			<liferay-ui:input-search />
+		</aui:nav-bar-search> 
+	--%>
+</aui:nav-bar>
 
-<aui:button  href="<%=addItemsURL.toString() %>" value="add-item"/>
-
-<liferay-ui:search-container delta="10"   orderByCol="<%=orderByCol %>" orderByType="<%=orderByType %>" emptyResultsMessage="No Items to Display" iteratorURL="<%=iteratorURL %>">
+<liferay-ui:search-container delta="10" orderByCol="<%=orderByCol %>" orderByType="<%=orderByType %>" emptyResultsMessage="No Items to Display" iteratorURL="<%=iteratorURL %>">
 
 	<liferay-ui:search-container-results>
 		 <%
