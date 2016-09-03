@@ -3,7 +3,7 @@
 	<dynamic-element dataType="string" indexType="" name="height" readOnly="false" repeatable="false" required="true" showLabel="true" type="text" width="small">
 		<meta-data locale="en_US">
 			<entry name="label"><![CDATA[Carousel Height]]></entry>
-			<entry name="predefinedValue"><![CDATA[500]]></entry>
+			<entry name="predefinedValue"><![CDATA[550]]></entry>
 			<entry name="tip"><![CDATA[]]></entry>
 		</meta-data>
 	</dynamic-element>
