@@ -1,4 +1,4 @@
-package com.liferay.action;
+package com.liferay.login;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -8,21 +8,15 @@ import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
-import com.liferay.listener.UserListener;
 import com.liferay.portal.kernel.struts.BaseStrutsPortletAction;
 import com.liferay.portal.kernel.struts.StrutsPortletAction;
-import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.wrapper.ExtActionRequestWrapper;
 
-public class ExtCreateAccountAction extends BaseStrutsPortletAction {
-	
+public class ExtLogin extends BaseStrutsPortletAction {
 	@Override
 	public void processAction(StrutsPortletAction originalStrutsPortletAction, PortletConfig portletConfig,
 			ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
-		// TODO Auto-generated method stub
-		
-		UserListener.emailAddress = ParamUtil.getString(actionRequest, "emailAddress");
-		UserListener.phoneNumber = ParamUtil.getString(actionRequest, "phone");
-		originalStrutsPortletAction.processAction(originalStrutsPortletAction, portletConfig, actionRequest, actionResponse);
+		originalStrutsPortletAction.processAction(originalStrutsPortletAction, portletConfig, new ExtActionRequestWrapper(actionRequest), actionResponse);
 	}
 	
 	@Override

@@ -125,7 +125,17 @@ birthdayCalendar.set(Calendar.YEAR, 1970);
 			<%@ include file="/html/portlet/login/create_account_user_name.jspf" %>
 
 			<c:if test="<%= !PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.USERS_SCREEN_NAME_ALWAYS_AUTOGENERATE) %>">
-				<aui:input model="<%= User.class %>" name="screenName" />
+				<aui:fieldset>
+					<aui:col span="5">
+						<aui:input model="<%= User.class %>" name="screenName" label="Phone Number">
+							 <aui:validator name="maxLength">10</aui:validator>
+							  <aui:validator name="number"/>
+						</aui:input>
+					</aui:col>
+					<aui:col span="6" cssClass="otp-btn">
+						<aui:button id="btn-send-otp" value="Send OTP"/>
+					</aui:col>
+				</aui:fieldset>
 			</c:if>
 
 			<aui:input autoFocus="<%= true %>" model="<%= User.class %>" name="emailAddress">
@@ -171,16 +181,6 @@ birthdayCalendar.set(Calendar.YEAR, 1970);
 
 				<liferay-ui:captcha url="<%= captchaURL %>" />
 			</c:if>
-			<aui:fieldset>
-				<aui:col span="5">
-					<aui:input type="text" name="phone" size="10" value="" >
-						<aui:validator name="required" />
-					</aui:input>
-				</aui:col>
-				<aui:col span="6" cssClass="otp-btn">
-					<aui:button id="btn-send-otp" value="Send OTP"/>
-				</aui:col>
-			</aui:fieldset>
 		</aui:col>
 	</aui:fieldset>
 
@@ -218,7 +218,7 @@ birthdayCalendar.set(Calendar.YEAR, 1970);
 		}
 
 		function sendOTP() {
-			var phoneNum = $('#<portlet:namespace/>phone').val();
+			var phoneNum = $('#<portlet:namespace/>screenName').val();
 			if (phoneNum == "") {
 				alert("Please Enter Phone Number");
 			} else {
