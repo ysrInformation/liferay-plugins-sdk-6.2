@@ -32,6 +32,11 @@
 		display: none;
 	}
 </style>
+
+<portlet:actionURL var="addToCartURL" name="addItemToCart">
+	<portlet:param name="isRedirectDisabled" value="true"/>
+</portlet:actionURL>
+
 <aui:input name="len" type="hidden"/>
 <div class="shopListSort row-fluid">
 	<div class="span6">
@@ -208,18 +213,39 @@
 					cssClass += ' first margin_left_zero';
 				}
 				
-				var ajaxURL = Liferay.PortletURL.createRenderURL();
-				ajaxURL.setPortletId(portletId);
-				ajaxURL.setParameter('jspPage', "/html/shoppinglist/details.jsp");
-				ajaxURL.setParameter('itemId', item.itemId);
+				var detailsURL = Liferay.PortletURL.createRenderURL();
+				detailsURL.setPortletId(portletId);
+				detailsURL.setParameter('jspPage', "/html/shoppinglist/details.jsp");
+				detailsURL.setParameter('itemId', item.itemId);
 				
-				li = '<li class="' + cssClass + '"><div class="product"><div class="product-image">'
-						+ '<a href="'+ajaxURL+'">	<img src=' + item.image + ' /></a>'
-						+ '</div><div class="product-details">'
-						+ '<h4 class="text-color-red">' + item.name + '</h4>'
-						/* + '<p class="description">' + item.description + '</p>' */
-						+ '<h6 id="price">' + formatPrice(item.totalPrice); + '</h6>'
-						+ '</div></div></li>';
+				var addToCartURL = '${addToCartURL}' + "&<portlet:namespace/>itemId="+item.itemId;
+				
+				var isNew = (item.isNewItem) ? '<span class="new"><i>New</i></span>' : '';
+				li = '<li class="' + cssClass + '">'
+						+'<div class="product">'
+							+'<div class="product-image">'
+								+'<a href="'+detailsURL+'">'
+									+'<img src=' + item.image + ' />'
+									+ isNew
+								+'</a>'
+								+ '<div class="hover_fly">'
+									+'<a href="'+addToCartURL+'">'
+										+'<div>'
+											+'<i class="fa fa-shopping-cart"></i>'
+											+'<span>Add to cart</span>'
+										+'</div>'
+									+'</a>'
+								+'</div>'
+							+ '</div>'
+							+'<div class="product-details">'
+								+'<a href="'+detailsURL+'">'
+									+ '<h4 class="item-name">' + item.name + '</h4>'
+								+'</a>'	
+								/* + '<p class="description">' + item.description + '</p>' */
+								+ '<h6 id="price">' + formatPrice(item.totalPrice); + '</h6>'
+							+'</div>'
+						+'</div>'
+					+'</li>';
 				$("#shopping_list").append(li);		
 			});
 		});

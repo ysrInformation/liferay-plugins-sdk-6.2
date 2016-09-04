@@ -23,9 +23,6 @@
 	color: white;
 }
 
-.currency select {
-	width: 48%;
-}
 </style>
 <%
 	String currencyId = (String) portletSession.getAttribute("currentCurrencyId", PortletSession.APPLICATION_SCOPE);
@@ -36,7 +33,7 @@
 
 <portlet:resourceURL var="setCurrencyURL" id="currencyId"/>
 
-<aui:select name="Currency" inlineField="true" inlineLabel="true"  onChange="javascript:changeCurrency(this);" cssClass="currency">
+<aui:select name="Currency" inlineField="true" inlineLabel="true"  onChange="javascript:changeCurrency(this);" cssClass="currency" label="">
 	<aui:option label="INR" value="0" selected="true"/>
 </aui:select>
 <aui:script use="aui-base">

@@ -106,6 +106,7 @@ public interface HConstants {
 	public static final String ASSET_VOCABULARY_ORDER_STATUS = "Order Status";
 	public static final int BAR_CODE_LENGTH = 13;
 	public static final String CST = "CST";
+	public static final String IS_NEW_ITEM ="isNewItem"; 
 	
 	//OTP
 	public static final String OTP_API_KEY = "a7a482de-64a1-11e6-a8cd-00163ef91450";

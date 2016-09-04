@@ -15,6 +15,8 @@
 package com.htmsd.slayer.service.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import com.htmsd.slayer.model.ShoppingItem;
@@ -28,6 +30,7 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.security.ac.AccessControlled;
@@ -101,17 +104,26 @@ public class ShoppingItemServiceImpl extends ShoppingItemServiceBaseImpl {
 
 	private void getItemJSONArray(long groupId, JSONArray jsonArray,
 			List<ShoppingItem> shoppingItems, long currencyId) {
+		
+		double currencyRate = CommonUtil.getCurrentRate(currencyId);
+		
 		for (ShoppingItem shoppingItem : shoppingItems) {
-
+			long imageId = shoppingItem.getSmallImage();
+			double total = (currencyRate == 0) ? shoppingItem.getTotalPrice() :  shoppingItem.getTotalPrice() / currencyRate;
+			
 			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 			jsonObject.put(HConstants.ITEM_ID, shoppingItem.getItemId());
 			jsonObject.put(HConstants.NAME, shoppingItem.getName());
-			jsonObject.put(HConstants.DESCRIPTION, StringUtil.shorten(shoppingItem.getDescription(), 50, ". . ."));
-			double currencyRate = CommonUtil.getCurrentRate(currencyId);
-			double total = (currencyRate == 0) ? shoppingItem.getTotalPrice() :  shoppingItem.getTotalPrice() / currencyRate; 
+			jsonObject.put(HConstants.DESCRIPTION, StringUtil.shorten(shoppingItem.getDescription(), 20));
 			jsonObject.put(HConstants.TOTAL_PRICE, total);
-			long imageId = shoppingItem.getSmallImage();
 			jsonObject.put(HConstants.IMAGE, CommonUtil.getThumbnailpath(imageId, groupId, false));
+			
+			if (DateUtil.getDaysBetween(shoppingItem.getModifiedDate(), Calendar.getInstance().getTime()) >= 2) {
+				jsonObject.put(HConstants.IS_NEW_ITEM, false);
+			} else {
+				jsonObject.put(HConstants.IS_NEW_ITEM, true);
+			}
+			
 			jsonArray.put(jsonObject);
 		}
 	}

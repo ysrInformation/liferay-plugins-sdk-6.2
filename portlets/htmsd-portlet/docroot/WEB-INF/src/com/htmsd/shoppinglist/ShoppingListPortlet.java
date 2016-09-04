@@ -49,6 +49,7 @@ public class ShoppingListPortlet extends MVCPortlet {
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		long itemId = ParamUtil.getLong(actionRequest, HConstants.ITEM_ID);
+		boolean isRedirectDisabled = ParamUtil.getBoolean(actionRequest, "isRedirectDisabled");
 		
 		if (themeDisplay.isSignedIn()) {
 			addSignedInUserCart(actionRequest, themeDisplay, itemId);
@@ -56,8 +57,10 @@ public class ShoppingListPortlet extends MVCPortlet {
 			addGuestUserCart(actionRequest,actionResponse, itemId);
 		}
 		
-		actionResponse.setRenderParameter(HConstants.JSP_PAGE, HConstants.PAGE_SHOPPING_LIST_DETAILS);
-		actionResponse.setRenderParameter(HConstants.ITEM_ID, String.valueOf(itemId));
+		if (isRedirectDisabled) {
+			actionResponse.setRenderParameter(HConstants.JSP_PAGE, HConstants.PAGE_SHOPPING_LIST_DETAILS);
+			actionResponse.setRenderParameter(HConstants.ITEM_ID, String.valueOf(itemId));
+		}
 	}
 	
 	/**
