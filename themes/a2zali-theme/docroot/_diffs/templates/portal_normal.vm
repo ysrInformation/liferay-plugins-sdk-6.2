@@ -151,8 +151,8 @@
 		<div class="" id="rightbar">
 			<div class="clearfix rightbar_2" id="rightbar_inner">
 				<div class="rightbar_wrap" id="rightbar_cart">
-					<a title="View my shopping cart" class="rightbar_tri icon_wrap" href="" id="rightbar-shopping_cart"> 
-						<i class="icon-basket icon_btn icon-0x"></i> 
+					<a title="View my shopping cart" class="rightbar_tri icon_wrap" href="/cart" id="rightbar-shopping_cart"> 
+						<i class="fa fa-shopping-cart"></i> 
 						<span class="icon_text">Cart</span> 
 						<span style="display: none;" class="ajax_cart_quantity amount_circle simple_hidden ">0</span> 
 					</a>
@@ -160,7 +160,7 @@
 				<div id="to_top_wrap">
 					<div id="to_top">
 						<a title="Back to top" class="icon_wrap disabled" href="javascript:void(0);">
-							<i class="icon-up-open-2 icon-0x"></i>
+							<i class="fa fa-chevron-up"></i>
 							<span class="icon_text">Top</span>
 						</a>
 					</div>
