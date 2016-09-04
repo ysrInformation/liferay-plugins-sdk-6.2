@@ -446,6 +446,10 @@
 	display: -webkit-box;
 }
 
+#mobile_nav, #nav_list {
+	display: none;
+}
+
 .topHeader ul li {
 	border-right: 1px solid #222;
 	display: inline-block;
@@ -460,7 +464,7 @@
 } */
 
 .topHeaderWrapper.row-fluid, #search-div.row-fluid, .row-fluid.sticky .mainHeadWrapper, .shopListSort.row-fluid, #shopping_list.row-fluid, 
-.content_wrapper, .copyRight.row-fluid, .footer_wrapper {
+.content_wrapper, .copyRight.row-fluid, .footer_wrapper, .shoppingItemDetails.rowfluid, #breadcrumbs .breadcrumb{
 	margin: 0 auto;
 	width: 94%;
 }
@@ -513,6 +517,15 @@ li.langPortlet form select {
 	top: 120px;
 }
 
+.div-bg .desc p {
+    text-align: center !important;
+    width: 80%
+}
+
+.shopListSort.row-fluid {
+	margin-top: 2%;
+}
+
 #shopping_list .product {
     border: 0;
 }
@@ -520,6 +533,19 @@ li.langPortlet form select {
 #shopping_list .product:hover {
 	border: 0 none;
 	box-shadow: none;
+}
+
+.shopListSort select {
+	width: inherit;
+}
+
+.aui .table-striped tbody > tr:nth-child(2n+1) > td, .aui .table-striped tbody > tr:nth-child(2n+1) > th,
+.aui .table-hover tbody tr:hover > td, .aui .table-hover tbody tr:hover > th {
+	background-color: transparent;
+}
+
+.aui table a {
+	color: inherit;
 }
 
 #hrefFm {
@@ -562,7 +588,7 @@ li.langPortlet form select {
 	z-index: 120;
 }
 a.icon_wrap {
-  background: #f1f1f1 none repeat scroll 0 0;
+  background: #f1f1f1;
   color: #00a161;
 }
 a.icon_wrap, .icon_wrap, a.icon_circle, .icon_circle, .shopping_cart .ajax_cart_right, .mobile_bar_tri {

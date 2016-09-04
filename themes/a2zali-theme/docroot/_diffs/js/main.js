@@ -87,3 +87,19 @@ $(function(){
 		} 
 	}
 });
+$(document).ready(function() {
+	var menuLeft = $('.pushmenu-left');
+	var nav_list = $('#nav_list');
+	var close = $('#pushMenuclose');
+	  
+	nav_list.click(function() {
+		$(this).toggleClass('active');
+	$('.pushmenu-push').toggleClass('pushmenu-push-toright');
+	menuLeft.toggleClass('pushmenu-open');
+	  });
+	  
+	close.click(function() {
+		$('.pushmenu-push').toggleClass('pushmenu-push-toright');
+		menuLeft.toggleClass('pushmenu-open');
+	});
+});

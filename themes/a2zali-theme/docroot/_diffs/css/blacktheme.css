@@ -55,8 +55,12 @@ body.blackTheme {
 }
 
 .aui .blackTheme #navigation li a {
-	color: #fff;
+	color: #ccc;
 	text-shadow: none;
+}
+
+.aui .blackTheme #navigation li:hover a {
+	color: #fff;
 }
 
 .aui .blackTheme #navigation .navbar-inner div ul li, .aui .blackTheme #navigation .nav li.active a, 
@@ -79,8 +83,30 @@ body.blackTheme {
 	color: #000;
 }
 
+.blackTheme .modify-pages .delete-tab:hover {
+	color: #fff;
+}
+
+.blackTheme .modify-pages .delete-tab {
+	color: #ccc;
+}
+
 .aui .blackTheme .navbar .nav > li > .dropdown-menu::before, .aui .blackTheme .navbar .nav > li > .dropdown-menu::after {
 	display: none;
+}
+
+.blackTheme #breadcrumbs {
+	background: #222;
+}
+
+.blackTheme .breadcrumb {
+	background-color: #222;
+	padding: 1em 0;
+}
+
+.blackTheme .breadcrumb a, .blackTheme .breadcrumb .divider, .blackTheme .breadcrumb li {
+	color: #888;
+	text-shadow: none;
 }
 /* Carousel css */
 
@@ -89,8 +115,18 @@ body.blackTheme {
 	padding: 0;
 }
 
+.blackTheme table td, .blackTheme table th {
+	color: #ccc;
+	text-shadow: none;
+}
+
 .blackTheme .shopListSort.row-fluid {
 	color: #fff;
+}
+
+.blackTheme .shopListSort label, .blackTheme .shopListSort .pull-right h5 {
+	color: #999;
+	font-size: 12px;
 }
 
 .blackTheme.bg .portlet-layout.row-fluid.bg_footer {
@@ -107,10 +143,6 @@ body.blackTheme {
 	font-size: 17px;
 	font-weight: normal;
 }
-.div-bg .desc p {
-    text-align: center !important;
-    width: 80%
-}
 
 .blackTheme .quick-contact fieldset {
 	padding-left: 3%;
@@ -125,6 +157,10 @@ body.blackTheme {
 	color: #777;
 }
 
+.bg_footer .portlet-body {
+	border-right: 1px solid #505050;
+}
+
 .blackTheme .footer_label {
 	color: #fff;
 	text-transform: uppercase;
@@ -134,4 +170,45 @@ body.blackTheme {
 .blackTheme .copyRight h5 {
     margin: 0;
     color: #777;
+}
+
+.blackTheme .shoppingItemDetails .span8 ul {
+	margin-bottom: 0;
+	border-bottom: 0;
+	margin-top: 3%;
+}
+
+.blackTheme .shoppingItemDetails .span8 ul.nav-tabs li.active a {
+	background-color: #222;
+	border: 0 none;
+	border-radius: 0;
+	color: #fff;
+	padding: 0.833em 1.666em;
+	text-transform: uppercase;
+}
+
+.blackTheme .shoppingItemDetails .span8 ul.nav-tabs li a {
+	background-color: #444;
+}
+
+.blackTheme .shoppingItemDetails .span8 p.description {
+	background: #222;
+	padding: 1em 1.8em;
+	color: #888;
+}
+
+.aui .blackTheme .btn-primary {
+	background-color: #fff;
+	background-image: none;
+	border-color: #fff;
+	color: #01a261;
+	text-shadow: none;
+}
+
+.aui .blackTheme .btn-primary:hover {
+	background-color: #444;
+	background-image: none;
+	border-color: #444;
+	box-shadow: none;
+	color: #fff;
 }

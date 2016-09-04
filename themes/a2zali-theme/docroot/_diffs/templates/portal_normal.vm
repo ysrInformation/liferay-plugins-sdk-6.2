@@ -25,7 +25,7 @@
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 	</head>
 	
-	<body class="$css_class $bg">
+	<body class="$css_class $bg pushmenu-push">
 		<a href="#main-content" id="skip-to-content">#language ("skip-to-content")</a>
 		
 		$theme.include($body_top_include)
@@ -77,6 +77,11 @@
 							#if ($has_navigation || $is_signed_in)
 								#parse ("$full_templates_path/navigation.vm")
 							#end
+							<div id="mobile_nav">
+								#if ($has_navigation || $is_signed_in)
+									#parse ("$full_templates_path/mobilenav.vm")
+								#end
+							</div>
 						</div>
 						<!--
 							<div class="span6 center">
