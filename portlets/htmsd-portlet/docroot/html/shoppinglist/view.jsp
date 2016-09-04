@@ -33,7 +33,7 @@
 	}
 </style>
 <aui:input name="len" type="hidden"/>
-<div class="row margin_left_zero">
+<div class="shopListSort row-fluid">
 	<div class="span6">
 		<aui:select name="sort-by" inlineLabel="true" onChange="javascript:refresh(this);" >
 			<aui:option value="createDate DESC" label="new"/>
@@ -56,7 +56,7 @@
 		</div>
 	</div>
 </div>	
-<ul id="shopping_list" class="row">
+<ul id="shopping_list" class="row-fluid">
 	<!-- item display -->
 </ul>
 <div id="no-item-display" >

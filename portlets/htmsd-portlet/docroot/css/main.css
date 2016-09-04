@@ -37,10 +37,10 @@
 	-moz-box-shadow: 0px 0px 10px 0px rgba(227, 41, 69, 1);
 	box-shadow: 0px 0px 10px 0px rgba(227, 41, 69, 1);
 }
-
+/* 
 #shopping_list {
 	margin-left : 0px !important;	
-}
+} */
 
 #shopping_list .row {
 	margin-left : 0px !important;
@@ -78,8 +78,12 @@
 }
 
 #loader-div {
-	padding: 10px;
+	padding: 3px;
 	text-transform: uppercase;
+}
+
+#loader-div > div:first-child {
+	padding-top: 4px;
 }
 
 .qty-discounts {
