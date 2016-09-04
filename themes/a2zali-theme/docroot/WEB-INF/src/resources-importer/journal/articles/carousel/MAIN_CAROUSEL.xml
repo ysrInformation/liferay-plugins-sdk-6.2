@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <root available-locales="en_US" default-locale="en_US">
 	<dynamic-element name="height" type="text" index-type="">
-		<dynamic-content><![CDATA[450]]></dynamic-content>
+		<dynamic-content><![CDATA[530]]></dynamic-content>
 	</dynamic-element>
 	<dynamic-element name="duration" type="list" index-type="">
 		<dynamic-content><![CDATA[3]]></dynamic-content>
