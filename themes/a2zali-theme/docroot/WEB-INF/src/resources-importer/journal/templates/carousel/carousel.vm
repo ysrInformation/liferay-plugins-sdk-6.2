@@ -8,7 +8,14 @@
 
     #${content_id} {
         height: ${height.data}px;
+        margin:0px;
     }
+    
+    .crausel_image {
+        height: ${height.data}px !important;
+        width:100%;
+    }
+    
 </style>
 <div class="carousel slide homeCarousel" id="$content_id">
     <div class="carousel-inner">
@@ -19,7 +26,7 @@
                 #set ($carousel_item_class = "$carousel_item_class active")
             #end
             <div class="$carousel_item_class">
-                <img class="" src="${item.image.data}"/>
+                <img class="crausel_image" src="${item.image.data}"/>
                 #if ($item.tagline.data != "")
                     <div class="container">
                         <div class="carousel-caption">
