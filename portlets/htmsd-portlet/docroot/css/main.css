@@ -422,8 +422,9 @@
 
 .main-div .item-details:hover {
   box-shadow: 3px 3px 15px #666;
-  border-color:#C76C0C;
-  background: #C76C0C;
+  border-color: #01a261; 
+  /* background: #C76C0C; */
+  background: #01a261;
   color: #fff;
   cursor: pointer;
   
