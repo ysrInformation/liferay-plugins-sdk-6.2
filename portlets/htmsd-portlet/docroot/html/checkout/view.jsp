@@ -1,46 +1,5 @@
 <%@include file="/html/checkout/init.jsp" %>
 
-<!--
-<style>
-.new-checkout ul.step li {
-  float: left;
-  text-align: center;
-  text-transform: uppercase;
-  width: 20%;
-}
-.new-checkout ul.step li.step_current {
-  background: #f9f9f9;
-  font-weight: bold;
-}
-.new-checkout ul#order_steps {
-  background-color: #fff;
-}
-.new-checkout ul.step {
-  list-style-type: none;
-  margin-bottom: 2em;
-}
-.new-checkout ul.step li.step_todo span {
-  color: #999;
-}
-.new-checkout ul.step li a, ul.step li span {
-  -moz-border-bottom-colors: none;
-  -moz-border-left-colors: none;
-  -moz-border-right-colors: none;
-  -moz-border-top-colors: none;
-  border-color: #ccc;
-  border-image: none;
-  border-style: solid;
-  border-width: 1px;
-  display: block;
-}
-.new-checkout .newcart-alert.newcartalert-warning {
-  background-color: #fdeda4;
-  border: 1px solid #fdeda4;
-  color: #7c622a;
-  padding: 15px;
-}
-</style>
- -->
 <%
 	String orderStep = ParamUtil.getString(renderRequest, "order_step", "step1");
 %>
