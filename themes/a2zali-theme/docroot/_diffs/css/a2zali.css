@@ -51,9 +51,10 @@
 
 /*------------Navigation CSS----------------*/
 .aui #navigation .navbar-inner {
-	background: transparent none repeat scroll 0 0;
+	background: transparent;
 	background-color: transparent;
 	background-image: none;
+	box-shadow: none;
 }
 
 .aui #navigation .navbar-inner div ul li {
@@ -148,7 +149,6 @@
 }
 
 .quick-contact input[type="text"] {
-	border: 1px solid #d8492d !important;
 	margin-bottom: 5px;
 }
 
@@ -381,6 +381,16 @@
 
 /*common css*/
 
+.aui body, label, .aui select, .aui textarea, .aui input[type="text"], 
+.aui input[type="password"], .aui input[type="datetime"], 
+.aui input[type="datetime-local"], .aui input[type="date"], .aui input[type="month"], 
+.aui input[type="time"], .aui input[type="week"], .aui input[type="number"],
+.aui input[type="email"], .aui input[type="url"], .aui input[type="search"], 
+.aui input[type="tel"], .aui input[type="color"], .aui .uneditable-input, th, td, 
+.aui p, .aui .btn, .aui span, .aui label.radio, .aui modal  {
+    font-family: "Raleway";
+}
+
 .aui .navbar.dockbar ul li a {
   color: #fff;
   text-shadow: none;
@@ -407,6 +417,11 @@
 	background: none;
 }
 
+.dockbar-user-notifications .dropdown-toggle .user-notifications-count {
+	background-color: transparent;
+	border: 1px solid #fff;
+}
+
 .aui .navbar .nav > li > a:focus, .aui .navbar .nav > li > a:hover {
   color: #00a161;
 }
@@ -415,12 +430,12 @@
 	display: none;
 }
 
-.dockbar .navbar-inner li {
-	border-right: 1px solid #222;
+.aui .dockbar li.dockbar-user-notifications a {
+	padding: 5px 5px 0;
 }
 
-.dockbar .navbar-inner li:first-child, .topHeader ul li:first-child {
-    border-left: 1px solid #222;
+li.currency select {
+	width: inherit;
 }
 
 #wrapper {
@@ -450,11 +465,6 @@
 	display: none;
 }
 
-.topHeader ul li {
-	border-right: 1px solid #222;
-	display: inline-block;
-}
-
 .topHeader ul, #search-div #heading.span3 {
 	margin-left: 0;
 }
@@ -473,10 +483,6 @@
 	width: 100%;
 }
 
-.topHeader {
-	border-bottom: 1px solid #222;
-}
-
 #search-div .span9 {
 	padding: 10px 0;
 }
@@ -485,8 +491,8 @@
 	padding: 10px 0;
 }
 
-.sticky {
-	padding: 0;
+#search-div.sticky {
+  padding: 0;
 }
 
 .social-icons .fa-facebook, .social-icons .fa-twitter, .social-icons .fa-google-plus, .social-icons .fa-youtube {
@@ -508,6 +514,34 @@ li.langPortlet form select {
 .div-bg .aboutus-btn {
 	margin-top: 8%;
 	text-align: center;
+}
+/* Navigation */
+#navigation .navbar-inner {
+	border: 0 none;
+}
+
+#navigation.navbar {
+	margin-bottom: 0;
+}
+
+.aui #navigation .navbar-inner div ul li, .aui #navigation .nav li.active a, 
+.aui #navigation .nav li.open > a, .aui #navigation .navbar-inner div ul li:hover, 
+.aui #navigation .navbar .nav > li > a:focus, .aui #navigation .navbar .nav > li > a:hover {
+	background: none;
+}
+
+.aui #navigation .nav .dropdown-menu {
+	background: #fff;
+	border-top: 0;
+	border-radius: none;
+}
+
+.aui .navbar .nav > li > .dropdown-menu::before, .aui .navbar .nav > li > .dropdown-menu::after {
+	display: none;
+}
+
+.aui #navigation li a {
+    box-shadow: none;
 }
 
 .homeCarousel .carousel-caption {
@@ -553,15 +587,13 @@ li.langPortlet form select {
 }
 
 .copyRight {
-	padding: 1em 0;
+	padding-bottom: 0.2em;
+    padding-top: 0.8em;
 }
 
-.footer_bottom {
-	background: #222;
-}
-
-.copyRight > h5 {
-  margin: 0;
+.copyRight h5 {
+	margin: 0;
+	font-size: 0.8em;
 }
 
 .footer_wrapper {
@@ -571,7 +603,9 @@ li.langPortlet form select {
 .footer_wrapper ul {
 	margin-left: 0;
 }
+
 /* right toolsbar*/
+
 #rightbar {
 	top: auto;
 	position: fixed;

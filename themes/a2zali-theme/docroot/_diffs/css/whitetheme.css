@@ -1,7 +1,91 @@
+body.whiteTheme.bg, body .bg, .whiteTheme #search-div.sticky {
+    background: #fff !important;
+}
+
 /* Dockbar css */
 
 .aui .whiteTheme .dockbar .navbar-inner, .aui .dockbar-split .dockbar .navbar-inner,
 .aui .whiteTheme .dockbar .navbar-inner .nav > li, .aui .dockbar-split .dockbar .navbar-inner .nav > li {
     background-color: #00a161;
     background-image: none;
+}
+
+.whiteTheme .dockbar .navbar-inner li:first-child {
+	border-left: 1px solid #3ab47b;
+}
+
+.whiteTheme .dockbar .navbar-inner li {
+	border-right: 1px solid #3ab47b;
+}
+
+.whiteTheme .topHeader {
+	border-bottom: 1px solid #e5e5e5;
+}
+
+.whiteTheme .topHeader ul li:first-child {
+	border-left: 1px solid #e5e5e5;
+} 
+
+.whiteTheme .topHeader ul li {
+	border-right: 1px solid #e5e5e5;
+	display: inline-block;
+}
+
+/* Navigation */
+
+.aui .whiteTheme #navigation li a {
+	color: #666;
+	text-shadow: none;
+}
+
+.aui .whiteTheme #navigation li:hover a {
+	color: #00a161;
+}
+
+.aui .whiteTheme #navigation .nav .dropdown-menu li a {
+	color: #444;
+}
+
+.whiteTheme .modify-pages .delete-tab:hover {
+	color: #00a161;
+}
+
+.whiteTheme .modify-pages .delete-tab {
+	color: #444;
+}
+
+.whiteTheme .quick-contact input[type="text"] {
+	border: 1px solid #e5e5e5 !important;
+}
+
+.whiteTheme #rightbar a.disabled {
+    color: #ccc;
+}
+
+/* Footer */
+
+.whiteTheme .quick-contact .portlet-borderless-container {
+    background: #fff;
+}
+
+.whiteTheme #bg_footer, .whiteTheme #bg_footer a {
+	background-color: #fff;
+	background-image: none;
+	border: 0 none;
+}
+
+.whiteTheme .footer_label {
+    color: #666;
+}
+
+.whiteTheme footer .quick_links li a, .whiteTheme footer li {
+    color: #444;
+}
+
+.whiteTheme .footer_bottom {
+	background: #666;
+}
+
+.whiteTheme .bg_footer .portlet-body {
+	border-right: 1px solid #e5e5e5;
 }

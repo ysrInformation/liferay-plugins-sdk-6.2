@@ -14,10 +14,6 @@ body.blackTheme {
 	border-bottom: 1px solid #222;
 }
 
-.aui .blackTheme .dockbar li.dockbar-user-notifications a {
-	padding: 5px 5px 0;
-}
-
 .blackTheme .dockbar #p_p_id_7_WAR_htmsdportlet_, .blackTheme .dockbar #p_p_id_7_WAR_htmsdportlet_ .portlet-borderless-container {
 	height: inherit;
 }
@@ -32,12 +28,24 @@ body.blackTheme {
 	color: #fff;
 }
 
-.blackTheme .dockbar-user-notifications .dropdown-toggle .user-notifications-count {
-	background-color: transparent;
-    border: 1px solid #fff;
+.blackTheme .dockbar .navbar-inner li {
+	border-right: 1px solid #222;
+}
+
+.blackTheme .dockbar .navbar-inner li:first-child,.blackTheme .topHeader ul li:first-child {
+    border-left: 1px solid #222;
+}
+
+.blackTheme .topHeader ul li {
+	border-right: 1px solid #222;
+	display: inline-block;
 }
 
 /* Header css */
+
+.blackTheme .topHeader {
+	border-bottom: 1px solid #222;
+}
 
 .blackTheme header, .blackTheme #search-div {
 	background: #000;
@@ -50,10 +58,6 @@ body.blackTheme {
 
 /* Navigation css */
 
-.blackTheme #navigation .navbar-inner {
-	border: 0 none;
-}
-
 .aui .blackTheme #navigation li a {
 	color: #ccc;
 	text-shadow: none;
@@ -61,22 +65,6 @@ body.blackTheme {
 
 .aui .blackTheme #navigation li:hover a {
 	color: #fff;
-}
-
-.aui .blackTheme #navigation .navbar-inner div ul li, .aui .blackTheme #navigation .nav li.active a, 
-.aui .blackTheme #navigation .nav li.open > a, .aui .blackTheme #navigation .navbar-inner div ul li:hover, 
-.aui .blackTheme #navigation .navbar .nav > li > a:focus, .aui .blackTheme #navigation .navbar .nav > li > a:hover {
-	background: none;
-}
-
-.blackTheme #navigation.navbar {
-	margin-bottom: 0;
-}
-
-.aui .blackTheme #navigation .nav .dropdown-menu {
-	background: #fff;
-	border-top: 0;
-	border-radius: none;
 }
 
 .aui .blackTheme #navigation .nav .dropdown-menu li a {
@@ -148,6 +136,10 @@ body.blackTheme {
 	padding-left: 3%;
 }
 
+.blackTheme .quick-contact input[type="text"] {
+	border: 1px solid #505050 !important;
+}
+
 /* Footer css */
 
 .blackTheme #bg_footer, .blackTheme #bg_footer a {
@@ -157,8 +149,12 @@ body.blackTheme {
 	color: #777;
 }
 
-.bg_footer .portlet-body {
+.blackTheme .bg_footer .portlet-body {
 	border-right: 1px solid #505050;
+}
+
+.blackTheme .footer_bottom {
+	background: #222;
 }
 
 .blackTheme .footer_label {
