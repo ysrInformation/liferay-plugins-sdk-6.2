@@ -17,6 +17,7 @@
 .new-checkout ul.step {
   list-style-type: none;
   margin-bottom: 2em;
+  margin-left: 0;
 }
 
 .new-checkout ul.step li.step_todo span {
@@ -33,6 +34,7 @@
   border-style: solid;
   border-width: 1px;
   display: block;
+  padding: 10px;
 }
 
 .new-checkout .newcart-alert.newcartalert-warning {
@@ -50,4 +52,9 @@
   font-size: 13px;
   font-weight: 600;
   text-transform: uppercase;
+  color: #fff;
+}
+
+.new-checkout {
+	padding: 2%;
 }
