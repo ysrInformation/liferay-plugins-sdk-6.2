@@ -63,6 +63,7 @@
 	<portlet>
 		<portlet-name>5</portlet-name>
 		<icon>/icon.png</icon>
+		<configuration-action-class>com.liferay.portal.kernel.portlet.DefaultConfigurationAction</configuration-action-class>
 		<action-url-redirect>true</action-url-redirect>
 		<private-session-attributes>false</private-session-attributes>
 		<header-portlet-css>/css/main.css</header-portlet-css>
@@ -91,6 +92,15 @@
 			/js/main.js
 		</footer-portlet-javascript>
 		<css-class-wrapper>7-portlet</css-class-wrapper>
+	</portlet>
+	<portlet>
+		<portlet-name>8</portlet-name>
+		<icon>/icon.png</icon>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>8-portlet</css-class-wrapper>
 	</portlet>
 	<role-mapper>
 		<role-name>administrator</role-name>
