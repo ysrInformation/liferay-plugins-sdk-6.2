@@ -153,6 +153,15 @@
 	  top: auto !important;
 	  width: 100%;
 	}
+	
+	.accordion-opened .accordion-toggle:after {
+    	content: "\f054";
+	}
+	.accordion-toggle:after {
+	    font-family: 'FontAwesome';
+	    content: "\f078";
+	    float: right;
+	}
 }
 
 @media screen and (max-width:768px) {

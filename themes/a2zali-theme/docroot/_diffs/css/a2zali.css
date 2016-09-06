@@ -544,6 +544,11 @@ li.langPortlet form select {
     box-shadow: none;
 }
 
+#navigation .nav-collapse > li:hover > ul.child-menu {
+	display: block;
+	top: 38px;
+}
+
 .homeCarousel .carousel-caption {
 	background: none;
 	color: #fff;
