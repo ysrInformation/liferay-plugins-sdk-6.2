@@ -58,18 +58,18 @@ body.blackTheme {
 
 /* Navigation css */
 
-.aui .blackTheme #navigation li a {
+.aui .blackTheme #navigation > li a {
 	color: #ccc;
 	text-shadow: none;
 }
 
-.aui .blackTheme #navigation li:hover a {
+.aui .blackTheme #navigation > li:hover a {
 	color: #fff;
 }
 
-.aui .blackTheme #navigation .nav .dropdown-menu li a {
+/* .aui .blackTheme #navigation .nav .dropdown-menu li a {
 	color: #000;
-}
+} */
 
 .blackTheme .modify-pages .delete-tab:hover {
 	color: #fff;
@@ -159,8 +159,6 @@ body.blackTheme {
 
 .blackTheme .footer_label {
 	color: #fff;
-	text-transform: uppercase;
-	font-size: 1.166em;
 }
 
 .blackTheme .copyRight h5 {
