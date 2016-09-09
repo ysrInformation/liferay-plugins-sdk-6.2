@@ -59,9 +59,11 @@
 					<div>
 						<liferay-ui:tabs names="description">
 							<liferay-ui:section>
-								<p class="description"> 
-									<%=shoppingItem.getDescription() %>
-								</p>
+								<div class="descriptionTabContent">
+									<p class="description"> 
+										<%=shoppingItem.getDescription() %>
+									</p>
+								</div>
 							</liferay-ui:section>
 						</liferay-ui:tabs>
 					</div>
