@@ -58,18 +58,14 @@ body.blackTheme {
 
 /* Navigation css */
 
-.aui .blackTheme #navigation > li a {
-	color: #ccc;
-	text-shadow: none;
+.blackTheme #navigation .navbar-inner ul > li > a {
+  color: #ccc;
+  text-shadow: none;
 }
 
-.aui .blackTheme #navigation > li:hover a {
-	color: #fff;
+.blackTheme #navigation .navbar-inner ul.child-menu > li > a {
+	color: #222;
 }
-
-/* .aui .blackTheme #navigation .nav .dropdown-menu li a {
-	color: #000;
-} */
 
 .blackTheme .modify-pages .delete-tab:hover {
 	color: #fff;
@@ -166,29 +162,21 @@ body.blackTheme {
     color: #777;
 }
 
-.blackTheme .shoppingItemDetails .span8 ul {
-	margin-bottom: 0;
-	border-bottom: 0;
-	margin-top: 3%;
+.blackTheme #rightbar a:hover {
+	color: #01A261;
 }
 
 .blackTheme .shoppingItemDetails .span8 ul.nav-tabs li.active a {
 	background-color: #222;
-	border: 0 none;
-	border-radius: 0;
 	color: #fff;
-	padding: 0.833em 1.666em;
-	text-transform: uppercase;
 }
 
 .blackTheme .shoppingItemDetails .span8 ul.nav-tabs li a {
 	background-color: #444;
 }
 
-.blackTheme .shoppingItemDetails .span8 p.description {
+.blackTheme .shoppingItemDetails .span8 .descriptionTabContent {
 	background: #222;
-	padding: 1em 1.8em;
-	color: #888;
 }
 
 .aui .blackTheme .btn-primary {

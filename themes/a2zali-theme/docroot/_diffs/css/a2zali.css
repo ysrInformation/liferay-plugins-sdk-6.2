@@ -494,7 +494,7 @@ li.currency select {
 }
 
 #search-div.sticky {
-  padding: 0;
+	padding: 0;
 }
 
 .social-icons .fa-facebook, .social-icons .fa-twitter, .social-icons .fa-google-plus, .social-icons .fa-youtube {
@@ -561,6 +561,16 @@ li.langPortlet form select {
 	color: #222;
 }
 
+#navigation .navbar-inner ul > li:hover > a {
+	color: #fff;
+	text-shadow: none;
+}
+
+.aui #navigation .navbar-inner ul.child-menu li a:hover {
+	background: transparent;
+	color: #00A161;
+}
+
 .aui #navigation .grandchildmenu li a span {
 	color: #444;
 	font-family: "Trebuchet MS";
@@ -569,12 +579,12 @@ li.langPortlet form select {
 	text-transform: capitalize;
 }
 
-.aui #navigation .child-menu li:hover a {
-	color: #222;
+.aui #navigation .grandchildmenu li a:hover span {
+	color: #00A161;
 }
 
-#navigation .child-menu li a:hover {
-	background: transparent;
+.aui #navigation .grandchildmenu li a:hover {
+	text-decoration: none;
 }
 
 .homeCarousel .carousel-caption {
@@ -698,6 +708,10 @@ a.icon_wrap, .icon_wrap, a.icon_circle, .icon_circle, .shopping_cart .ajax_cart_
 	text-decoration: none;
 }
 
+#rightbar a:hover {
+	text-decoration: none;
+}
+
 a.icon_wrap, .icon_wrap, .shopping_cart .ajax_cart_right {
 	color: #222222;
 }
@@ -762,4 +776,56 @@ a.icon_wrap.disabled, .icon_wrap.disabled {
 	font-size: 12px;
 	font-weight: bold;
 	margin: 0;
+}
+
+.add-to-cart-item-label > h2 {
+	color: #666;
+	font-size: 24px;
+	margin-bottom: 1em;
+	text-transform: uppercase;
+}
+
+.add-to-cart-item-code {
+	color: #888;
+    font-size: 12px;
+    font-family: tahoma;
+}
+
+.add-to-cart-item-price {
+	color: #01A261;
+	font-size: 24px;
+	padding: 20px 0;
+}
+
+.shoppingItemDetails .span8 ul {
+	margin-bottom: 0;
+	border-bottom: 0;
+	margin-top: 3%;
+}
+
+.shoppingItemDetails .span8 ul.nav-tabs li.active a {
+	border: 0 none;
+	border-radius: 0;
+	padding: 0.833em 1.666em;
+	text-transform: uppercase;
+}
+
+.shoppingItemDetails .span8 p.description {
+	padding: 1em 1.8em;
+}
+
+.shoppingItemDetails .span8 ul.breadcrumb {
+	margin: 0;
+}
+
+.shoppingItemDetails p, .shoppingItemDetails ul, .shoppingItemDetails span {
+	color: #888;
+}
+
+.shoppingItemDetails .span8 .descriptionTabContent {
+	background: #222;
+	color: #888;
+	font-family: tahoma;
+    font-size: 12px;
+	padding-left: 4%;
 }
