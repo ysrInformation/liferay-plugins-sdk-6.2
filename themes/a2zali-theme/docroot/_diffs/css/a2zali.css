@@ -475,10 +475,18 @@ li.currency select {
 	width: 100%;
 } */
 
-.topHeaderWrapper.row-fluid, #search-div.row-fluid, .row-fluid.sticky .mainHeadWrapper, .shopListSort.row-fluid, #shopping_list.row-fluid, 
-.content_wrapper, .copyRight.row-fluid, .footer_wrapper, .shoppingItemDetails.rowfluid, #breadcrumbs .breadcrumb{
+.bg .topHeaderWrapper.row-fluid, .bg #search-div.row-fluid, .bg .row-fluid.sticky .mainHeadWrapper, 
+.bg .shopListSort.row-fluid, .bg #shopping_list.row-fluid, .bg .content_wrapper, .bg .copyRight.row-fluid, 
+.bg .footer_wrapper, .bg .shoppingItemDetails.rowfluid, .bg #breadcrumbs .breadcrumb {
 	margin: 0 auto;
 	width: 94%;
+}
+
+.topHeaderWrapper.row-fluid, #search-div.row-fluid, .row-fluid.sticky .mainHeadWrapper, .shopListSort.row-fluid, #shopping_list.row-fluid, 
+.content_wrapper, .copyRight.row-fluid, .footer_wrapper, .shoppingItemDetails.rowfluid, #breadcrumbs .breadcrumb, 
+.new-checkout, .shoppingCartPage{
+	margin: 0 auto;
+	width: 76%;
 }
 
 #search-div.row-fluid.sticky {
@@ -828,4 +836,15 @@ a.icon_wrap.disabled, .icon_wrap.disabled {
 	font-family: tahoma;
     font-size: 12px;
 	padding-left: 4%;
+}
+
+.new-checkout ul.step li a, ul.step li span {
+	border: 1px solid #ccc;
+	display: block;
+    font-size: 12px;
+    padding: 8px 10px 6px;
+}
+
+.new-checkout {
+	padding: 2% 0;
 }
