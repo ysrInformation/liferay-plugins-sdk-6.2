@@ -93,7 +93,7 @@
 														String showInPopup = "javascript:showPopup('"+detailsURL.toString()+"','800','1200','Product Details');";
 														%>
 														<a href="<%= showInPopup %>">
-															<img width="100" height="100" src="<%= imageURL %>" style="margin-top:5%;">
+															<img width="45" height="51" src="<%= imageURL %>" style="margin-top:5%;">
 														</a>
 														<c:if test="<%= !imageExist %>"><liferay-ui:message key="no-image"/></c:if>
 													</c:when>
