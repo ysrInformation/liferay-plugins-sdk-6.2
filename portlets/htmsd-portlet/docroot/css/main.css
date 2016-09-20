@@ -322,16 +322,8 @@
 	border-top: 0;
 }
 
-.cart-table tr:last-child td {
-	border-bottom: 0;
-}
-
 .cart-table tr td:first-child, .cart-table table tr th:first-child {
 	border-left: 0;
-}
-
-.cart-table tr td:last-child, .cart-table tr th:last-child {
-	border-right: 0;
 }
 
 .cart-footer div {
