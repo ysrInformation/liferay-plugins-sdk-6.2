@@ -166,13 +166,19 @@ body.blackTheme {
 	color: #01A261;
 }
 
-.blackTheme .shoppingItemDetails .span8 ul.nav-tabs li.active a {
+.blackTheme ul.nav-tabs li.active a {
 	background-color: #222;
 	color: #fff;
 }
 
-.blackTheme .shoppingItemDetails .span8 ul.nav-tabs li a {
+.blackTheme ul.nav-tabs li a {
 	background-color: #444;
+	color: #fff;
+}
+
+.aui .blackTheme ul.nav-tabs li a:hover {
+	background: #222 !important;
+	color: #fff !important;
 }
 
 .blackTheme .shoppingItemDetails .span8 .descriptionTabContent {
@@ -193,4 +199,21 @@ body.blackTheme {
 	border-color: #444;
 	box-shadow: none;
 	color: #fff;
+}
+
+.blackTheme .cart-table .cart-head-row td {
+	border-right: 1px solid #333;
+}
+
+.blackTheme .cart-table tbody td:first-child {
+	border-left: 1px solid #333;
+}
+
+.blackTheme .cart-table tbody td {
+	border-bottom: 1px solid #333;
+	border-right: 1px solid #333;
+}
+
+.blackTheme .cart-footer .price-text {
+	color: #333;
 }

@@ -803,21 +803,39 @@ a.icon_wrap.disabled, .icon_wrap.disabled {
 	color: #01A261;
 	font-size: 24px;
 	padding: 20px 0;
+	font-family: tahoma;
 }
 
-.shoppingItemDetails .span8 ul {
+.aui ul.nav-tabs {
 	margin-bottom: 0;
 	border-bottom: 0;
 	margin-top: 3%;
 }
 
-.shoppingItemDetails .span8 ul.nav-tabs li.active a {
-	border: 0 none;
+ul.nav-tabs li a {
+	border: 0 none !important;
 	border-radius: 0;
+	font-size: 13px;
+	font-weight: 600;
+	margin: 0;
 	padding: 0.833em 1.666em;
 	text-transform: uppercase;
 }
 
+.mycart > h2 {
+	color: #ccc;
+}
+
+.cart-table .cart-head-row td {
+	font-size: 12px;
+    font-weight: 600;
+    color: #333;
+}
+
+.cart-table tbody td, .cart-table tbody h5, .cart-table tbody label {
+	font-family: tahoma;
+	font-size: 12px;
+}
 .shoppingItemDetails .span8 p.description {
 	padding: 1em 1.8em;
 }
@@ -847,4 +865,11 @@ a.icon_wrap.disabled, .icon_wrap.disabled {
 
 .new-checkout {
 	padding: 2% 0;
+}
+
+.btn.add-to-cart {
+	font-family: fontello;
+	font-size: 16.3px;
+	text-transform: uppercase;
+	width: inherit;
 }
