@@ -812,7 +812,7 @@ a.icon_wrap.disabled, .icon_wrap.disabled {
 	margin-top: 3%;
 }
 
-ul.nav-tabs li a {
+.aui ul.nav-tabs li a {
 	border: 0 none !important;
 	border-radius: 0;
 	font-size: 13px;
@@ -820,6 +820,10 @@ ul.nav-tabs li a {
 	margin: 0;
 	padding: 0.833em 1.666em;
 	text-transform: uppercase;
+}
+
+.aui .shoppingCartPage ul.nav-tabs {
+	margin-bottom: 2%;
 }
 
 .mycart > h2 {
