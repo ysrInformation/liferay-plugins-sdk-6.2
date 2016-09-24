@@ -1,10 +1,14 @@
+<%@page import="com.liferay.portal.kernel.workflow.WorkflowConstants"%>
 <%@include file="/html/dashboard/init.jsp" %>
 
 <portlet:resourceURL  id="getCategoryId"  var="getCategoryURL"/>
 
 <head>
+
   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  
   <style>
 	 .ui-widget-content{
 	 	 border : 0;
@@ -25,7 +29,6 @@
 	} */
   </style>
  </head> 
- 
 <%
  	String backURL = ParamUtil.getString(renderRequest, "backURL");
 	long itemId = ParamUtil.getLong(renderRequest, "itemId");
@@ -39,6 +42,7 @@
 		updateItemURL.setParameter(HConstants.ITEM_ID, String.valueOf(itemId));
 		updateItemURL.setParameter("userId", String.valueOf(item.getUserId()));
 		updateItemURL.setParameter("backURL", backURL);
+		updateItemURL.setParameter("redirect", themeDisplay.getURLCurrent());
 		updateItemURL.setParameter("tab1", ParamUtil.getString(renderRequest, "tab1"));
 		if(!isAdmin) {
 			updateItemURL.setParameter(HConstants.status,String.valueOf(item.getStatus()));
@@ -55,21 +59,9 @@
 			parentCategoryId = itemCategory.get(0).getParentCategoryId();
 		}
 		int status = item.getStatus();
-		String itemStatus = StringPool.BLANK;
-		if(status == HConstants.APPROVE) {
-			itemStatus = "item-approve";
-		}else if(status == HConstants.REJECT){
-			itemStatus = "item-reject";
-		}else{
-			itemStatus = "item-new";
-		}
 		%>
 	
 		<liferay-ui:header title='<%=isAdmin ? "update-item" : "view-item" %>' backLabel="go-back" backURL='<%=backURL%>'/>
-		<liferay-ui:header title='<%=itemStatus%>'/>
-		<c:if test="<%=status == HConstants.REJECT %>">
-			<liferay-ui:header title='<%=item.getRemark()%>'/>
-		</c:if>
 		<aui:fieldset>
 			<aui:form action="<%=updateItemURL %>" enctype="multipart/form-data" method="POST" name="itemDetailForm">
 				<aui:input name="userId" type="hidden" value="<%=item.getUserId() %>" />
@@ -192,7 +184,6 @@
 					</aui:input>
 				</c:if>
 				
-				
 				<aui:layout>
 					<aui:input name="<%=HConstants.WHOLESALE_DISCOUNT %>" type="checkbox"  checked="<%= wholeSaleSize > 0 ? true :  false %>" inlineLabel="true" />
 					<div id="wholeSaleDiv" style='<%= wholeSaleSize > 0 ? "display:block" :  "display:block" %>'>
@@ -232,23 +223,10 @@
 								<%
 							}
 						%>
-					</div>	
-				</aui:layout>
-				<%-- <div id="tags">
-					<liferay-ui:message key="tags" />
-					<liferay-ui:asset-tags-selector className="<%=ShoppingItem.class.getName() %>" classPK="<%=itemId %>" />
-				</div>	 --%>	
-				<c:if test="<%=isAdmin%>">
-					<aui:select name="<%=HConstants.status %>" showEmptyOption="true" required="true" >
-						<aui:option value="<%=HConstants.APPROVE%>" label="approve" />
-						<aui:option value="<%=HConstants.REJECT %>" label="reject" />
-					</aui:select>
-					<div id="remarkDiv" style="display:none;">
-						<aui:input name="<%=HConstants.REMARK %>" type="textarea" value="<%=item.getRemark()%>"/>
 					</div>
-				</c:if>
+				</aui:layout>
 				<c:if test="<%=isAdmin || isStaff %>">
-					<aui:input name="<%=HConstants.STAFF_REMARKS %>" type="textarea"/>
+					<aui:input name="<%=HConstants.STAFF_REMARKS %>" type="textarea" value="<%=item.getRemark()%>" required="true"/>
 					<aui:button type="submit" value="update" onClick="return confirmSubmit();"/>
 					<aui:button type="button" href="<%=backURL %>" value="cancel" />
 				</c:if>
@@ -340,25 +318,14 @@
 					}); 
 				 
 					 <c:if test='<%=isAdmin %>'>
-					 
-						 A.one("#<portlet:namespace /><%=HConstants.UNILIMITED_QUANTITY%>Checkbox").on('change',function(e){
-								var quantity =  A.one("#<portlet:namespace /><%=HConstants.QUANTITY%>");
-								if(e.currentTarget.get('checked')) {
-									quantity.set('disabled', true);
-								 }else{
-								 	quantity.set('disabled', false);	
-								 }
-							});
-						 
-							 A.one("#<portlet:namespace /><%=HConstants.status%>").on('change',function(e){
-								var remarkDiv = document.getElementById("remarkDiv");
-								if(e.currentTarget.get('value') == <%=HConstants.REJECT%>) {
-									remarkDiv.style.display  = 'block';
-								}else{
-									remarkDiv.style.display  = 'none';
-								}
-							 });
-						 
+						A.one("#<portlet:namespace /><%=HConstants.UNILIMITED_QUANTITY%>Checkbox").on('change',function(e){
+							var quantity =  A.one("#<portlet:namespace /><%=HConstants.QUANTITY%>");
+							if(e.currentTarget.get('checked')) {
+								quantity.set('disabled', true);
+							 }else{
+							 	quantity.set('disabled', false);	
+							 }
+						});
 					 </c:if>
 				});
 				

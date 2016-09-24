@@ -1,3 +1,6 @@
+<%@page import="com.liferay.portal.kernel.workflow.WorkflowConstants"%>
+<%@page import="com.liferay.portal.workflow.kaleo.model.KaleoTaskInstanceToken"%>
+<%@page import="java.net.URLEncoder"%>
 <%@page import="com.htmsd.util.CommonUtil"%>
 <%@page import="com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil"%>
 <%@page import="com.liferay.portal.model.User"%>
@@ -70,7 +73,6 @@
 
 	<liferay-ui:search-container-results>
 		 <%
-
 		 	itemList = 	keyword.isEmpty() ? ShoppingItemLocalServiceUtil.getByStatus(status, searchContainer.getStart(), searchContainer.getEnd())
 		 									:ShoppingItemLocalServiceUtil.searchItems(status, keyword, searchContainer.getStart(), searchContainer.getEnd()) ;
 		 				
@@ -149,13 +151,15 @@
 		
 		<liferay-ui:search-container-column-text name="action">
 			<%
-				PortletURL itemDetailURL = renderResponse.createRenderURL();
-				itemDetailURL.setParameter("jspPage", "/html/dashboard/itemdetails.jsp");
-				itemDetailURL.setParameter("itemId", String.valueOf(item.getItemId()));
-				itemDetailURL.setParameter("backURL", redirectURL);
-				itemDetailURL.setParameter("tab1", tabs1);
+				KaleoTaskInstanceToken kaleoTaskInstanceToken = CommonUtil.getKaleoTaskId(item.getItemId());
+				String itemDetailURL = "showReviewPage('"+themeDisplay.getPortalURL() +"/group/control_panel/manage/-/my_workflow_tasks/view/"
+						+ kaleoTaskInstanceToken.getKaleoTaskInstanceTokenId()  +"?_153_struts_action=%2Fmy_workflow_tasks%2Fedit_workflow_task"
+						+ "&_153_itemId="+item.getItemId()
+						+ "&_153_workflowTaskId="+kaleoTaskInstanceToken.getKaleoTaskId()
+						+ "&controlPanelCategory=my"
+						+ "&_153_redirect=" + URLEncoder.encode(themeDisplay.getURLCurrent()) +"');";
 			%>
-			<aui:a href="<%=itemDetailURL.toString() %>">View</aui:a>
+			<aui:a onClick="<%=itemDetailURL %>" href="javascript:void(0);">View</aui:a>
 		</liferay-ui:search-container-column-text>
 		
 	</liferay-ui:search-container-row>
@@ -195,23 +199,42 @@
 	}
 	
 	function showStockForm(url) {
-		
 		AUI().use('aui-modal', function(A) {
-				Liferay.Util.openWindow({
-					dialog: {
-					    centered: true,
-					    modal: true,
-					    width  : 300,
-					    height : 300
-					},
-					dialogIframe: {
-						id: 'showstockDialog',
-						uri: url
-					},
-					title: Liferay.Language.get('stock'),
+			Liferay.Util.openWindow({
+				dialog: {
+				    centered: true,
+				    modal: true,
+				    width  : 300,
+				    height : 300,
+				},
+				dialogIframe: {
+					id: 'showstockDialog',
 					uri: url
-				});
-				
-			}); 
+				},
+				title: Liferay.Language.get('stock'),
+				uri: url
+			});
+		}); 
+	}
+
+	function showReviewPage(url) {
+		AUI().use('aui-modal', function(A) {
+			Liferay.Util.openWindow({
+				dialog : {
+					centered : true,
+					modal : true,
+					width : "90%",
+					height : 800,
+					destroyOnHide: true,
+    				resizable: false
+				},
+				dialogIframe : {
+					id : 'showstockDialog',
+					uri : url
+				},
+				title : Liferay.Language.get('review'),
+				uri : url
+			});
+		});
 	}
 </aui:script>

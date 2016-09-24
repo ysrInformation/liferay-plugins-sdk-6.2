@@ -23,6 +23,7 @@ import com.htmsd.slayer.model.ItemHistory;
 import com.htmsd.slayer.model.ShoppingItem;
 import com.htmsd.slayer.service.ShoppingItemLocalServiceUtil;
 import com.htmsd.slayer.service.base.ShoppingItemLocalServiceBaseImpl;
+import com.liferay.portal.NoSuchRepositoryEntryException;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.Junction;
@@ -54,8 +55,7 @@ import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
  * @see com.htmsd.slayer.service.base.ShoppingItemLocalServiceBaseImpl
  * @see com.htmsd.slayer.service.ShoppingItemLocalServiceUtil
  */
-public class ShoppingItemLocalServiceImpl
-	extends ShoppingItemLocalServiceBaseImpl {
+public class ShoppingItemLocalServiceImpl extends ShoppingItemLocalServiceBaseImpl {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -318,14 +318,26 @@ public class ShoppingItemLocalServiceImpl
 			ShoppingItem shoppingItem =  shoppingItemLocalService.fetchShoppingItem(itemId);
 			String [] imagesIds =   StringUtil.split(shoppingItem.getImageIds(), StringPool.COMMA);
 			for(String imagesId : imagesIds) {
-				DLAppLocalServiceUtil.deleteFileEntry(Long.valueOf(imagesId));
-			} 
-			DLAppLocalServiceUtil.deleteFileEntry(shoppingItem.getSmallImage());
+				try {
+					DLAppLocalServiceUtil.deleteFileEntry(Long.valueOf(imagesId));
+				} catch (NoSuchRepositoryEntryException e) {
+					_log.error(e.getMessage()+" Image Not Found");
+				}
+			}
+			
+			try {
+				DLAppLocalServiceUtil.deleteFileEntry(shoppingItem.getSmallImage());
+			} catch (NoSuchRepositoryEntryException e) {
+				_log.error(e.getMessage()+" Image Not Found");
+			}
+			
 			categoryFinder.deleteCatItemByItemId(itemId);
 			AssetEntry  assetEntry=  AssetEntryLocalServiceUtil.fetchEntry(ShoppingItem.class.getName(), itemId);
+			
 			if(Validator.isNotNull(assetEntry)) {
 				AssetEntryLocalServiceUtil.deleteAssetEntry(assetEntry);
 			}
+			
 			List<ItemHistory> itemHistories = itemHistoryLocalService.getItemHistoryByItemId(itemId, 0, itemHistoryLocalService.getItemIdCount(itemId));
 			for(ItemHistory itemHistory  :itemHistories) {
 				itemHistoryLocalService.deleteItemHistory(itemHistory.getHistoryId());
