@@ -451,7 +451,7 @@ li.currency select {
 #navigation li > ul.child-menu {
 	border-radius: 0;
 	float: left !important;
-	padding: 5px 10px;
+	padding: 20px;
 }
 
 #navigation li ul.child-menu > li {
@@ -685,7 +685,7 @@ footer .social-icons ul li a i {
 	top: auto;
 	position: fixed;
 	_position: absolute;
-	z-index: 110;
+	z-index: 1001;
 	right: 0;
 	bottom: 60%;
 	background: #f1f1f1;
@@ -875,4 +875,85 @@ a.icon_wrap.disabled, .icon_wrap.disabled {
 	font-size: 16.3px;
 	text-transform: uppercase;
 	width: inherit;
+}
+
+.homelayout .content_wrapper .portlet-column {
+	border-right: 1px solid #505050;
+	max-height: 401px;
+	min-height: 260px;
+}
+
+/* Search css */
+
+form#searchbox {
+    position: relative;
+    z-index: 75;
+}
+
+#search_block_top .searchbox_inner, #search_block_mobile_bar .searchbox_inner {
+    position: relative;
+}
+
+#search_block_top .search_query, #search_block_mobile_bar .search_query {
+  -moz-border-bottom-colors: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  background: rgb(251, 251, 251) none repeat scroll 0 0;
+  border-color: rgb(229, 229, 229);
+  border-image: none;
+  border-style: solid;
+  border-width: 1px 0 1px 1px;
+  box-shadow: none;
+  display: inline-block;
+  height: 42px;
+  line-height: normal;
+  padding: 6px;
+  width: 264px;
+}
+
+.form-control {
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(214, 212, 212);
+  border-radius: 0;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+  color: rgb(156, 155, 155);
+  display: block;
+  font-size: 13px;
+  height: 32px;
+  padding: 6px 12px;
+  transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+  vertical-align: middle;
+  width: 100%;
+}
+
+.form-control {
+  height: 26px;
+  padding: 2px 4px;
+}
+
+.form-control:-moz-placeholder {
+	color:#999;
+}
+.form-control::-moz-placeholder {
+	color:#999;
+}
+.form-control:-ms-input-placeholder {
+	color:#999;
+}
+ 
+.form-control::-webkit-input-placeholder {
+	color:#999;
+}
+
+#search_block_top.quick_search_simple .search_query {
+    display: none;
+    position: absolute;
+    right: 100%;
+    top: 0;
+}
+
+#search_block_top.quick_search_simple .submit_searchbox {
+	border-color:transparent;
+	background:transparent;
 }
