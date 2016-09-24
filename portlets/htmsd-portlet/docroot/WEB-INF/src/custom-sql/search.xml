@@ -5,7 +5,7 @@
 		   <![CDATA[
 			    SELECT DISTINCT si.* FROM htmsd_ShoppingItem si where 
 			    NOT si.quantity = 0 
-			    AND si.status = 1 AND (si.name like ? OR si.productCode like ?)
+			    AND si.status = 0 AND (si.name like ? OR si.productCode like ?)
    				[$sort]
 		 	]]>
 	</sql>
