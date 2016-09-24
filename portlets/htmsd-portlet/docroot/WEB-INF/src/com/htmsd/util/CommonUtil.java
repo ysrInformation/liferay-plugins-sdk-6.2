@@ -16,7 +16,6 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 
-import com.htmsd.slayer.NoSuchShoppingItem_CartException;
 import com.htmsd.slayer.model.Category;
 import com.htmsd.slayer.model.Currency;
 import com.htmsd.slayer.model.Invoice;
@@ -33,8 +32,10 @@ import com.htmsd.slayer.service.ShoppingItemLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingItem_CartLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingOrderItemLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
+import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.OrderFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -45,8 +46,6 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.PortletClassLoaderUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
-import com.liferay.portal.kernel.util.HtmlUtil;
-import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.TextFormatter;
 import com.liferay.portal.kernel.util.Validator;
@@ -59,6 +58,9 @@ import com.liferay.portal.service.CountryServiceUtil;
 import com.liferay.portal.service.RegionServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.workflow.kaleo.model.KaleoTaskInstanceToken;
+import com.liferay.portal.workflow.kaleo.service.ClpSerializer;
+import com.liferay.portal.workflow.kaleo.service.KaleoTaskInstanceTokenLocalServiceUtil;
 import com.liferay.portlet.asset.model.AssetCategory;
 import com.liferay.portlet.asset.model.AssetVocabulary;
 import com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil;
@@ -644,5 +646,30 @@ public class CommonUtil {
 			method.releaseConnection();
 		}
 		return jsonObject;
+	}
+	
+	@SuppressWarnings({ "static-access", "unchecked" })
+	public static KaleoTaskInstanceToken getKaleoTaskId(long itemId) {
+		KaleoTaskInstanceToken kaleoTaskInstanceToken = null;
+		try {
+			ClassLoader classLoader = (ClassLoader) PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),"portletClassLoader");
+			DynamicQuery kaleoQuery = DynamicQueryFactoryUtil.forClass(KaleoTaskInstanceToken.class, classLoader);
+			kaleoQuery.add(RestrictionsFactoryUtil.eq("className", ShoppingItem.class.getName()));
+			kaleoQuery.add(RestrictionsFactoryUtil.eq("classPK", itemId));
+			kaleoQuery.addOrder(new OrderFactoryUtil().desc("createDate"));
+			
+			List<KaleoTaskInstanceToken> kaleoTaskInstanceTokens = null;
+			try {
+				kaleoTaskInstanceTokens = KaleoTaskInstanceTokenLocalServiceUtil.dynamicQuery(kaleoQuery);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			
+			if (Validator.isNotNull(kaleoTaskInstanceTokens) && kaleoTaskInstanceTokens.size() > 0) 
+				kaleoTaskInstanceToken = kaleoTaskInstanceTokens.get(0);
+		} catch (RuntimeException e) {
+			_log.error(e.getMessage());
+		}
+		return kaleoTaskInstanceToken;
 	}
 }

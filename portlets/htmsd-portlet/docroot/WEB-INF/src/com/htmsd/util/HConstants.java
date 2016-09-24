@@ -3,6 +3,8 @@ package com.htmsd.util;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
+
 public interface HConstants {
  
 	public static String ITEM_ID = "itemId";
@@ -46,10 +48,10 @@ public interface HConstants {
 	public static String COMPANY_NAME="Company Name";
 	public static int IMAGES_UPLOAD_LIMIT = 5;
 	public static int WHOLESALE_LIMIT = 3;
-	public static int NEW = 0;
-	public static int APPROVE = 1;
-	public static int REJECT = 5;
-	public static int PENDING = 2;
+	public static int NEW = WorkflowConstants.STATUS_PENDING;
+	public static int APPROVE = WorkflowConstants.STATUS_APPROVED;
+	public static int REJECT = WorkflowConstants.STATUS_DENIED;
+	public static int PENDING = WorkflowConstants.STATUS_PENDING;
 	public static int SUCCESSFUL = 3;
 	public static int DELIVERED = 4;
 	public static int NOT_DELIVERED = 6;

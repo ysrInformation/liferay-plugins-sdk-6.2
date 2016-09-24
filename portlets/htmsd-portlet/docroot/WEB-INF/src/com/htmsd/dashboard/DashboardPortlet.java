@@ -29,6 +29,7 @@ import com.htmsd.slayer.service.WholeSaleLocalServiceUtil;
 import com.htmsd.util.HConstants;
 import com.htmsd.util.NotificationUtil;
 import com.liferay.counter.service.CounterLocalServiceUtil;
+import com.liferay.portal.NoSuchWorkflowDefinitionLinkException;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
@@ -42,6 +43,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.Folder;
+import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
@@ -50,13 +52,17 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.kernel.workflow.WorkflowHandlerRegistryUtil;
 import com.liferay.portal.model.Address;
 import com.liferay.portal.model.Contact;
 import com.liferay.portal.model.ListTypeConstants;
+import com.liferay.portal.model.WorkflowDefinitionLink;
 import com.liferay.portal.service.AddressLocalServiceUtil;
 import com.liferay.portal.service.ListTypeServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
+import com.liferay.portal.service.WorkflowDefinitionLinkLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
@@ -228,8 +234,17 @@ public class DashboardPortlet extends MVCPortlet {
 		int status = ParamUtil.getInteger(uploadRequest, HConstants.status);
 		String articleId = StringPool.BLANK;
 		
-		String remark = ( status == HConstants.REJECT ) ? ParamUtil.getString(uploadRequest, HConstants.REMARK)  : StringPool.BLANK;
+		String remark = StringPool.BLANK;
 		String addupdateMessage = (itemId == 0) ? "added" : "updated"; 
+		
+		ServiceContext serviceContext = null;
+		try {
+			serviceContext = ServiceContextFactory.getInstance(ShoppingItem.class.getName(), actionRequest);
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
 		
 		if (itemId == 0) {
 		
@@ -237,22 +252,63 @@ public class DashboardPortlet extends MVCPortlet {
 			imageIds = saveFiles(uploadRequest, HConstants.IMAGE, HConstants.ITEM_FOLDER_NAME);
 			shoppingItem = ShoppingItemLocalServiceUtil.addItem(themeDisplay.getScopeGroupId(),
 					themeDisplay.getCompanyId(), currentUserId,currentUserName, currentUserEmail, currentUserId, StringPool.BLANK, StringPool.BLANK, productCode,
-					name, description, sellerPrice, sellerPrice, tax, quantity, HConstants.NEW,
+					name, description, sellerPrice, sellerPrice, tax, quantity, WorkflowConstants.STATUS_PENDING,
 					StringUtil.merge(imageIds, StringPool.COMMA), vedioURL,  getSmallImageId(), StringPool.BLANK);
 			itemId = shoppingItem.getItemId();
 			ItemHistoryLocalServiceUtil.addItemHistory(itemId, currentUserId, currentUserName, currentUserEmail, HConstants.ITEM_ADDED, StringPool.BLANK);
 			articleId = HConstants.ITEM_ADDED_TEMPLATE;
 		
+			WorkflowDefinitionLink workflowDefinitionLink = null;
+			try {
+				workflowDefinitionLink = WorkflowDefinitionLinkLocalServiceUtil.getDefaultWorkflowDefinitionLink(themeDisplay.getCompanyId(), ShoppingItem.class.getName(), 0, 0);
+			} catch (Exception e) {
+				if(e instanceof NoSuchWorkflowDefinitionLinkException){
+					SessionMessages.add(actionRequest.getPortletSession(),"workflow-not-enabled");
+				}
+				e.printStackTrace();
+			}
+			
+			if (Validator.isNotNull(shoppingItem) && Validator.isNotNull(workflowDefinitionLink)) {
+				
+				try {
+					AssetEntryLocalServiceUtil.updateEntry(currentUserId, themeDisplay.getScopeGroupId(),
+							ShoppingItem.class.getName(), shoppingItem.getItemId(),
+							serviceContext.getAssetCategoryIds(), serviceContext.getAssetTagNames());
+				} catch (PortalException e) {
+					e.printStackTrace();
+				} catch (SystemException e) {
+					e.printStackTrace();
+				}
+				
+				try {
+					WorkflowHandlerRegistryUtil.startWorkflowInstance(shoppingItem.getCompanyId(),
+							shoppingItem.getUserId(), ShoppingItem.class.getName(), shoppingItem.getItemId(),
+							shoppingItem, serviceContext);
+				} catch (PortalException e) {
+					e.printStackTrace();
+				} catch (SystemException e) {
+					e.printStackTrace();
+				}
+			}
+			actionResponse.setRenderParameter("tab1", ParamUtil.getString(uploadRequest, "tab1"));
 		} else {
-		
-			//Updating items 
-				imageIds = updateImages(uploadRequest, HConstants.IMAGE, HConstants.IMAGE_ID);
-				shoppingItem = ShoppingItemLocalServiceUtil.updateItem(itemId,
-						themeDisplay.getScopeGroupId(), themeDisplay.getCompanyId(), userId, userName, userEmail, currentUserId, currentUserName, currentUserEmail,productCode, name,
-						description, sellerPrice, totalPrice, tax, quantity, status,
-						StringUtil.merge(imageIds, StringPool.COMMA), vedioURL, 0, remark);
-				ItemHistoryLocalServiceUtil.addItemHistory(itemId, currentUserId, currentUserName, currentUserEmail, HConstants.ITEM_UPDATED, staffRemark);
-				articleId = HConstants.ITEM_ADDED_UPDATED_TEMPLATE;
+			String redirect = ParamUtil.getString(actionRequest, "redirect");
+			try {
+				status = ShoppingItemLocalServiceUtil.fetchShoppingItem(itemId).getStatus();
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			//Updating items
+			imageIds = updateImages(uploadRequest, HConstants.IMAGE, HConstants.IMAGE_ID);
+			
+			shoppingItem = ShoppingItemLocalServiceUtil.updateItem(itemId,
+					themeDisplay.getScopeGroupId(), themeDisplay.getCompanyId(), userId, userName, userEmail, currentUserId, currentUserName, currentUserEmail,productCode, name,
+					description, sellerPrice, totalPrice, tax, quantity, status,
+					StringUtil.merge(imageIds, StringPool.COMMA), vedioURL, 0, remark);
+			ItemHistoryLocalServiceUtil.addItemHistory(itemId, currentUserId, currentUserName, currentUserEmail, status, staffRemark);
+			articleId = HConstants.ITEM_ADDED_UPDATED_TEMPLATE;
+			
+			actionResponse.sendRedirect(redirect);
 		}
 	
 		// Tag
@@ -260,8 +316,7 @@ public class DashboardPortlet extends MVCPortlet {
 		
 		//Category 
 		ShoppingItemLocalServiceUtil.updateCategory(itemId, categoryId, userId, userName);
-		actionResponse.setRenderParameter("tab1", ParamUtil.getString(uploadRequest, "tab1"));
-		
+				
 		//WholeSale
 		updateWholeSale(uploadRequest,itemId);
 		
