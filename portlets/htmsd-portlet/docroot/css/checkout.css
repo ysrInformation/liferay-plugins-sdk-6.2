@@ -58,3 +58,43 @@
 .new-checkout {
 	padding: 2%;
 }
+
+.cart-summary {
+  width: 100%;
+}
+
+.cart-summary tbody > tr > td, .cart-summary tbody > tr > th, #cart-summary-total tbody > tr > td {
+  border: 1px solid #333333;
+}
+
+.cart-summary tbody td {
+  text-align: center;
+  padding: 10px;
+}
+
+.checkout-item-description {
+  padding-left: 1%;
+  text-align: left;
+}
+	
+.cart-summary > thead > tr > th {
+  background: #fbfbfb;
+  border-bottom-width: 1px;
+  color: #333333;
+  vertical-align: middle;
+  padding: 8px;
+}
+
+#cart-summary-total {
+  float: right;
+  width: 320px;
+  margin-top: 2em;
+}
+
+#cart-summary-total tbody > tr > td {
+	padding: 10px 0 10px 12px;
+}
+
+.checkout-totalprice, .checkout-unitprice {
+  color: #01a261;
+}
