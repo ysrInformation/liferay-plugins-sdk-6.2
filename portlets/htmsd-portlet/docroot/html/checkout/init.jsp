@@ -17,3 +17,7 @@
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="javax.portlet.WindowState"%>
 <%@page import="javax.portlet.PortletSession"%>
+
+<%
+	String continueShoppingURL=themeDisplay.getPortalURL() +"/web/"+themeDisplay.getLayout().getFriendlyURL()+"/home";
+%>
