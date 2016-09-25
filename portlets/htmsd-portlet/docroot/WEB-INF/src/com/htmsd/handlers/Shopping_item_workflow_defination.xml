@@ -180,10 +180,6 @@
 					<role-type>regular</role-type>
 					<name>ShoppingItem Content reviewer</name>
 				</role>
-				<role>
-					<role-type>regular</role-type>
-					<name>Approver</name>
-				</role>
 			</roles>
 		</assignments>
 		<transitions>
