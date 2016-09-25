@@ -437,3 +437,8 @@
 	color : #FF4500;
 	font-weight: bold;
 }
+
+#shopping_list .product:hover .product-image img {
+	transform: scale(1.06);
+	transition: all 0.3s ease 0s;
+}
