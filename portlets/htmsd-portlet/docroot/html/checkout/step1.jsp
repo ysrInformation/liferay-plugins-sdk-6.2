@@ -152,7 +152,7 @@
 				</table>
 			</div>
 			<aui:button-row>
-				<aui:button cssClass="pull-left" type="submit" value='<%= LanguageUtil.get(portletConfig, locale, "continue-shopping") %>' href="#"/>
+				<aui:button cssClass="pull-left" type="submit" value='<%= LanguageUtil.get(portletConfig, locale, "continue-shopping") %>' href="<%= continueShoppingURL %>"/>
 				<aui:button cssClass="pull-right" type="submit" value='<%= LanguageUtil.get(portletConfig, locale, "step1") %>' href="<%= checkOut %>"/>
 			</aui:button-row>
 		</div>

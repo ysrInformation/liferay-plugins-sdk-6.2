@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
@@ -18,9 +19,12 @@ import com.htmsd.slayer.service.WholeSaleLocalServiceUtil;
 import com.htmsd.util.CommonUtil;
 import com.htmsd.util.HConstants;
 import com.htmsd.util.ShoppingBean;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.Constants;
+import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -32,14 +36,7 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  * Portlet implementation class CheckoutPortlet
  */
 public class CheckoutPortlet extends MVCPortlet {
-	
-	public void step1(ActionRequest actionRequest, ActionResponse actionResponse)
-			throws IOException, PortletException {
-	
-		System.out.println("Checkout :- Step 1");
-		actionResponse.setRenderParameter("order_step", "step2"); 
-	}
-	
+
 	public void step2(ActionRequest actionRequest, ActionResponse actionResponse)
 			throws IOException, PortletException {
 	
@@ -49,8 +46,26 @@ public class CheckoutPortlet extends MVCPortlet {
 	
 	public void step3(ActionRequest actionRequest, ActionResponse actionResponse)
 			throws IOException, PortletException {
-		System.out.println("Checkout :- Step 3");
-		actionResponse.setRenderParameter("order_step", "step4");
+		_log.info("Checkout :- Step 3");
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		
+		long userId = themeDisplay.getUserId();
+		long companyId = themeDisplay.getCompanyId();
+		String shippingFirstName = ParamUtil.getString(actionRequest, "firstName");
+		String shippingLastName = ParamUtil.getString(actionRequest, "lastName");
+		String shippingEmailAddress = ParamUtil.getString(actionRequest, "email");
+		String shippingMoble = ParamUtil.getString(actionRequest, "mobileNumber");
+		String shippingAltMoble = ParamUtil.getString(actionRequest, "altNumber");
+		String shippingStreet = ParamUtil.getString(actionRequest, "street");
+		String shippingCity = ParamUtil.getString(actionRequest, "city");
+		String shippingZip = ParamUtil.getString(actionRequest, "zip");
+		String shippingCountry = ParamUtil.getString(actionRequest, "country");
+		String shippingState = ParamUtil.getString(actionRequest, "state");
+		
+		PortletConfig portletConfig = (PortletConfig) actionRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
+		String successMessage = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "you-details-saved-successfully");
+		SessionMessages.add(actionRequest, "request_processed", successMessage);
+		actionResponse.setRenderParameter("order_step", "step5");
 	}
 	
 	public void step4(ActionRequest actionRequest, ActionResponse actionResponse)
@@ -62,6 +77,13 @@ public class CheckoutPortlet extends MVCPortlet {
 	public void step5(ActionRequest actionRequest, ActionResponse actionResponse)
 			throws IOException, PortletException {
 		System.out.println("Checkout :- Step 5");
+		String paymentMode = ParamUtil.getString(actionRequest, "paymentMethod");
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		
+		PortletConfig portletConfig = (PortletConfig) actionRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
+		String successMessage = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "you-order-has-been-registered-you-may-get-email-shortly");
+		SessionMessages.add(actionRequest, "request_processed", successMessage);
+		actionResponse.setRenderParameter("order_step", "step5");
 	}
 	
 	public void serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)

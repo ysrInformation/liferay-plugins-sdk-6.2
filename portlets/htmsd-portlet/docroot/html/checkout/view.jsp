@@ -2,6 +2,7 @@
 
 <%
 	String orderStep = ParamUtil.getString(renderRequest, "order_step", "step1");
+	String continueShoppingURL=themeDisplay.getPortalURL() +"/web/"+themeDisplay.getLayout().getFriendlyURL()+"/home";
 %>
 
 <div class="new-checkout">
@@ -35,7 +36,7 @@
 	$(function(){
 		var currentOrderStep = '<%= orderStep %>';
 		if(currentOrderStep != null) {
-			$("#order_steps li").removeClass("step_current"); 
+			$("#order_steps li").removeClass("step_current").addClass("step_done_last"); 
 			$("#order_steps ."+currentOrderStep).removeClass("step_todo").addClass("step_current");	
 		}
 	});

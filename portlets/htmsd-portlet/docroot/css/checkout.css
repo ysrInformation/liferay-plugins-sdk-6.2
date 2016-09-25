@@ -5,7 +5,7 @@
   width: 20%;
 }
 
-.new-checkout ul.step li.step_current {
+.new-checkout ul.step li.step_current, .new-checkout ul.step li.step_done_last {
   background: #f9f9f9;
   font-weight: bold;
 }
@@ -97,4 +97,33 @@
 
 .checkout-totalprice, .checkout-unitprice {
   color: #01a261;
+}
+
+#checkout-addresslabel, .shippingAdress, .payment-methods-label h1 {
+  border-bottom: 1px solid;
+}
+
+.checkout-details-container, .payment-methods {
+  background-color: #222222;
+  padding-bottom: 2%;
+  padding-left: 0.5%;
+  padding-right: 5%;
+}
+
+.shippingAdress {
+	width: 40%;
+}
+
+.checkout-address-form, .paymentOptions {
+  padding-left: 20%;
+}
+
+.paymentOptions label {
+  color: #fff;
+  font-size: 18px;
+  padding: 1%;
+}
+
+.step2, .step4 {
+	display: none;
 }
