@@ -19,5 +19,5 @@
 <%@page import="javax.portlet.PortletSession"%>
 
 <%
-	String continueShoppingURL=themeDisplay.getPortalURL() +"/web/"+themeDisplay.getLayout().getFriendlyURL()+"/home";
+	String continueShoppingURL=themeDisplay.getPortalURL() +"/web/guest/home";
 %>
