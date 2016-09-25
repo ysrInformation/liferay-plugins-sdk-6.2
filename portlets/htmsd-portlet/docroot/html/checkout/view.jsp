@@ -2,7 +2,6 @@
 
 <%
 	String orderStep = ParamUtil.getString(renderRequest, "order_step", "step1");
-	String continueShoppingURL=themeDisplay.getPortalURL() +"/web/"+themeDisplay.getLayout().getFriendlyURL()+"/home";
 %>
 
 <div class="new-checkout">
