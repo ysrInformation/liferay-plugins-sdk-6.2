@@ -62,6 +62,16 @@
 						#end
 					</li>
 				#end
+				<li class="search_block_mod quick_search_simple clearfix" id="search_block_top">
+					<div id="searchbox">
+						<div class="searchbox_inner">
+							<input id="search_query_top" class="search_query form-control ac_input" placeholder="Search"/>
+							<a id="submit_searchbox" class="submit_searchbox icon_wrap" href="javascript:;">
+								<i class="fa fa-search"></i>
+							</a>
+						</div>
+					</div>
+				</li>
 			</ul>
 			#if ($layout.isPrivateLayout())
 				<ul class="nav nav-collapse pull-right"">
@@ -73,6 +83,7 @@
 		</div>
 	</div>
 </nav>
+
 <script>
 	Liferay.Data.NAV_LIST_SELECTOR = '.navbar-inner .nav-collapse > ul';
 </script>

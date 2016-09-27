@@ -85,11 +85,7 @@
 							</div>
 						</div>
 						<!--
-							<div class="span6 center">
-								<input id="search" placeholder="Search"/><button id="srch-btn" class="search-btn" onClick="javascript:searchItems();">
-									<i class="fa fa-search"></i> SEARCH
-								</button>
-							</div>
+							
 							<div class="span2 center">
 								#if (!$is_signed_in)
 									#set ($shoppingList = $request.getSession().getAttribute("SHOPPING_ITEMS"))
