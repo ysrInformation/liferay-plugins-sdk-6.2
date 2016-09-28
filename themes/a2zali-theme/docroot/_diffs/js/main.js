@@ -103,4 +103,34 @@ $(function(){
 		$('.pushmenu-push').toggleClass('pushmenu-push-toright');
 		menuLeft.toggleClass('pushmenu-open');
 	});
+
 });
+//Multi-Toggle Navigation
+$(function() {
+	$('body').addClass('js');
+		var	$menu = $('#menu'),
+			$menuTrigger = $('.has-subnav');
+
+	$menuTrigger.click(function(e) {
+		e.preventDefault();
+		var $this = $(this);
+		$this.toggleClass('active').next('ul').toggleClass('active');
+	});
+	
+	$('.has-subnav2').click(function(e) {
+		e.preventDefault();
+		var $this = $(this);
+		$this.toggleClass('active').next('ul').toggleClass('active');
+	});
+
+});
+
+// Remove "Active" Class from Menu on Resize
+$(window).resize(function() {
+	var viewportWidth = $(window).width();
+		if (viewportWidth > 925) {
+			$("#menu").removeClass("active");
+		}
+});
+
+		

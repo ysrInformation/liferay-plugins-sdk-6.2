@@ -1,34 +1,39 @@
 <nav class="pushmenu pushmenu-left" id="navigation" role="navigation">
 	<div id="pushMenuclose"><i class="fa fa-close"></i></div>
-	<div class="container-fluid">
-		<ul aria-label="#language ("site-pages")" class="links accordion" id="accordion2" role="">
+	<div class="menu" id="menu">
+		<ul aria-label="#language ("site-pages")" class="level-1" id="" role="">
 			#foreach ($nav_item in $nav_items)
-				<li class="accordion-group" id="layout_$nav_item.getLayoutId()" $nav_item_attr_selected role="presentation">
-					<div class="accordion-heading">
-						<a aria-labelledby="layout_$nav_item.getLayoutId()" $nav_item_attr_has_popup class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne" $nav_item.getTarget() role="">
-							<span>$nav_item.icon() $nav_item.getName() $nav_item_caret</span>
-						</a>
-					</div>
+				#set ($nav_item_caret="")
+				#if ($nav_item.hasChildren())
+					#set ($nav_item_caret='<span class="has-subnav"><i class="icon-caret-down"></i></span>')
+				#end
+				#if ($nav_child.hasChildren())
+					#set ($nav_item_caret='<span class="has-subnav2"><i class="icon-caret-down"></i></span>')
+				#end
+				<li class="" id="layout_$nav_item.getLayoutId()" $nav_item_attr_selected role="presentation">
+					<a aria-labelledby="layout_$nav_item.getLayoutId()" $nav_item_attr_has_popup href="$nav_item.getURL()" $nav_item.getTarget() role="">
+						<span>$nav_item.icon() $nav_item.getName()</span>
+					</a>
+					$nav_item_caret
 					#if ($nav_item.hasChildren())
-						<ul id="collapseOne" class="accordion-body collapse" role="">
-							<div class="accordion-inner">
-								#foreach ($nav_child in $nav_item.getChildren())
-									<li class="$nav_child_css_class" id="layout_$nav_child.getLayoutId()" $nav_child_attr_selected role="presentation">
-										<a aria-labelledby="layout_$nav_child.getLayoutId()" href="$nav_child.getURL()" $nav_child.getTarget() role="menuitem">$nav_child.getName()</a>
-										#if ($nav_child.hasChildren())
-											<ul class="grandchildmenu" role="">
-												#foreach ($nav_grandchild in $nav_child.getChildren())
-													<li class="$nav_grandchild_css_class" id="layout_$nav_grandchild.getLayoutId()" $nav_grandchild_attr_selected role="presentation">
-														<a aria labelledby ="layout_$nav_grandchild.getLayoutId()" href ="$nav_grandchild.getURL()" $nav_grandchild.getTarget() role=" menuitem ">
-															<span>$nav_grandchild.icon() $nav_grandchild.getName() </span>
-														</a>
-													</li>
-												#end
-											</ul>
-										#end
-									</li>
-								#end
-							</div>
+						<ul class="level-2" role="">
+							#foreach ($nav_child in $nav_item.getChildren())
+								<li class="" id="layout_$nav_child.getLayoutId()" $nav_child_attr_selected role="presentation">
+									<a aria-labelledby="layout_$nav_child.getLayoutId()" href="$nav_child.getURL()" $nav_child.getTarget() role="menuitem">$nav_child.getName()</a>
+									$nav_item_caret
+									#if ($nav_child.hasChildren())
+										<ul class="level-3" role="">
+											#foreach ($nav_grandchild in $nav_child.getChildren())
+												<li class="" id="layout_$nav_grandchild.getLayoutId()" $nav_grandchild_attr_selected role="presentation">
+													<a aria labelledby ="layout_$nav_grandchild.getLayoutId()" href ="$nav_grandchild.getURL()" $nav_grandchild.getTarget() role=" menuitem ">
+														<span>$nav_grandchild.icon() $nav_grandchild.getName() </span>
+													</a>
+												</li>
+											#end
+										</ul>
+									#end
+								</li>
+							#end
 						</ul>
 					#end
 				</li>
