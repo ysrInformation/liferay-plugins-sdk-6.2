@@ -1,6 +1,7 @@
 package com.htmsd.util;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 
+import com.htmsd.slayer.NoSuchCategoryException;
 import com.htmsd.slayer.model.Category;
 import com.htmsd.slayer.model.Currency;
 import com.htmsd.slayer.model.Invoice;
@@ -671,5 +673,31 @@ public class CommonUtil {
 			_log.error(e.getMessage());
 		}
 		return kaleoTaskInstanceToken;
+	}
+	
+	public static String getWorkflowURL(long ItemId, ThemeDisplay themeDisplay) {
+		KaleoTaskInstanceToken kaleoTaskInstanceToken = CommonUtil.getKaleoTaskId(ItemId);
+		String itemDetailURL = StringPool.BLANK;
+		if (Validator.isNotNull(kaleoTaskInstanceToken)) {
+			itemDetailURL = "showReviewPage('"+themeDisplay.getPortalURL() +"/group/control_panel/manage/-/my_workflow_tasks/view/"
+				+ kaleoTaskInstanceToken.getKaleoTaskInstanceTokenId()  +"?_153_struts_action=%2Fmy_workflow_tasks%2Fedit_workflow_task"
+				+ "&_153_itemId="+ItemId
+				+ "&_153_workflowTaskId="+kaleoTaskInstanceToken.getKaleoTaskId()
+				+ "&controlPanelCategory=my"
+				+ "&_153_redirect=" + URLEncoder.encode(themeDisplay.getURLCurrent()) +"');";
+		}
+		return itemDetailURL;
+	}
+	
+	public static String getCategoryName(long categoryId) {
+		String categoryName = "All Items";
+		Category category = null;
+		try {
+			category = CategoryLocalServiceUtil.fetchCategory(categoryId);
+			if (Validator.isNotNull(category)) categoryName = category.getName().toUpperCase();
+		} catch (Exception e) {
+			_log.error(e.getMessage());
+		}
+		return categoryName;
 	}
 }

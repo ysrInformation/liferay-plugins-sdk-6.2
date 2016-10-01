@@ -145,7 +145,7 @@
 				$('#loader-icon').hide();
 			},
 			success : function(data) {
-				if (data.length > 0) {	
+				if (data.length > 0) {
 					$("#<portlet:namespace/>len").val(e);
 					render(data);
 					dataLen = parseInt(dataLen) + parseInt(data.length);

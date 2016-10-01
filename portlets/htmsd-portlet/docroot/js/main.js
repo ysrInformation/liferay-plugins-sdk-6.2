@@ -26,3 +26,86 @@ function showPageInPopup(url, height, width, title){
     		popup.titleNode.html(title);
 	});
 }
+
+function getShoppingItems(categoryId, currencyId, groupId, status, start, end, sort, portletId, namespace) {
+	$.ajax({
+		url : Liferay.ThemeDisplay.getPortalURL() + '/api/jsonws/htmsd-portlet.shoppingitem/get-shopping-items',
+		type : "GET",
+		dataType : "json",
+		data : {
+			p_auth: Liferay.authToken,
+			categoryId : categoryId,
+			currencyId : currencyId, 
+			groupId : groupId,
+			status : status,
+			start : start,
+			end: end,
+			sortBy: sort
+		},
+		beforeSend : function() {
+			$('#loader-icon-'+namespace).show();
+		},
+		complete : function() {
+			$('#loader-icon-'+namespace).hide();
+		},
+		success : function(data) {
+			if (data.length > 0) {	
+				render(data, namespace, portletId);
+			}
+		},
+		error : function() {
+		}
+	});
+}
+
+function render(data, namespace, portletId) {
+	AUI().use('liferay-portlet-url', function(A) {
+		$.each(data, function(i, item) {
+			var detailsURL = Liferay.PortletURL.createRenderURL();
+			detailsURL.setPortletId(portletId);
+			detailsURL.setParameter('jspPage', "/html/shoppinglist/details.jsp");
+			detailsURL.setParameter('itemId', item.itemId);
+			
+			var addToCartURL = '${addToCartURL}' + "&"+namespace+"itemId="+item.itemId;
+			
+			var isNew = (item.isNewItem) ? '<span class="new"><i>New</i></span>' : '';
+			li = '<div class="swiper-slide">'
+					+'<div class="product">'
+						+'<div class="product-image">'
+							+'<a href="'+detailsURL+'">'
+								+'<img src=' + item.image + ' />'
+								+ isNew
+							+'</a>'
+							+ '<div class="hover_fly">'
+								+'<a href="'+addToCartURL+'">'
+									+'<div>'
+										+'<i class="fa fa-shopping-cart"></i>'
+										+'<span>Add to cart</span>'
+									+'</div>'
+								+'</a>'
+							+'</div>'
+						+ '</div>'
+						+'<div class="product-details">'
+							+'<a href="'+detailsURL+'">'
+								+ '<h4 class="item-name">' + item.name + '</h4>'
+							+'</a>'	
+							/* + '<p class="description">' + item.description + '</p>' */
+							+ '<h6 id="price">' + formatPrice(item.totalPrice); + '</h6>'
+						+'</div>'
+					+'</div>'
+				+'</div>';
+			$("#featured_list_"+namespace).append(li);		
+		});
+		var swiper = new Swiper('.swiper-container', {
+	        slidesPerView: 4,
+	        paginationClickable: true,
+	        spaceBetween: 30,
+	        nextButton: '.swiper-button-next',
+	        prevButton: '.swiper-button-prev',
+	        autoplay: 3500,
+	        centeredSlides: true,
+	        autoplayDisableOnInteraction: false,
+	        freeMode: true
+	    });
+	});
+}

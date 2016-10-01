@@ -1,0 +1,56 @@
+<%@page import="javax.portlet.PortletSession"%>
+<%@page import="com.liferay.portal.util.PortalUtil"%>
+<%@include file="/html/shoppinglist/init.jsp" %>
+
+<%
+	String noOfItems  = portletPreferences.getValue("noOfItems", "8");
+	String categoryToDisplay  = portletPreferences.getValue("categoryToDisplay", "-1");
+%>
+<style>
+	#no-item-display {
+		text-align: center;
+		display: none;
+	}
+</style>
+
+<portlet:actionURL var="addToCartURL" name="addItemToCart">
+	<portlet:param name="isRedirectDisabled" value="true"/>
+</portlet:actionURL>
+
+<div class="row-fluid featured-container">
+	<div class="span2">
+		<div>
+			<c:choose>
+				<c:when test="<%=Long.valueOf(categoryToDisplay) > 0 %>">
+					<h2><%=CommonUtil.getCategoryName(Long.valueOf(categoryToDisplay)) %></h2>
+				</c:when>
+				<c:otherwise>
+					<h2>All Items</h2>
+				</c:otherwise>
+			</c:choose>
+		</div>
+	</div>
+	<div class="span10">
+		<div class="swiper-container">
+			<div id="featured_list_<portlet:namespace/>" class="swiper-wrapper">
+				<!-- item display -->
+			</div>
+			<div class="swiper-button-next"></div>
+			<div class="swiper-button-prev"></div>
+		</div>
+	</div>
+</div>
+
+<div id="no-item-display" >
+	<h2>No Items to Display</h2>
+</div>
+<div id="loader-icon-<portlet:namespace/>" >
+	<img src="<%=request.getContextPath()%>/images/loader.gif" style="width: 100px; height: 100px"/>
+</div>
+<aui:script>
+	$(function() {
+		var portletId = '<%= themeDisplay.getPortletDisplay().getId() %>';
+		var namespace = '<portlet:namespace/>';
+		getShoppingItems(<%=categoryToDisplay%>, <%=currencyId%>, <%=themeDisplay.getScopeGroupId()%>, <%=HConstants.APPROVE%>, 0, <%=noOfItems%>, 'createDate DESC', portletId, namespace);
+	});
+</aui:script>
