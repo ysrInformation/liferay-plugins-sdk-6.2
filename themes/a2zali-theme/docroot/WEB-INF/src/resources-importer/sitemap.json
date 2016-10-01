@@ -1,5 +1,5 @@
 {
-	"layoutTemplateId": "homelayout",
+	"layoutTemplateId": "1_column",
 	"privatePages": [
 	    {
 	    	"columns": [
@@ -98,7 +98,8 @@
 			],
 			"friendlyURL": "/home",
 			"name": "Home",
-			"title": "Home"
+			"title": "Home",
+			"layoutTemplateId": "homelayout"
 		},
 		{
 			"columns": [

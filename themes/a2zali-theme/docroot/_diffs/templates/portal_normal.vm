@@ -25,6 +25,7 @@
 		<script type="text/javascript" src="$javascript_folder/lightGallery.min.js"></script>
 		<script type="text/javascript" src="$javascript_folder/jquery-ui.js" ></script>
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="$javascript_folder/swiper.min.js" ></script>
 	</head>
 	
 	<body class="$css_class $bg pushmenu-push">
