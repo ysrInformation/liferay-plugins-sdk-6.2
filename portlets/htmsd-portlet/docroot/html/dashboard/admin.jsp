@@ -151,13 +151,7 @@
 		
 		<liferay-ui:search-container-column-text name="action">
 			<%
-				KaleoTaskInstanceToken kaleoTaskInstanceToken = CommonUtil.getKaleoTaskId(item.getItemId());
-				String itemDetailURL = "showReviewPage('"+themeDisplay.getPortalURL() +"/group/control_panel/manage/-/my_workflow_tasks/view/"
-						+ kaleoTaskInstanceToken.getKaleoTaskInstanceTokenId()  +"?_153_struts_action=%2Fmy_workflow_tasks%2Fedit_workflow_task"
-						+ "&_153_itemId="+item.getItemId()
-						+ "&_153_workflowTaskId="+kaleoTaskInstanceToken.getKaleoTaskId()
-						+ "&controlPanelCategory=my"
-						+ "&_153_redirect=" + URLEncoder.encode(themeDisplay.getURLCurrent()) +"');";
+				String itemDetailURL = CommonUtil.getWorkflowURL(item.getItemId(), themeDisplay);
 			%>
 			<aui:a onClick="<%=itemDetailURL %>" href="javascript:void(0);">View</aui:a>
 		</liferay-ui:search-container-column-text>

@@ -22,7 +22,6 @@
 }
 
 .product {
-	border: 1px solid #e32945;
 	overflow: auto;
 }
 
@@ -441,4 +440,8 @@
 #shopping_list .product:hover .product-image img {
 	transform: scale(1.06);
 	transition: all 0.3s ease 0s;
+}
+
+.featured-container {
+	padding: 10px;
 }
