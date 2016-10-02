@@ -1011,3 +1011,19 @@ form#searchbox .button.button-small {
 form#searchbox .button.button-small i {
 	margin-right: 0;
 }
+
+/* featured-container */
+
+.featured-container .swiper-container {
+	 padding: 15px 0;
+}
+
+.featured-container .swiper-slide {
+	max-width: 200px;
+}
+
+.product-image img {
+	max-height: 200px;
+	max-width: 200px !important;
+	min-height: 200px !important;
+}
