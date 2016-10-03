@@ -456,6 +456,16 @@ li.currency select {
 
 #navigation li ul.child-menu > li {
 	display: table-cell;
+	max-width: 200px;
+    min-width: 200px;
+}
+
+#navigation li ul.child-menu > li a {
+	font-size: 14px;
+}
+
+#navigation li ul.child-menu > li a:focus {
+	background-color: transparent;
 }
 
 #navigation li ul.child-menu li ul.grandchildmenu li {
