@@ -27,7 +27,7 @@ function showPageInPopup(url, height, width, title){
 	});
 }
 
-function getShoppingItems(categoryId, currencyId, groupId, status, start, end, sort, portletId, namespace) {
+function getShoppingItems(categoryId, currencyId, groupId, status, start, end, sort, url, portletId, namespace) {
 	$.ajax({
 		url : Liferay.ThemeDisplay.getPortalURL() + '/api/jsonws/htmsd-portlet.shoppingitem/get-shopping-items',
 		type : "GET",
@@ -50,7 +50,9 @@ function getShoppingItems(categoryId, currencyId, groupId, status, start, end, s
 		},
 		success : function(data) {
 			if (data.length > 0) {	
-				render(data, namespace, portletId);
+				render(data, url, namespace, portletId);
+			} else {
+				$('#no-item-display').show();
 			}
 		},
 		error : function() {
@@ -58,7 +60,7 @@ function getShoppingItems(categoryId, currencyId, groupId, status, start, end, s
 	});
 }
 
-function render(data, namespace, portletId) {
+function render(data, url, namespace, portletId) {
 	AUI().use('liferay-portlet-url', function(A) {
 		$.each(data, function(i, item) {
 			var detailsURL = Liferay.PortletURL.createRenderURL();
@@ -66,7 +68,7 @@ function render(data, namespace, portletId) {
 			detailsURL.setParameter('jspPage', "/html/shoppinglist/details.jsp");
 			detailsURL.setParameter('itemId', item.itemId);
 			
-			var addToCartURL = '${addToCartURL}' + "&"+namespace+"itemId="+item.itemId;
+			var addToCartURL = url + "&"+namespace+"itemId="+item.itemId;
 			
 			var isNew = (item.isNewItem) ? '<span class="new"><i>New</i></span>' : '';
 			li = '<div class="swiper-slide">'
@@ -103,7 +105,6 @@ function render(data, namespace, portletId) {
 	        nextButton: '.swiper-button-next',
 	        prevButton: '.swiper-button-prev',
 	        autoplay: 3500,
-	        centeredSlides: true,
 	        autoplayDisableOnInteraction: false,
 	        freeMode: true
 	    });

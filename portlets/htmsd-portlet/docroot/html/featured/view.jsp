@@ -13,9 +13,9 @@
 	}
 </style>
 
-<portlet:actionURL var="addToCartURL" name="addItemToCart">
-	<portlet:param name="isRedirectDisabled" value="true"/>
-</portlet:actionURL>
+<liferay-portlet:actionURL var="addToCartURL" name="addItemToCart" >
+	<liferay-portlet:param name="isRedirectDisabled" value="true"/>
+</liferay-portlet:actionURL>
 
 <div class="row-fluid featured-container">
 	<div class="span2">
@@ -51,6 +51,6 @@
 	$(function() {
 		var portletId = '<%= themeDisplay.getPortletDisplay().getId() %>';
 		var namespace = '<portlet:namespace/>';
-		getShoppingItems(<%=categoryToDisplay%>, <%=currencyId%>, <%=themeDisplay.getScopeGroupId()%>, <%=HConstants.APPROVE%>, 0, <%=noOfItems%>, 'createDate DESC', portletId, namespace);
+		getShoppingItems(<%=categoryToDisplay%>, <%=currencyId%>, <%=themeDisplay.getScopeGroupId()%>, <%=HConstants.APPROVE%>, 0, <%=noOfItems%>, 'createDate DESC', '${addToCartURL}', portletId, namespace);
 	});
 </aui:script>
