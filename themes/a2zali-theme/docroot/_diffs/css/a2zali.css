@@ -951,13 +951,17 @@ a.icon_wrap.disabled, .icon_wrap.disabled {
 #search_block_top.quick_search_simple .search_query {
 	display: none;
 	position: absolute;
-	top: 0;
+	top: 4px;
 	right: 100%;
 }
 
 #search_block_top.quick_search_simple .searchbox_inner:hover .search_query,
 	#search_block_top.quick_search_simple .searchbox_inner.active .search_query {
 	display: inline-block;
+}
+
+#search_query_top.search_query:focus {
+	display: block;
 }
 
 #search_block_top.quick_search_simple .submit_searchbox {
