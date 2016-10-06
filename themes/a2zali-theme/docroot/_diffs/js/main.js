@@ -82,13 +82,6 @@ $(function() {
 		});
 	});
 
-	$('#submit_searchbox', function() {
-		var searchParam = $('#search_query_top').val();
-		if (searchParam) {
-			window.location.href = '/search?search-param=' + searchParam;
-		}
-	});
-	
 	var menuLeft = $('.pushmenu-left');
 	var nav_list = $('#nav_list');
 	var close = $('#pushMenuclose');
@@ -122,6 +115,13 @@ $(function() {
 		var viewportWidth = $(window).width();
 		if (viewportWidth > 925) {
 			$("#menu").removeClass("active");
+		}
+	});
+	
+	$('#submit_searchbox').on('click', function() {
+		var searchParam = $('#search_query_top').val();
+		if (searchParam) {
+			window.location.href = '/search?search-param=' + searchParam;
 		}
 	});
 });

@@ -66,7 +66,7 @@
 					<div id="searchbox">
 						<div class="searchbox_inner">
 							<input id="search_query_top" class="search_query form-control ac_input" placeholder="Search"/>
-							<a id="submit_searchbox" class="submit_searchbox icon_wrap" href="javascript:;">
+							<a id="submit_searchbox" class="submit_searchbox icon_wrap" href="javascript:void(0);">
 								<i class="fa fa-search"></i>
 							</a>
 						</div>
