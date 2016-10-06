@@ -262,6 +262,6 @@
 	}
 	
 	$(function() {
-		$('#search').val('<%=searchParam%>');
+		$('#search_query_top').val('<%=searchParam%>');
 	})
 </aui:script>
