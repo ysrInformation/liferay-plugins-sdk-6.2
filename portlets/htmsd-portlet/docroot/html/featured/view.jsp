@@ -18,7 +18,7 @@
 </liferay-portlet:actionURL>
 
 <div class="row-fluid featured-container">
-	<div class="span2">
+	<div class="span2 leftColHeight">
 		<div>
 			<c:choose>
 				<c:when test="<%=Long.valueOf(categoryToDisplay) > 0 %>">
@@ -30,7 +30,7 @@
 			</c:choose>
 		</div>
 	</div>
-	<div class="span10">
+	<div class="span10 rightColHeight">
 		<div class="swiper-container">
 			<div id="featured_list_<portlet:namespace/>" class="swiper-wrapper">
 				<!-- item display -->
@@ -52,5 +52,8 @@
 		var portletId = '<%= themeDisplay.getPortletDisplay().getId() %>';
 		var namespace = '<portlet:namespace/>';
 		getShoppingItems(<%=categoryToDisplay%>, <%=currencyId%>, <%=themeDisplay.getScopeGroupId()%>, <%=HConstants.APPROVE%>, 0, <%=noOfItems%>, 'createDate DESC', '${addToCartURL}', portletId, namespace);
+	
+		var colHeight = $('.featured-container .rightColHeight').height();
+		$('.featured-container .leftColHeight').css('height', colHeight);
 	});
 </aui:script>
