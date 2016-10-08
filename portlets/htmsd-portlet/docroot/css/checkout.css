@@ -48,22 +48,19 @@
 }
 
 .new-checkout .page-heading {
-  font-family: "Raleway";
-  font-size: 13px;
-  font-weight: 600;
+  font-family: "Raleway" !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;;
   text-transform: uppercase;
-  color: #fff;
-}
-
-.new-checkout {
-	padding: 2%;
+  color: #fff !important;;
 }
 
 .cart-summary {
   width: 100%;
 }
 
-.cart-summary tbody > tr > td, .cart-summary tbody > tr > th, #cart-summary-total tbody > tr > td {
+.cart-summary tbody > tr > td, .cart-summary tbody > tr > th, 
+#cart-summary-total tbody > tr > td, .cart-summary tfoot > tr > td  {
   border: 1px solid #333333;
 }
 
@@ -126,4 +123,22 @@
 
 .step2, .step4 {
 	display: none;
+}
+
+.checkout-address-page .span6 {
+  background-color: #222222;
+  margin-bottom: 1%;
+}
+
+.checkout-address-page .address {
+  list-style: outside none none;
+}
+
+.new-checkout {
+	color : #777;
+}
+
+.cart-summary tfoot > tr > td {
+	padding: 0.5%;
+	text-align: right;
 }

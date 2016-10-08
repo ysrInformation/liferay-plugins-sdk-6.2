@@ -360,5 +360,40 @@
 			<finder-column name="currencyCode"/>
 		</finder>
 	</entity>
+	
+	<entity name="UserInfo" local-service="true" remote-service="false">
+		<column name="userInfoId" type="long" primary="true"/>
+		<column name="userId" type="long"/>
+		<column name="groupId" type="long"/>
+		<column name="companyId" type="long"/>
+		<column name="shippingAddressId" type="long"/>
+		<column name="billingAddressId" type="long"/>
+		<column name="mobileNumber" type="String"/>
+		<column name="altNumber" type="String"/>
+		
+		<finder return-type="Collection" name="UserId">
+			<finder-column name="userId"/>
+		</finder>
+		<finder return-type="UserInfo" name="SUserId">
+			<finder-column name="userId"/>
+		</finder>
+	</entity>
+	
+	<entity name="Purchase" local-service="true" remote-service="false">
+		<column name="purchaseId" type="long" primary="true"/>
+		<column name="orderId" type="long"/>
+		<column name="userId" type="long"/>
+		<column name="groupId" type="long"/>
+		<column name="companyId" type="long"/>
+		<column name="currencyId" type="long"/>
+		<column name="purchaseDate" type="Date"/>
+		<column name="paymentMode" type="String"/>
+		<column name="paymentStatus" type="String"/>
+		<column name="totalAmount" type="double"/>
+		
+		<finder return-type="Collection" name="UserId">
+			<finder-column name="userId"/>
+		</finder>
+	</entity>
 
 </service-builder>
