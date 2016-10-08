@@ -1037,7 +1037,18 @@ form#searchbox .button.button-small i {
 }
 
 .product-image img {
-	max-height: 200px;
-	max-width: 200px !important;
-	min-height: 200px !important;
+	max-height: 237px;
+	max-width: 237px !important;
+	min-height: 237px !important;
+}
+
+.featured-container .span2.leftColHeight {
+	display: flex;
+	align-items: center;
+}
+
+.featured-container .swiper-button-prev, .featured-container .swiper-button-next {
+	background-color: #282828;
+	background-size: 18px 44px;
+	padding: 4px;
 }
