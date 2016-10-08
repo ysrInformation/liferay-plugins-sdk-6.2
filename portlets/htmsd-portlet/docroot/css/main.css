@@ -482,3 +482,14 @@
 .gallery-thumbs .swiper-slide-active {
     opacity: 1;
 }
+
+.swiper-slide .play-icon {
+	background-image: url("../images/play.png");
+	background-repeat: no-repeat;
+	background-size: contain;
+	height: 35px;
+	left: 32%;
+	position: absolute;
+	top: 25%;
+	width: 35px;
+}

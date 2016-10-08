@@ -39,18 +39,14 @@
 									<%
 								}
 							%>
-							<%-- <c:if test="<%= Validator.isNotNull(videoURL) && !videoURL.isEmpty() %>">
-								<li data-src="<%=shoppingItem.getVedioURL()%>" class="span2">
+							<c:if test="<%= Validator.isNotNull(videoURL) && !videoURL.isEmpty() %>">
+								<div class="swiper-slide">
 									<%
 										String videoId = videoURL.substring(videoURL.indexOf("v=")+2, videoURL.length());
-										String youtubeThumbnailURL = "http://img.youtube.com/vi/"+videoId+"/default.jpg";
 									%>
-									<div class="video">
-										<img width="200" height="100" src="<%=youtubeThumbnailURL%>" class="thumbnail details-img" />
-										<a href="#"></a>
-									</div>
-								</li>
-							</c:if> --%>
+									<iframe src="<%="//www.youtube.com/embed/"+videoId%>" width="100%" height="100%"></iframe>
+								</div>
+							</c:if>
 						</div>
 						<div class="swiper-button-next swiper-button-white"></div>
 						<div class="swiper-button-prev swiper-button-white"></div>
@@ -68,18 +64,15 @@
 									<%
 								}
 							%>
-							<%-- <c:if test="<%= Validator.isNotNull(videoURL) && !videoURL.isEmpty() %>">
-								<li data-src="<%=shoppingItem.getVedioURL()%>" class="span2">
-									<%
-										String videoId = videoURL.substring(videoURL.indexOf("v=")+2, videoURL.length());
-										String youtubeThumbnailURL = "http://img.youtube.com/vi/"+videoId+"/default.jpg";
-									%>
-									<div class="video">
-										<img width="200" height="100" src="<%=youtubeThumbnailURL%>" class="thumbnail details-img" />
-										<a href="#"></a>
-									</div>
-								</li>
-							</c:if> --%>
+							<c:if test="<%= Validator.isNotNull(videoURL) && !videoURL.isEmpty() %>">
+								<%
+									String videoId = videoURL.substring(videoURL.indexOf("v=")+2, videoURL.length());
+									String youtubeThumbnailURL = "http://img.youtube.com/vi/"+videoId+"/default.jpg";
+								%>
+								<div class="swiper-slide" style="background-image: url(<%=youtubeThumbnailURL%>);">
+									<i class="play-icon" aria-hidden="true" ></i>
+								</div>
+							</c:if>
 						</div>
 					</div>
 				</div>
