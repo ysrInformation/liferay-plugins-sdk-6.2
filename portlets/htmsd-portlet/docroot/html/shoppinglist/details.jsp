@@ -24,25 +24,22 @@
 		%>
 		<liferay-ui:error key="item-exist" message="item-already-exist"/>
 		<aui:fieldset>
-			<div class="shoppingItemDetails rowfluid">
-				<aui:col width="70">
-					<div >
-						<ul id="lightGallery" class="row" style="margin-left: 0px;">
+			<div class="shoppingItemDetails row-fluid">
+				<div class="span5">
+					<div class="swiper-container gallery-top">
+						<div class="swiper-wrapper">
 							<% 
 								for (String str : shoppingItem.getImageIds().split(",")) {
 									long imageId = Long.valueOf(str.isEmpty() ? "0" : str); 
 									String imageURL = CommonUtil.getThumbnailpath(imageId, themeDisplay.getScopeGroupId(), false);
 									String thumbnailURL = CommonUtil.getThumbnailpath(imageId, themeDisplay.getScopeGroupId(), true);
 									%>
-										<li data-src="<%=imageURL%>" class="span2">
-											<a href="<%=imageURL%>">
-			        							<img width="200" height="100" src="<%=thumbnailURL%>" class="thumbnail details-img" />
-			        						</a>
-			      						</li>
+										<div class="swiper-slide" style="background-image: url(<%=thumbnailURL%>);">
+										</div>
 									<%
 								}
 							%>
-							<c:if test="<%= Validator.isNotNull(videoURL) && !videoURL.isEmpty() %>">
+							<%-- <c:if test="<%= Validator.isNotNull(videoURL) && !videoURL.isEmpty() %>">
 								<li data-src="<%=shoppingItem.getVedioURL()%>" class="span2">
 									<%
 										String videoId = videoURL.substring(videoURL.indexOf("v=")+2, videoURL.length());
@@ -53,22 +50,40 @@
 										<a href="#"></a>
 									</div>
 								</li>
-							</c:if>
-						</ul>
+							</c:if> --%>
+						</div>
+						<div class="swiper-button-next swiper-button-white"></div>
+						<div class="swiper-button-prev swiper-button-white"></div>
 					</div>
-					<div>
-						<liferay-ui:tabs names="description">
-							<liferay-ui:section>
-								<div class="descriptionTabContent">
-									<p class="description"> 
-										<%=shoppingItem.getDescription() %>
-									</p>
-								</div>
-							</liferay-ui:section>
-						</liferay-ui:tabs>
+					<div class="swiper-container gallery-thumbs">
+						<div class="swiper-wrapper">
+							<% 
+								for (String str : shoppingItem.getImageIds().split(",")) {
+									long imageId = Long.valueOf(str.isEmpty() ? "0" : str); 
+									String imageURL = CommonUtil.getThumbnailpath(imageId, themeDisplay.getScopeGroupId(), false);
+									String thumbnailURL = CommonUtil.getThumbnailpath(imageId, themeDisplay.getScopeGroupId(), true);
+									%>
+										<div class="swiper-slide" style="background-image: url(<%=thumbnailURL%>);">
+										</div>
+									<%
+								}
+							%>
+							<%-- <c:if test="<%= Validator.isNotNull(videoURL) && !videoURL.isEmpty() %>">
+								<li data-src="<%=shoppingItem.getVedioURL()%>" class="span2">
+									<%
+										String videoId = videoURL.substring(videoURL.indexOf("v=")+2, videoURL.length());
+										String youtubeThumbnailURL = "http://img.youtube.com/vi/"+videoId+"/default.jpg";
+									%>
+									<div class="video">
+										<img width="200" height="100" src="<%=youtubeThumbnailURL%>" class="thumbnail details-img" />
+										<a href="#"></a>
+									</div>
+								</li>
+							</c:if> --%>
+						</div>
 					</div>
-				</aui:col>
-				<aui:col width="30">
+				</div>
+				<div class="span7">
 					<aui:form action="<%=addItemsToCartActionURL %>">
 						<div class="add-to-cart-item">
 							<div class="add-to-cart-item-label">
@@ -106,8 +121,9 @@
 													%>
 														<tr>
 															<td><%=wholeSale.getQuantity() + " Units"%></td>
-															<%	double total = (currentRate == 0) ? wholeSale.getPrice() :  wholeSale.getPrice() / currentRate; 
-	 %>
+															<%	
+																double total = (currentRate == 0) ? wholeSale.getPrice() :  wholeSale.getPrice() / currentRate; 
+	 														%>
 															<td><%=CommonUtil.getPriceFormat(total, currencyId) %></td>
 														</tr>
 													<%
@@ -129,7 +145,18 @@
 							</c:if>
 						</div>
 					</aui:form>
-				</aui:col>	
+					<div>
+						<liferay-ui:tabs names="description">
+							<liferay-ui:section>
+								<div class="descriptionTabContent">
+									<p class="description"> 
+										<%=shoppingItem.getDescription() %>
+									</p>
+								</div>
+							</liferay-ui:section>
+						</liferay-ui:tabs>
+					</div>
+				</div>	
 			</div>
 		</aui:fieldset>
 		<script>
@@ -142,6 +169,23 @@
 			    });
 			    $('#breadcrumbs ul li').removeClass("only");
 			    $('#breadcrumbs ul').append('<li class=""><%=shoppingItem.getName()%></li>');
+			    
+			    var galleryTop = new Swiper('.swiper-container.gallery-top', {
+			    	nextButton: '.swiper-button-next',
+			        prevButton: '.swiper-button-prev',
+			        spaceBetween: 10,
+			    });
+			    
+			    var galleryThumbs = new Swiper('.swiper-container.gallery-thumbs', {
+			    	spaceBetween: 10,
+			        centeredSlides: true,
+			        slidesPerView: 'auto',
+			        touchRatio: 0.2,
+			        slideToClickedSlide: true
+			    });
+			    
+			    galleryTop.params.control = galleryThumbs;
+			    galleryThumbs.params.control = galleryTop;
 			});
 		</script>
 	</c:when>
