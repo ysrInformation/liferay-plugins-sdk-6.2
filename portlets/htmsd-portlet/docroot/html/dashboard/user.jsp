@@ -65,7 +65,18 @@
 		</liferay-ui:search-container-column-text>
 		
 		<liferay-ui:search-container-column-text name="status" >
-			<%=item.getStatus() == HConstants.APPROVE ? "Listed" : (item.getStatus() == HConstants.REJECT ? "Rejected" : "New")%>
+			<%
+				int status = item.getStatus();
+				String disStatus = "New";
+				if (status == HConstants.APPROVE) {
+					disStatus = "Listed"; 
+				} else if (status == HConstants.INCOMPLETE) {
+					disStatus = "Incomplete";	
+				} else if (status == HConstants.REJECT) {
+					disStatus = "Rejected";
+				}
+			%>
+			<%=disStatus%>
 		</liferay-ui:search-container-column-text>
 		
 		<liferay-ui:search-container-column-text name="product-stock">
