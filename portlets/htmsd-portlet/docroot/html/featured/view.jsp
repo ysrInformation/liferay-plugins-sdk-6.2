@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.NoSuchLayoutException"%>
 <%@page import="com.liferay.portal.service.LayoutLocalServiceUtil"%>
 <%@page import="com.liferay.portal.model.Layout"%>
 <%@page import="javax.portlet.PortletSession"%>
@@ -7,8 +8,16 @@
 <%
 	String noOfItems  = portletPreferences.getValue("noOfItems", "8");
 	String categoryToDisplay  = portletPreferences.getValue("categoryToDisplay", "-1");
-	Layout detailLayout = LayoutLocalServiceUtil.getFriendlyURLLayout(themeDisplay.getScopeGroupId(), false, "/detail");
-	long detailPlid = detailLayout.getPlid();
+	Layout detailLayout = null;
+	try {
+		detailLayout = LayoutLocalServiceUtil.getFriendlyURLLayout(themeDisplay.getScopeGroupId(), false, "/detail");
+	} catch (NoSuchLayoutException e) {
+		e.getCause().printStackTrace();
+	}
+	long detailPlid = layout.getPlid();
+	if (Validator.isNotNull(detailLayout)) {
+		detailPlid = detailLayout.getPlid();
+	}
 %>
 <style>
 	#no-item-display {
