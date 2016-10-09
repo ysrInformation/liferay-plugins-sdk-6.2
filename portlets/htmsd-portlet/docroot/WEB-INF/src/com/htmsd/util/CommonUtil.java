@@ -26,6 +26,7 @@ import com.htmsd.slayer.model.ShoppingItem;
 import com.htmsd.slayer.model.ShoppingItem_Cart;
 import com.htmsd.slayer.model.ShoppingOrder;
 import com.htmsd.slayer.model.ShoppingOrderItem;
+import com.htmsd.slayer.model.UserInfo;
 import com.htmsd.slayer.service.CategoryLocalServiceUtil;
 import com.htmsd.slayer.service.CurrencyLocalServiceUtil;
 import com.htmsd.slayer.service.InvoiceLocalServiceUtil;
@@ -34,12 +35,14 @@ import com.htmsd.slayer.service.ShoppingItemLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingItem_CartLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingOrderItemLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
+import com.htmsd.slayer.service.UserInfoLocalServiceUtil;
 import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.OrderFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -699,5 +702,55 @@ public class CommonUtil {
 			_log.error(e.getMessage());
 		}
 		return categoryName;
+	}
+	
+	public static boolean isUserHasAddress(long userId) throws SystemException {
+		boolean isUserAddressNotEmpty = false;
+		User user = null;
+		try {
+			user = UserLocalServiceUtil.getUser(userId);
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		if (Validator.isNotNull(user)) {
+			List<Address> addressList = user.getAddresses(); 
+			isUserAddressNotEmpty = (Validator.isNotNull(addressList) && addressList.size() > 0);
+		}
+		return isUserAddressNotEmpty;
+	}
+	
+	public static Address getUsersAddress(long userId) throws SystemException {
+		Address address = null;
+		List<Address> addressList = new ArrayList<Address>();
+		User user = null;
+		try {
+			user = UserLocalServiceUtil.getUser(userId);
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		if (Validator.isNull(user)) return address;
+		addressList = user.getAddresses();
+		if (Validator.isNotNull(addressList) && addressList.size() > 0) {
+			address = addressList.get(0);
+		}
+		return address;
+	}
+	
+	public static long getAddressId(long userId) {
+		Address address = null;
+		try {
+			address = getUsersAddress(userId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		return (Validator.isNotNull(address) ? address.getAddressId() : 0);
+	}
+	
+	public static UserInfo findUserInfoByUserId(long userId) {
+		return UserInfoLocalServiceUtil.findUserInfoByUserId(userId);
 	}
 }
