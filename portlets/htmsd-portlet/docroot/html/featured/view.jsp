@@ -1,3 +1,5 @@
+<%@page import="com.liferay.portal.service.LayoutLocalServiceUtil"%>
+<%@page import="com.liferay.portal.model.Layout"%>
 <%@page import="javax.portlet.PortletSession"%>
 <%@page import="com.liferay.portal.util.PortalUtil"%>
 <%@include file="/html/shoppinglist/init.jsp" %>
@@ -5,6 +7,8 @@
 <%
 	String noOfItems  = portletPreferences.getValue("noOfItems", "8");
 	String categoryToDisplay  = portletPreferences.getValue("categoryToDisplay", "-1");
+	Layout detailLayout = LayoutLocalServiceUtil.getFriendlyURLLayout(themeDisplay.getScopeGroupId(), false, "/detail");
+	long detailPlid = detailLayout.getPlid();
 %>
 <style>
 	#no-item-display {
@@ -51,7 +55,7 @@
 	$(function() {
 		var portletId = '<%= themeDisplay.getPortletDisplay().getId() %>';
 		var namespace = '<portlet:namespace/>';
-		getShoppingItems(<%=categoryToDisplay%>, <%=currencyId%>, <%=themeDisplay.getScopeGroupId()%>, <%=HConstants.APPROVE%>, 0, <%=noOfItems%>, 'createDate DESC', '${addToCartURL}', portletId, namespace);
+		getShoppingItems(<%=categoryToDisplay%>, <%=currencyId%>, <%=themeDisplay.getScopeGroupId()%>, <%=HConstants.APPROVE%>, 0, <%=noOfItems%>, 'createDate DESC', '${addToCartURL}', <%=detailPlid%>, namespace);
 	
 		var colHeight = $('.featured-container .rightColHeight').height();
 		$('.featured-container .leftColHeight').css('height', colHeight);

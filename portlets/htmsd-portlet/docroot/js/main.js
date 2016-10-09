@@ -27,7 +27,7 @@ function showPageInPopup(url, height, width, title){
 	});
 }
 
-function getShoppingItems(categoryId, currencyId, groupId, status, start, end, sort, url, portletId, namespace) {
+function getShoppingItems(categoryId, currencyId, groupId, status, start, end, sort, url, plid, namespace) {
 	$.ajax({
 		url : Liferay.ThemeDisplay.getPortalURL() + '/api/jsonws/htmsd-portlet.shoppingitem/get-shopping-items',
 		type : "GET",
@@ -50,7 +50,7 @@ function getShoppingItems(categoryId, currencyId, groupId, status, start, end, s
 		},
 		success : function(data) {
 			if (data.length > 0) {	
-				render(data, url, namespace, portletId);
+				render(data, url, namespace, plid);
 			} else {
 				$('#no-item-display').show();
 			}
@@ -60,11 +60,12 @@ function getShoppingItems(categoryId, currencyId, groupId, status, start, end, s
 	});
 }
 
-function render(data, url, namespace, portletId) {
+function render(data, url, namespace, plid) {
 	AUI().use('liferay-portlet-url', function(A) {
 		$.each(data, function(i, item) {
 			var detailsURL = Liferay.PortletURL.createRenderURL();
-			detailsURL.setPortletId(portletId);
+			detailsURL.setPortletId("3_WAR_htmsdportlet");
+			detailsURL.setParameter("p_l_id", plid);
 			detailsURL.setParameter('jspPage', "/html/shoppinglist/details.jsp");
 			detailsURL.setParameter('itemId', item.itemId);
 			
