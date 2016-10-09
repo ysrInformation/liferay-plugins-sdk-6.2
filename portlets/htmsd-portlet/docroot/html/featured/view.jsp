@@ -12,7 +12,7 @@
 	try {
 		detailLayout = LayoutLocalServiceUtil.getFriendlyURLLayout(themeDisplay.getScopeGroupId(), false, "/detail");
 	} catch (NoSuchLayoutException e) {
-		e.getCause().printStackTrace();
+		
 	}
 	long detailPlid = layout.getPlid();
 	if (Validator.isNotNull(detailLayout)) {

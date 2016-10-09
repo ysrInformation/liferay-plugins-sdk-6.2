@@ -753,4 +753,13 @@ public class CommonUtil {
 	public static UserInfo findUserInfoByUserId(long userId) {
 		return UserInfoLocalServiceUtil.findUserInfoByUserId(userId);
 	}
+	
+	public static String getUserExpandoValue(User user, String attribute) {
+		String value = StringPool.BLANK;
+		ExpandoBridge expandoBridge = user.getExpandoBridge();
+		if (Validator.isNotNull(expandoBridge)) {
+			value = (String) expandoBridge.getAttribute(attribute);
+		}
+		return value;
+	}
 }

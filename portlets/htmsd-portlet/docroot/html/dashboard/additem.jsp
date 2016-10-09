@@ -44,11 +44,6 @@
 				</aui:col>
 			</c:if>
 		</aui:layout>
-		
-		<liferay-ui:message key="description" />
-		<liferay-ui:input-editor cssClass="editor_padding"/>
-		<aui:input name="<%=HConstants.DESCRIPTION %>" value=""  type="hidden" />
-		
 		<h4><liferay-ui:message key="allowed-files" /></h4>
 		<aui:layout >
 			<c:forEach var="i" begin="1" end="<%=HConstants.IMAGES_UPLOAD_LIMIT %>">
@@ -70,6 +65,10 @@
 				</aui:column>
 			</c:forEach>
 		</aui:layout>
+		
+		<liferay-ui:message key="description" />
+		<liferay-ui:input-editor cssClass="editor_padding"/>
+		<aui:input name="<%=HConstants.DESCRIPTION %>" value=""  type="hidden" />
 		
 		<aui:input name="<%=HConstants.VEDIO_URL %>" >
 			<aui:validator name="url" />

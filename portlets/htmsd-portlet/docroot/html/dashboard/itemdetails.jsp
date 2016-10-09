@@ -1,3 +1,7 @@
+<%@page import="com.liferay.portal.model.User"%>
+<%@page import="com.liferay.portal.service.UserLocalServiceUtil"%>
+<%@page import="com.liferay.portal.model.Address"%>
+<%@page import="com.htmsd.util.CommonUtil"%>
 <%@page import="com.liferay.portal.kernel.workflow.WorkflowConstants"%>
 <%@include file="/html/dashboard/init.jsp" %>
 
@@ -10,56 +14,130 @@
   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
   
   <style>
-	 .ui-widget-content{
-	 	 border : 0;
-	 	 background: transparent;
-	  }
-	   .ui-widget-header{
-	 	 background: transparent;
-	 	  border : 0;
-	  }
-	  .ui-button-icon-only .ui-button-text, .ui-button-icons-only .ui-button-text {
-	    padding: 0;
+	.ui-widget-content {
+		border: 0;
+		background: transparent;
 	}
-	.ui-widget-overlay,.ui-dialog-content{
-		cursor:zoom-out;
+	
+	.ui-widget-header {
+		background: transparent;
+		border: 0;
 	}
-	/* .cke_reset {
-		width : 500px;
-	} */
-  </style>
+	
+	.ui-button-icon-only .ui-button-text, .ui-button-icons-only .ui-button-text
+		{
+		padding: 0;
+	}
+	
+	.ui-widget-overlay, .ui-dialog-content {
+		cursor: zoom-out;
+	}
+	.seller-details {
+		border: 1px solid;
+		border-radius: 5px;
+		padding: 10px;
+		margin-bottom: 20px;
+	}
+</style>
  </head> 
 <%
  	String backURL = ParamUtil.getString(renderRequest, "backURL");
-	long itemId = ParamUtil.getLong(renderRequest, "itemId");
-	ShoppingItem item = ShoppingItemLocalServiceUtil.fetchShoppingItem(itemId);
-	DLFileEntry documentFileEntry = null;
-	DecimalFormat decimalFormat = new DecimalFormat("#.00");
-	if(Validator.isNotNull(item)) {
-		List<Category> parentCategories = CategoryLocalServiceUtil.getByParent(0);
-		PortletURL updateItemURL = renderResponse.createActionURL();
-		updateItemURL.setParameter(ActionRequest.ACTION_NAME, "addItem");
-		updateItemURL.setParameter(HConstants.ITEM_ID, String.valueOf(itemId));
-		updateItemURL.setParameter("userId", String.valueOf(item.getUserId()));
-		updateItemURL.setParameter("backURL", backURL);
-		updateItemURL.setParameter("redirect", themeDisplay.getURLCurrent());
-		updateItemURL.setParameter("tab1", ParamUtil.getString(renderRequest, "tab1"));
-		if(!isAdmin) {
-			updateItemURL.setParameter(HConstants.status,String.valueOf(item.getStatus()));
-			updateItemURL.setParameter(HConstants.QUANTITY, String.valueOf(item.getQuantity()));
-		}
-		long quantity = item.getQuantity();
-		List<Category> itemCategory = CategoryLocalServiceUtil.getCategoryByItemId(itemId);
-		List<WholeSale> wholeSales  =WholeSaleLocalServiceUtil.getWholeSaleItem(itemId);
-		long wholeSaleSize =  wholeSales.size();
-		long categoryId = 0l;
-		long parentCategoryId = 0l;
-		if(itemCategory.size()>=1) {
-			categoryId = itemCategory.get(0).getCategoryId();
-			parentCategoryId = itemCategory.get(0).getParentCategoryId();
-		}
-		int status = item.getStatus();
-		%>
+ 	long itemId = ParamUtil.getLong(renderRequest, "itemId");
+ 	ShoppingItem item = ShoppingItemLocalServiceUtil.fetchShoppingItem(itemId);
+ 	DLFileEntry documentFileEntry = null;
+ 	DecimalFormat decimalFormat = new DecimalFormat("#.00");
+ 	if (Validator.isNotNull(item)) {
+ 		List<Category> parentCategories = CategoryLocalServiceUtil.getByParent(0);
+ 		PortletURL updateItemURL = renderResponse.createActionURL();
+ 		updateItemURL.setParameter(ActionRequest.ACTION_NAME, "addItem");
+ 		updateItemURL.setParameter(HConstants.ITEM_ID, String.valueOf(itemId));
+ 		updateItemURL.setParameter("userId", String.valueOf(item.getUserId()));
+ 		updateItemURL.setParameter("backURL", backURL);
+ 		updateItemURL.setParameter("redirect", themeDisplay.getURLCurrent());
+ 		updateItemURL.setParameter("tab1", ParamUtil.getString(renderRequest, "tab1"));
+ 		if (!isAdmin) {
+ 			updateItemURL.setParameter(HConstants.status, String.valueOf(item.getStatus()));
+ 			updateItemURL.setParameter(HConstants.QUANTITY, String.valueOf(item.getQuantity()));
+ 		}
+ 		long quantity = item.getQuantity();
+ 		List<Category> itemCategory = CategoryLocalServiceUtil.getCategoryByItemId(itemId);
+ 		List<WholeSale> wholeSales = WholeSaleLocalServiceUtil.getWholeSaleItem(itemId);
+ 		long wholeSaleSize = wholeSales.size();
+ 		long categoryId = 0l;
+ 		long parentCategoryId = 0l;
+ 		if (itemCategory.size() >= 1) {
+ 			categoryId = itemCategory.get(0).getCategoryId();
+ 			parentCategoryId = itemCategory.get(0).getParentCategoryId();
+ 		}
+ 		int status = item.getStatus();
+
+ 		User seller = UserLocalServiceUtil.fetchUser(item.getUserId());
+ 		List<Address> addressList = user.getAddresses();
+
+ 		String companyName = CommonUtil.getUserExpandoValue(seller, HConstants.COMPANY_NAME);
+ 		String cst = CommonUtil.getUserExpandoValue(seller, HConstants.CST);
+ 		String tin = CommonUtil.getUserExpandoValue(seller, HConstants.TIN);
+ %>
+		<div class="seller-details">
+			<h3>Seller Details</h3>
+			<div class="seller-company row-fluid">
+				<div class="phone-number span3">
+					<strong><liferay-ui:message key="phone-number"/>:</strong><%= user.getScreenName() %>
+				</div>
+				<div class="company-name span3">
+					<strong><liferay-ui:message key="company-name"/>:</strong><%= companyName %>
+				</div>
+				<div class="tin span3">
+					<strong><liferay-ui:message key="tin"/>:</strong><%= tin %>
+				</div>
+				<div class="cst span3">
+					<strong><liferay-ui:message key="cst"/>:</strong><%= cst %>
+				</div>
+			</div>
+			<div class="seller-addresses">
+				<div class="address row-fluid">
+					<%
+						for (Address address : addressList) {
+							String primaryCss = address.isPrimary() ? "primary-address" : StringPool.BLANK;
+							%>
+								<div class="span3 <%=primaryCss%>">
+									<div class="street1">
+										<strong><liferay-ui:message key="street1"/>:</strong><%=address.getStreet1() %>
+									</div>
+									<%
+										if (Validator.isNotNull(address.getStreet2()) && !address.getStreet2().isEmpty()) {
+											%>
+												<div class="street2">
+													<strong><liferay-ui:message key="street2"/>:</strong><%=address.getStreet2() %>
+												</div>
+											<%
+										}
+									%>	
+									<%
+										if (Validator.isNotNull(address.getStreet3()) && !address.getStreet3().isEmpty()) {
+											%>
+												<div class="street3">
+													<strong><liferay-ui:message key="street3"/>:</strong><%=address.getStreet3() %>
+												</div>
+											<%
+										}
+									%>
+									<div class="country">
+										<strong><liferay-ui:message key="country"/>:</strong><%=address.getCountry().getName() %>
+									</div>
+									<div class="city">
+										<strong><liferay-ui:message key="city"/>:</strong><%=address.getCity() %>
+									</div>
+									<div class="zip">
+										<strong><liferay-ui:message key="postal-code"/>:</strong><%=address.getZip() %>
+									</div>
+								</div>
+							<%
+						}
+					%>
+				</div>
+			</div>
+		</div>
 	
 		<liferay-ui:header title='<%=isAdmin ? "update-item" : "view-item" %>' backLabel="go-back" backURL='<%=backURL%>'/>
 		<aui:fieldset>
@@ -95,10 +173,6 @@
 						<aui:select name="<%=HConstants.CATEGORY_ID %>" label="sub-category" showEmptyOption="true" required="true" disabled="<%=!(isAdmin || isStaff)%>"></aui:select>
 					</aui:col>
 				</aui:layout>
-				
-				<liferay-ui:message key="description" />
-				<liferay-ui:input-editor cssClass="editor_padding" />
-				<aui:input name="<%=HConstants.DESCRIPTION %>" value="<%=item.getDescription()%>"  type="hidden"/>
 				<aui:layout>
 					<%
 						String imagesList [] =  StringUtil.split(item.getImageIds(), StringPool.COMMA) ;
@@ -146,11 +220,28 @@
 						}
 					%>
 				</aui:layout>
-				
-				<aui:input name="<%=HConstants.VEDIO_URL %>" value="<%=item.getVedioURL() %>">
-					<aui:validator name="url" />
-				</aui:input>
-				
+				<liferay-ui:message key="description" />
+				<liferay-ui:input-editor cssClass="editor_padding" />
+				<aui:input name="<%=HConstants.DESCRIPTION %>" value="<%=item.getDescription()%>"  type="hidden"/>
+				<div>
+					<div>
+						<aui:input name="<%=HConstants.VEDIO_URL %>" value="<%=item.getVedioURL() %>">
+							<aui:validator name="url" />
+						</aui:input>
+					</div>
+					<div>
+						<%
+							String videoURL = item.getVedioURL();
+							String videoId = StringPool.BLANK; 
+							if (Validator.isNotNull(videoURL) && !videoURL.isEmpty()) {
+								videoId = videoURL.substring(videoURL.indexOf("v=")+2, videoURL.length());
+								%>
+									<iframe src="<%="//www.youtube.com/embed/"+videoId%>" width="100%" height="300px"></iframe>
+								<%
+							}
+						%>	
+					</div>
+				</div>
 				<aui:input name="<%=HConstants.PRICE %>" required="true" value="<%=decimalFormat.format(item.getSellerPrice()) %>">
 					<aui:validator name="number" />
 				</aui:input>
