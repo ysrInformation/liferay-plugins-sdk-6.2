@@ -5,7 +5,13 @@
 %>
 
 <div class="new-checkout">
-	<h1 id="cart-title" class="page-heading"><liferay-ui:message key="shopping-cart-summary" /></h1>
+	<h1 id="cart-title" class="page-heading">
+		<c:choose>
+			<c:when test='<%= orderStep.equalsIgnoreCase("step1") %>'><liferay-ui:message key="shopping-cart-summary" /></c:when> 
+			<c:when test='<%= orderStep.equalsIgnoreCase("step3") %>'><liferay-ui:message key="checkout-addressess" /></c:when>
+			<c:otherwise><liferay-ui:message key="please-choose-your-payment-method" /></c:otherwise>
+		</c:choose>
+	</h1>
 	<ul id="order_steps" class="step clearfix">
 		<li class="step_current step1"><span><liferay-ui:message key="checkout-label-summary" /></span></li>
 		<%-- <li class="step_todo step2"><span><liferay-ui:message key="checkout-label-signin" /></span></li> --%>

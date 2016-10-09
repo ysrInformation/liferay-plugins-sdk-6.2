@@ -72,7 +72,8 @@ public interface HConstants {
 	public static String RUPPEE_SYMBOL = "&#8377;";
 	public static String ITEM_ADDED_TEMPLATE="ITEM_ADDED_TEMPLATE";
 	public static String ITEM_ADDED_UPDATED_TEMPLATE="ITEM_ADDED_UPDATED_TEMPLATE";
-	
+	public static String PAYMENT_STATUS = "Unpaid";
+	public static String ORDER_COMFIRMATION = "ORDER_COMFIRMATION";
  
 	// PAGES
 	public static String PAGE_SHOPPING_LIST_DETAILS = "/html/shoppinglist/details.jsp";

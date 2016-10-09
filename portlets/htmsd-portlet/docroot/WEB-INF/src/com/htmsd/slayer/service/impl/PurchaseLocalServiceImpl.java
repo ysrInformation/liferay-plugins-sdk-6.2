@@ -14,7 +14,12 @@
 
 package com.htmsd.slayer.service.impl;
 
+import java.util.Date;
+
+import com.htmsd.slayer.model.Purchase;
+import com.htmsd.slayer.model.impl.PurchaseImpl;
 import com.htmsd.slayer.service.base.PurchaseLocalServiceBaseImpl;
+import com.liferay.portal.kernel.exception.SystemException;
 
 /**
  * The implementation of the purchase local service.
@@ -36,4 +41,23 @@ public class PurchaseLocalServiceImpl extends PurchaseLocalServiceBaseImpl {
 	 *
 	 * Never reference this interface directly. Always use {@link com.htmsd.slayer.service.PurchaseLocalServiceUtil} to access the purchase local service.
 	 */
+	
+	public Purchase insertPurchaseDetails(long userId, long groupId, long companyId, long currencyId, 
+			long orderId, double totalAmount, String paymentMode, String paymentStatus) throws SystemException {
+		
+		Purchase purchase = new PurchaseImpl();
+		purchase = purchaseLocalService.createPurchase(counterLocalService.increment()); 
+		purchase.setUserId(userId);
+		purchase.setCompanyId(companyId);
+		purchase.setCurrencyId(currencyId);
+		purchase.setOrderId(orderId);
+		purchase.setGroupId(groupId);
+		purchase.setPaymentMode(paymentMode);
+		purchase.setPaymentStatus(paymentStatus);
+		purchase.setPurchaseDate(new Date());
+		purchase.setTotalAmount(totalAmount);
+		purchase = purchaseLocalService.addPurchase(purchase);
+		
+		return purchase;
+	}
 }

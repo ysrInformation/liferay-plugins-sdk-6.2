@@ -12,7 +12,7 @@ public class UserNotificationHandler extends BaseUserNotificationHandler {
 	
 	public final static String PORTLET_ID = "4_WAR_htmsdportlet";
 	
-	public final String TITLE = "HTMSD Notification";
+	public final String TITLE = "A2ZALI Notification";
 	
 	public UserNotificationHandler() {
 		setPortletId(PORTLET_ID);
