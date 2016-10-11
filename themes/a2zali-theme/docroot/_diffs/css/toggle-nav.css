@@ -72,7 +72,6 @@ span.has-subnav, span.has-subnav2 {
 
 .menu,  .menu > ul ul {
   margin: 0;
-  max-height: 0;
   overflow: hidden;
 }
 
