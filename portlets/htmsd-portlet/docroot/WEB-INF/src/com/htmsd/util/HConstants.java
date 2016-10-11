@@ -52,6 +52,7 @@ public interface HConstants {
 	public static int APPROVE = WorkflowConstants.STATUS_APPROVED;
 	public static int REJECT = WorkflowConstants.STATUS_DENIED;
 	public static int PENDING = WorkflowConstants.STATUS_PENDING;
+	public static int INCOMPLETE = WorkflowConstants.STATUS_INCOMPLETE;
 	public static int SUCCESSFUL = 3;
 	public static int DELIVERED = 4;
 	public static int NOT_DELIVERED = 6;

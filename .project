@@ -2,7 +2,21 @@
 <projectDescription>
 	<name>liferay-plugins-sdk-6.2</name>
 	<comment></comment>
-	<projects></projects>
-	<buildSpec></buildSpec>
-	<natures></natures>
+	<projects>
+	</projects>
+	<buildSpec>
+	</buildSpec>
+	<natures>
+	</natures>
+	<filteredResources>
+		<filter>
+			<id>1475653636415</id>
+			<name>webs</name>
+			<type>10</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-true-false-resources-importer-web-6.2.x</arguments>
+			</matcher>
+		</filter>
+	</filteredResources>
 </projectDescription>

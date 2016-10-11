@@ -17,9 +17,11 @@
 	
 		$theme.include($top_head_include)
 		
+		<link href="//code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet"></link>
+
 		<script type="text/javascript" src="$javascript_folder/jquery-1.11.3.min.js"></script>
 		<script type="text/javascript" src="$javascript_folder/lightGallery.min.js"></script>
-
+		<script type="text/javascript" src="$javascript_folder/jquery-ui.js" ></script>
 	</head>
 	
 	<body class="$css_class $bg">
@@ -167,6 +169,19 @@
 			}
 		});
 		$('.scroll-top-wrapper').on('click', scrollToTop);
+		
+		// auto complete code
+		AUI().use('aui-base', function(A) {
+			Liferay.Service('/htmsd-portlet.shoppingitem/get-autocomplete-items',
+		  		function(data) {
+		  			var autocompleteData = data.autoCompleteData;
+		  			console.log(autocompleteData);
+					$("#search").autocomplete({
+						source : autocompleteData
+					});
+		  		}
+		  	);
+		});
 	});
 	 
 	function scrollToTop() {

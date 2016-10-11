@@ -35,6 +35,18 @@
 		<field name="action" type="int" />
 		<field name="remark" type="String" />
 	</model>
+	<model name="com.htmsd.slayer.model.Purchase">
+		<field name="purchaseId" type="long" />
+		<field name="orderId" type="long" />
+		<field name="userId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="currencyId" type="long" />
+		<field name="purchaseDate" type="Date" />
+		<field name="paymentMode" type="String" />
+		<field name="paymentStatus" type="String" />
+		<field name="totalAmount" type="double" />
+	</model>
 	<model name="com.htmsd.slayer.model.ShoppingCart">
 		<field name="cartId" type="long" />
 		<field name="groupId" type="long" />
@@ -68,6 +80,8 @@
 		<field name="tax" type="Double" />
 		<field name="quantity" type="long" />
 		<field name="status" type="int" />
+		<field name="statusByUserId" type="long" />
+		<field name="statusDate" type="Date" />
 		<field name="imageIds" type="String" />
 		<field name="vedioURL" type="String" />
 		<field name="smallImage" type="long" />
@@ -138,6 +152,16 @@
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
 		<field name="name" type="String" />
+	</model>
+	<model name="com.htmsd.slayer.model.UserInfo">
+		<field name="userInfoId" type="long" />
+		<field name="userId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="shippingAddressId" type="long" />
+		<field name="billingAddressId" type="long" />
+		<field name="mobileNumber" type="String" />
+		<field name="altNumber" type="String" />
 	</model>
 	<model name="com.htmsd.slayer.model.WholeSale">
 		<field name="wholseSaleId" type="long" />

@@ -645,7 +645,8 @@ public class FileSystemImporter extends BaseImporter {
 		if (!dir.isDirectory()|| !dir.canRead()) {
 			return;
 		}
-
+		System.out.println("===============addDLFileEntries=========================");
+		System.out.println(dirName);
 		File[] files = dir.listFiles();
 
 		if (ArrayUtil.isEmpty(files)) {

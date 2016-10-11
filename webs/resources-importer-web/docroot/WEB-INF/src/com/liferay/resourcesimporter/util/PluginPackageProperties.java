@@ -15,7 +15,7 @@
 package com.liferay.resourcesimporter.util;
 
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.PortalRunMode;
+//import com.liferay.portal.kernel.util.PortalRunMode;
 import com.liferay.portal.kernel.util.PropertiesUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -80,8 +80,8 @@ public class PluginPackageProperties {
 	public boolean isDeveloperModeEnabled() {
 		return GetterUtil.getBoolean(
 			_properties.getProperty(
-				"resources-importer-developer-mode-enabled")) ||
-			PortalRunMode.isTestMode();
+				"resources-importer-developer-mode-enabled"));
+			//PortalRunMode.isTestMode();
 	}
 
 	public boolean isUpdateModeEnabled() {

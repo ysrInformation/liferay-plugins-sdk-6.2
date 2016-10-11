@@ -368,3 +368,16 @@
 .scroll-top-wrapper i.fa {
 	line-height: inherit;
 }
+
+.span6.otp-btn {
+    padding-top: 3.6%;
+}
+
+#confirm-otp #counter {
+	float: right;
+	font-size: 11px;
+}
+
+#confirm-otp .control-group {
+  margin: 0 !important;
+}

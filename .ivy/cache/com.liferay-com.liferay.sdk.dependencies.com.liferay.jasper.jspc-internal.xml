@@ -4,10 +4,10 @@
 	<info
 		organisation="com.liferay"
 		module="com.liferay.sdk.dependencies.com.liferay.jasper.jspc"
-		revision="working@KHAN-PC"
+		revision="working@KHAN"
 		conf="internal"
 		confs="default, internal"
-		date="20151206185621"/>
+		date="20160923192715"/>
 	<dependencies>
 	</dependencies>
 </ivy-report>

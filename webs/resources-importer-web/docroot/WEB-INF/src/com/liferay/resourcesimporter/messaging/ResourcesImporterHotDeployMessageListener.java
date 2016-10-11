@@ -93,7 +93,11 @@ public class ResourcesImporterHotDeployMessageListener
 		throws Exception {
 
 		long companyId = CompanyThreadLocal.getCompanyId();
-
+		System.out.println("=====================================================");
+		System.out.println(pluginPackageProperties.getTargetClassName());
+		System.out.println(pluginPackageProperties.getTargetValue());
+		System.out.println(pluginPackageProperties.getResourcesDir());
+		
 		try {
 			CompanyThreadLocal.setCompanyId(company.getCompanyId());
 
