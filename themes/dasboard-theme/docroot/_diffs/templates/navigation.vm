@@ -2,7 +2,7 @@
 	<div class="navbar-inner">
 		<div class="sidebar-collapse collapse nav-collapse">
 			<ul id="side-menu" aria-label="#language ("site-pages")" class="nav metismenu" role="menubar">
-				<li class="productTitle nav-header">
+				<li class="productTitle nav-header"> 
 	        		<div class="dropdown profile-element">
 						<a class="$logo_css_class" href="$site_default_url" title="#language_format ("go-to-x", [$site_name])">
 							<img alt="$logo_description" height="200px" class="img-circle" src="$site_logo" width="200px" />

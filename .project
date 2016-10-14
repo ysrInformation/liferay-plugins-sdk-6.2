@@ -10,6 +10,51 @@
 	</natures>
 	<filteredResources>
 		<filter>
+			<id>1476174329209</id>
+			<name>ext</name>
+			<type>10</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-true-false-htmsd-ext</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>1476174200331</id>
+			<name>hooks</name>
+			<type>10</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-true-false-htmsd-hook</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>1476174177769</id>
+			<name>portlets</name>
+			<type>10</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-true-false-htmsd-portlet</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>1476174349352</id>
+			<name>portlets</name>
+			<type>10</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-true-false-FeedBakcWorkFlow-portlet</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>1476439761161</id>
+			<name>themes</name>
+			<type>10</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-true-false-dasboard-theme</arguments>
+			</matcher>
+		</filter>
+		<filter>
 			<id>1475653636415</id>
 			<name>webs</name>
 			<type>10</type>

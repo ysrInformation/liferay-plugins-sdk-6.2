@@ -10,5 +10,5 @@
 			<setting key="portlet-setup-show-borders-default" value="false"></setting>
 			<setting configurable="true" key="icon-section" type="text" value=""></setting>
 		</settings>
-	</theme>
+	</theme> 
 </look-and-feel>
