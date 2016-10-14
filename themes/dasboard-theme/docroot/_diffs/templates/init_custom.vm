@@ -1,0 +1,5 @@
+##set ($css_class = "${css_class} dockbar-split")
+
+#if ($theme_settings.icon-section)
+	#set ($icon_section = $theme_settings.icon-section)
+#end

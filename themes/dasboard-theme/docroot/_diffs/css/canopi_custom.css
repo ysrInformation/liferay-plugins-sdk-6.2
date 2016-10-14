@@ -1,0 +1,739 @@
+.aui body, .aui {
+  font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* background-color: #2f4050; */
+  font-size: 13px;
+  color: #676a6c;
+  overflow-x: hidden;
+  background-color: #2f4050;
+}
+
+.aui body, label, .aui select, .aui textarea, .aui input[type="text"], 
+.aui input[type="password"], .aui input[type="datetime"], 
+.aui input[type="datetime-local"], .aui input[type="date"], .aui input[type="month"], 
+.aui input[type="time"], .aui input[type="week"], .aui input[type="number"],
+.aui input[type="email"], .aui input[type="url"], .aui input[type="search"], 
+.aui input[type="tel"], .aui input[type="color"], .aui .uneditable-input, .aui th, td, 
+.aui p, .aui .btn, .aui span, .aui label.radio {
+    font-size: 13px;
+}
+
+.aui h1, .aui h2, .aui h3, .aui h4, .aui h5, .aui h6 {
+  font-weight: 100;
+}
+.aui h1 {
+  font-size: 30px;
+}
+.aui h2 {
+  font-size: 24px;
+}
+.aui h3 {
+  font-size: 16px;
+}
+.aui h4 {
+  font-size: 14px;
+}
+.aui h5 {
+  font-size: 12px;
+}
+.aui h6 {
+  font-size: 10px;
+}
+.aui h3, .aui h4, .aui h5 {
+  margin-top: 5px;
+  font-weight: 600;
+}
+
+#wrapper, #banner h1 {
+	padding: 0px;
+	margin: 0px;
+}
+
+#heading {
+	padding: 5px;
+} 
+
+#banner {
+	background: #1C0C4F;
+}
+
+.brandedlogo {
+	padding: 8px;
+	background: #120639;
+	color: #C0C0C0;
+}
+
+.brandedlogo span {
+	font-size: 17.5px;
+}
+
+/* .main_container, .main_container .span2 {
+	background: #EBEBEB;
+} */
+
+/* .main_container #content {
+	background: #fff;
+} */
+
+.main_container .span10 {
+	margin-left: 0px;
+}
+
+.main_content .subheading {
+	padding: 8px;
+	background: #4B3E73;
+	color: #fff;
+}
+
+.aui #navigation.navbar .nav, .aui #navigation.navbar .nav>li {
+	float: none;
+	margin: 0px;
+}
+
+.aui #navigation .navbar-inner {
+    background: #2f4050;
+    padding: 0;
+}
+
+.aui #navigation .navbar-inner li a {
+    color: #a7b1c2;
+    font-weight: 600;
+    padding: 14px 20px 14px 25px;
+}
+
+.aui #navigation .nav li.active>a {
+	/* background: #C0C0C0; */
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+}
+
+/* .aui #navigation .navbar-inner li a {
+    color: #000;
+} */
+
+#navigation .nav li.active a {
+    background: transparent !important;
+}
+
+#wrapper {
+    overflow-x: unset !important;
+}
+
+.navbar-static-side {
+    z-index: inherit;
+}
+
+#navigation.navbar-default .nav > li > a:hover, .navbar-default .nav > li > a:focus {
+    background-color: #293846;
+    color: white;
+}
+
+.aui .productTitle.nav-header {
+	background: url("../images/patterns/header-profile.png") no-repeat;
+	border: 0;
+	padding: 8%;
+}
+
+.productTitle h5 {
+    margin-left: 11%;
+    text-shadow: none;
+}
+
+.aui #navigation li .profile-element a {
+    padding: 0;
+}
+
+.site-name.block.m-t-xs {
+    color: #888;
+}
+
+.btn-primary, .add-row.btn, .delete-row.btn, .add-row.btn:hover, .delete-row.btn:hover, .add-row.btn:focus, .delete-row.btn:focus {
+    background-color: #1ab394 !important;
+    background-image: none !important;
+    border-color: #1ab394 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    color: #fff !important;
+}
+
+.gray-bg > .row {
+    margin: 0 -15px;
+    padding: 8px 0 0;
+}
+
+.dashbard-1 .navbar-static-top .navbar-header a {
+	margin-top: 0;
+    padding: 6px 14px;
+}
+
+.wizard > .steps > ul > li {
+    width: 18%;
+}
+
+.nav.navbar-top-links.navbar-right {
+    float: right !important;
+}
+
+.nav.navbar-top-links.navbar-right li a {
+    padding: 0 10px;
+}
+
+.portlet-body {
+    padding: 20px;
+}
+
+.signed-in #content {
+    margin-top: 1%;
+}
+
+.footer {
+	padding: 0px !important;
+}
+
+.aui .btn a.btn, .aui .btn a.btn:hover, .aui .btn a.btn:focus {
+    background-color: inherit;
+    background-image: none;
+    border: 0;
+    box-shadow: none !important;
+    color: #fff;
+    text-shadow: none !important;
+    padding: 0px;
+}
+
+.aui .btn a.btn img {
+	display: none;
+}
+
+.aui .btn-group.open .btn.dropdown-toggle {
+	background-color: transparent;
+}
+
+.aui .dropdown-menu > li > a:hover, .aui .dropdown-menu > li > a:focus {
+	background-color: #f5f5f5;
+	background-image: none;
+	color: #262626;
+}
+
+.btn.btn-primary a {
+    color: #fff;
+}
+
+.btn.btn-primary a:hover {
+    text-decoration: none;
+}
+
+#hrefFm {
+	display :none;
+}
+
+.aui select, .aui input[type="text"], .aui input[type="password"] {
+    margin-bottom: 0;
+}
+
+.add-row.btn, .delete-row.btn {
+    font-size: 12px;
+    margin-right: 4px;
+    padding: 0 8px;
+}
+
+.portlet-nested-portlets .portlet-body, .portlet-nested-portlets .portlet-borderless {
+    min-height: 450px;
+    padding: 0;
+}
+
+.portlet-nested-portlets > .portlet-borderless-container {
+    background: #f3f3f4;
+    padding: 0;
+}
+
+.portlet-nested-portlets .portlet-column-last.span6 {
+    margin-left: 1%;
+}
+
+.portlet-nested-portlets .portlet-body > h2 {
+	border-bottom: 1px solid #bababa;
+	text-align: center;
+}
+
+.ui-widget-header .ui-icon {
+    background-image: url("../images/ui-icons_222222_256x240.png") !important;
+}
+
+/*----------table----------*/
+
+.invoice-table tbody > tr > td:nth-child(4),
+.invoice-table tbody > tr > td:nth-child(3),
+.invoice-table tbody > tr > td:nth-child(2) {
+  text-align: left;
+}
+
+.invoice-table thead > tr > th:nth-child(4),
+.invoice-table thead > tr > th:nth-child(3),
+.invoice-table thead > tr > th:nth-child(2) {
+  text-align: left;
+}
+
+.table-responsive .table thead th {
+    background-color: transparent;
+    border-bottom: 1px solid #ddd;
+}
+
+.dataTables_length select {
+    width: inherit;
+}
+
+table.dataTable.no-footer {
+	border-bottom: 0 !important;
+}
+
+.table tr:nth-child(2n+1) td {
+    background-color: #f9f9f9 !important;
+}
+
+.table tr:nth-child(2n+2) td {
+    background-color: #fff !important;
+}
+
+html.popupBg, .popupBg body {
+    background-color: #fff;
+}
+
+/*----------Pagination----------*/
+
+.aui .pagination {
+	margin: 0;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+	padding-top: 0 !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+.pagination > li > a, .pagination > li > span {
+	 margin-left: -3px !important;
+}
+
+.aui .pagination > li > a:focus, .pagination > li > a:hover, .aui .pagination > li > span:focus, .aui .pagination > li > span:hover {
+    background-color: #eee;
+    border-color: #ddd ;
+    color: #23527c;
+    z-index: 2;
+}
+
+.aui .pagination > .active > a, .aui .pagination > .active > span, .aui .pagination > .active > a:hover, .aui .pagination > .active > span:hover, .aui .pagination > .active > a:focus, .aui .pagination > .active > span:focus {
+    background-color: #f4f4f4;
+    border-color: #dddddd;
+    color: #a0a2a3;
+    cursor: default;
+    z-index: 2;
+    text-decoration: none;
+}
+
+.aui .pagination > .disabled > a, .aui .pagination > .disabled > a:focus, .aui .pagination > .disabled > a:hover, .aui .pagination > .disabled > span, .aui .pagination > .disabled > span:focus, .aui .pagination > .disabled > span:hover {
+    background-color: #fff;
+    border-color: #ddd;
+    color: #777;
+    cursor: not-allowed;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background: transparent !important;
+    border: 1px solid transparent !important;
+}
+
+.ui-slider .ui-slider-range {
+	background: #1ab394;
+}
+
+/*----------canopi portlet----------*/
+
+#invoiceItems .row-fields input {
+    width: inherit;
+}
+
+.financemyInvoice .control-group label {
+    width: 32%;
+}
+
+/* .row-fluid.financemyInvoice {
+    margin: 0 auto;
+    width: 72%;
+} */
+
+.row-fluid.financemyInvoice .span7 {
+    width: 54%;
+    padding: 2% 0 0 2%;
+}
+
+.row-fluid.financemyInvoice .span5 {
+    margin-left: 0;
+    padding-top: 2%;
+    width: 44%;
+}
+
+.financemyInvoice .address {
+	border: 1px solid #ddd;
+	margin-bottom: 4%;
+	padding: 2%;
+	width: 42.5%;
+}
+
+.financemyInvoice .address.offset4 {
+	border: 1px solid #ddd;
+    margin-bottom: 4%;
+    padding: 4%;
+	border-radius: 2%;
+    margin-left: 33% !important;
+    width: 38%;
+}
+
+.fileUpload label font {
+	font-size: 12px;
+}
+
+.dropdown-menu .btn.btn-primary {
+	background-color: #fff !important;
+    border-color: #fff !important;
+    display: block;
+    padding: 0;
+}
+
+.finance-portlet .table-responsive .btn-primary {
+    width: 56%;
+}
+
+#piechart.row-fluid, .financeBtn.text-right {
+    margin-bottom: 1%;
+}
+
+.financeBtn.text-right {
+	margin-right: 0.5%;
+}
+
+#wizard.row-fluid li a {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.row-fluid.financemyInvoice {
+	background-color: #eeeeee;
+	margin-bottom: 1%;
+}
+
+.addressCol .addressLabel {
+	width: 32%;
+}
+
+.addressCol > div {
+	display: inline-block;
+}
+
+#invoiceItems .row-fields > .control-group label {
+    display: none;
+}
+
+.row-fluid.tableHead .span2, .row-fluid.tableHead .span1 {
+    padding: 6px;
+}
+
+#invoiceItems .row-fields .control-group {
+    margin-bottom: 0;
+}
+
+.row-fluid.tableHead {
+    background-color: #cccccc;
+    color: #000;
+}
+
+.row-fluid.tableHead .span2 {
+    padding: 6px;
+}
+
+.total label {
+    width: 8%;
+}
+
+.total input {
+    width: 81%;
+}
+
+/* .totalAndFile > div {
+    display: inline-block;
+    margin-right: 4%;
+} */
+
+.fileUpload .control-group label {
+    display: inline-block;
+    width: 8%;
+}
+
+.formInlineFields > div {
+    display: inline-block;
+}
+
+.formInlineFields div:first-child {
+    color: #555;
+    font-size: 15px;
+    font-weight: 200;
+    width: 10%;
+}
+
+.addConnection label {
+    width: 10%;
+}
+
+ .inlineColumns > div {
+    display: inline-block;
+}
+
+.tableEstimate .control-group {
+	margin-bottom: 0px;
+}
+
+.inlineColumns input[type="text"] {
+    background: transparent;
+	border: 0 none;
+	margin-top: -2px;
+	padding-left: 2px;
+	padding-right: 0;
+	width: 26px;
+}
+
+.inlineColumns.divAlign input[type="text"] {
+	padding-left: 0;
+	text-align: center;
+}
+
+#invoiceItems .row-fields {
+	display: inline-block;
+    width: 100%;
+}
+
+#invoiceItems .row-fields .itemIndex {
+    width: 8% !important;
+}
+
+.lfr-autorow-controls {
+	top: 0;
+}
+
+.row-fields > div {
+    display: inline-block;
+}
+
+.ibox-content {
+    border-top: 0;
+}
+
+.center-orientation .vertical-timeline-icon {
+    font-size: 14px !important;
+    height: 30px !important;
+    left: 50% !important;
+    margin-left: -17px !important;
+    width: 30px !important;
+}
+
+.vertical-timeline-icon i {
+	top: 58% !important;
+	height: 16px !important;
+	left: 51% !important;
+	width: 24px !important;
+}
+
+.vertical-timeline-block {
+    margin-bottom: 20px !important;
+    margin-top: 20px !important;
+}
+
+.dark-timeline .vertical-timeline-content, .dark-timeline.center-orientation .vertical-timeline-content {
+    background: transparent !important;
+}
+
+.center-orientation .vertical-timeline-content .vertical-date {
+  left: 106%;
+  width: 165px;
+}
+
+.connection-portlet .accordion .accordion-toggle, .connection-portlet .accordion .title-text {
+  font-size: 20px;
+}
+
+/*----------Reports----------*/
+
+.text-center.reportsTitle {
+    font-size: 26px;
+}
+
+.row-fluid.reports {
+    margin-top: 2%;
+}
+
+.reports .span6 {
+    border: 1px solid #cfcfcf;
+    border-radius: 6px;
+    padding: 1%;
+}
+
+.reports .span6 p {
+    color: #7a7a7a;
+    font-size: 15px;
+}
+
+.reports .span6 h4 {
+    color: #7a7a7a;
+}
+
+.searchResultsBy {
+	margin-bottom: 2%;
+}
+
+/*----------flow----------*/
+
+#wizard .steps li a {
+    background-color: #eeeeee;
+    color: #aaa;
+}
+
+#wizard .steps li.active a {
+    background-color: #1ab394;
+    color: #fff;
+}
+
+/*----------Settings----------*/
+
+.settingslogin .control-group {
+	 margin-bottom: 20px;
+}
+
+/*----------Notification----------*/
+
+.notificationEmbeded .portlet-borderless-container {
+	background: transparent;
+    margin: 0;
+    padding: 0;
+}
+
+.notificationEmbeded .portlet-body {
+    padding: 0;
+}
+
+.notificationEmbeded .portlet-borderless-bar {
+    display: none !important;
+}
+
+.notificationEmbeded ul.nav {
+    margin: 0 !important;
+}
+
+.notificationEmbeded .navbar-top-links li:last-child {
+    margin: 0;
+}
+
+.notificationEmbeded li a i {
+    vertical-align: bottom;
+}
+
+.notificationEmbeded .count-info .label {
+	top: 0;
+}
+
+/*----------Responsive css----------*/
+
+@import "compass";
+@import "mixins";
+
+@include respond-to(phone, tablet) {
+	.aui body {
+		padding: 0px;
+	}
+	
+	#_145_navSiteNavigationNavbarBtn {
+	    display: none;
+	}
+	
+	.row {
+	    margin: 0;
+	}	
+	.table-responsive {
+	    overflow-x: auto;
+	}
+	
+	.table {
+		display: inline;
+	}
+	
+	.wizard>.steps>ul>li {
+	    width: inherit;
+	}
+	
+	.financemyInvoice .control-group label {
+	    width: inherit;
+	    display: block;
+	}
+	
+	.financemyInvoice .address.offset4 {
+		margin-left: 0 !important;
+		width: auto;
+	}
+	
+	.finance-portlet .table-responsive .btn-primary {
+	    width: inherit;
+	    font-size: 14px;
+	}
+	
+	.center-orientation .vertical-timeline-icon {
+	    font-size: 14px!important;
+	    height: 30px!important;
+	    width: 30px!important;
+	    left: 0%!important;
+    	margin-left: 2px!important;
+	}
+	
+	.vertical-timeline-icon i {
+	    display: block;
+	    width: 24px;
+	    height: 24px;
+	    position: relative;
+	    left: 50%;
+	    top: 50%;
+	    margin-left: -12px;
+	    margin-top: -9px;
+	}
+	.addConnection label, .formInlineFields div:first-child {
+	    width: inherit;
+	}
+	
+	.formInlineFields > div, .aui .addConnection label {
+		display: block;
+	}
+	
+	.fileUpload .control-group label {
+	    display: block;
+	    width: inherit;
+	}
+}
+
+@include respond-to(phone) {
+	.body-small.mini-navbar .navbar-static-side {
+	    display: block !important;
+	}
+
+	.aui .nav-collapse, .aui .nav-collapse.collapse {
+		overflow: visible;
+	}	
+	
+}
+
+.aui .modal {
+	-webkit-transform:translate(0,-25%);
+	-ms-transform:translate(0,-25%);
+	-o-transform:translate(0,-25%);
+	transform:translate(0,-25%);
+	-webkit-transition:-webkit-transform .3s ease-out;
+	-o-transition:-o-transform .3s ease-out;
+	transition:transform .3s ease-out;
+}
