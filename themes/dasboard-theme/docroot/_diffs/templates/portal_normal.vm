@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+
+#parse ($init)
+
+<html class="$root_css_class" dir="#language ("lang.dir")" lang="$w3c_language_id">
+
+	<head>
+		<title>$the_title - $company_name</title>
+	
+		<meta content="initial-scale=1.0, width=device-width" name="viewport" />
+	
+		$theme.include($top_head_include)
+		
+	    <link href="$css_folder/font-awesome.css" rel="stylesheet">
+	    <link href="$css_folder/animate.css" rel="stylesheet">
+	    <link href="$css_folder/style.css" rel="stylesheet">
+	    <link href="$css_folder/jquery.dataTables.css" rel="stylesheet">
+	    <link href="$css_folder/jquery-ui.css" rel="stylesheet">
+	    ##<link href="$css_folder/bootstrap.min.css" rel="stylesheet">
+	    <link href="$css_folder/bootstrap-toggle.min.css" rel="stylesheet">
+	    
+	    <script src="$javascript_folder/jquery-1.11.3.min.js"></script>
+	    <script src="$javascript_folder/jquery-ui.min.js"></script>
+	    <script src="//code.highcharts.com/highcharts.js"></script>
+		<script src="//code.highcharts.com/modules/exporting.js"></script>
+		<script src="$javascript_folder/jquery.dataTables.min.js"></script>
+		<script src="//cdn.datatables.net/1.10.11/js/dataTables.bootstrap.min.js"></script>
+		##<script src="//cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
+	</head>
+
+	<body class="$css_class">
+	
+		<a href="#main-content" id="skip-to-content">#language ("skip-to-content")</a>
+		
+		$theme.include($body_top_include)
+		
+		#if ( $is_signed_in &&  $permissionChecker.isOmniadmin())
+			#dockbar()
+		#end
+		
+		<div class="container-fluid" id="wrapper">
+			<!--<header id="banner" role="banner">
+				<div id="heading">
+					
+					<h2 class="page-title">
+						<span>$the_title</span>
+					</h2>
+				</div>
+			</header>-->
+			<div class="main_container">
+				##<div class="brandedlogo"> <span> Canopi </span> </div>
+				#if ($has_navigation || $is_signed_in)
+					#parse ("$full_templates_path/navigation.vm")
+				#end
+				<div id="page-wrapper" class="main_content gray-bg dashbard-1">
+					<div class="row border-bottom">
+				        <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+					        <div class="navbar-header">
+					            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+					        </div>
+					        <ul class="nav navbar-top-links navbar-right">
+					        	<!--<li>
+										#if ($show_site_name)
+											<div>
+												<span class="site-name block m-t-xs" title="k#language_format ("go-to-x", [$site_name])">
+													<strong class="font-bold">$site_name</strong>
+												</span>
+											</div>
+										#end
+									</li>
+						        	<li class="site-title">
+										<div class="dropdown profile-element">
+											<a class="$logo_css_class" href="$site_default_url" title="#language_format ("go-to-x", [$site_name])">
+												<img alt="$logo_description" height="40px" class="img-circle" src="$site_logo" width="40px" />
+											</a>
+										</div>
+									</li>
+									<li class="notificationEmbeded">$theme.runtime("notification_WAR_canopiportlet")</li>
+					        	-->
+				                <li>
+				                    <a href="$sign_out_url">
+				                        <i class="fa fa-sign-out"></i> Log out
+				                    </a>
+				                </li>
+					        </ul>
+					    </nav>
+					 </div>
+					<!--<div class="subheading text-center"> 
+						<span>refresh</span>
+						<span>settings</span>
+					</div>-->
+					<div id="content">
+						##<nav id="breadcrumbs">#breadcrumbs()</nav>
+				
+						#if ($selectable)
+							$theme.include($content_include)
+						#else
+							$portletDisplay.recycle()
+				
+							$portletDisplay.setTitle($the_title)
+				
+							$theme.wrapPortlet("portlet.vm", $content_include)
+						#end
+					</div>
+				</div>
+			</div>
+		</div>
+		$theme.include($body_bottom_include)
+		
+		$theme.include($bottom_include)
+	
+		##<script src="$javascript_folder/jquery-2.1.1.js"></script>
+		##<script src="$javascript_folder/jquery.dataTables.min.js"></script>
+	    <script src="$javascript_folder/bootstrap.min.js"></script>
+	    <script src="$javascript_folder/jquery.metisMenu.js"></script>
+	    <script src="$javascript_folder/jquery.slimscroll.min.js"></script>
+	    <script src="$javascript_folder/inspinia.js"></script>
+	    <script src="$javascript_folder/pace.min.js"></script>
+	    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.0/js/bootstrap-toggle.min.js"></script>
+	
+	</body>
+</html>
