@@ -713,6 +713,7 @@ public class DashboardPortlet extends MVCPortlet {
 				themeDisplay.getCompanyId(), themeDisplay.getContact().getContactId(), bankAccountNumber, countryId,
 				regionId, ifscCode, themeDisplay.getUser().getFullName(), companyName, tin, cst, street1, street2, street3, city, zip, serviceContext);
 		
+		SessionMessages.add(actionRequest, "request_processed","Your Details have been saved Save Thank you!!");
 	}
 	
 	public long getSmallImageId() {

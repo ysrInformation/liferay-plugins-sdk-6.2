@@ -213,9 +213,9 @@
 			<liferay-ui:asset-tags-selector className="<%=ShoppingItem.class.getName() %>" />
 		</div> --%>
 		<aui:input name="terms"  type="checkbox" required="true" label="" inlineField="true" />
-		<aui:a href="http://www.google.com">Terms of user</aui:a>
+		<aui:a href="/terms-and-conditions">Terms of use</aui:a>
 		And
-		<aui:a href="http://www.google.com">Posting Policies</aui:a>
+		<aui:a href="/posting-policy">Posting Policies</aui:a>
 		<aui:button-row>
 			<aui:button type="submit" value="add-item" onClick="onAddItem();"/>
 			<aui:button type="reset" value="reset" />
