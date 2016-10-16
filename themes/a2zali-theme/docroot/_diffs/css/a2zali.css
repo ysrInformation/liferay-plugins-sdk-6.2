@@ -1052,3 +1052,7 @@ form#searchbox .button.button-small i {
 	background-size: 18px 44px;
 	padding: 4px;
 }
+
+.lfr-hudcrumbs {
+	display: none !important;
+}

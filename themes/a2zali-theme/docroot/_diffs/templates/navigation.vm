@@ -76,7 +76,7 @@
 			#if ($layout.isPrivateLayout())
 				<ul class="nav nav-collapse pull-right"">
 					<li class="backhome">
-						<a href="$company_url"> &#10149; Back to Dashboard </a>				
+						<a href="$company_url"> &#10149; Back to Home </a>				
 					</li>
 				</ul>
 			#end
