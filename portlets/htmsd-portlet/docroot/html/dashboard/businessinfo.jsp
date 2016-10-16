@@ -29,7 +29,13 @@
 			<aui:select label="region"  name="regionId" required="true"/>
 		</aui:col>
 	</aui:fieldset>
-	<aui:button type="submit" value="Submit"/>
+	<aui:input name="terms"  type="checkbox" required="true" label="" inlineField="true" />
+	<aui:a href="/terms-and-conditions">Terms of use</aui:a>
+	And
+	<aui:a href="/posting-policy">Posting Policies</aui:a>
+	<aui:button-row>
+		<aui:button type="submit" value="Submit"/>
+	</aui:button-row>	
 </aui:form>
 
 <script>
