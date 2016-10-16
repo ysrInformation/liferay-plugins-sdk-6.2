@@ -14,12 +14,18 @@
 
 package com.htmsd.slayer.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.htmsd.slayer.model.UserInfo;
+import com.htmsd.slayer.model.impl.UserInfoImpl;
 import com.htmsd.slayer.service.base.UserInfoLocalServiceBaseImpl;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Address;
+import com.liferay.portal.model.User;
+import com.liferay.portal.service.UserLocalServiceUtil;
 
 /**
  * The implementation of the user info local service.
@@ -42,19 +48,25 @@ public class UserInfoLocalServiceImpl extends UserInfoLocalServiceBaseImpl {
 	 * Never reference this interface directly. Always use {@link com.htmsd.slayer.service.UserInfoLocalServiceUtil} to access the user info local service.
 	 */
 	
-	public UserInfo addUserInfo(long userId, long groupId, long companyId, long shippingAddressId, long billingAddressId, 
-			String mobileNumber, String altNumber) throws SystemException {
+	public UserInfo addUserInfo(long userInfoId, long userId, long groupId, long companyId, long shippingAddressId, long billingAddressId, 
+			String mobileNumber, String altNumber, String firstName, String lastName, String email, boolean isDeliveryAddress)  {
 		
-		long userInfoId = 0l;
+		UserInfo userInfo = new UserInfoImpl();
 		boolean newentry = false;
-		UserInfo userInfo = findUserInfoByUserId(userId);
-		if (Validator.isNotNull(userInfo)) {
-			userInfoId = userInfo.getUserInfoId();
-			userInfo = userInfoLocalService.fetchUserInfo(userInfoId); 
-		} else {
+		if (userInfoId == 0) {
 			newentry = true;
-			userInfoId = counterLocalService.increment();
+			try {
+				userInfoId = counterLocalService.increment();
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
 			userInfo = userInfoLocalService.createUserInfo(userInfoId); 
+		} else {
+			try {
+				userInfo = userInfoLocalService.fetchUserInfo(userInfoId);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		userInfo.setUserId(userId);
@@ -64,11 +76,23 @@ public class UserInfoLocalServiceImpl extends UserInfoLocalServiceBaseImpl {
 		userInfo.setBillingAddressId(billingAddressId); 
 		userInfo.setMobileNumber(mobileNumber); 
 		userInfo.setAltNumber(altNumber); 
+		userInfo.setFirstName(firstName);
+		userInfo.setLastName(lastName);
+		userInfo.setEmail(email);
+		userInfo.setIsDeliveryAddress(isDeliveryAddress); 
 		
 		if (newentry) {
-			userInfo = userInfoLocalService.addUserInfo(userInfo);
+			try {
+				userInfo = userInfoLocalService.addUserInfo(userInfo);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
 		} else {
-			userInfo = userInfoLocalService.updateUserInfo(userInfo);
+			try {
+				userInfo = userInfoLocalService.updateUserInfo(userInfo);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		return userInfo;
@@ -82,6 +106,61 @@ public class UserInfoLocalServiceImpl extends UserInfoLocalServiceBaseImpl {
 		UserInfo userInfo = null;
 		try {
 		  userInfo = userInfoPersistence.fetchBySUserId(userId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		return userInfo;
+	}
+	
+	public List<UserInfo> checkCreateUserInfo(long userId, long companyId, long groupId) {
+		User user = null;
+		List<Address> addresses = null;
+		List<UserInfo> userInfoList = new ArrayList<UserInfo>();
+		try {
+			user = UserLocalServiceUtil.fetchUser(userId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		if (Validator.isNotNull(user)) {
+			try {
+				addresses = user.getAddresses();
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			if (Validator.isNotNull(addresses) && addresses.size() > 0) {
+				for (Address address: addresses) {
+					UserInfo _userInfo = addUserInfo(0l, userId, groupId, companyId, address.getAddressId(), 0l, 
+							StringPool.BLANK, StringPool.BLANK, user.getFirstName(), user.getLastName(), StringPool.BLANK, false);
+					if (Validator.isNotNull(_userInfo)) {
+						userInfoList.add(_userInfo);
+					}
+				}
+			}
+		}
+		
+		return userInfoList;
+	}
+	
+	public List<UserInfo> getUserAddressFromUserInfo(long userId, long groupId, long companyId) {
+		List<UserInfo> userInfoList = new ArrayList<UserInfo>();
+		try {
+			userInfoList = getUserInfoByUserId(userId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		if (Validator.isNull(userInfoList)) {
+			userInfoList = checkCreateUserInfo(userId, companyId, groupId);
+		}
+		
+		return userInfoList;
+	}
+	
+	public UserInfo getUserInfoByUserIdAndIsDelivery(long userId, boolean isDeliveryAddress) {
+		UserInfo userInfo = null;
+		try {
+			return userInfoPersistence.fetchBySUserId_IsDelieryAddress(userId, isDeliveryAddress);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}

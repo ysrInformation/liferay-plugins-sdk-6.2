@@ -124,7 +124,7 @@
 									</td>
 									<td>
 										<div class="checkout-cancel-item">
-											<a class="cancelItemLink" href="#" data-id="<%= shpItem.getItemId() %>"><i class="icon-cancel icon-small">X</i></a>
+											<a class="cancelItemLink" href="#" data-id="<%= shpItem.getItemId() %>"><i class="fa fa-remove"></i></a>
 										</div>
 									</td>
 									<td>

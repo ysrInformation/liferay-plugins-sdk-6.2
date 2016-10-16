@@ -91,19 +91,23 @@ public class CheckoutPortlet extends MVCPortlet {
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		PortletSession portletSession = actionRequest.getPortletSession();
 		PortletConfig portletConfig = (PortletConfig) actionRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
+		
 		List<ShoppingItem_Cart> shoppingItem_Carts = CommonUtil.getUserCartItems(themeDisplay.getUserId());
-		UserInfo _userInfo = CommonUtil.findUserInfoByUserId(themeDisplay.getUserId());
+		
 		Address address = null;
-		try {
-			address = AddressLocalServiceUtil.fetchAddress(_userInfo.getShippingAddressId());
-		} catch (SystemException e) {
-			e.printStackTrace();
+		UserInfo _userInfo = UserInfoLocalServiceUtil.getUserInfoByUserIdAndIsDelivery(themeDisplay.getUserId(), true); 
+		if (Validator.isNotNull(_userInfo)) {
+			try {
+				address = AddressLocalServiceUtil.fetchAddress(_userInfo.getShippingAddressId());
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		String paymentMode = ParamUtil.getString(actionRequest, "paymentMethod");
-		String shippingFirstName = themeDisplay.getUser().getFirstName();
-		String shippingLastName = themeDisplay.getUser().getLastName();
-		String shippingEmailAddress = themeDisplay.getUser().getEmailAddress();
+		String shippingFirstName = (Validator.isNotNull(_userInfo) ? _userInfo.getFirstName() :themeDisplay.getUser().getFirstName());
+		String shippingLastName = (Validator.isNotNull(_userInfo) ? _userInfo.getLastName() : themeDisplay.getUser().getLastName());
+		String shippingEmailAddress = (Validator.isNotNull(_userInfo) ? _userInfo.getEmail() : themeDisplay.getUser().getEmailAddress());
 		String shippingMoble = (Validator.isNotNull(_userInfo) ? _userInfo.getMobileNumber() : StringPool.BLANK);
 		String shippingAltMoble = (Validator.isNotNull(_userInfo) ? _userInfo.getAltNumber() : StringPool.BLANK);
 		String shippingStreet = (Validator.isNotNull(address) ? address.getStreet1() : StringPool.BLANK);
@@ -251,10 +255,12 @@ public class CheckoutPortlet extends MVCPortlet {
 		ServiceContext serviceContext = getServiceContext(actionRequest);
 		
 		long userId = themeDisplay.getUserId();
+		long userInfoId = ParamUtil.getLong(actionRequest, "userInfoId");
 		long addressId = ParamUtil.getLong(actionRequest, "addressId");
 		long shippingCountry = ParamUtil.getLong(actionRequest, "country");
 		long shippingState = ParamUtil.getLong(actionRequest, "state");
 		
+		int typeId = ParamUtil.getInteger(actionRequest, "typeId");
 		String firstName = ParamUtil.getString(actionRequest, "firstName");
 		String lastName = ParamUtil.getString(actionRequest, "lastName");
 		String email = ParamUtil.getString(actionRequest, "email");
@@ -263,12 +269,7 @@ public class CheckoutPortlet extends MVCPortlet {
 		String shippingStreet = ParamUtil.getString(actionRequest, "street");
 		String shippingCity = ParamUtil.getString(actionRequest, "city");
 		String shippingZip = ParamUtil.getString(actionRequest, "zip");
-		
-		User user = UserLocalServiceUtil.getUser(userId); 
-		user.setFirstName(firstName);
-		user.setLastName(lastName); 
-		user.setEmailAddress(email);
-		UserLocalServiceUtil.updateUser(user);
+		System.out.println("typeId ::"+typeId); 
 		
 		Address address = null;
 		if (addressId > 0) {
@@ -278,9 +279,10 @@ public class CheckoutPortlet extends MVCPortlet {
 			address.setStreet1(shippingStreet);
 			address.setZip(shippingZip);
 			address.setCity(shippingCity); 
+			address.setTypeId(typeId); 
 			AddressLocalServiceUtil.updateAddress(address);
 		} else {
-			int typeId = getListTypeId(Contact.class.getName() + ListTypeConstants.ADDRESS, "business");
+			//int typeId = getListTypeId(Contact.class.getName() + ListTypeConstants.ADDRESS, type);
 			try {
 				address = AddressLocalServiceUtil.addAddress(themeDisplay.getUserId(), Contact.class.getName(), 
 						themeDisplay.getContact().getContactId(), shippingStreet, StringPool.BLANK, StringPool.BLANK,
@@ -292,15 +294,34 @@ public class CheckoutPortlet extends MVCPortlet {
 			}
 		}
 		
-		UserInfo userInfo = UserInfoLocalServiceUtil.addUserInfo(userId, themeDisplay.getScopeGroupId(), themeDisplay.getCompanyId(), address.getAddressId(), 0l, 
-				shippingMoble, shippingAltMoble);
+		UserInfo userInfo = UserInfoLocalServiceUtil.addUserInfo(userInfoId, userId, themeDisplay.getScopeGroupId(), themeDisplay.getCompanyId(), address.getAddressId(), 0l, 
+				shippingMoble, shippingAltMoble, firstName, lastName, email, false);
 		
-		_log.info("UserInfoId is :"+userInfo.getUserInfoId()); 
+		_log.info("updated users address and userinfo table successfully, the userinfoId is :"+userInfo.getUserInfoId()); 
 		
 		String successMessage = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "your-address-saved-successfully");
 		SessionMessages.add(actionRequest, "request_processed", successMessage);
 		actionResponse.setRenderParameter("jspPage", "/html/checkout/view.jsp");
 		actionResponse.setRenderParameter("order_step", "step3");
+	}
+	
+	public void setDeliveryAddress(ActionRequest actionRequest, ActionResponse actionResponse)
+			throws IOException, PortletException, SystemException {
+		
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		PortletConfig portletConfig = (PortletConfig) actionRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
+		
+		long userInfoId = ParamUtil.getLong(actionRequest, "userInfoId");
+		if (userInfoId > 0) {
+			UserInfo userInfo = UserInfoLocalServiceUtil.fetchUserInfo(userInfoId);
+			userInfo.setIsDeliveryAddress(true); 
+			UserInfoLocalServiceUtil.updateUserInfo(userInfo);
+		}
+		
+		String successMessage = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "your-delivery-address-set-successfully");
+		SessionMessages.add(actionRequest, "request_processed", successMessage);
+		actionResponse.setRenderParameter("jspPage", "/html/checkout/view.jsp");
+		actionResponse.setRenderParameter("order_step", "step5");
 	}
 
 	private ServiceContext getServiceContext(ActionRequest actionRequest) {

@@ -22,6 +22,12 @@
 	} else {
 		shoppingList = CommonUtil.getGuestUserList(session);
 	}
+	
+	UserInfo _userInfo = UserInfoLocalServiceUtil.getUserInfoByUserIdAndIsDelivery(userId, true);
+	Address address = CommonUtil.getAddressByAddressId(_userInfo.getShippingAddressId());
+	String zip = (Validator.isNotNull(address.getZip())) ? address.getZip() : StringPool.BLANK;
+	String firstName = Validator.isNotNull(_userInfo.getFirstName()) ? _userInfo.getFirstName() : StringPool.BLANK;
+	String lastName = Validator.isNotNull(_userInfo.getLastName()) ? _userInfo.getLastName() : StringPool.BLANK;
 %>
 
 <aui:form id="checkout-step5" name="confirmOrder" method="post" action="${confirmCheckoutURL}" inlineLabels="<%= true %>"> 
@@ -108,22 +114,40 @@
 		</table>
 	</div>
 	
-	<div class="payment-methods">
-		<div class="payment-methods-label"> 
-			<h1 class="page-heading"><liferay-ui:message key="checkout-payment-methods"/></h1>
+	<div class="row-fluid address-payment-div">
+		<div class="span6">
+			<ul class="address first_item">
+				<li>
+					<h1 class="page-heading">
+						<liferay-ui:message key="checkout-label-your-shipping-address"/>
+					</h1>
+				</li>
+				<li><span class="address_name"> <%= firstName + StringPool.SPACE + lastName %> </span></li>
+				<li><span class="address_street"><%= Validator.isNotNull(address.getStreet1()) ? address.getStreet1() : StringPool.BLANK %></span></li>
+				<li><span class="address_city"><%= Validator.isNotNull(address.getCity()) ? address.getCity() : StringPool.BLANK %></span></li>
+				<li><span class=""><%= Validator.isNotNull(address.getRegionId()) ? CommonUtil.getState(address.getRegionId()) : StringPool.BLANK %></span></li>
+				<li><span class="address_phone"><%= Validator.isNotNull(address.getCountryId()) ? CommonUtil.getCountry(address.getCountryId()) : StringPool.BLANK  + ", " + zip  %> </span></li>
+				<li><span class="address_phone_mobile"><%= Validator.isNotNull(_userInfo.getMobileNumber()) ?  _userInfo.getMobileNumber(): StringPool.BLANK %></span></li>
+				<li><span class="address_alt_mobile"><%= Validator.isNotNull(_userInfo.getAltNumber()) ? _userInfo.getAltNumber() : StringPool.BLANK %></span></li>
+			</ul>
 		</div>
-		<div class="paymentOptions">
-			<aui:input name="paymentMethod" type="radio" label="checkout-label-debitcard" value="debit" disabled="true">
-				<aui:validator name="required"/>
-			</aui:input>
-			<aui:input name="paymentMethod" type="radio" label="checkout-label-creditcard" value="credit" disabled="true">
-				<aui:validator name="required"/>
-			</aui:input>
-			<aui:input name="paymentMethod" type="radio" label="checkout-label-cod" value="cod">
-				<aui:validator name="required"/>
-			</aui:input>
-		</div>
-	</div>	
+		<div class="span6 payment-methods">
+			<div class="payment-methods-label"> 
+				<h1 class="page-heading"><liferay-ui:message key="checkout-payment-methods"/></h1>
+			</div>
+			<div class="paymentOptions">
+				<aui:input name="paymentMethod" type="radio" label="checkout-label-debitcard" value="debit" disabled="true">
+					<aui:validator name="required"/>
+				</aui:input>
+				<aui:input name="paymentMethod" type="radio" label="checkout-label-creditcard" value="credit" disabled="true">
+					<aui:validator name="required"/>
+				</aui:input>
+				<aui:input name="paymentMethod" type="radio" label="checkout-label-cod" value="cod">
+					<aui:validator name="required"/>
+				</aui:input>
+			</div>
+		</div>	
+	</div>
 
 	<aui:button-row>
 		<aui:button cssClass="pull-right" type="submit" value='<%= LanguageUtil.get(portletConfig, locale, "step5") %>'/>

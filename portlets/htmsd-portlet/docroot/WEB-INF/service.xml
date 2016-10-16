@@ -374,12 +374,20 @@
 		<column name="billingAddressId" type="long"/>
 		<column name="mobileNumber" type="String"/>
 		<column name="altNumber" type="String"/>
+		<column name="firstName" type="String"/>
+		<column name="lastName" type="String"/>
+		<column name="email" type="String"/>
+		<column name="isDeliveryAddress" type="Boolean" />
 		
 		<finder return-type="Collection" name="UserId">
 			<finder-column name="userId"/>
 		</finder>
 		<finder return-type="UserInfo" name="SUserId">
 			<finder-column name="userId"/>
+		</finder>
+		<finder return-type="UserInfo" name="SUserId_IsDelieryAddress">
+			<finder-column name="userId"/>
+			<finder-column name="isDeliveryAddress"/>
 		</finder>
 	</entity>
 	

@@ -96,7 +96,7 @@
   color: #01a261;
 }
 
-#checkout-addresslabel, .shippingAdress, .payment-methods-label h1 {
+#checkout-addresslabel, .shippingAdress, .payment-methods-label h1, .address-payment-div h1 {
   border-bottom: 1px solid;
 }
 
@@ -111,7 +111,7 @@
 	width: 40%;
 }
 
-.checkout-address-form, .paymentOptions {
+.checkout-address-form {
   padding-left: 20%;
 }
 
@@ -125,12 +125,12 @@
 	display: none;
 }
 
-.checkout-address-page .span6 {
+.new-checkout .span6, .address-div {
   background-color: #222222;
   margin-bottom: 1%;
 }
 
-.checkout-address-page .address {
+.new-checkout .address {
   list-style: outside none none;
 }
 
@@ -145,4 +145,21 @@
 
 .checkout-thanks-message {
 	padding: 2%;
+}
+
+.address-btns {
+  margin-left: 7%;
+}
+
+.checkout-address-page .add-new-address {
+	margin-bottom: 1%;
+}
+
+.new-checkout .address-payment-div {
+	margin-top: 2%;
+}
+
+.paymentOptions {
+  margin-left: 5%;
+  padding: 1.5%;
 }
