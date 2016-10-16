@@ -59,6 +59,7 @@ import com.liferay.portal.model.Country;
 import com.liferay.portal.model.Phone;
 import com.liferay.portal.model.Region;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.AddressLocalServiceUtil;
 import com.liferay.portal.service.CountryServiceUtil;
 import com.liferay.portal.service.RegionServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
@@ -761,5 +762,15 @@ public class CommonUtil {
 			value = (String) expandoBridge.getAttribute(attribute);
 		}
 		return value;
+	}
+	
+	public static Address getAddressByAddressId(long addressId) {
+		Address address = null;
+		try {
+			address = AddressLocalServiceUtil.fetchAddress(addressId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		return address;
 	}
 }
