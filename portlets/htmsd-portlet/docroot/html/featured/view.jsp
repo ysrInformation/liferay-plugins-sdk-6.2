@@ -31,7 +31,7 @@
 </liferay-portlet:actionURL>
 
 <div class="row-fluid featured-container">
-	<div class="span2 leftColHeight">
+	<div class="category-name">
 		<div>
 			<c:choose>
 				<c:when test="<%=Long.valueOf(categoryToDisplay) > 0 %>">
@@ -43,7 +43,7 @@
 			</c:choose>
 		</div>
 	</div>
-	<div class="span10 rightColHeight">
+	<div class="item-display">
 		<div class="swiper-container">
 			<div id="featured_list_<portlet:namespace/>" class="swiper-wrapper">
 				<!-- item display -->

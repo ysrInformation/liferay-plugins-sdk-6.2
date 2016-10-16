@@ -100,14 +100,13 @@ function render(data, url, namespace, plid) {
 			$("#featured_list_"+namespace).append(li);		
 		});
 		var swiper = new Swiper('.swiper-container', {
-	        slidesPerView: 4,
+	        slidesPerView: 6,
 	        paginationClickable: true,
-	        spaceBetween: 30,
+	        spaceBetween: 35,
 	        nextButton: '.swiper-button-next',
 	        prevButton: '.swiper-button-prev',
 	        autoplay: 3500,
 	        autoplayDisableOnInteraction: false,
-	        freeMode: true
 	    });
 	});
 }
