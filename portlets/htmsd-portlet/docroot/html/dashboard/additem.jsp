@@ -66,13 +66,57 @@
 			</c:forEach>
 		</aui:layout>
 		
+		<aui:input name="<%=HConstants.VEDIO_URL %>" >
+			<aui:validator name="url" />
+		</aui:input>
+		
 		<liferay-ui:message key="description" />
 		<liferay-ui:input-editor cssClass="editor_padding"/>
 		<aui:input name="<%=HConstants.DESCRIPTION %>" value=""  type="hidden" />
 		
-		<aui:input name="<%=HConstants.VEDIO_URL %>" >
-			<aui:validator name="url" />
-		</aui:input>
+		<aui:layout>
+			<aui:column>
+				<aui:input name="MRP" label="MRP" required="true">
+					<aui:validator name="number" />
+					<aui:validator name="custom" errorMessage="Please enter a valid price">
+						function (val, fieldNode, ruleValue) {
+							var result = true;
+							if (val.length == 0 || val <= 0) {
+								result = false;
+							}
+							return result;
+						}
+					</aui:validator>
+				</aui:input>
+			</aui:column>
+			<aui:column>
+				<aui:input name="itemWeight" label="Weight" required="true">
+					<aui:validator name="number" />
+					<aui:validator name="custom" errorMessage="Please enter a valid price">
+						function (val, fieldNode, ruleValue) {
+							var result = true;
+							if (val.length == 0 || val <= 0) {
+								result = false;
+							}
+							return result;
+						}
+					</aui:validator>
+				</aui:input>
+			</aui:column>
+		</aui:layout>
+		<aui:layout>
+			<aui:column>
+				<aui:select name="itemType" label="Type" required="true" showEmptyOption="true" helpMessage="item-type-help-message">
+					<aui:option value="1" label="Hand Made"/>
+					<aui:option value="2" label="Branded"/>
+				</aui:select>
+			</aui:column>
+			<aui:column>
+				<aui:input name="itemTypeDocument" label="Document" type="file" required="true">
+					<aui:validator name="acceptFiles" errorMessage="please-upload-image-document">'jpg,png,gif,jpeg,tif,tiff,bmp,docx,pdf'</aui:validator>
+				</aui:input>
+			</aui:column>
+		</aui:layout>
 		<h4><liferay-ui:message key="comission" /></h4>
 		<aui:layout>
 			<aui:column>

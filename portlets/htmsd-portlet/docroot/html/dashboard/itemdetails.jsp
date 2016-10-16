@@ -1,3 +1,6 @@
+<%@page import="com.liferay.portlet.documentlibrary.service.DLAppHelperLocalServiceUtil"%>
+<%@page import="com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil"%>
+<%@page import="com.liferay.portal.kernel.repository.model.FileEntry"%>
 <%@page import="com.liferay.portal.model.User"%>
 <%@page import="com.liferay.portal.service.UserLocalServiceUtil"%>
 <%@page import="com.liferay.portal.model.Address"%>
@@ -220,9 +223,7 @@
 						}
 					%>
 				</aui:layout>
-				<liferay-ui:message key="description" />
-				<liferay-ui:input-editor cssClass="editor_padding" />
-				<aui:input name="<%=HConstants.DESCRIPTION %>" value="<%=item.getDescription()%>"  type="hidden"/>
+				
 				<div>
 					<div>
 						<aui:input name="<%=HConstants.VEDIO_URL %>" value="<%=item.getVedioURL() %>">
@@ -236,16 +237,83 @@
 							if (Validator.isNotNull(videoURL) && !videoURL.isEmpty()) {
 								videoId = videoURL.substring(videoURL.indexOf("v=")+2, videoURL.length());
 								%>
-									<iframe src="<%="//www.youtube.com/embed/"+videoId%>" width="100%" height="300px"></iframe>
+									<iframe src="<%="//www.youtube.com/embed/"+videoId%>" width="500px" height="300px"></iframe>
 								<%
 							}
 						%>	
 					</div>
 				</div>
-				<aui:input name="<%=HConstants.PRICE %>" required="true" value="<%=decimalFormat.format(item.getSellerPrice()) %>">
+				
+				<liferay-ui:message key="description" />
+				<liferay-ui:input-editor cssClass="editor_padding" />
+				<aui:input name="<%=HConstants.DESCRIPTION %>" value="<%=item.getDescription()%>"  type="hidden"/>
+				
+				<aui:layout>
+				<aui:column>
+					<aui:input name="MRP" label="MRP" required="true" value="<%= item.getMRP() %>">
+						<aui:validator name="number" />
+						<aui:validator name="custom" errorMessage="Please enter a valid price">
+							function (val, fieldNode, ruleValue) {
+								var result = true;
+								if (val.length == 0 || val <= 0) {
+									result = false;
+								}
+								return result;
+							}
+						</aui:validator>
+					</aui:input>
+				</aui:column>
+				<aui:column>
+					<aui:input name="itemWeight" label="Weight" required="true" value="<%= item.getItemWeight() %>">
+						<aui:validator name="number" />
+						<aui:validator name="custom" errorMessage="Please enter a valid price">
+							function (val, fieldNode, ruleValue) {
+								var result = true;
+								if (val.length == 0 || val <= 0) {
+									result = false;
+								}
+								return result;
+							}
+						</aui:validator>
+					</aui:input>
+				</aui:column>
+			</aui:layout>
+			<aui:layout>
+				<aui:column>
+					<aui:select name="itemType" label="Type" required="true" showEmptyOption="true" helpMessage="item-type-help-message" >
+						<aui:option value="1" label="Hand Made" selected="<%= item.getItemTypeId() == 1 ? true : false %>"/>
+						<aui:option value="2" label="Branded" selected="<%= item.getItemTypeId() == 2 ? true : false %>"/>
+					</aui:select>
+				</aui:column>
+				<aui:column>
+					<aui:input name="itemTypeDocumentId" type="hidden" value="<%= item.getItemTypeDocumentId() %>"/>
+				<aui:input name="itemTypeDocument" label="Document" type="file"
+					required='<c:choose><c:when test="<%=item.getItemTypeDocumentId() > 0%>">false</c:when><c:otherwise>true</c:otherwise></c:choose>'>
+					<aui:validator name="acceptFiles"
+						errorMessage="please-upload-image-document">'jpg,png,gif,jpeg,tif,tiff,bmp,docx,pdf'</aui:validator>
+				</aui:input>
+			</aui:column>
+				<c:if test="<%=item.getItemTypeDocumentId() > 0 %>">
+					<aui:column>
+						<%
+							String downloadURL = CommonUtil.getThumbnailpath(item.getItemTypeDocumentId(), item.getGroupId(), false);
+							FileEntry fileEntry = DLAppLocalServiceUtil.getFileEntry(item.getItemTypeDocumentId());
+						%>
+						<c:choose>
+							<c:when test='<%=fileEntry.getMimeType().contains("image") %>'>
+								<img src="<%=downloadURL %>" width="100px" height="100px"/>
+							</c:when>
+							<c:otherwise>
+								<aui:a href="<%=downloadURL %>" label="Type Document"/>
+							</c:otherwise>
+						</c:choose>
+					</aui:column>
+				</c:if>
+			</aui:layout>
+				
+				<aui:input name="<%=HConstants.PRICE %>" required="true" value="<%=decimalFormat.format(item.getSellingPrice()) %>">
 					<aui:validator name="number" />
 				</aui:input>
-				
 				<aui:input name="<%=HConstants.TAX %>" value="<%=item.getTax() %>">
 					<aui:validator  name="custom"  errorMessage="Please enter valid Percentage" >
 						function (val, fieldNode, ruleValue) {

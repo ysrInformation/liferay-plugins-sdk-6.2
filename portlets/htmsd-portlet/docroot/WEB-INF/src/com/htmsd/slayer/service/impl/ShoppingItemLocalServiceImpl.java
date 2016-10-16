@@ -62,11 +62,11 @@ public class ShoppingItemLocalServiceImpl extends ShoppingItemLocalServiceBaseIm
 	 * Never reference this interface directly. Always use {@link com.htmsd.slayer.service.ShoppingItemLocalServiceUtil} to access the shopping item local service.
 	 */
 	
-	public ShoppingItem addItem(long groupId, long companyId, long userId,
-			String userName, String userEmail,long updateUserId, String updateUserName, String updateEmail,
-			String productCode, String name, String description,
-			Double sellerPrice, Double totalPrice, Double tax, long quantity, int status,
-			String imageIds, String vedioURL, long smallImage , String remark) {
+	public ShoppingItem addItem(long groupId, long companyId, long userId, String userName, String userEmail,
+			long updateUserId, String updateUserName, String updateEmail, String productCode, String name,
+			String description, Double sellerPrice, Double totalPrice, Double tax, long quantity, int status,
+			String imageIds, String vedioURL, long smallImage, String remark, double MRP, double itemWeight,
+			long itemTypeId, long itemTypeDocumentId) {
 
 		ShoppingItem shoppingItem = null;
 		try {
@@ -83,7 +83,11 @@ public class ShoppingItemLocalServiceImpl extends ShoppingItemLocalServiceBaseIm
 			shoppingItem.setProductCode(productCode);
 			shoppingItem.setName(name);
 			shoppingItem.setDescription(description);
-			shoppingItem.setSellerPrice(sellerPrice);
+			shoppingItem.setSellingPrice(sellerPrice);
+			shoppingItem.setMRP(MRP);
+			shoppingItem.setItemWeight(itemWeight);
+			shoppingItem.setItemTypeId(itemTypeId);
+			shoppingItem.setItemTypeDocumentId(itemTypeDocumentId);
 			shoppingItem.setTotalPrice(totalPrice);
 			shoppingItem.setTax(tax);
 			shoppingItem.setQuantity(quantity);
@@ -101,10 +105,12 @@ public class ShoppingItemLocalServiceImpl extends ShoppingItemLocalServiceBaseIm
 		}
 		return shoppingItem;
 	}
-	
-	public ShoppingItem updateItem(long itemId, long groupId, long companyId,
-			long userId, String userName, String userEmail ,long updateUserId, String updateUserName, String updateEmail , String productCode, String name, String description,
-			Double sellerPrice, Double totalPrice, Double tax, long quantity, int status, String imageIds, String vedioURL, long smallImage ,String remark) {
+
+	public ShoppingItem updateItem(long itemId, long groupId, long companyId, long userId, String userName,
+			String userEmail, long updateUserId, String updateUserName, String updateEmail, String productCode,
+			String name, String description, Double sellerPrice, Double totalPrice, Double tax, long quantity,
+			int status, String imageIds, String vedioURL, long smallImage, String remark, double MRP, double itemWeight,
+			long itemTypeId, long itemTypeDocumentId) {
 
 		ShoppingItem shoppingItem = null;
 		try {
@@ -121,17 +127,19 @@ public class ShoppingItemLocalServiceImpl extends ShoppingItemLocalServiceBaseIm
 			shoppingItem.setProductCode(productCode);
 			shoppingItem.setName(name);
 			shoppingItem.setDescription(description);
-			shoppingItem.setSellerPrice(sellerPrice);
+			shoppingItem.setSellingPrice(sellerPrice);
 			shoppingItem.setTotalPrice(totalPrice);
 			shoppingItem.setTax(tax);
 			shoppingItem.setQuantity(quantity);
 			shoppingItem.setStatus(status);
 			shoppingItem.setImageIds(imageIds);
 			shoppingItem.setVedioURL(vedioURL);
-			shoppingItem.setSellerPrice(sellerPrice);
 			shoppingItem.setModifiedDate(new Date());
 			shoppingItem.setRemark(remark);
-			
+			shoppingItem.setMRP(MRP);
+			shoppingItem.setItemWeight(itemWeight);
+			shoppingItem.setItemTypeId(itemTypeId);
+			shoppingItem.setItemTypeDocumentId(itemTypeDocumentId);
 			updateShoppingItem(shoppingItem);
 		} catch (SystemException e) {
 			_log.error(e);

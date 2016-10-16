@@ -211,33 +211,41 @@ public class DashboardPortlet extends MVCPortlet {
 		ThemeDisplay themeDisplay=(ThemeDisplay)uploadRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		PortletConfig portletConfig = (PortletConfig) actionRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
 		
+		boolean unlimitedQuantity = ParamUtil.getBoolean(uploadRequest, HConstants.UNILIMITED_QUANTITY);
+		
+		int status = ParamUtil.getInteger(uploadRequest, HConstants.status);
+		
 		long itemId = ParamUtil.getLong(uploadRequest, HConstants.ITEM_ID);
 		long userId  = ParamUtil.getLong(uploadRequest, "userId");
+		long currentUserId  = themeDisplay.getUserId();
+		long quantity = unlimitedQuantity ? -1 : ParamUtil.getLong(uploadRequest, HConstants.QUANTITY);
+		long categoryId = ParamUtil.getLong(uploadRequest, HConstants.CATEGORY_ID);
+		long itemTypeId = ParamUtil.getLong(uploadRequest, "itemType");
+		long itemTypeDocumentId = ParamUtil.getLong(uploadRequest, "itemTypeDocumentId");
+		
+		double itemWeight = ParamUtil.getDouble(uploadRequest, "itemWeight");
+		double MRP = ParamUtil.getDouble(uploadRequest, "MRP");
+		double sellingPrice = ParamUtil.getDouble(uploadRequest, HConstants.PRICE);
+		double totalPrice = ParamUtil.getDouble(uploadRequest, HConstants.TOTAL_PRICE);
+		double tax = ParamUtil.getDouble(uploadRequest, HConstants.TAX);
+		
 		String userName = ParamUtil.getString(uploadRequest, "userName");
 		String userEmail = ParamUtil.getString(uploadRequest, "emailId");
-		long currentUserId  = themeDisplay.getUserId();
 		String currentUserName = themeDisplay.getUser().getScreenName();
 		String currentUserEmail = themeDisplay.getUser().getEmailAddress();
 		String name = ParamUtil.getString(uploadRequest, HConstants.NAME);
 		String productCode = ParamUtil.getString(uploadRequest, HConstants.PRODUCT_CODE);
 		String description = ParamUtil.getString(uploadRequest, HConstants.DESCRIPTION);
-		Double sellerPrice = ParamUtil.getDouble(uploadRequest, HConstants.PRICE);
-		Double totalPrice = ParamUtil.getDouble(uploadRequest, HConstants.TOTAL_PRICE);
-		Double tax = ParamUtil.getDouble(uploadRequest, HConstants.TAX);
-		boolean unlimitedQuantity = ParamUtil.getBoolean(uploadRequest, HConstants.UNILIMITED_QUANTITY);
-		long quantity = unlimitedQuantity ? -1 : ParamUtil.getLong(uploadRequest, HConstants.QUANTITY);
-		long categoryId = ParamUtil.getLong(uploadRequest, HConstants.CATEGORY_ID);
 		String vedioURL = ParamUtil.getString(uploadRequest, HConstants.VEDIO_URL);
 		String staffRemark = ParamUtil.getString(uploadRequest, HConstants.STAFF_REMARKS, "Item Added");
+		String articleId = StringPool.BLANK;
+		String remark = StringPool.BLANK;
+		String addupdateMessage = (itemId == 0) ? "added" : "updated";
+		
 		List<Long> imageIds = new ArrayList<Long>();
 		ShoppingItem shoppingItem = null;
-		int status = ParamUtil.getInteger(uploadRequest, HConstants.status);
-		String articleId = StringPool.BLANK;
-		
-		String remark = StringPool.BLANK;
-		String addupdateMessage = (itemId == 0) ? "added" : "updated"; 
-		
 		ServiceContext serviceContext = null;
+		
 		try {
 			serviceContext = ServiceContextFactory.getInstance(ShoppingItem.class.getName(), actionRequest);
 		} catch (PortalException e) {
@@ -246,14 +254,49 @@ public class DashboardPortlet extends MVCPortlet {
 			e.printStackTrace();
 		}
 		
-		if (itemId == 0) {
+		File itemTypeDocument = uploadRequest.getFile("itemTypeDocument");
+		String itemTypeDocumentName = uploadRequest.getFileName("itemTypeDocument");
+		String itemTypeDocumentMimeType = MimeTypesUtil.getContentType(itemTypeDocumentName);
+		Folder folder = getFolder(themeDisplay, HConstants.ITEM_FOLDER_NAME);
 		
+		if (itemTypeDocumentId > 0) {
+			if (Validator.isNotNull(itemTypeDocument) && itemTypeDocument.exists()) {
+				try {
+					DLAppLocalServiceUtil.updateFileEntry(currentUserId, itemTypeDocumentId, itemTypeDocumentName,
+							itemTypeDocumentMimeType, itemTypeDocumentName + CounterLocalServiceUtil.increment(),
+							itemTypeDocumentName + CounterLocalServiceUtil.increment(), StringPool.BLANK, true,
+							itemTypeDocument, serviceContext);
+				} catch (PortalException e) {
+					e.printStackTrace();
+				} catch (SystemException e) {
+					e.printStackTrace();
+				}
+			}
+		} else if (Validator.isNotNull(itemTypeDocument) && itemTypeDocument.exists()) {
+			FileEntry fileEntry = null;
+			try {
+				fileEntry = DLAppLocalServiceUtil.addFileEntry(currentUserId,
+						themeDisplay.getScopeGroupId(), folder.getFolderId(), itemTypeDocumentName,
+						itemTypeDocumentMimeType,
+						itemTypeDocumentName + CounterLocalServiceUtil.increment(), StringPool.BLANK,
+						StringPool.BLANK, itemTypeDocument, serviceContext);
+			} catch (PortalException e) {
+				e.printStackTrace();
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			itemTypeDocumentId = fileEntry.getFileEntryId();
+		}
+		
+		if (itemId == 0) {
 			//Adding items 
+			
 			imageIds = saveFiles(uploadRequest, HConstants.IMAGE, HConstants.ITEM_FOLDER_NAME);
 			shoppingItem = ShoppingItemLocalServiceUtil.addItem(themeDisplay.getScopeGroupId(),
-					themeDisplay.getCompanyId(), currentUserId,currentUserName, currentUserEmail, currentUserId, StringPool.BLANK, StringPool.BLANK, productCode,
-					name, description, sellerPrice, sellerPrice, tax, quantity, WorkflowConstants.STATUS_PENDING,
-					StringUtil.merge(imageIds, StringPool.COMMA), vedioURL,  getSmallImageId(), StringPool.BLANK);
+					themeDisplay.getCompanyId(), currentUserId, currentUserName, currentUserEmail, currentUserId,
+					StringPool.BLANK, StringPool.BLANK, productCode, name, description, sellingPrice, sellingPrice, tax,
+					quantity, WorkflowConstants.STATUS_PENDING, StringUtil.merge(imageIds, StringPool.COMMA), vedioURL,
+					getSmallImageId(), StringPool.BLANK, MRP, itemWeight, itemTypeId, itemTypeDocumentId);
 			itemId = shoppingItem.getItemId();
 			ItemHistoryLocalServiceUtil.addItemHistory(itemId, currentUserId, currentUserName, currentUserEmail, HConstants.ITEM_ADDED, StringPool.BLANK);
 			articleId = HConstants.ITEM_ADDED_TEMPLATE;
@@ -303,8 +346,8 @@ public class DashboardPortlet extends MVCPortlet {
 			
 			shoppingItem = ShoppingItemLocalServiceUtil.updateItem(itemId,
 					themeDisplay.getScopeGroupId(), themeDisplay.getCompanyId(), userId, userName, userEmail, currentUserId, currentUserName, currentUserEmail,productCode, name,
-					description, sellerPrice, totalPrice, tax, quantity, status,
-					StringUtil.merge(imageIds, StringPool.COMMA), vedioURL, 0, remark);
+					description, sellingPrice, totalPrice, tax, quantity, status,
+					StringUtil.merge(imageIds, StringPool.COMMA), vedioURL, 0, remark, MRP, itemWeight, itemTypeId, itemTypeDocumentId);
 			ItemHistoryLocalServiceUtil.addItemHistory(itemId, currentUserId, currentUserName, currentUserEmail, status, staffRemark);
 			articleId = HConstants.ITEM_ADDED_UPDATED_TEMPLATE;
 			
@@ -321,7 +364,7 @@ public class DashboardPortlet extends MVCPortlet {
 		updateWholeSale(uploadRequest,itemId);
 		
 		String[] oldStr = {"[$USER_EMAIL$]", "[$USER_NAME$]", "[$ITEM_NAME$]", "[$PRODUCT_CODE$]", "[$DESCRIPTION$]", "[$TAX$]", "[$SELLER_PRICE$]", "[$QUANTITY$]"};
-		String[] newStr = {currentUserEmail, currentUserName, name, productCode, description, Double.toString(tax), Double.toString(sellerPrice), quantity == -1 ? "Unlimited Quantity" : String.valueOf(quantity)};
+		String[] newStr = {currentUserEmail, currentUserName, name, productCode, description, Double.toString(tax), Double.toString(sellingPrice), quantity == -1 ? "Unlimited Quantity" : String.valueOf(quantity)};
 		
 		NotificationUtil.sendNotification(themeDisplay.getScopeGroupId(), 
 				themeDisplay.getUser().getFullName(), themeDisplay.getUser().getEmailAddress(), articleId, oldStr, newStr);
@@ -518,7 +561,6 @@ public class DashboardPortlet extends MVCPortlet {
     	FileEntry fileEntry = null;
     	String contentType = StringPool.BLANK;
     	
-
 		for (int i = 0; i <= HConstants.IMAGES_UPLOAD_LIMIT; i++) {
 				
 				String  fileName = inputName+i;
@@ -533,10 +575,15 @@ public class DashboardPortlet extends MVCPortlet {
 			    	if(file.exists() && file.length() > 0) {
 			        	 contentType = MimeTypesUtil.getContentType(sourceFileName);	
 			        	 try {
-							fileEntry = DLAppLocalServiceUtil.addFileEntry(themeDisplay.getUserId(), repositoryId, folderId, sourceFileName, contentType, file.getName()+CounterLocalServiceUtil.increment(), StringPool.BLANK, StringPool.BLANK,  resizeImage(file, 600, 600), serviceContext);
+						fileEntry = DLAppLocalServiceUtil.addFileEntry(themeDisplay.getUserId(), repositoryId, folderId,
+								sourceFileName, contentType, file.getName() + CounterLocalServiceUtil.increment(),
+								StringPool.BLANK, StringPool.BLANK, resizeImage(file, 600, 600), serviceContext);
 							//Adding small Image
 							if(i == 1) {
-								FileEntry fileEntry2 =  DLAppLocalServiceUtil.addFileEntry(themeDisplay.getUserId(), repositoryId, folderId, sourceFileName+HConstants.SMALL_IMAGE, contentType, file.getName()+HConstants.SMALL_IMAGE+CounterLocalServiceUtil.increment(), StringPool.BLANK, StringPool.BLANK,  resizeImage(file, 300, 300), serviceContext);
+							FileEntry fileEntry2 = DLAppLocalServiceUtil.addFileEntry(themeDisplay.getUserId(),
+									repositoryId, folderId, sourceFileName + HConstants.SMALL_IMAGE, contentType,
+									file.getName() + HConstants.SMALL_IMAGE + CounterLocalServiceUtil.increment(),
+									StringPool.BLANK, StringPool.BLANK, resizeImage(file, 300, 300), serviceContext);
 								setSmallImageId(fileEntry2.getFileEntryId());	
 							}
 			        	 } catch (PortalException e) {

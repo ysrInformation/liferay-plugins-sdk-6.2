@@ -68,7 +68,9 @@
 		<column name="productCode" type="String" />
 		<column name="name" type="String" />
 		<column name="description" type="String" />
-		<column name="sellerPrice" type="Double" />
+		<column name="sellingPrice" type="Double" />
+		<column name="MRP" type="Double"/>
+		<column name="itemWeight" type="Double"/>
 		<column name="totalPrice" type="Double" />
 		<column name="tax" type="Double" />
 		<column name="quantity" type="long" />
@@ -79,12 +81,14 @@
 		<column name="vedioURL" type="String" />
 		<column name="smallImage" type="long" />
 		<column name="remark" type="String" />
-	
+		
+		<column name="itemTypeId" type="long"/>
+		<column name="itemTypeDocumentId" type="long"/>
+		
 		<!-- Relationships -->
  		
 		<column name="tags" type="Collection" entity="Tag" mapping-table="ShoppingItem_Tag"/>
 		<column name="categories" type="Collection" entity="Category" mapping-table="ShopppingItem_Category"/>
-	
 	
 		<!-- Order By -->
 	

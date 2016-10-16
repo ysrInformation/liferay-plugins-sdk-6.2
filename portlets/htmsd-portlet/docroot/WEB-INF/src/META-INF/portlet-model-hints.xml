@@ -75,7 +75,9 @@
 		<field name="description" type="String">
 			<hint name="max-length">40000</hint>
 		</field>
-		<field name="sellerPrice" type="Double" />
+		<field name="sellingPrice" type="Double" />
+		<field name="MRP" type="Double" />
+		<field name="itemWeight" type="Double" />
 		<field name="totalPrice" type="Double" />
 		<field name="tax" type="Double" />
 		<field name="quantity" type="long" />
@@ -86,6 +88,8 @@
 		<field name="vedioURL" type="String" />
 		<field name="smallImage" type="long" />
 		<field name="remark" type="String" />
+		<field name="itemTypeId" type="long" />
+		<field name="itemTypeDocumentId" type="long" />
 	</model>
 	<model name="com.htmsd.slayer.model.ShoppingItem_Cart">
 		<field name="id" type="long" />
