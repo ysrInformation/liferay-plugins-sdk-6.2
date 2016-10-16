@@ -1,3 +1,4 @@
+<%@page import="com.htmsd.slayer.service.SellerLocalServiceUtil"%>
 <%@include file="/html/common/init.jsp" %>
 
 <%@page import="com.liferay.portal.kernel.util.ListUtil"%>
@@ -50,4 +51,5 @@
 <%
 	boolean isAdmin = permissionChecker.isOmniadmin();
 	boolean isStaff = RoleLocalServiceUtil.hasUserRole(user.getUserId(), themeDisplay.getCompanyId(), HConstants.STAFF_ROLE, false);
+	boolean isSeller = SellerLocalServiceUtil.isSeller(themeDisplay.getUserId());
 %>

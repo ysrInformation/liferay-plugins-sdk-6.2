@@ -407,5 +407,28 @@
 			<finder-column name="userId"/>
 		</finder>
 	</entity>
+	
+	<entity name="Seller" local-service="true" remote-service="false">
+		<column name="sellerId" type="long" primary="true"/>
 
+		<!-- Group instance -->
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+		<column name="companyId" type="long" />
+		<column name="userId" type="long"/>
+		<column name="userName" type="String"/>
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<column name="name" type="String"/>
+		<column name="bankAccountNumber" type="long"/>
+		<column name="ifscCode" type="String"/>
+		<column name="TIN" type="String"/>
+		<column name="CST" type="String"/>
+		
+		<finder return-type="Collection" name="UserId">
+			<finder-column name="userId"/>
+		</finder>
+	</entity>
 </service-builder>

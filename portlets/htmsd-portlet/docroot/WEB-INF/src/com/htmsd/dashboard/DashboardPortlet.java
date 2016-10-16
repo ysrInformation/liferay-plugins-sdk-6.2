@@ -22,6 +22,7 @@ import com.htmsd.slayer.model.ShoppingItem;
 import com.htmsd.slayer.model.ShoppingOrder;
 import com.htmsd.slayer.service.CategoryLocalServiceUtil;
 import com.htmsd.slayer.service.ItemHistoryLocalServiceUtil;
+import com.htmsd.slayer.service.SellerLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingCartLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingItemLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
@@ -677,6 +678,41 @@ public class DashboardPortlet extends MVCPortlet {
 		ShoppingItemLocalServiceUtil.updateStock(itemId, quantity, themeDisplay.getUserId(), themeDisplay.getUser().getScreenName());
 		
 		actionResponse.sendRedirect(ParamUtil.getString(actionRequest, "redirectURL"));
+	}
+	
+	public void saveSellerDetails(ActionRequest actionRequest, ActionResponse actionResponse) {
+		
+		_log.info("saving seller details");
+		
+		long countryId = ParamUtil.getLong(actionRequest, "countryId");
+		long regionId = ParamUtil.getLong(actionRequest, "regionId");
+		long bankAccountNumber = ParamUtil.getLong(actionRequest, "bankAccountNumber");
+		
+		String street1 = ParamUtil.getString(actionRequest, "street1");
+		String street2 = ParamUtil.getString(actionRequest, "street2");
+		String street3 = ParamUtil.getString(actionRequest, "street3");
+		String city = ParamUtil.getString(actionRequest, "city");
+		String zip = ParamUtil.getString(actionRequest, "zip");
+		String tin = ParamUtil.getString(actionRequest, "tin");
+		String cst = ParamUtil.getString(actionRequest, "cst");
+		String companyName = ParamUtil.getString(actionRequest, "companyName");
+		String ifscCode = ParamUtil.getString(actionRequest, "ifsc-code");
+		
+		ThemeDisplay themeDisplay  = (ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		ServiceContext serviceContext = null;
+		
+		try {
+			serviceContext = ServiceContextFactory.getInstance(actionRequest);
+		} catch (PortalException e) {
+			_log.error(e);
+		} catch (SystemException e) {
+			_log.error(e);
+		}
+		
+		SellerLocalServiceUtil.update(0, themeDisplay.getUserId(), themeDisplay.getScopeGroupId(),
+				themeDisplay.getCompanyId(), themeDisplay.getContact().getContactId(), bankAccountNumber, countryId,
+				regionId, ifscCode, themeDisplay.getUser().getFullName(), companyName, tin, cst, street1, street2, street3, city, zip, serviceContext);
+		
 	}
 	
 	public long getSmallImageId() {

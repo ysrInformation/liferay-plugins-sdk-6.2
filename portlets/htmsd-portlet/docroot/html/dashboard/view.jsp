@@ -8,19 +8,25 @@
 <portlet:renderURL var="tabsURL">
 	<portlet:param name="tabs2" value="<%= tabs2 %>" />
 </portlet:renderURL>
-
 <c:choose>
-	<c:when test="<%=isAdmin || isStaff%>">
-		<jsp:include page="/html/dashboard/admin.jsp" />
+	<c:when test="<%= !isSeller %>">
+		<%@include file="/html/dashboard/businessinfo.jsp" %>
 	</c:when>
 	<c:otherwise>
-		<liferay-ui:tabs names="<%= tabNames %>" refresh="true" param="tab2" url="<%= tabsURL.toString() %>">
-			<c:if test='<%= tabs2.equalsIgnoreCase("Add Items") %>'>
-				<jsp:include page="/html/dashboard/user.jsp" />
-			</c:if>
-			<c:if test='<%= tabs2.equalsIgnoreCase("Orders") %>'>
-				<jsp:include page="/html/dashboard/orders.jsp" />
-			</c:if>
-		</liferay-ui:tabs>
+		<c:choose>
+			<c:when test="<%=isAdmin || isStaff%>">
+				<jsp:include page="/html/dashboard/admin.jsp" />
+			</c:when>
+			<c:otherwise>
+				<liferay-ui:tabs names="<%= tabNames %>" refresh="true" param="tab2" url="<%= tabsURL.toString() %>">
+					<c:if test='<%= tabs2.equalsIgnoreCase("Add Items") %>'>
+						<jsp:include page="/html/dashboard/user.jsp" />
+					</c:if>
+					<c:if test='<%= tabs2.equalsIgnoreCase("Orders") %>'>
+						<jsp:include page="/html/dashboard/orders.jsp" />
+					</c:if>
+				</liferay-ui:tabs>
+			</c:otherwise>
+		</c:choose>
 	</c:otherwise>
 </c:choose>

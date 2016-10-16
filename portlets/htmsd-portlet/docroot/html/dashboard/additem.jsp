@@ -223,8 +223,6 @@
 	</aui:form>
 </aui:fieldset>
 
-<%@include file="/html/dashboard/businessinfo.jspf" %>
-
 <script>
 	
 	$( document ).ready(function() {
@@ -320,7 +318,6 @@
 		$('#<portlet:namespace/>removebtn'+counter).show();
 	});
 	
-	
 	$('.removeclass').click(function(){
 		
 		var id = $(this).attr('id');
@@ -333,144 +330,10 @@
 		$('#<portlet:namespace/><%=HConstants.WHOLESALE_PRICE%>'+counter).val('');
 	});
 	
-	function getBusinessAddress() {
-		<%-- var cat = A.one('#<portlet:namespace/><%=HConstants.PARENT_CATEGORY_ID %>').attr('value'); --%>
-		
-		AUI().io.request('<%=getBusinessAddrURL%>', {
-			dataType: 'json',
-			async:false,
-			/* data: {
-				'<portlet:namespace/>categoryId' : cat
-			   }, */
-			  on: {
-			   success: function() {
-					if(this.get('responseData')[0] == 'false'){
-						AUI().use('aui-modal', function(A) {
-					        Liferay.Util.openWindow({
-					            dialog: {
-					                centered: true,
-					                modal: true,
-					                bodyContent : document.getElementById('businessDiv').innerHTML ,
-					                
-					                toolbars: {
-		    	   	 			          body: [
-		    	   	 			            {
-		    	   	 			              icon: 'glyphicon glyphicon-file',
-		    	   	 			              label: 'Ok',
-		    	   	 			         	  centered: true,
-			    	   	 			          on: {
-			    	   	 			            click: function() {
-			    	   	 			            	
-			    	   	 			            	var validForm = false;
-			    	   	 			            	 
-			    	   	 			            	validForm = validateBusinessForm(document.getElementById('<portlet:namespace/>businessForm').elements);
-			    	   	 			            	if(validForm) {
-			    	   	 			            	   AUI().use('aui-base','aui-io-request', 'aui-form-validator', 'aui-overlay-context-panel', function(A){
-					    	   	 			         		
-					    	   	 			            	A.io.request('<%=saveBusinessURl%>',{
-						    	   	 			           	 sync : true,
-						    	   	 			                dataType: 'json',
-						    	   	 			                form: { 
-						    	   	 			               	 	  id: '<portlet:namespace/>businessForm'
-						    	   	 			                }, 
-						    	   	 			                on: {
-						    	   	 			                success: function() {
-							    	   	 			                if(validForm) {
-							    	   	 			              	  var updateBusinessDialog=Liferay.Util.Window.getById('updateBusiness');
-							    	   	 			           	 		updateBusinessDialog.destroy();	
-							    	   	 			                }
-					    	   	 			                   		}
-						    	   	 			                }
-						    	   	 			            });
-					    	   	 			       		});
-			    	   	 			            	}
-				    	   	 			         
-			    	   	 			            }
-			    	   	 			          }
-			    	   	 			              
-		    	   	 			            },
-			    	   	 			        {
-			    	   	 			              icon: 'glyphicon glyphicon-file',
-			    	   	 			              label: 'Cancel',
-			    	   	 			         	  centered: true,
-				    	   	 			          on: {
-				    	   	 			            click: function() {
-				    	   	 			                var updateBusinessDialog=Liferay.Util.Window.getById('updateBusiness');
-				    	   	 			           	 	updateBusinessDialog.destroy();	
-				    	   	 			            }
-				    	   	 			          }
-				    	   	 			    }
-		    	   	 			          ]
-		    	   	 			        }
-					            },
-					            id: 'updateBusiness',
-					            title: Liferay.Language.get('Business Information'),
-					        });
-					       
-					    }); 
-						return false;
-					} 
-			   }
-			  }
-			});
-		
-	}
-	
 	function onAddItem() {
 		extractCodeFromEditor();
 	}
 	
-	function validateBusinessForm(form) {
-		
-		for(var i = 0 ; i <form.length; i++){
-			var name = 	form[i].name;
-			var value = form[i].value;
-			switch(name) {
-			
-				case "<portlet:namespace/>street1" : if(value.length >0 )  {
-														document.getElementById(name+'Err').style.display = "none";
-														break;
-													 }else{
-														document.getElementById(name+'Err').style.display = "block";
-														return false;
-													}
-				
-				case "<portlet:namespace/>companyName" : if(value.length >0 )  {
-														document.getElementById(name+'Err').style.display = "none";
-														break;
-													 }else{
-														document.getElementById(name+'Err').style.display = "block";
-														return false;
-													}
-				
-				
-				case "<portlet:namespace/>zip" : if(value.match(/^[0-9]{6}/))  {
-													document.getElementById(name+'Err').style.display = "none";
-													break;
-												}else{
-													document.getElementById(name+'Err').style.display = "block";
-													return false;
-												}
-				case "<portlet:namespace/>city" : 	if(value.match(/^[a-zA-Z]+$/))  {
-														document.getElementById(name+'Err').style.display = "none";
-														break;
-												}else{
-													document.getElementById(name+'Err').style.display = "block";
-													return false;
-												}
-				
-				/* case "<portlet:namespace/>tin" : 	if(value.match(/^[0-9]{9}/))  {
-														document.getElementById(name+'Err').style.display = "none";
-														break;
-													}else{
-														document.getElementById(name+'Err').style.display = "block";
-														return false;
-													} */
-					
-			}
-		}
-		return true;
-	}
 	function  <portlet:namespace />initEditor() {
 	    return "";
 	}
