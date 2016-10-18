@@ -229,12 +229,6 @@
 		$("img[src='']").hide();
 	});
 	
-	AUI().ready(function(A) {
-		 AUI().use('aui-base','aui-io-request', 'aui-form-validator', 'aui-overlay-context-panel', function(A){
-			getBusinessAddress();
-		 });
-	});
-	
 	function readURL(input,id) {
 	    if (input.files && input.files[0]) {
 	        var reader = new FileReader();
