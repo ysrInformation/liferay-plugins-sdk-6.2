@@ -96,7 +96,7 @@
 						<strong><liferay-ui:message key="ifsc-code" />:</strong><%=ifscCode%>
 					</div>
 					<div class="phone-number span4">
-						<strong><liferay-ui:message key="phone-number" />:</strong><%=user.getScreenName()%>
+						<strong><liferay-ui:message key="phone-number" />:</strong><%=sellerUser.getScreenName()%>
 					</div>
 				</div>
 				<div class="row-fluid">
