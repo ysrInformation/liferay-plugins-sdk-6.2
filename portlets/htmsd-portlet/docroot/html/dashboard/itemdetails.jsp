@@ -1,3 +1,4 @@
+<%@page import="com.htmsd.slayer.NoSuchSellerException"%>
 <%@page import="com.htmsd.slayer.model.Seller"%>
 <%@page import="com.liferay.portlet.documentlibrary.service.DLAppHelperLocalServiceUtil"%>
 <%@page import="com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil"%>
@@ -77,14 +78,24 @@
 
  		User sellerUser = UserLocalServiceUtil.fetchUser(item.getUserId());
  		List<Address> addressList = sellerUser.getAddresses();
-		
- 		Seller seller = SellerLocalServiceUtil.getSeller(item.getUserId());
+ 		Seller seller = null;
+ 		String companyName = StringPool.BLANK;
+ 		String cst = StringPool.BLANK;
+ 		String tin = StringPool.BLANK;
+ 		String bankAcountNumber = StringPool.BLANK;
+ 		String ifscCode = StringPool.BLANK;
+		try {
+			seller = SellerLocalServiceUtil.getSeller(item.getUserId());
+			companyName = seller.getName();
+	 		cst = seller.getCST();
+	 		tin = seller.getTIN();
+	 		bankAcountNumber = String.valueOf(seller.getBankAccountNumber());
+	 		ifscCode = seller.getIfscCode();
+		} catch (NoSuchSellerException e) {
+			out.print("<h2>Please Fill the Seller Details First</h2>");
+		}
  		
- 		String companyName = seller.getName();
- 		String cst = seller.getCST();
- 		String tin = seller.getTIN();
- 		long bankAcountNumber = seller.getBankAccountNumber();
- 		String ifscCode = seller.getIfscCode();
+ 		
  %>
 		<div class="seller-details">
 			<h3>Seller Details</h3>
