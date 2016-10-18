@@ -1,3 +1,4 @@
+<%@page import="com.htmsd.slayer.model.Seller"%>
 <%@page import="com.liferay.portlet.documentlibrary.service.DLAppHelperLocalServiceUtil"%>
 <%@page import="com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil"%>
 <%@page import="com.liferay.portal.kernel.repository.model.FileEntry"%>
@@ -74,27 +75,41 @@
  		}
  		int status = item.getStatus();
 
- 		User seller = UserLocalServiceUtil.fetchUser(item.getUserId());
- 		List<Address> addressList = user.getAddresses();
-
- 		String companyName = CommonUtil.getUserExpandoValue(seller, HConstants.COMPANY_NAME);
- 		String cst = CommonUtil.getUserExpandoValue(seller, HConstants.CST);
- 		String tin = CommonUtil.getUserExpandoValue(seller, HConstants.TIN);
+ 		User sellerUser = UserLocalServiceUtil.fetchUser(item.getUserId());
+ 		List<Address> addressList = sellerUser.getAddresses();
+		
+ 		Seller seller = SellerLocalServiceUtil.getSeller(item.getUserId());
+ 		
+ 		String companyName = seller.getName();
+ 		String cst = seller.getCST();
+ 		String tin = seller.getTIN();
+ 		long bankAcountNumber = seller.getBankAccountNumber();
+ 		String ifscCode = seller.getIfscCode();
  %>
 		<div class="seller-details">
 			<h3>Seller Details</h3>
-			<div class="seller-company row-fluid">
-				<div class="phone-number span3">
-					<strong><liferay-ui:message key="phone-number"/>:</strong><%= user.getScreenName() %>
+			<div class="seller-company ">
+				<div class="row-fluid">
+					<div class="bank-account-number span4">
+						<strong><liferay-ui:message key="bank-account-number" />:</strong><%=bankAcountNumber%>
+					</div>
+					<div class="ifsc-code span4">
+						<strong><liferay-ui:message key="ifsc-code" />:</strong><%=ifscCode%>
+					</div>
+					<div class="phone-number span4">
+						<strong><liferay-ui:message key="phone-number" />:</strong><%=user.getScreenName()%>
+					</div>
 				</div>
-				<div class="company-name span3">
-					<strong><liferay-ui:message key="company-name"/>:</strong><%= companyName %>
-				</div>
-				<div class="tin span3">
-					<strong><liferay-ui:message key="tin"/>:</strong><%= tin %>
-				</div>
-				<div class="cst span3">
-					<strong><liferay-ui:message key="cst"/>:</strong><%= cst %>
+				<div class="row-fluid">
+					<div class="company-name span4">
+						<strong><liferay-ui:message key="company-name"/>:</strong><%= companyName %>
+					</div>
+					<div class="tin span4">
+						<strong><liferay-ui:message key="tin"/>:</strong><%= tin %>
+					</div>
+					<div class="cst span4">
+						<strong><liferay-ui:message key="cst"/>:</strong><%= cst %>
+					</div>
 				</div>
 			</div>
 			<div class="seller-addresses">
