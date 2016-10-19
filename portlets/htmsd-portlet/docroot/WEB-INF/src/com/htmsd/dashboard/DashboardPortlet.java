@@ -16,6 +16,8 @@ import javax.portlet.PortletException;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
+import org.imgscalr.Scalr;
+
 import com.htmsd.addresscapture.AddressCapture;
 import com.htmsd.slayer.model.Category;
 import com.htmsd.slayer.model.ShoppingItem;
@@ -501,13 +503,13 @@ public class DashboardPortlet extends MVCPortlet {
 						DLAppLocalServiceUtil.updateFileEntry(
 								themeDisplay.getUserId(), fileEntryId,
 								sourceFileName, contentType, file.getName()+CounterLocalServiceUtil.increment(),
-								sourceFileName, StringPool.BLANK, true, resizeImage(file, 600, 600),
+								sourceFileName, StringPool.BLANK, true, resizeImage(file, 600),
 								serviceContext);
 						if(i == 1) {
 						DLAppLocalServiceUtil.updateFileEntry(
 								themeDisplay.getUserId(), ParamUtil.getLong(uploadRequest, HConstants.SMALL_IMAGE),
 								sourceFileName, contentType, sourceFileName+HConstants.SMALL_IMAGE+CounterLocalServiceUtil.increment(),
-								sourceFileName+HConstants.SMALL_IMAGE, StringPool.BLANK, true, resizeImage(file, 100, 100),
+								sourceFileName+HConstants.SMALL_IMAGE, StringPool.BLANK, true, resizeImage(file, 300),
 								serviceContext);
 					}
 					} catch (PortalException e) {
@@ -578,13 +580,13 @@ public class DashboardPortlet extends MVCPortlet {
 			        	 try {
 						fileEntry = DLAppLocalServiceUtil.addFileEntry(themeDisplay.getUserId(), repositoryId, folderId,
 								sourceFileName, contentType, file.getName() + CounterLocalServiceUtil.increment(),
-								StringPool.BLANK, StringPool.BLANK, resizeImage(file, 600, 600), serviceContext);
+								StringPool.BLANK, StringPool.BLANK, resizeImage(file, 600), serviceContext);
 							//Adding small Image
 							if(i == 1) {
 							FileEntry fileEntry2 = DLAppLocalServiceUtil.addFileEntry(themeDisplay.getUserId(),
 									repositoryId, folderId, sourceFileName + HConstants.SMALL_IMAGE, contentType,
 									file.getName() + HConstants.SMALL_IMAGE + CounterLocalServiceUtil.increment(),
-									StringPool.BLANK, StringPool.BLANK, resizeImage(file, 300, 300), serviceContext);
+									StringPool.BLANK, StringPool.BLANK, resizeImage(file, 300), serviceContext);
 								setSmallImageId(fileEntry2.getFileEntryId());	
 							}
 			        	 } catch (PortalException e) {
@@ -608,7 +610,7 @@ public class DashboardPortlet extends MVCPortlet {
 	 * @param height
 	 * @return
 	 */
-	private File resizeImage(File file, int width, int height) {
+	private File resizeImage(File file, int size) {
 		
 		BufferedImage bufferedOriginalImage = null;
 		try {
@@ -618,15 +620,8 @@ public class DashboardPortlet extends MVCPortlet {
 		} 
 		if(Validator.isNotNull(bufferedOriginalImage)) {
 			
-			if(width == 0 || height == 0) {
-				width = bufferedOriginalImage.getWidth();
-				height = bufferedOriginalImage.getHeight();
-			}
 			int type = bufferedOriginalImage.getType() == 0? BufferedImage.TYPE_INT_ARGB : bufferedOriginalImage.getType();
-			BufferedImage bufferedCompressedImage = new BufferedImage(width, height, type);
-			Graphics2D graphics2d = bufferedCompressedImage.createGraphics();
-			graphics2d.drawImage(bufferedOriginalImage, 0, 0, width, height, null);
-			graphics2d.dispose();
+			BufferedImage bufferedCompressedImage = Scalr.resize(bufferedOriginalImage, size);
 			
 			try {
 				ImageIO.write(bufferedCompressedImage, "jpg", file);
@@ -636,7 +631,6 @@ public class DashboardPortlet extends MVCPortlet {
 		}
 		return file;
 	}
-
 
 	/**
 	 * Method to getFolder return the folde with respected name or create folder and return id

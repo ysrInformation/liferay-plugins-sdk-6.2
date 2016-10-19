@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+ <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
 <service-builder package-path="com.htmsd.slayer">
 	<author>YSR</author>
@@ -430,5 +430,74 @@
 		<finder return-type="Collection" name="UserId">
 			<finder-column name="userId"/>
 		</finder>
+	</entity>
+	
+	<entity name="City" local-service="true" remote-service="false">
+		<column name="cityId" type="long" primary="true"/>
+		<column name="regionId" type="long"/>		
+		<column name="name" type="String"/>
+		
+		<finder return-type="City" name="Name">
+			<finder-column name="name"/>
+		</finder>
+		
+		<finder return-type="City" name="RegionIdAndName">
+			<finder-column name="regionId"/>
+			<finder-column name="name"/>
+		</finder>		
+	</entity>
+	
+	<entity name="CityArea" local-service="true" remote-service="false">
+		<column name="cityAreaId" type="long" primary="true"/>
+		<column name="cityId" type="long"/>
+		<column name="postalCode" type="long"/>
+		<column name="location" type="String"/>
+		
+		<finder return-type="Collection" name="PostalCode">
+			<finder-column name="postalCode"/>
+		</finder>
+		
+		<finder return-type="Collection" name="CityIdAndCode">
+			<finder-column name="cityId"/>
+			<finder-column name="postalCode"/>
+		</finder>
+	</entity>
+	
+	<entity name="Zone" local-service="true" remote-service="false">
+		<column name="zoneId" type="long" primary="true" />
+		<column name="name" type="String"/>
+	</entity>
+	
+	<entity name="ZonePostalCode" local-service="true" remote-service="false">
+		<column name="zpcId" type="long" primary="true"/>
+		<column name="zoneId" type="long"/>
+		<column name="postalCodeId" type="long"/>
+		
+		<finder return-type="Collection" name="ZoneId">
+			<finder-column name="zoneId"/>
+		</finder>
+	</entity>
+
+	<entity name="PriceType">
+		<column name="priceTypeId" type="long" primary="true"/>
+		<column name="name" type="String"/>
+	</entity>
+
+	<entity name="Price" local-service="true" remote-service="false">
+		<column name="priceId" type="long" primary="true"/>
+		<column name="categoryId" type="long"/>
+		<column name="zoneId" type="long"/>
+		<column name="priceTypeId" type="long"/>
+		<column name="weightRangeFrom" type="Double"/>
+		<column name="weightRangeTo" type="Double"/>
+		<column name="price" type="Double"/>
+		<column name="createdDate" type="Date"/>
+		<column name="modifiedDate" type="Date"/>
+	</entity>
+	
+	<entity name="Commision" remote-service="true" local-service="false">
+		<column name="commisionId" type="long" primary="true"/>
+		<column name="categoryId" type="long"/>
+		<column name="percent" type="Double"/>
 	</entity>
 </service-builder>
