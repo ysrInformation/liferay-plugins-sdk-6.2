@@ -37,48 +37,48 @@
 				<aui:input name="addressId" type="hidden" value="<%= _userInfo.getShippingAddressId() %>" /> 
 				<aui:input name="userInfoId" type="hidden" value="<%= userInfoId %>" />
 				
-				<aui:input type="text" name="firstName" value="<%= _userInfo.getFirstName()  %>" inlineField="true">
+				<aui:input type="text" name="firstName" value="<%= _userInfo.getFirstName()  %>">
 					<aui:validator name="required"/>
 				</aui:input>
 				
-				<aui:input type="text" name="lastName" value="<%= _userInfo.getLastName() %>" inlineField="true">
+				<aui:input type="text" name="lastName" value="<%= _userInfo.getLastName() %>">
 					<aui:validator name="required"/>
 				</aui:input>
 				
-				<aui:input type="email" name="email" value="<%= _userInfo.getEmail() %>" inlineField="true">
+				<aui:input type="email" name="email" value="<%= _userInfo.getEmail() %>">
 					<aui:validator name="required"/>
 				</aui:input>
 				
-				<aui:input type="text" name="mobileNumber" label="mobile-number" inlineField="true" value="<%= _userInfo.getMobileNumber()  %>" required="true" maxLength="10">
+				<aui:input type="text" name="mobileNumber" label="mobile-number" value="<%= _userInfo.getMobileNumber()  %>" required="true" maxLength="10">
 					<aui:validator name="digits"/>
 			        <aui:validator name="rangeLength" errorMessage="please-enter-valid-mobile-number">[10,10]</aui:validator>
 				</aui:input>
 				
-				<aui:input type="text" name="altNumber" label="alt-number" inlineField="true" maxLength="10" value="<%= _userInfo.getAltNumber() %>"> 
+				<aui:input type="text" name="altNumber" label="alt-number" maxLength="10" value="<%= _userInfo.getAltNumber() %>"> 
 					<aui:validator name="digits"/>
 			        <aui:validator name="rangeLength" errorMessage="please-enter-valid-mobile-number">[10,10]</aui:validator>
 				</aui:input>
 				
 				<div class="checkout-shipping-address">
 					<p class="page-heading shippingAdress"><liferay-ui:message key="checkout-label-shipping-address"/></p>
-					<aui:input type="text" name="street" inlineField="true" label="street" value="<%= street %>">
+					<aui:input type="text" name="street" label="street" value="<%= street %>">
 						<aui:validator name="required"/>
 					</aui:input>
 					
-					<aui:input type="text" name="city" inlineField="true" label="city" value="<%= city %>">
+					<aui:input type="text" name="city" label="city" value="<%= city %>">
 						<aui:validator name="required"/>
 					</aui:input>
 					
-					<aui:input type="text" name="zip" inlineField="true" label="post-code" required="true" value="<%= zip %>" maxLength="6">
+					<aui:input type="text" name="zip" label="post-code" required="true" value="<%= zip %>" maxLength="6">
 						<aui:validator name="digits" />
 				        <aui:validator name="rangeLength" errorMessage="please-enter-valid-pincode-number">[6,6]</aui:validator>
 					</aui:input>
 					
-					<aui:select name="country" inlineField="true" label="country" id="country" required="true"/>
+					<aui:select name="country" label="country" id="country" required="true"/>
 					
-					<aui:select name="state" label="state" inlineField="true" id="state" required="true"/> 
+					<aui:select name="state" label="state" id="state" required="true"/> 
 					
-					<aui:select name="typeId" label="checkout-address-type" inlineField="true">
+					<aui:select name="typeId" label="checkout-address-type">
 						<% for (ListType listType : listTypes) { %> 
 							<aui:option value="<%= listType.getListTypeId() %>" label="<%= TextFormatter.format(listType.getName(), TextFormatter.J) %>"
 								selected='<%= (listTypeId == listType.getListTypeId()) %>' />
