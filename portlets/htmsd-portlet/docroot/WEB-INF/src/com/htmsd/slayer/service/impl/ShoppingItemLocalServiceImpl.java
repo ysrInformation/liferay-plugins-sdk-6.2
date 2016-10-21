@@ -536,7 +536,7 @@ public class ShoppingItemLocalServiceImpl extends ShoppingItemLocalServiceBaseIm
 	}
 	
 	public String[] getAutoCompleteItems(){
-		List<ShoppingItem> shoppingItems = null;
+		List<ShoppingItem> shoppingItems = new ArrayList<ShoppingItem>();
 		try {
 			shoppingItems = ShoppingItemLocalServiceUtil.getShoppingItems(-1, shoppingItemLocalService.getShoppingItemsCount());
 		} catch (SystemException e) {
