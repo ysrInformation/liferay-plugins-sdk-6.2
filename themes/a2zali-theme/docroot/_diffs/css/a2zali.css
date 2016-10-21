@@ -452,6 +452,12 @@ li.currency select {
 	border-radius: 0;
 	float: left !important;
 	padding: 20px;
+	top: 38px;
+}
+
+#navigation li > ul.child-menu .row-fluid {
+	width: 700px;
+	margin-bottom: 2%;
 }
 
 #navigation li ul.child-menu > li {
@@ -1055,4 +1061,17 @@ form#searchbox .button.button-small i {
 
 .lfr-hudcrumbs {
 	display: none !important;
+}
+
+.shoppingItemDetails.row-fluid .span7 {
+	margin-left: 10px;
+}
+
+#breadcrumbs {
+	margin-bottom: 2%;
+}
+
+.checkout-address-form .control-group label {
+ 	display: inline-block;
+	width: 25%;
 }
