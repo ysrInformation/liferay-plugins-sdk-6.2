@@ -1,3 +1,5 @@
+<%@page import="com.htmsd.slayer.service.ItemTypeLocalServiceUtil"%>
+<%@page import="com.htmsd.slayer.model.ItemType"%>
 <%@include file="/html/dashboard/init.jsp" %>
 
 <portlet:resourceURL  id="getCategoryId"  var="getCategoryURL"/>
@@ -107,8 +109,13 @@
 		<aui:layout>
 			<aui:column>
 				<aui:select name="itemType" label="Type" required="true" showEmptyOption="true" helpMessage="item-type-help-message">
-					<aui:option value="1" label="Hand Made"/>
-					<aui:option value="2" label="Branded"/>
+					<%
+						for (ItemType itemType : ItemTypeLocalServiceUtil.getItemTypes(-1, -1)) {
+							%>
+								<aui:option value="<%=itemType.getItemTypeId() %>" label="<%=itemType.getName() %>"/>		 
+							<%
+						}
+					%>
 				</aui:select>
 			</aui:column>
 			<aui:column>

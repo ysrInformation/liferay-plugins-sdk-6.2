@@ -1,3 +1,5 @@
+<%@page import="com.htmsd.slayer.service.ItemTypeLocalServiceUtil"%>
+<%@page import="com.htmsd.slayer.model.ItemType"%>
 <%@page import="com.htmsd.slayer.model.Seller"%>
 <%@page import="com.liferay.portlet.documentlibrary.service.DLAppHelperLocalServiceUtil"%>
 <%@page import="com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil"%>
@@ -82,78 +84,87 @@
  		String companyName = seller.getName();
  		String cst = seller.getCST();
  		String tin = seller.getTIN();
+ 		String bankName = seller.getBankName();
  		long bankAcountNumber = seller.getBankAccountNumber();
  		String ifscCode = seller.getIfscCode();
  %>
 		<div class="seller-details">
-			<h3>Seller Details</h3>
-			<div class="seller-company ">
-				<div class="row-fluid">
-					<div class="bank-account-number span4">
-						<strong><liferay-ui:message key="bank-account-number" />:</strong><%=bankAcountNumber%>
-					</div>
-					<div class="ifsc-code span4">
-						<strong><liferay-ui:message key="ifsc-code" />:</strong><%=ifscCode%>
-					</div>
-					<div class="phone-number span4">
-						<strong><liferay-ui:message key="phone-number" />:</strong><%=sellerUser.getScreenName()%>
+			<aui:fieldset label="seller-details">
+				<div class="seller-company ">
+					<div class="row-fluid">
+						<div class="span6">
+							<div class="bank-account-number">
+								<strong><liferay-ui:message key="bank-name" />: </strong><%=bankName%>
+							</div>
+							<div class="bank-account-number">
+								<strong><liferay-ui:message key="bank-account-number" />: </strong><%=bankAcountNumber%>
+							</div>
+							<div class="ifsc-code">
+								<strong><liferay-ui:message key="ifsc-code" />: </strong><%=ifscCode%>
+							</div>
+							<div class="phone-number">
+								<strong><liferay-ui:message key="phone-number" />: </strong><%=sellerUser.getScreenName()%>
+							</div>
+						</div>
+						<div class="span6">
+							<div class="company-name">
+								<strong><liferay-ui:message key="company-name"/>: </strong><%= companyName %>
+							</div>
+							<div class="tin">
+								<strong><liferay-ui:message key="tin"/>: </strong><%= tin %>
+							</div>
+							<div class="cst">
+								<strong><liferay-ui:message key="cst"/>: </strong><%= cst %>
+							</div>
+						</div>
 					</div>
 				</div>
-				<div class="row-fluid">
-					<div class="company-name span4">
-						<strong><liferay-ui:message key="company-name"/>:</strong><%= companyName %>
-					</div>
-					<div class="tin span4">
-						<strong><liferay-ui:message key="tin"/>:</strong><%= tin %>
-					</div>
-					<div class="cst span4">
-						<strong><liferay-ui:message key="cst"/>:</strong><%= cst %>
+			</aui:fieldset>
+			<aui:fieldset label="seller-addresses">
+				<div class="seller-addresses">
+					<div class="address row-fluid">
+						<%
+							for (Address address : addressList) {
+								String primaryCss = address.isPrimary() ? "primary-address" : StringPool.BLANK;
+								%>
+									<div class="span3 <%=primaryCss%>">
+										<div class="street1">
+											<strong><liferay-ui:message key="street1"/>:</strong><%=address.getStreet1() %>
+										</div>
+										<%
+											if (Validator.isNotNull(address.getStreet2()) && !address.getStreet2().isEmpty()) {
+												%>
+													<div class="street2">
+														<strong><liferay-ui:message key="street2"/>:</strong><%=address.getStreet2() %>
+													</div>
+												<%
+											}
+										%>	
+										<%
+											if (Validator.isNotNull(address.getStreet3()) && !address.getStreet3().isEmpty()) {
+												%>
+													<div class="street3">
+														<strong><liferay-ui:message key="street3"/>:</strong><%=address.getStreet3() %>
+													</div>
+												<%
+											}
+										%>
+										<div class="country">
+											<strong><liferay-ui:message key="country"/>:</strong><%=address.getCountry().getName() %>
+										</div>
+										<div class="city">
+											<strong><liferay-ui:message key="city"/>:</strong><%=address.getCity() %>
+										</div>
+										<div class="zip">
+											<strong><liferay-ui:message key="postal-code"/>:</strong><%=address.getZip() %>
+										</div>
+									</div>
+								<%
+							}
+						%>
 					</div>
 				</div>
-			</div>
-			<div class="seller-addresses">
-				<div class="address row-fluid">
-					<%
-						for (Address address : addressList) {
-							String primaryCss = address.isPrimary() ? "primary-address" : StringPool.BLANK;
-							%>
-								<div class="span3 <%=primaryCss%>">
-									<div class="street1">
-										<strong><liferay-ui:message key="street1"/>:</strong><%=address.getStreet1() %>
-									</div>
-									<%
-										if (Validator.isNotNull(address.getStreet2()) && !address.getStreet2().isEmpty()) {
-											%>
-												<div class="street2">
-													<strong><liferay-ui:message key="street2"/>:</strong><%=address.getStreet2() %>
-												</div>
-											<%
-										}
-									%>	
-									<%
-										if (Validator.isNotNull(address.getStreet3()) && !address.getStreet3().isEmpty()) {
-											%>
-												<div class="street3">
-													<strong><liferay-ui:message key="street3"/>:</strong><%=address.getStreet3() %>
-												</div>
-											<%
-										}
-									%>
-									<div class="country">
-										<strong><liferay-ui:message key="country"/>:</strong><%=address.getCountry().getName() %>
-									</div>
-									<div class="city">
-										<strong><liferay-ui:message key="city"/>:</strong><%=address.getCity() %>
-									</div>
-									<div class="zip">
-										<strong><liferay-ui:message key="postal-code"/>:</strong><%=address.getZip() %>
-									</div>
-								</div>
-							<%
-						}
-					%>
-				</div>
-			</div>
+			</aui:fieldset>
 		</div>
 	
 		<liferay-ui:header title='<%=isAdmin ? "update-item" : "view-item" %>' backLabel="go-back" backURL='<%=backURL%>'/>
@@ -295,8 +306,13 @@
 			<aui:layout>
 				<aui:column>
 					<aui:select name="itemType" label="Type" required="true" showEmptyOption="true" helpMessage="item-type-help-message" >
-						<aui:option value="1" label="Hand Made" selected="<%= item.getItemTypeId() == 1 ? true : false %>"/>
-						<aui:option value="2" label="Branded" selected="<%= item.getItemTypeId() == 2 ? true : false %>"/>
+						<%
+							for (ItemType itemType : ItemTypeLocalServiceUtil.getItemTypes(-1, -1)) {
+								%>
+									<aui:option value="<%=itemType.getItemTypeId() %>" label="<%=itemType.getName() %>" selected="<%= item.getItemTypeId() == itemType.getItemTypeId() ? true : false %>"/>		 
+								<%
+							}
+						%>
 					</aui:select>
 				</aui:column>
 				<aui:column>

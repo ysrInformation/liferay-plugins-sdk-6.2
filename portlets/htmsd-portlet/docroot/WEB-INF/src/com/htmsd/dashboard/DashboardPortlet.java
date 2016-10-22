@@ -691,7 +691,7 @@ public class DashboardPortlet extends MVCPortlet {
 		String cst = ParamUtil.getString(actionRequest, "cst");
 		String companyName = ParamUtil.getString(actionRequest, "companyName");
 		String ifscCode = ParamUtil.getString(actionRequest, "ifsc-code");
-		
+		String bankName = ParamUtil.getString(actionRequest, "bankName");
 		ThemeDisplay themeDisplay  = (ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		ServiceContext serviceContext = null;
 		
@@ -705,8 +705,9 @@ public class DashboardPortlet extends MVCPortlet {
 		
 		SellerLocalServiceUtil.update(0, themeDisplay.getUserId(), themeDisplay.getScopeGroupId(),
 				themeDisplay.getCompanyId(), themeDisplay.getContact().getContactId(), bankAccountNumber, countryId,
-				regionId, ifscCode, themeDisplay.getUser().getFullName(), companyName, tin, cst, street1, street2, street3, city, zip, serviceContext);
-		
+				regionId, ifscCode, themeDisplay.getUser().getFullName(), companyName, tin, cst, street1, street2,
+				street3, city, zip, bankName, serviceContext);
+
 		SessionMessages.add(actionRequest, "request_processed","Your Details have been saved Save Thank you!!");
 	}
 	

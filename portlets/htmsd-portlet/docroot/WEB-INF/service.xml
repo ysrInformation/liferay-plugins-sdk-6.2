@@ -408,6 +408,12 @@
 		</finder>
 	</entity>
 	
+	<entity name="ItemType" local-service="true" remote-service="false">
+		<column name="itemTypeId" type="long" primary="true"/>
+		<column name="name" type="String" />
+		<column name="documentRequired" type="boolean" />
+	</entity>
+	
 	<entity name="Seller" local-service="true" remote-service="false">
 		<column name="sellerId" type="long" primary="true"/>
 
@@ -422,6 +428,7 @@
 		<column name="modifiedDate" type="Date" />
 
 		<column name="name" type="String"/>
+		<column name="bankName" type="String"/>
 		<column name="bankAccountNumber" type="long"/>
 		<column name="ifscCode" type="String"/>
 		<column name="TIN" type="String"/>

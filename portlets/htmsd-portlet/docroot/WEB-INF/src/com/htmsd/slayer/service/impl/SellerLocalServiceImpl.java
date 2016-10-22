@@ -55,7 +55,7 @@ public class SellerLocalServiceImpl extends SellerLocalServiceBaseImpl {
 	
 	public Seller update(long sellerId, long userId, long groupId, long companyId, long contactId,
 			long bankAccountNumber, long countryId, long regionId,String userName, String ifscCode, String name, String TIN, String CST,
-			String street1, String street2, String street3, String city, String zip, ServiceContext serviceContext) {
+			String street1, String street2, String street3, String city, String zip, String bankName, ServiceContext serviceContext) {
 		Seller seller = null;
 		
 		if (sellerId > 0) {
@@ -79,6 +79,7 @@ public class SellerLocalServiceImpl extends SellerLocalServiceBaseImpl {
 		seller.setModifiedDate(Calendar.getInstance().getTime());
 		seller.setName(name);
 		seller.setUserName(userName);
+		seller.setBankName(bankName);
 		seller.setBankAccountNumber(bankAccountNumber);
 		seller.setIfscCode(ifscCode);
 		seller.setTIN(TIN);

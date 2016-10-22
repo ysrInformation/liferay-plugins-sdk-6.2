@@ -5,6 +5,7 @@
 <aui:form id="businessForm" name="businessForm" action="${saveSellerURL}" >
 	<aui:fieldset>
 		<aui:col width="<%= 50 %>">
+			<aui:input name="bankName" required="true" />
 			<aui:input name="bankAccountNumber" required="true" />
 			<aui:input name="companyName" required="true" />
 			<aui:input  name="street1" required="true" />

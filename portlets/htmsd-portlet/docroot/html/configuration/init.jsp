@@ -24,7 +24,3 @@
 
 <portlet:defineObjects />
 <liferay-theme:defineObjects/>
-
-
-
-

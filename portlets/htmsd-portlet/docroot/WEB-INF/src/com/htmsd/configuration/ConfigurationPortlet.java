@@ -7,8 +7,11 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 
+import com.htmsd.slayer.model.ItemType;
 import com.htmsd.slayer.service.CategoryLocalServiceUtil;
+import com.htmsd.slayer.service.ItemTypeLocalServiceUtil;
 import com.htmsd.util.HConstants;
+import com.itextpdf.text.log.SysoCounter;
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -129,6 +132,30 @@ public class ConfigurationPortlet extends MVCPortlet {
 			}
 		}
 		actionResponse.setRenderParameter("tab1", "Tags");
-	}	
+	}
+	
+	public void saveItemType(ActionRequest actionRequest, ActionResponse actionResponse)
+			throws IOException, PortletException {
+		String name = ParamUtil.getString(actionRequest, "name");
+		boolean documentRequired = ParamUtil.getBoolean(actionRequest, "documentRequired");
+		long itemTypeId = ParamUtil.getLong(actionRequest, "itemTypeId");
+		ItemTypeLocalServiceUtil.update(itemTypeId, name, documentRequired);
+		actionResponse.setRenderParameter("tab1", "Item Types");
+	}
+	
+	public void deleteItemType(ActionRequest actionRequest, ActionResponse actionResponse)
+			throws IOException, PortletException {
+		long itemTypeId = ParamUtil.getLong(actionRequest, "itemTypeId");
+		
+		try {
+			ItemTypeLocalServiceUtil.deleteItemType(itemTypeId);
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		actionResponse.setRenderParameter("tab1", "Item Types");
+	}
+	
 	private Log _log = LogFactoryUtil.getLog(ConfigurationPortlet.class);
 }
