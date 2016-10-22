@@ -452,11 +452,19 @@ li.currency select {
 	border-radius: 0;
 	float: left !important;
 	padding: 20px;
-	top: 38px;
+	/* top: 38px; */
+    left: 379px;
+    margin: 0 auto;
+    position: fixed;
+    top: 152px;
+    width: 63%;
+}
+
+.sticky #navigation li > ul.child-menu {
+	top: 54px;
 }
 
 #navigation li > ul.child-menu .row-fluid {
-	width: 700px;
 	margin-bottom: 2%;
 }
 
@@ -571,7 +579,6 @@ li.langPortlet form select {
 
 #navigation .nav-collapse > li:hover > ul.child-menu {
 	display: block;
-	top: 38px;
 }
 
 #navigation ul li a {
@@ -867,12 +874,21 @@ a.icon_wrap.disabled, .icon_wrap.disabled {
 	color: #888;
 }
 
-.shoppingItemDetails .span8 .descriptionTabContent {
+.shoppingItemDetails .span7 .descriptionTabContent {
 	background: #222;
 	color: #888;
 	font-family: tahoma;
     font-size: 12px;
 	padding-left: 4%;
+}
+
+.descriptionTabContent p {
+	margin: 0;
+}
+
+.descriptionTabContent {
+	padding-left: 2%;
+	padding-top: 2%;
 }
 
 .new-checkout ul.step li a, ul.step li span {
@@ -1071,7 +1087,16 @@ form#searchbox .button.button-small i {
 	margin-bottom: 2%;
 }
 
+.checkout-thanks-message h2 {
+	font-family: Raleway;
+	font-size: 24px;
+}
+
 .checkout-address-form .control-group label {
  	display: inline-block;
 	width: 25%;
+}
+
+.swiper-button-next, .swiper-button-prev {
+	height: 20px;
 }
