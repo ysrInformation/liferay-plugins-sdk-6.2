@@ -323,4 +323,68 @@
 			<role-name>user</role-name>
 		</security-role-ref>
 	</portlet>
+	<portlet>
+		<portlet-name>pricing</portlet-name>
+		<display-name>Pricing</display-name>
+		<portlet-class>com.htmsd.pricing.PricingPortlet</portlet-class>
+		<init-param>
+			<name>view-template</name>
+			<value>/html/pricing/view.jsp</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<resource-bundle>content.Language</resource-bundle>
+		<portlet-info>
+			<title>Pricing</title>
+			<short-title>Pricing</short-title>
+			<keywords></keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>power-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+	</portlet>
+	<portlet>
+		<portlet-name>pick-up</portlet-name>
+		<display-name>Pick Up</display-name>
+		<portlet-class>com.htmsd.pickup.PickUpPortlet</portlet-class>
+		<init-param>
+			<name>view-template</name>
+			<value>/html/pickup/view.jsp</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<resource-bundle>content.Language</resource-bundle>
+		<portlet-info>
+			<title>Pick Up</title>
+			<short-title>Pick Up</short-title>
+			<keywords></keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>power-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+	</portlet>
 </portlet-app>

@@ -114,6 +114,24 @@
 		<header-portlet-javascript>/js/main.js</header-portlet-javascript>
 		<css-class-wrapper>featured-portlet</css-class-wrapper>
 	</portlet>
+	<portlet>
+		<portlet-name>pricing</portlet-name>
+		<icon>/icon.png</icon>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>pricing-portlet</css-class-wrapper>
+	</portlet>
+	<portlet>
+		<portlet-name>pick-up</portlet-name>
+		<icon>/icon.png</icon>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>pick-up-portlet</css-class-wrapper>
+	</portlet>
 	<role-mapper>
 		<role-name>administrator</role-name>
 		<role-link>Administrator</role-link>

@@ -2,8 +2,7 @@
 <!DOCTYPE display PUBLIC "-//Liferay//DTD Display 6.2.0//EN" "http://www.liferay.com/dtd/liferay-display_6_2_0.dtd">
 
 <display>
-	
-	<category name="HTMSD">
+	<category name="A2ZALI">
 		<portlet id="1"></portlet>
 		<portlet id="2"></portlet>
 		<portlet id="3"></portlet>
@@ -13,5 +12,7 @@
 		<portlet id="7"></portlet>
 		<portlet id="8"></portlet>
 		<portlet id="featured"></portlet>
+		<portlet id="pricing"></portlet>
+		<portlet id="pick-up"></portlet>
 	</category>
 </display>

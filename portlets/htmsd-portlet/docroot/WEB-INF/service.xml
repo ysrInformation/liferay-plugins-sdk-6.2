@@ -478,7 +478,7 @@
 		</finder>
 	</entity>
 
-	<entity name="PriceType">
+	<entity name="PriceType" local-service="true" remote-service="false">
 		<column name="priceTypeId" type="long" primary="true"/>
 		<column name="name" type="String"/>
 	</entity>
@@ -495,7 +495,7 @@
 		<column name="modifiedDate" type="Date"/>
 	</entity>
 	
-	<entity name="Commision" remote-service="true" local-service="false">
+	<entity name="Commision" local-service="true" remote-service="false">
 		<column name="commisionId" type="long" primary="true"/>
 		<column name="categoryId" type="long"/>
 		<column name="percent" type="Double"/>
