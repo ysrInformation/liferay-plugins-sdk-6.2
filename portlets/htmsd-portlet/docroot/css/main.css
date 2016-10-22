@@ -3,7 +3,7 @@
 /******Shopping List*******/
 .product-image img {
 	height: 300px !important;	
-	width: 100%;
+	/* width: 100%; */
 }
 
 .product-details {
@@ -50,6 +50,7 @@
 }
 
 #shopping_list li {
+	background: #fff;
 	margin-bottom: 20px;
 }
 
@@ -58,7 +59,7 @@
 }
 
 .dynatable-active-page {
-	background: #D8492D none repeat scroll 0 0 !important;
+	background: #D8492D !important;
 }
 
 .dynatable-active-page a {
@@ -147,6 +148,7 @@
 .product .product-image a {
 	position: relative;
 	display: block;
+	text-align: center;
 }
 .product .product-details .item-name {
 	color: #888888;	

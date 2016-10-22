@@ -115,13 +115,11 @@
 	</div>
 	
 	<div class="row-fluid address-payment-div">
-		<div class="span6">
+		<div class="span6 delAddress-div">
+			<h1 class="page-heading">
+				<liferay-ui:message key="checkout-label-your-shipping-address"/>
+			</h1>
 			<ul class="address first_item">
-				<li>
-					<h1 class="page-heading">
-						<liferay-ui:message key="checkout-label-your-shipping-address"/>
-					</h1>
-				</li>
 				<li><span class="address_name"> <%= firstName + StringPool.SPACE + lastName %> </span></li>
 				<li><span class="address_street"><%= Validator.isNotNull(address.getStreet1()) ? address.getStreet1() : StringPool.BLANK %></span></li>
 				<li><span class="address_city"><%= Validator.isNotNull(address.getCity()) ? address.getCity() : StringPool.BLANK %></span></li>
