@@ -36,8 +36,10 @@
 										#set ($nav_child_attr_selected="aria-selected='true'")
 										#set ($nav_child_css_class="selected")
 									#end
-
-									<li class="$nav_child_css_class" id="layout_$nav_child.getLayoutId()" $nav_child_attr_selected role="presentation">
+									#if ($velocityCount%3 == 1)
+									<div class="row-fluid $velocityCount">
+									#end
+									<li class="$nav_child_css_class span4" id="layout_$nav_child.getLayoutId()" $nav_child_attr_selected role="presentation">
 										<a aria-labelledby="layout_$nav_child.getLayoutId()" href="$nav_child.getURL()" $nav_child.getTarget() role="menuitem">$nav_child.getName()</a>
 										#if ($nav_child.hasChildren())
 											<ul class="grandchildmenu" role="menu">
@@ -57,6 +59,9 @@
 											</ul>
 										#end
 									</li>
+									#if ($velocityCount%3 == 0)
+									</div> 
+									#end
 								#end
 							</ul>
 						#end
