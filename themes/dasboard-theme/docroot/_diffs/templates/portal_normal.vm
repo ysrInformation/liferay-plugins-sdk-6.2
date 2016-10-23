@@ -16,10 +16,11 @@
 	    <link href="$css_folder/style.css" rel="stylesheet">
 	    <link href="$css_folder/jquery.dataTables.css" rel="stylesheet">
 	    <link href="$css_folder/jquery-ui.css" rel="stylesheet">
-	    <link href="$css_folder/bootstrap-toggle.min.css" rel="stylesheet">
+	    <link href="$css_folder/jquery.dataTables.css" rel="stylesheet">
 	    
 	    <script src="$javascript_folder/jquery-1.11.3.min.js"></script>
 	    <script src="$javascript_folder/jquery-ui.min.js"></script>
+	    <script src="$javascript_folder/jquery.dataTables.min.js"></script>
 	    
 	</head>
 
