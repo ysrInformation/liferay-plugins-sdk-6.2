@@ -50,8 +50,11 @@
 }
 
 #shopping_list li {
-	background: #fff;
 	margin-bottom: 20px;
+}
+
+#shopping_list li .product-image {
+	background: #fff;
 }
 
 .dynatable-search {
