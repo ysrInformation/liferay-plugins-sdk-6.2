@@ -456,12 +456,12 @@ li.currency select {
     left: 379px;
     margin: 0 auto;
     position: fixed;
-    top: 152px;
+    top: 148px;
     width: 63%;
 }
 
 .sticky #navigation li > ul.child-menu {
-	top: 54px;
+	top: 50px;
 }
 
 #navigation li > ul.child-menu .row-fluid {
@@ -480,6 +480,10 @@ li.currency select {
 
 #navigation li ul.child-menu > li a:focus {
 	background-color: transparent;
+}
+
+#navigation ul.grandchildmenu {
+	margin-left: 8px;
 }
 
 #navigation li ul.child-menu li ul.grandchildmenu li {
