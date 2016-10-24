@@ -329,7 +329,6 @@
 	height: 85px;
 }
 
-
 /*****Scroll to Top****/
 .scroll-top-wrapper {
     position: fixed;
@@ -456,7 +455,7 @@ li.currency select {
     left: 379px;
     margin: 0 auto;
     position: fixed;
-    top: 144px;
+    top: 148px;
     width: 63%;
 }
 
@@ -483,7 +482,7 @@ li.currency select {
 }
 
 #navigation ul.grandchildmenu {
-	margin-left: 8px;
+	margin-left: 0px;
 }
 
 #navigation li ul.child-menu li ul.grandchildmenu li {
@@ -619,6 +618,13 @@ li.langPortlet form select {
 
 .aui #navigation .grandchildmenu li a:hover {
 	text-decoration: none;
+}
+
+#navigation .grandchildmenu li a::before {
+	font-family: "fontello";
+	content: "\f105";
+	display: inline-block;
+	width: 7px;
 }
 
 .homeCarousel .carousel-caption {
@@ -866,6 +872,7 @@ a.icon_wrap.disabled, .icon_wrap.disabled {
 	font-family: tahoma;
 	font-size: 12px;
 }
+
 .shoppingItemDetails .span8 p.description {
 	padding: 1em 1.8em;
 }

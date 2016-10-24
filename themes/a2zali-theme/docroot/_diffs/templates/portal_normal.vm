@@ -19,6 +19,7 @@
 		<link href="//code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet"></link>
 		<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.css" rel="Stylesheet"></link>
 		<link href="//fonts.googleapis.com/css?family=Raleway:600|Fjalla+One|Raleway" rel="Stylesheet"></link>
+		<link href="$css_folder/fontello.css" rel="Stylesheet"></link>
 		<link href="$css_folder/toggle-nav.css" rel="Stylesheet"></link>
 
 		<script type="text/javascript" src="$javascript_folder/jquery-1.11.3.min.js"></script>
