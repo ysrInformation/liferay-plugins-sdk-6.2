@@ -43,8 +43,6 @@
 
 <liferay-ui:tabs names="<%=tabNames%>"  param="tab1" url="<%=mainURL.toString() %>" />
     
-  
-    
 <%
 	List<ShoppingItem> itemList = new ArrayList<ShoppingItem>();
 	int status = HConstants.NEW;
@@ -57,8 +55,11 @@
 	} else {
 		status = HConstants.REJECT;
 	}
+	
+	int count=1, start = 0, end = ShoppingItemLocalServiceUtil.getByStatusCount(status); 
+	itemList = ShoppingItemLocalServiceUtil.getByStatus(status, start, end);
 %>    	
-<aui:form action="<%=deletSetURL.toString() %>" name="bookListForm" method="POST">
+<%-- <aui:form action="<%=deletSetURL.toString() %>" name="bookListForm" method="POST"> --%>
 <aui:button name="deleteBtn" type="submit" value="delete" style="display:none"/>
 <aui:button name="approveBtn" type="button" value="approve" onClick="changeAction('approve');" style="display:none"/>
 <aui:button name="rejectBtn" type="button" value="reject" onClick="changeAction('reject');" style="display:none"/>
@@ -66,11 +67,14 @@
 	<aui:nav>
 		<aui:nav-item href="<%=addItemURL.toString() %>" iconCssClass="icon-plus" label="add-item"/>
 	</aui:nav>
-	<aui:nav-bar-search cssClass="form-search pull-right">
-		<liferay-ui:input-search />
-	</aui:nav-bar-search>
+	<%-- 
+		<aui:nav-bar-search cssClass="form-search pull-right">
+			<liferay-ui:input-search />
+		</aui:nav-bar-search>
+	 --%>
 </aui:nav-bar>
 
+<%-- 
 <liferay-ui:search-container delta="10"  orderByCol="<%=orderByCol %>" orderByType="<%=orderByType %>" emptyResultsMessage="No Items to display" iteratorURL="<%=iteratorURL %>"  rowChecker="<%= new RowChecker(renderResponse)%>">
 
 	<liferay-ui:search-container-results>
@@ -162,7 +166,78 @@
 	
 	<liferay-ui:search-iterator  searchContainer="<%=searchContainer %>"/>
 </liferay-ui:search-container>
-</aui:form>
+</aui:form> 
+--%>
+<table id="displayItems" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0"> 
+	<thead>
+  		<tr>
+    		<th><liferay-ui:message key="no."/></th>
+    		<th><liferay-ui:message key="product-code"/></th>
+    		<th><liferay-ui:message key="item-title"/></th>
+    		<th><liferay-ui:message key="date"/></th>
+    		<th><liferay-ui:message key="seller"/></th>
+    		<th><liferay-ui:message key="seller-city"/></th>
+    		<c:if test='<%=tabs1.equals("Approved Items") %>'>
+    			<th><liferay-ui:message key="product-stock"/></th>
+    			<th><liferay-ui:message key="total-sold"/></th>
+    		</c:if>
+    		<th><liferay-ui:message key="action"/></th>
+  		</tr>
+  </thead>
+  <tbody>
+  		<c:if test='<%= Validator.isNotNull(itemList) && itemList.size() > 0 %>'>
+  			<% for (ShoppingItem item : itemList) { %>
+  				<tr>
+  					<td><%= count %></td>
+  					<td><%= item.getProductCode() %></td>
+  					<td>
+  						<portlet:renderURL var="historyURL">
+							<portlet:param name="jspPage" value="/html/dashboard/itemhistory.jsp"/>
+							<portlet:param name="backURL" value="<%=redirectURL %>"/>
+							<portlet:param name="<%=HConstants.ITEM_ID %>" value="<%=String.valueOf(item.getItemId())%>"/>
+						</portlet:renderURL>
+						<aui:a href="<%= historyURL %>"><%= item.getName() %></aui:a> 
+  					</td>
+  					<td>
+  						<fmt:formatDate value="<%= item.getCreateDate() %>" pattern="dd/MM/yyyy" />
+  					</td>
+  					<td>
+  						<%= item.getUserEmail() + StringPool.SPACE + StringPool.OPEN_PARENTHESIS + item.getUserName() + StringPool.CLOSE_PARENTHESIS %>
+  					</td>
+  					<td>
+  						<% User seller = UserLocalServiceUtil.fetchUser(item.getUserId()); %>
+						<%= seller.getAddresses().isEmpty() ? StringPool.BLANK : seller.getAddresses().get(0).getCity() %>
+  					</td>
+  					<c:if test='<%=tabs1.equals("Approved Items") %>'>
+  						<td>
+  							<%
+								PortletURL showStockFormURL = renderResponse.createRenderURL();
+								showStockFormURL.setParameter("jspPage", "/html/dashboard/stockform.jsp");
+								showStockFormURL.setParameter(HConstants.ITEM_ID, String.valueOf(item.getItemId()));	
+								showStockFormURL.setParameter("redirectURL", redirectURL);
+								showStockFormURL.setWindowState(LiferayWindowState.POP_UP);
+							%>
+							<a href="#" onclick="showStockForm('<%=showStockFormURL%>');"><aui:icon image="edit"/></a> 
+							<%= item.getQuantity() == -1 ? LanguageUtil.get(portletConfig,themeDisplay.getLocale(),"unlimited") : item.getQuantity() %>
+  						</td>
+  						<td>
+  							<%
+								int orderStatus = (int) ShoppingOrderLocalServiceUtil.getAssetCategoryIdByName(HConstants.DELIVERED_STATUS);
+								int itemsSold = ShoppingOrderLocalServiceUtil.getTotalItemsSold(orderStatus, item.getItemId());
+							%>
+							<%= itemsSold %>
+  						</td>
+  					</c:if>
+  					<td>
+  						<% String itemDetailURL = CommonUtil.getWorkflowURL(item.getItemId(), themeDisplay); %>
+						<a onclick="<%= itemDetailURL %>" href="javascript:void(0);">View</a>
+  					</td>
+  				</tr>
+  			<% count++;
+  			} %>
+  		</c:if>
+  </tbody>
+</table>
 
  
 <aui:script>
@@ -172,7 +247,7 @@
 			btns.toggle(checkBoxs.is(":checked"));
 		});
 
-		AUI().use('aui-base', function(A) {
+		/* AUI().use('aui-base', function(A) {
 			Liferay.Service('/htmsd-portlet.shoppingitem/get-autocomplete-items',
 		  		function(data) {
 		  			var autocompleteData = data.autoCompleteData;
@@ -182,7 +257,9 @@
 					});
 		  		}
 		  	);
-		});
+		}); */
+		
+		$("#displayItems").DataTable();
  	});
 	
 	function changeAction(action) {

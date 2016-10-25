@@ -10,6 +10,9 @@
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("jspPage", "/html/dashboard/user.jsp");
 	iteratorURL.setParameter("tab2", tabs1);
+	
+	int count = 1, start = 0, end = ShoppingItemLocalServiceUtil.getByUserIdCount(userId);
+	itemList = ShoppingItemLocalServiceUtil.getByUserId(userId, start, end);
 %>
 
 <portlet:renderURL var="addItemsURL">
@@ -29,6 +32,7 @@
 	--%>
 </aui:nav-bar>
 
+<%-- 
 <liferay-ui:search-container delta="10" orderByCol="<%=orderByCol %>" orderByType="<%=orderByType %>" emptyResultsMessage="No Items to Display" iteratorURL="<%=iteratorURL %>">
 
 	<liferay-ui:search-container-results>
@@ -108,10 +112,81 @@
 	</liferay-ui:search-container-row>
 	
 	<liferay-ui:search-iterator  searchContainer="<%=searchContainer %>"/>
-</liferay-ui:search-container>
+</liferay-ui:search-container> 
+--%>
+
+<table id="sellerDisplayItems" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0"> 
+	<thead>
+  		<tr>
+    		<th><liferay-ui:message key="no."/></th>
+    		<th><liferay-ui:message key="item-title"/></th>
+    		<th><liferay-ui:message key="date"/></th>
+    		<th><liferay-ui:message key="product-stock"/></th>
+    		<th><liferay-ui:message key="status"/></th>
+    		<th><liferay-ui:message key="action"/></th>
+  		</tr>
+  </thead>
+  <tbody>
+  		<c:if test='<%= Validator.isNotNull(itemList) && itemList.size() > 0 %>'>
+  			<% for (ShoppingItem item : itemList) { %>
+  				<tr>
+  					<td><%= count %></td>
+  					<td>
+  						<%= item.getName() %>
+  					</td>
+  					<td>
+  						<fmt:formatDate value="<%= item.getCreateDate() %>" pattern="dd/MM/yyyy" />
+  					</td>
+  					<td>
+  						<%
+							int status = item.getStatus();
+							String disStatus = "New";
+							if (status == HConstants.APPROVE) {
+								disStatus = "Listed"; 
+							} else if (status == HConstants.INCOMPLETE) {
+								disStatus = "Incomplete";	
+							} else if (status == HConstants.REJECT) {
+								disStatus = "Rejected";
+							}
+						%>
+						<%=disStatus%>
+  					</td>
+  					<td>
+  						<c:if test='<%=item.getStatus() == HConstants.APPROVE %>'>
+							<%=item.getQuantity() == -1 ? LanguageUtil.get(portletConfig,themeDisplay.getLocale(),"unlimited") : item.getQuantity() %>
+							
+							<%
+								PortletURL showStockFormURL = renderResponse.createRenderURL();
+								showStockFormURL.setParameter("jspPage", "/html/dashboard/stockform.jsp");
+								showStockFormURL.setParameter(HConstants.ITEM_ID, String.valueOf(item.getItemId()));	
+								showStockFormURL.setWindowState(LiferayWindowState.POP_UP);
+								showStockFormURL.setParameter("redirectURL", redirectURL);
+							%>
+							<a href="#" onclick="showStockForm('<%=showStockFormURL%>');"><aui:icon image="edit" /></a> 
+						</c:if>
+  					</td>
+  					<td>
+						<%
+							PortletURL itemDetailURL = renderResponse.createRenderURL();
+							itemDetailURL.setParameter("jspPage", "/html/dashboard/itemdetails.jsp");
+							itemDetailURL.setParameter("itemId", String.valueOf(item.getItemId()));
+							itemDetailURL.setParameter("backURL", redirectURL);
+						%>
+						<aui:a href="<%=itemDetailURL.toString() %>">View</aui:a>
+  					</td>
+  				</tr>
+  			<% count++;
+  			} %>
+  		</c:if>
+  </tbody>
+</table>
 
 
 <script>
+$(function(){
+	$("#sellerDisplayItems").DataTable();
+});
+
 function showStockForm(url) {
 	
 	AUI().use('aui-modal', function(A) {
