@@ -18,9 +18,12 @@
 	    <link href="$css_folder/jquery-ui.css" rel="stylesheet">
 	    <link href="$css_folder/jquery.dataTables.css" rel="stylesheet">
 	    
-	    <script src="$javascript_folder/jquery-1.11.3.min.js"></script>
+	    <script src="$javascript_folder/jquery-1.12.3.js"></script>
 	    <script src="$javascript_folder/jquery-ui.min.js"></script>
 	    <script src="$javascript_folder/jquery.dataTables.min.js"></script>
+	    <script src="$javascript_folder/datatable.bootstrap.min.js"></script>
+	    <script src="$javascript_folder/dataTables.responsive.min.js"></script>
+	    <script src="$javascript_folder/responsive.bootstrap.js"></script>
 	    
 	</head>
 
