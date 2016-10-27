@@ -167,3 +167,12 @@
   margin-left: 5%;
   padding: 1.5%;
 }
+
+.add-new-address .span8 label {
+	display: inline;
+	margin-left: 28%;
+}
+
+.span6.payment-methods {
+	padding-bottom: 1.9%;
+}

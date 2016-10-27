@@ -51,7 +51,6 @@ import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Address;
 import com.liferay.portal.model.Contact;
 import com.liferay.portal.model.ListType;
-import com.liferay.portal.model.ListTypeConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.AddressLocalServiceUtil;
 import com.liferay.portal.service.ListTypeServiceUtil;
@@ -313,6 +312,17 @@ public class CheckoutPortlet extends MVCPortlet {
 		
 		long userInfoId = ParamUtil.getLong(actionRequest, "userInfoId");
 		if (userInfoId > 0) {
+			List<UserInfo> userInfoList = UserInfoLocalServiceUtil.getUserInfoByUserId(themeDisplay.getUserId());
+			if (Validator.isNotNull(userInfoList) && userInfoList.size() > 0) {
+				for (UserInfo userInfo:userInfoList) {
+					if (userInfo.getIsDeliveryAddress() == true) {
+						System.out.println("Inside delivery address :"); 
+						userInfo.setIsDeliveryAddress(false);
+						UserInfoLocalServiceUtil.updateUserInfo(userInfo);
+					}
+				}
+			}
+			
 			UserInfo userInfo = UserInfoLocalServiceUtil.fetchUserInfo(userInfoId);
 			userInfo.setIsDeliveryAddress(true); 
 			UserInfoLocalServiceUtil.updateUserInfo(userInfo);

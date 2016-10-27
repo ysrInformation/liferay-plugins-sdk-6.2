@@ -98,6 +98,7 @@ public interface HConstants {
 	public static final int SORT_PRICE_HIGH_TO_LOW = 0;
 	public static final int SORT_PRICE_LOW_TO_HIGH = 1;
 	public static final String CASH_ON_DELIVERY = "Cash On Delivery";
+	public static final String MY_ADDRESS = "My Address";
 	
 	//EMAIL NOTIFICATION 
 	public static final String EMAIL_SUBJECT ="Subject";

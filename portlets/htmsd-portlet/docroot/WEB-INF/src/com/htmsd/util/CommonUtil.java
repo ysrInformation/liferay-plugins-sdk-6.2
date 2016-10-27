@@ -6,7 +6,10 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -772,5 +775,17 @@ public class CommonUtil {
 			e.printStackTrace();
 		}
 		return address;
+	}
+	
+	public static Map<String, Long> getDeliveryAddresses(long userId, long groupId, long companyId) {
+		Map<String, Long> addressmap = new LinkedHashMap<String, Long>();
+		List<UserInfo> userInfoList = UserInfoLocalServiceUtil.getUserAddressFromUserInfo(userId, groupId, companyId);
+		if (Validator.isNotNull(userInfoList) && userInfoList.size() > 0) {
+			for (int i=0;i<userInfoList.size();i++) {
+				String key = HConstants.MY_ADDRESS + StringPool.SPACE +(i+1);
+				addressmap.put(key, userInfoList.get(i).getUserInfoId());
+			}
+		}
+		return addressmap;
 	}
 }
