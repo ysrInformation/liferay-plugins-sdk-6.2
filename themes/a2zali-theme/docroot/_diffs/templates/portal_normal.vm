@@ -148,15 +148,39 @@
 			</div>
 		-->	
 		
+		#set ($shoppingList = $request.getSession().getAttribute("SHOPPING_ITEMS"))
+		#if ($validator.isNotNull($shoppingList))
+			#set($count = $shoppingList.size())
+			<script>
+				$(function(){
+					$(".guest_cart_quantity").show();
+				});
+			</script>
+		#else
+			#set($count = 0)
+		#end
+		
 		<div class="" id="rightbar">
 			<div class="clearfix rightbar_2" id="rightbar_inner">
 				<div class="rightbar_wrap" id="rightbar_cart">
 					<a title="View my shopping cart" class="rightbar_tri icon_wrap" href="/cart" id="rightbar-shopping_cart"> 
 						<i class="fa fa-shopping-cart"></i> 
 						<span class="icon_text">Cart</span> 
-						<span style="display: none;" class="ajax_cart_quantity amount_circle simple_hidden ">0</span> 
+						#if ($is_signed_in)
+							<span style="display: none;" class="ajax_cart_quantity amount_circle simple_hidden ">0</span>
+						#else
+							<span style="display: none;" class="guest_cart_quantity amount_circle simple_hidden ">$count</span>
+						#end 
 					</a>
 				</div> 
+				#if ($is_signed_in)
+					<div class="rightbar_wrap" id="rightbar_cart">
+						<a title="View my order details" class="rightbar_tri icon_wrap" href="/myorders" id="rightbar-shopping_cart"> 
+							<i class="fa fa-cart-arrow-down"></i> 
+							<span class="icon_text">Orders</span> 
+						</a>
+					</div>
+				#end 
 				<div id="to_top_wrap">
 					<div id="to_top">
 						<a title="Back to top" class="icon_wrap disabled" href="javascript:void(0);">
