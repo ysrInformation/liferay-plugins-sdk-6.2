@@ -28,6 +28,7 @@
 	String zip = (Validator.isNotNull(address.getZip())) ? address.getZip() : StringPool.BLANK;
 	String firstName = Validator.isNotNull(_userInfo.getFirstName()) ? _userInfo.getFirstName() : StringPool.BLANK;
 	String lastName = Validator.isNotNull(_userInfo.getLastName()) ? _userInfo.getLastName() : StringPool.BLANK;
+	String btnTitle = (shoppingList.size() == 0) ? "Please add atleast 1 item to cart, before confirming an order." : StringPool.BLANK; 
 %>
 
 <aui:form id="checkout-step5" name="confirmOrder" method="post" action="${confirmCheckoutURL}" inlineLabels="<%= true %>"> 
@@ -101,7 +102,7 @@
 						<% } %>
 					</c:when>
 					<c:otherwise>
-						<tr><liferay-ui:message key="checkout-no-items-in-your-cart"/></tr>
+						<tr><td colspan="6"><liferay-ui:message key="checkout-no-items-in-your-cart"/></td></tr> 
 					</c:otherwise>
 				</c:choose>
 			</tbody>
@@ -148,7 +149,7 @@
 	</div>
 
 	<aui:button-row>
-		<aui:button cssClass="pull-right" type="submit" value='<%= LanguageUtil.get(portletConfig, locale, "step5") %>'/>
+		<aui:button cssClass="pull-right" title="<%= btnTitle %>" disabled='<%= shoppingList.size() == 0 %>' type="submit" value='<%= LanguageUtil.get(portletConfig, locale, "step5") %>' />
 	</aui:button-row>
 </aui:form>
 
