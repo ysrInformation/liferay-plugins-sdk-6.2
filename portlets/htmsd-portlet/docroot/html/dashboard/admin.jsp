@@ -17,7 +17,7 @@
     String keyword = ParamUtil.getString(renderRequest, "keywords");
 	PortletURL mainURL = renderResponse.createRenderURL();
 	mainURL.setWindowState(WindowState.MAXIMIZED);
-    String tabNames = "New Items,Approved Items,Incomplete Items, Rejected Items";
+    String tabNames = "New Items,Approved Items,Incomplete Items,Rejected Items";
     PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("jspPage", "/html/dashboard/admin.jsp");
 	iteratorURL.setParameter("tab1", tabs1);
