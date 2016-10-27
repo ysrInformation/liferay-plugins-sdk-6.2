@@ -385,18 +385,16 @@ public class CheckoutPortlet extends MVCPortlet {
 		HttpSession session = PortalUtil.getHttpServletRequest(resourceRequest).getSession();
 		List<ShoppingBean> shoppingCartList = CommonUtil.getGuestUserList(session);
 		List<ShoppingBean> newShoppingCartList = new ArrayList<ShoppingBean>();
-		itemPrice = getWholeSalePrice(quantity, itemId, itemPrice);
+		double totalPrice = getWholeSalePrice(quantity, itemId, itemPrice);
 				
 		if (id > 0) {
-			double totalPrice = quantity * itemPrice;
 			ShoppingItem_CartLocalServiceUtil.updateShoppingItem_Cart(id, quantity, totalPrice);
 		} else {
 			if (Validator.isNotNull(shoppingCartList) && shoppingCartList.size() > 0) {
 				for (ShoppingBean shoppingBean:shoppingCartList) {
 					if (itemId == shoppingBean.getItemId()) {
-						double total = quantity * itemPrice;
 						shoppingBean.setQuantity(quantity); 
-						shoppingBean.setTotalPrice(total);
+						shoppingBean.setTotalPrice(totalPrice);
 						newShoppingCartList.add(shoppingBean);
 					} else {
 						newShoppingCartList.add(shoppingBean);
@@ -451,17 +449,22 @@ public class CheckoutPortlet extends MVCPortlet {
 	
 	private double getWholeSalePrice(int quantity, long itemId, double itemPrice) {
 		
+		double totalPrice = 0.0;
 		List<WholeSale> wholesaleList = WholeSaleLocalServiceUtil.getWholeSaleByQty(itemId, quantity);
-		
 		if (Validator.isNotNull(wholesaleList)) {
+			totalPrice = quantity * itemPrice;
 			for (WholeSale wholeSale: wholesaleList) {
-				if (quantity == wholeSale.getQuantity() || quantity >= wholeSale.getQuantity()) {
-					itemPrice = wholeSale.getPrice(); 
+				if (quantity == wholeSale.getQuantity()) {
+					totalPrice = wholeSale.getPrice(); 
+				} else if (quantity > wholeSale.getQuantity()) {
+					totalPrice = quantity * (wholeSale.getPrice() / wholeSale.getQuantity());
 				}
 			}
+		} else {
+			totalPrice = quantity * itemPrice;
 		}
 		
-		return itemPrice;
+		return totalPrice;
 	}
 	
 	private static final Log _log = LogFactoryUtil.getLog(CheckoutPortlet.class.getName());

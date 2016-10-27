@@ -98,6 +98,8 @@
 	<portlet>
 		<portlet-name>8</portlet-name>
 		<icon>/icon.png</icon>
+		<action-url-redirect>true</action-url-redirect>
+		<private-session-attributes>false</private-session-attributes>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>
 			/js/main.js
