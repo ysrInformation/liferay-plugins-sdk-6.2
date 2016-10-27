@@ -268,7 +268,7 @@ public class CheckoutPortlet extends MVCPortlet {
 		String shippingStreet = ParamUtil.getString(actionRequest, "street");
 		String shippingCity = ParamUtil.getString(actionRequest, "city");
 		String shippingZip = ParamUtil.getString(actionRequest, "zip");
-		System.out.println("typeId ::"+typeId); 
+		_log.info("typeId ::"+typeId); 
 		
 		Address address = null;
 		if (addressId > 0) {
@@ -316,7 +316,7 @@ public class CheckoutPortlet extends MVCPortlet {
 			if (Validator.isNotNull(userInfoList) && userInfoList.size() > 0) {
 				for (UserInfo userInfo:userInfoList) {
 					if (userInfo.getIsDeliveryAddress() == true) {
-						System.out.println("Inside delivery address :"); 
+						_log.info("Inside delivery address!"); 
 						userInfo.setIsDeliveryAddress(false);
 						UserInfoLocalServiceUtil.updateUserInfo(userInfo);
 					}
