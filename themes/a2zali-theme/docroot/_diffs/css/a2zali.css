@@ -447,6 +447,24 @@ li.currency select {
     display: none;
 }
 
+#navigation ul > li .lfr-nav-child-toggle {
+	transition:all 550ms ease-in-out 2s;
+	perspective: 800px;
+	perspective-origin: 50% 100px;
+	position: absolute;
+	right: 2px;
+}
+
+#navigation ul > li .lfr-nav-child-toggle:not(.clear) {
+	perspective: 800px;
+	perspective-origin: 50% 100px;
+	transition: all 550ms ease-in-out 0s;
+}
+
+#navigation ul > li:hover .lfr-nav-child-toggle {
+	transform:rotate(180deg);
+}
+
 #navigation li > ul.child-menu {
 	border-radius: 0;
 	float: left !important;
@@ -621,10 +639,16 @@ li.langPortlet form select {
 }
 
 #navigation .grandchildmenu li a::before {
-	font-family: "fontello";
-	content: "\f105";
-	display: inline-block;
-	width: 7px;
+	color: #444;
+	content: "\003e";
+	font-size: 11px;
+	vertical-align: top;
+}
+
+#navigation .grandchildmenu li a:hover:before {
+	color: #00A161;
+	padding-left: 5px;
+    transition: all 300ms ease-in-out 0s;
 }
 
 .homeCarousel .carousel-caption {
@@ -1110,4 +1134,8 @@ form#searchbox .button.button-small i {
 
 .swiper-button-next, .swiper-button-prev {
 	height: 20px;
+}
+
+.langPortlet .goog-te-gadget-simple {
+	padding: 2% 0;
 }
