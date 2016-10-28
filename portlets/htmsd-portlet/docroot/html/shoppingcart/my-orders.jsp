@@ -1,7 +1,7 @@
 <%@page import="java.text.SimpleDateFormat"%>
 <%@ include file="/html/shoppingcart/init.jsp"%>
 
-<h4><liferay-ui:message key="my-orders"/></h4>
+<h4><liferay-ui:message key="label-my-orders"/></h4>
 
 <%
 	String noOfItems  = portletPreferences.getValue("noOfItems", "8");
@@ -13,68 +13,6 @@
 	String currencySymbol = CommonUtil.getCurrencySymbol(Long.valueOf(currencyId2));
 %>
 
-<%-- <c:choose>
-	<c:when test='<%= Validator.isNotNull(shoppingOrderItems) && !shoppingOrderItems.isEmpty()  %>'>
-		<div class="main-div">
-			<% 
-			for (ShoppingOrder soi:shoppingOrderItems) { 
-				double currentRate = CommonUtil.getCurrentRate(Long.valueOf(currencyId2));
-				double totalPrice = (currentRate == 0) ? soi.getTotalPrice() : soi.getTotalPrice() / currentRate;
-				String total = CommonUtil.getPriceFormat(totalPrice, currencyId2);
-				ShoppingItem shoppingItem = CommonUtil.getShoppingItem(soi.getShoppingItemId());
-				long imageId = shoppingItem.getSmallImage();
-				String imageSRC = CommonUtil.getThumbnailpath(imageId, themeDisplay.getScopeGroupId(), false);
-				String status = CommonUtil.getOrderStatus(soi.getOrderStatus());
-				%>
-				<portlet:renderURL var="itemDetailsURL" windowState="<%= LiferayWindowState.POP_UP.toString()  %>"> 
-            		<portlet:param name="<%= HConstants.JSP_PAGE %>" value="/html/shoppinglist/details.jsp"/> 
-            		<portlet:param name="<%= HConstants.ITEM_ID %>" value="<%= String.valueOf(soi.getShoppingItemId()) %>"/>
-            		<portlet:param name="<%= Constants.CMD %>" value="itemsDetails"/> 
-            	</portlet:renderURL>
-            	<% String itemsDetails = "javascript:showPopupDetails('"+itemDetailsURL+"','1200','Product Details');"; %>
-				<div class="item-details">
-					<div class="row-fluid first-item">
-						<div class="span3 item-Image">
-							<a href="<%= itemsDetails %>"><img src="<%= imageSRC %>" style="width: 100px; height: 100px"/></a> 
-						</div>
-						<div class="span4">
-							<div><a href="<%= itemsDetails %>"><%= shoppingItem.getName() %></a></div> 
-							<div><span class="qty"><liferay-ui:message key="shopping-qty"/> : <%= soi.getQuantity() %></span></div> 
-						</div>
-						<div class="span3">
-							<div><%= total %></div>
-							<div class="<%= status %>"><liferay-ui:message key="status"/> : <%= status %></div>
-						</div>
-						<div class="span2" title="Cancel this item">
-							<portlet:renderURL var="cancelOrderURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>"> 
-								<portlet:param name="<%= HConstants.JSP_PAGE %>" value="/html/shoppingcart/capture-reason.jsp" />
-								<portlet:param name="orderId" value="<%= String.valueOf(soi.getOrderId()) %>"/>
-							</portlet:renderURL>
-							<%
-								boolean isDisabled = (soi.getOrderStatus() == HConstants.PENDING) ? false : true;
-								String cancelOrder = "javascript:showPopupDetails('"+cancelOrderURL+"','1000','Cancel Order');"; 
-							%>
-							<a href="<%= cancelOrder %>"><aui:button cssClass="cancel-btn" type="button" 
-								value='<%= LanguageUtil.get(locale, "cancel-order") %>' disabled="<%= isDisabled %>"/></a>
-						</div>
-					</div>
-					<div class="row-fluid">
-						<div class="span5">
-							<span><liferay-ui:message key="date"/> : <%= sdf.format(soi.getCreateDate()) %></span>
-						</div>
-						<div class="pull-right">
-							<span class="order-total"><liferay-ui:message key="order-total"/> : <%= CommonUtil.getPriceInNumberFormat(totalPrice, currencySymbol) %></span>
-						</div>
-					</div>
-				</div>
-			<% } %>
-		</div>
-	</c:when>
-	<c:otherwise>
-		<h4 class="text-center">No Items to Display</h4>
-	</c:otherwise>
-</c:choose>
- --%>
 <div class="main-div" id="shopping_list">
 	<!-- item display -->
 </div>
