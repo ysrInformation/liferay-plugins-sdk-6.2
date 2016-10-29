@@ -72,6 +72,10 @@ function render(data, url, namespace, plid) {
 			var addToCartURL = url + "&"+namespace+"itemId="+item.itemId;
 			
 			var isNew = (item.isNewItem) ? '<span class="new"><i>New</i></span>' : '';
+			var MRP = formatPrice(item.MRP).toString();
+			if (item.MRP === 0 ) {
+				MRP = '';				
+			}
 			li = '<div class="swiper-slide">'
 					+'<div class="product">'
 						+'<div class="product-image">'
@@ -93,7 +97,9 @@ function render(data, url, namespace, plid) {
 								+ '<h4 class="item-name">' + item.name + '</h4>'
 							+'</a>'	
 							/* + '<p class="description">' + item.description + '</p>' */
-							+ '<h6 id="price">' + formatPrice(item.totalPrice); + '</h6>'
+							+ '<h6 id="price">' + formatPrice(item.totalPrice)
+								+ '<span class="old-price product-price">'+ MRP +'</span>'
+							+ '</h6>'
 						+'</div>'
 					+'</div>'
 				+'</div>';

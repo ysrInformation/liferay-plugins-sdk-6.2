@@ -110,12 +110,14 @@ public class ShoppingItemServiceImpl extends ShoppingItemServiceBaseImpl {
 		for (ShoppingItem shoppingItem : shoppingItems) {
 			long imageId = shoppingItem.getSmallImage();
 			double total = (currencyRate == 0) ? shoppingItem.getTotalPrice() :  shoppingItem.getTotalPrice() / currencyRate;
+			double MRP = (currencyRate == 0) ? shoppingItem.getMRP():  shoppingItem.getMRP() / currencyRate;
 			
 			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 			jsonObject.put(HConstants.ITEM_ID, shoppingItem.getItemId());
 			jsonObject.put(HConstants.NAME, shoppingItem.getName());
 			jsonObject.put(HConstants.DESCRIPTION, StringUtil.shorten(shoppingItem.getDescription(), 20));
 			jsonObject.put(HConstants.TOTAL_PRICE, total);
+			jsonObject.put("MRP", MRP);
 			jsonObject.put(HConstants.IMAGE, CommonUtil.getThumbnailpath(imageId, groupId, false));
 			
 			if (DateUtil.getDaysBetween(shoppingItem.getModifiedDate(), Calendar.getInstance().getTime()) >= 2) {

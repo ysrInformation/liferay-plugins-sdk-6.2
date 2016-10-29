@@ -101,6 +101,15 @@
 	padding: 5px;
 }
 
+.old-price {
+	color: #999999;
+	font-size: 0.9em;
+	margin-right: 4px;
+	padding-left: 10px;
+	text-decoration: line-through;
+	white-space: nowrap;
+}
+
 /********Shopping Item Details********/
 .add-to-cart-item-price {
 	font-size: 27px;

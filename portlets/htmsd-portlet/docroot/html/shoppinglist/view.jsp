@@ -27,10 +27,10 @@
 	String autoCompleteListToString = CommonUtil.toJavaScriptArray(autoCompleteList);
 %>
 <style>
-	#no-item-display {
-		text-align: center;
-		display: none;
-	}
+#no-item-display {
+	text-align: center;
+	display: none;
+}
 </style>
 
 <portlet:actionURL var="addToCartURL" name="addItemToCart">
@@ -221,6 +221,11 @@
 				var addToCartURL = '${addToCartURL}' + "&<portlet:namespace/>itemId="+item.itemId;
 				
 				var isNew = (item.isNewItem) ? '<span class="new"><i>New</i></span>' : '';
+				var MRP = formatPrice(item.MRP).toString();
+				if (item.MRP === 0 ) {
+					MRP = '';				
+				}
+				
 				li = '<li class="' + cssClass + '">'
 						+'<div class="product">'
 							+'<div class="product-image">'
@@ -242,7 +247,9 @@
 									+ '<h4 class="item-name">' + item.name + '</h4>'
 								+'</a>'	
 								/* + '<p class="description">' + item.description + '</p>' */
-								+ '<h6 id="price">' + formatPrice(item.totalPrice); + '</h6>'
+								+ '<h6 id="price">' + formatPrice(item.totalPrice)
+									+ '<span class="old-price product-price">'+ MRP +'</span>'									
+								+ '</h6>'
 							+'</div>'
 						+'</div>'
 					+'</li>';
