@@ -2,6 +2,7 @@
 <%@page import="com.htmsd.slayer.service.WholeSaleLocalService"%>
 <%@page import="com.htmsd.slayer.model.WholeSale"%>
 <%@include file="/html/shoppinglist/init.jsp" %>
+
 <%
 	long itemId = ParamUtil.getLong(request, HConstants.ITEM_ID);
 	
@@ -21,7 +22,15 @@
 			double currentRate = CommonUtil.getCurrentRate(Long.valueOf(currencyId));
 			List<WholeSale> wholeSales = WholeSaleLocalServiceUtil.getWholeSaleItem(shoppingItem.getItemId());
 			String stock = (shoppingItem.getQuantity() == -1) ? "Unlimited" : String.valueOf(shoppingItem.getQuantity());
+			String redirectURL = ParamUtil.getString(request, "backURL");
 		%>
+		<c:if test='<%= cmd.equalsIgnoreCase("itemsDetails") %>'>
+			<ul class="nav nav-collapse pull-right">
+				<li class="backhome">
+					<a href="<%= redirectURL %>"> &#10149; Back </a>				
+				</li>
+			</ul>
+		</c:if>
 		<liferay-ui:error key="item-exist" message="item-already-exist"/>
 		<aui:fieldset>
 			<div class="shoppingItemDetails row-fluid">

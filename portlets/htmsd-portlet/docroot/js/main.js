@@ -116,3 +116,16 @@ function render(data, url, namespace, plid) {
 	    });
 	});
 }
+
+function showDetailsPage(backURL, itemId, plid) {
+	AUI().use('liferay-portlet-url', function(A) {
+		var detailsURL = Liferay.PortletURL.createRenderURL();
+		detailsURL.setPortletId("3_WAR_htmsdportlet");
+		detailsURL.setParameter("p_l_id", plid);
+		detailsURL.setParameter('jspPage', "/html/shoppinglist/details.jsp");
+		detailsURL.setParameter('itemId', itemId);
+		detailsURL.setParameter('cmd', 'itemsDetails');
+		detailsURL.setParameter('backURL', backURL);
+		location.href = detailsURL;
+	});
+}
