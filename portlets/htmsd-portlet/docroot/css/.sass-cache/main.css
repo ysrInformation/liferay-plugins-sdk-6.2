@@ -79,19 +79,22 @@
 .checkout-totalprice, .checkout-unitprice {
   color: #01a261; }
 
-#checkout-addresslabel, .shippingAdress, .payment-methods-label h1 {
+#checkout-addresslabel, .shippingAdress, .payment-methods-label h1, .address-payment-div h1 {
   border-bottom: 1px solid; }
 
-.checkout-details-container, .payment-methods {
+.checkout-details-container, .payment-methods, .delAddress-div {
   background-color: #222222;
-  padding-bottom: 2%;
+  /*  padding-bottom: 0.3%; */
   padding-left: 0.5%;
-  padding-right: 5%; }
+  /* padding-right: 5%; */ }
+
+.delAddress-div {
+  padding-bottom: 0.2%; }
 
 .shippingAdress {
   width: 40%; }
 
-.checkout-address-form, .paymentOptions {
+.checkout-address-form {
   padding-left: 20%; }
 
 .paymentOptions label {
@@ -102,11 +105,11 @@
 .step2, .step4 {
   display: none; }
 
-.checkout-address-page .span6 {
+.new-checkout .span6, .address-div {
   background-color: #222222;
   margin-bottom: 1%; }
 
-.checkout-address-page .address {
+.new-checkout .address {
   list-style: outside none none; }
 
 .new-checkout {
@@ -119,10 +122,30 @@
 .checkout-thanks-message {
   padding: 2%; }
 
+.address-btns {
+  margin-left: 7%; }
+
+.checkout-address-page .add-new-address {
+  margin-bottom: 1%; }
+
+.new-checkout .address-payment-div {
+  margin-top: 2%; }
+
+.paymentOptions {
+  margin-left: 5%;
+  padding: 1.5%; }
+
+.add-new-address .span8 label {
+  display: inline;
+  margin-left: 28%; }
+
+.span6.payment-methods {
+  padding-bottom: 1.9%; }
+
 /******Shopping List*******/
 .product-image img {
   height: 300px !important;
-  width: 100%; }
+  /* width: 100%; */ }
 
 .product-details {
   background: transparent;
@@ -162,11 +185,14 @@
 #shopping_list li {
   margin-bottom: 20px; }
 
+#shopping_list li .product-image {
+  background: #fff; }
+
 .dynatable-search {
   margin-bottom: 0px !important; }
 
 .dynatable-active-page {
-  background: #D8492D none repeat scroll 0 0 !important; }
+  background: #D8492D !important; }
 
 .dynatable-active-page a {
   color: #fff !important; }
@@ -196,6 +222,14 @@
 .qty-discounts th, .qty-discounts td {
   text-align: left;
   padding: 5px; }
+
+.old-price {
+  color: #999999;
+  font-size: 0.9em;
+  margin-right: 4px;
+  padding-left: 10px;
+  text-decoration: line-through;
+  white-space: nowrap; }
 
 /********Shopping Item Details********/
 .add-to-cart-item-price {
@@ -241,7 +275,8 @@
 
 .product .product-image a {
   position: relative;
-  display: block; }
+  display: block;
+  text-align: center; }
 
 .product .product-details .item-name {
   color: #888888;
@@ -531,4 +566,7 @@
   position: absolute;
   top: 25%;
   width: 35px; }
+
+.fieldset {
+  color: #cccccc; }
 

@@ -29,10 +29,17 @@
 		<!-- <li class="currency">
 			<liferay-portlet:runtime portletName="7_WAR_htmsdportlet" />
 		</li> -->
-		<li>
-			<a href="/sell"> Sell </a>
-		</li>
-		<c:if test='<%= RoleServiceUtil.hasUserRole(themeDisplay.getUserId(), themeDisplay.getCompanyId(), "Approver", false) %>'>
+		<%
+			boolean isApprover = RoleServiceUtil.hasUserRole(themeDisplay.getUserId(), themeDisplay.getCompanyId(), "Approver", false);
+			boolean isSystemAdmin = RoleServiceUtil.hasUserRole(themeDisplay.getUserId(), themeDisplay.getCompanyId(), "System Admin", false);
+		%>
+		<c:if test='<%=!isApprover %>'>
+			<li>
+				<a href="/sell"> Sell </a>
+			</li>
+		</c:if>
+		
+		<c:if test='<%= isApprover || isSystemAdmin %>'>
 			<li>
 				<a href="/group/guest/system-admin"> System Admin </a>
 			</li>

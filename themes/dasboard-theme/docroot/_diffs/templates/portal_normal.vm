@@ -31,7 +31,7 @@
 		
 		$theme.include($body_top_include)
 		
-		#if ( $is_signed_in &&  $permissionChecker.isOmniadmin())
+		#if ( $is_signed_in)
 			#dockbar()
 		#end
 		
@@ -56,24 +56,6 @@
 					            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
 					        </div> 
 					        <ul class="nav navbar-top-links navbar-right">
-					        	<!--<li>
-										#if ($show_site_name)
-											<div>
-												<span class="site-name block m-t-xs" title="k#language_format ("go-to-x", [$site_name])">
-													<strong class="font-bold">$site_name</strong>
-												</span>
-											</div>
-										#end
-									</li>
-						        	<li class="site-title">
-										<div class="dropdown profile-element">
-											<a class="$logo_css_class" href="$site_default_url" title="#language_format ("go-to-x", [$site_name])">
-												<img alt="$logo_description" height="40px" class="img-circle" src="$site_logo" width="40px" />
-											</a>
-										</div>
-									</li>
-									<li class="notificationEmbeded">$theme.runtime("notification_WAR_canopiportlet")</li>
-					        	-->
 				                <li>
 				                    <a href="$sign_out_url">
 				                        <i class="fa fa-sign-out"></i> Log out
@@ -81,14 +63,8 @@
 				                </li>
 					        </ul>
 					    </nav>
-					 </div>
-					<!--<div class="subheading text-center"> 
-						<span>refresh</span>
-						<span>settings</span>
-					</div>-->
-					<div id="content">
-						##<nav id="breadcrumbs">#breadcrumbs()</nav>
-				
+					</div>
+					<div id="content">				
 						#if ($selectable)
 							$theme.include($content_include)
 						#else

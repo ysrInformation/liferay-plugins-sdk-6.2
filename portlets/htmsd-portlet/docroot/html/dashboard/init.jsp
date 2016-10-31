@@ -51,8 +51,9 @@
 <%@page import="org.apache.commons.beanutils.BeanComparator"%>
 
 <%
-	boolean isAdmin = permissionChecker.isOmniadmin();
+	boolean isAdmin = RoleLocalServiceUtil.hasUserRole(user.getUserId(), themeDisplay.getCompanyId(), HConstants.SYSTEM_ADMIN_ROLE, false);
 	boolean isStaff = RoleLocalServiceUtil.hasUserRole(user.getUserId(), themeDisplay.getCompanyId(), HConstants.STAFF_ROLE, false);
+	boolean isApprover = RoleLocalServiceUtil.hasUserRole(user.getUserId(), themeDisplay.getCompanyId(), HConstants.APPROVER_ROLE, false);
 	boolean isSeller = SellerLocalServiceUtil.isSeller(themeDisplay.getUserId());
 	String val = (String) portletSession.getAttribute("currentCurrencyId", PortletSession.APPLICATION_SCOPE);
 	long currencyId = (Validator.isNull(val)) ?  0 : Long.valueOf(val);

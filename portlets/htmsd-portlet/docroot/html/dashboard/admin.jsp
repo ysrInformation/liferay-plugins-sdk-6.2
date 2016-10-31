@@ -18,6 +18,9 @@
 	PortletURL mainURL = renderResponse.createRenderURL();
 	mainURL.setWindowState(WindowState.MAXIMIZED);
     String tabNames = "New Items,Approved Items,Incomplete Items,Rejected Items";
+    if (isApprover) {
+    	tabNames = "New Items";
+    }
     PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("jspPage", "/html/dashboard/admin.jsp");
 	iteratorURL.setParameter("tab1", tabs1);
@@ -56,118 +59,24 @@
 		status = HConstants.REJECT;
 	}
 	
-	int count=1, start = 0, end = ShoppingItemLocalServiceUtil.getByStatusCount(status); 
-	itemList = ShoppingItemLocalServiceUtil.getByStatus(status, start, end);
+	int count=1, start = 0, end = ShoppingItemLocalServiceUtil.getByStatusCount(status);
+	if (isApprover) {
+		itemList = CommonUtil.getPendingApprovalItems(themeDisplay.getUserId(), themeDisplay.getCompanyId(), status);
+	} else {
+		itemList = ShoppingItemLocalServiceUtil.getByStatus(status, start, end);
+	}
 %>    	
 <%-- <aui:form action="<%=deletSetURL.toString() %>" name="bookListForm" method="POST"> --%>
 <aui:button name="deleteBtn" type="submit" value="delete" style="display:none"/>
 <aui:button name="approveBtn" type="button" value="approve" onClick="changeAction('approve');" style="display:none"/>
 <aui:button name="rejectBtn" type="button" value="reject" onClick="changeAction('reject');" style="display:none"/>
-<aui:nav-bar>
-	<aui:nav>
-		<aui:nav-item href="<%=addItemURL.toString() %>" iconCssClass="icon-plus" label="add-item"/>
-	</aui:nav>
-	<%-- 
-		<aui:nav-bar-search cssClass="form-search pull-right">
-			<liferay-ui:input-search />
-		</aui:nav-bar-search>
-	 --%>
-</aui:nav-bar>
-
-<%-- 
-<liferay-ui:search-container delta="10"  orderByCol="<%=orderByCol %>" orderByType="<%=orderByType %>" emptyResultsMessage="No Items to display" iteratorURL="<%=iteratorURL %>"  rowChecker="<%= new RowChecker(renderResponse)%>">
-
-	<liferay-ui:search-container-results>
-		 <%
-		 	itemList = 	keyword.isEmpty() ? ShoppingItemLocalServiceUtil.getByStatus(status, searchContainer.getStart(), searchContainer.getEnd())
-		 									:ShoppingItemLocalServiceUtil.searchItems(status, keyword, searchContainer.getStart(), searchContainer.getEnd()) ;
-		 				
-			List<ShoppingItem> copy_itemList = new ArrayList<ShoppingItem>();
-			copy_itemList.addAll(itemList);
-		 	Comparator<ShoppingItem> beanComparator = new BeanComparator(orderByCol);
-			Collections.sort(copy_itemList, beanComparator);			
-			if(orderByType.equals("desc")) {
-				Collections.reverse(copy_itemList);
-			}
-			
-			results = copy_itemList; 
-			total = keyword.isEmpty() ? ShoppingItemLocalServiceUtil.getByStatusCount(status)
-									    :ShoppingItemLocalServiceUtil.searchCount(status, keyword);													;
-			
-			pageContext.setAttribute("results", results);
-			pageContext.setAttribute("total", total);
-		%>
-	</liferay-ui:search-container-results>			 
-	<liferay-ui:search-container-row className="com.htmsd.slayer.model.ShoppingItem" modelVar="item" indexVar="indexVar" keyProperty="itemId">
-
-		<liferay-ui:search-container-column-text name="no.">
-			<%=String.valueOf(searchContainer.getStart()+1+indexVar)%>
-		</liferay-ui:search-container-column-text>
-		
-		<liferay-ui:search-container-column-text  name="product-code"  property="productCode"/>
-		 
-		<liferay-ui:search-container-column-text name="item-title" >
-			<portlet:renderURL var="historyURL">
-				<portlet:param name="jspPage" value="/html/dashboard/itemhistory.jsp"/>
-				<portlet:param name="backURL" value="<%=redirectURL %>"/>
-				<portlet:param name="<%=HConstants.ITEM_ID %>" value="<%=String.valueOf(item.getItemId())%>"/>
-			</portlet:renderURL>
-			<aui:a href="<%=historyURL %>"><%=item.getName() %></aui:a> 
-		</liferay-ui:search-container-column-text>
-		
-		<liferay-ui:search-container-column-text name="date" orderable="true" orderableProperty="createDate" >
-			<fmt:formatDate value="<%=item.getCreateDate() %>" pattern="dd/MM/yyyy" />
-		</liferay-ui:search-container-column-text>
-		
-		<liferay-ui:search-container-column-text name="seller" >
-			<%=item.getUserEmail() + StringPool.OPEN_PARENTHESIS + item.getUserName() + StringPool.CLOSE_PARENTHESIS %>
-		</liferay-ui:search-container-column-text>
-		
-		
-		<liferay-ui:search-container-column-text name="seller-city" >
-			<%
-				User seller = UserLocalServiceUtil.fetchUser(item.getUserId());
-			%>
-			<%=seller.getAddresses().isEmpty() ? StringPool.BLANK : seller.getAddresses().get(0).getCity() %>		
-		</liferay-ui:search-container-column-text>
-		
-		<c:if test='<%=tabs1.equals("Approved Items") %>'>
-			<liferay-ui:search-container-column-text name="stock">
-				<%
-					PortletURL showStockFormURL = renderResponse.createRenderURL();
-					showStockFormURL.setParameter("jspPage", "/html/dashboard/stockform.jsp");
-					showStockFormURL.setParameter(HConstants.ITEM_ID, String.valueOf(item.getItemId()));	
-					showStockFormURL.setParameter("redirectURL", redirectURL);
-					showStockFormURL.setWindowState(LiferayWindowState.POP_UP);
-				%>
-				<a href="#" onclick="showStockForm('<%=showStockFormURL%>');"><aui:icon image="edit"/></a> 
-				<%=item.getQuantity() == -1 ? LanguageUtil.get(portletConfig,themeDisplay.getLocale(),"unlimited") : item.getQuantity() %>
-			</liferay-ui:search-container-column-text>
-			
-		<liferay-ui:search-container-column-text name="total-sold" >
-			<%
-				int orderStatus = (int) ShoppingOrderLocalServiceUtil.getAssetCategoryIdByName(HConstants.DELIVERED_STATUS);
-				int itemsSold = ShoppingOrderLocalServiceUtil.getTotalItemsSold(orderStatus, item.getItemId());
-			%>
-			<%= itemsSold %>
-		</liferay-ui:search-container-column-text>
-		</c:if>
-		
-		
-		
-		<liferay-ui:search-container-column-text name="action">
-			<%
-				String itemDetailURL = CommonUtil.getWorkflowURL(item.getItemId(), themeDisplay);
-			%>
-			<aui:a onClick="<%=itemDetailURL %>" href="javascript:void(0);">View</aui:a>
-		</liferay-ui:search-container-column-text>
-		
-	</liferay-ui:search-container-row>
-	
-	<liferay-ui:search-iterator  searchContainer="<%=searchContainer %>"/>
-</liferay-ui:search-container>
-</aui:form> 
---%>
+<c:if test="<%= !isApprover %>">
+	<aui:nav-bar>
+		<aui:nav>
+			<aui:nav-item href="<%=addItemURL.toString() %>" iconCssClass="icon-plus" label="add-item"/>
+		</aui:nav>
+	</aui:nav-bar>
+</c:if>
 <table id="displayItems" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0"> 
 	<thead>
   		<tr>
@@ -246,19 +155,6 @@
 	 	 var checkBoxs  = $(":checkbox").on("click",function(){
 			btns.toggle(checkBoxs.is(":checked"));
 		});
-
-		/* AUI().use('aui-base', function(A) {
-			Liferay.Service('/htmsd-portlet.shoppingitem/get-autocomplete-items',
-		  		function(data) {
-		  			var autocompleteData = data.autoCompleteData;
-		  			console.log(autocompleteData);
-					$("#<portlet:namespace/>keywords").autocomplete({
-						source : autocompleteData
-					});
-		  		}
-		  	);
-		}); */
-		
 		$("#displayItems").DataTable();
  	});
 	

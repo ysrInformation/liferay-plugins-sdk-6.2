@@ -9,12 +9,12 @@
 	<portlet:param name="tabs2" value="<%= tabs2 %>" />
 </portlet:renderURL>
 <c:choose>
-	<c:when test="<%= !isSeller %>">
+	<c:when test="<%= !isSeller && !isApprover && !isAdmin %>">
 		<%@include file="/html/dashboard/businessinfo.jsp" %>
 	</c:when>
 	<c:otherwise>
 		<c:choose>
-			<c:when test="<%=isAdmin || isStaff%>">
+			<c:when test="<%=isAdmin || isStaff || isApprover%>">
 				<jsp:include page="/html/dashboard/admin.jsp" />
 			</c:when>
 			<c:otherwise>

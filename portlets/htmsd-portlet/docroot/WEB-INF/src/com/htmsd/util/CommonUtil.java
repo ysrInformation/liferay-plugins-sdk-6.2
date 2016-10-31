@@ -65,10 +65,13 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.service.AddressLocalServiceUtil;
 import com.liferay.portal.service.CountryServiceUtil;
 import com.liferay.portal.service.RegionServiceUtil;
+import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken;
 import com.liferay.portal.workflow.kaleo.model.KaleoTaskInstanceToken;
 import com.liferay.portal.workflow.kaleo.service.ClpSerializer;
+import com.liferay.portal.workflow.kaleo.service.KaleoInstanceTokenLocalServiceUtil;
 import com.liferay.portal.workflow.kaleo.service.KaleoTaskInstanceTokenLocalServiceUtil;
 import com.liferay.portlet.asset.model.AssetCategory;
 import com.liferay.portlet.asset.model.AssetVocabulary;
@@ -657,8 +660,13 @@ public class CommonUtil {
 		return jsonObject;
 	}
 	
-	@SuppressWarnings({ "static-access", "unchecked" })
 	public static KaleoTaskInstanceToken getKaleoTaskId(long itemId) {
+		KaleoTaskInstanceToken kaleoTaskInstanceToken = getKaleoTaskInstanceToken(itemId);
+		return kaleoTaskInstanceToken;
+	}
+
+	@SuppressWarnings({ "static-access", "unchecked" })
+	private static KaleoTaskInstanceToken getKaleoTaskInstanceToken(long itemId) {
 		KaleoTaskInstanceToken kaleoTaskInstanceToken = null;
 		try {
 			ClassLoader classLoader = (ClassLoader) PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),"portletClassLoader");
@@ -682,6 +690,7 @@ public class CommonUtil {
 		return kaleoTaskInstanceToken;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public static String getWorkflowURL(long ItemId, ThemeDisplay themeDisplay) {
 		KaleoTaskInstanceToken kaleoTaskInstanceToken = CommonUtil.getKaleoTaskId(ItemId);
 		String itemDetailURL = StringPool.BLANK;
@@ -787,5 +796,35 @@ public class CommonUtil {
 			}
 		}
 		return addressmap;
+	}
+	
+	public static List<ShoppingItem> getPendingApprovalItems(long currentUserId, long companyId, int status) {
+		List<ShoppingItem> shoppingItems = new ArrayList<ShoppingItem>();
+		
+		for (ShoppingItem shoppingItem : ShoppingItemLocalServiceUtil.getByStatus(status)) {
+			KaleoTaskInstanceToken kaleoTaskInstanceToken = getKaleoTaskInstanceToken(shoppingItem.getItemId());
+			KaleoInstanceToken kaleoInstanceToken = null;
+			try {
+				kaleoInstanceToken = KaleoInstanceTokenLocalServiceUtil
+						.getKaleoInstanceToken(kaleoTaskInstanceToken.getKaleoInstanceTokenId());
+			} catch (PortalException e) {
+				e.printStackTrace();
+			} catch (SystemException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				if (RoleLocalServiceUtil.hasUserRole(currentUserId, companyId, kaleoInstanceToken.getCurrentKaleoNodeName(), false)) {
+					shoppingItems.add(shoppingItem);
+				}
+			} catch (PortalException e) {
+				e.printStackTrace();
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+		}
+		return shoppingItems;
 	}
 }

@@ -38,7 +38,11 @@ public interface HConstants {
 	public static String VIDEOURL_REVIEWER = "Video Reviewer";
 	public static String TAG_REVIEWER = "Tag Reviewer";
 	public static String CATEGORY_REVIEWER = "Category Reviewer";
+	
 	public static String STAFF_ROLE = "Staff";
+	public static String SYSTEM_ADMIN_ROLE = "System Admin";
+	public static String APPROVER_ROLE = "Approver";
+	
 	public static String WHOLESALE_DISCOUNT="wholeSaleDiscount";
 	public static String WHOLESALE_QUANTITY="wholeSaleQuantity";
 	public static String WHOLESALE_PRICE="wholeSalePrice";
