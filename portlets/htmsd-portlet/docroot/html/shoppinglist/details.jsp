@@ -11,7 +11,7 @@
 <c:choose>
 	<c:when test="<%=Validator.isNotNull(shoppingItem) %>">
 		<%
-			double price = shoppingItem.getTotalPrice();
+			double price = shoppingItem.getSellingPrice();
 			
 			PortletURL addItemsToCartActionURL = renderResponse.createActionURL();
 			addItemsToCartActionURL.setParameter(ActionRequest.ACTION_NAME, "addItemToCart");

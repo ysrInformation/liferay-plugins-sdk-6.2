@@ -24,9 +24,9 @@
 
 	String val2 = (String) portletSession.getAttribute("currentCurrencyId", PortletSession.APPLICATION_SCOPE);
 	long currencyId1 = (Validator.isNull(val2)) ?  0 : Long.valueOf(val2);
-	System.out.println("CurrencyID ==>"+CommonUtil.getCurrencySymbol(currencyId1));
-
+	long detailPlid = CommonUtil.getDetailPageLayoutId(themeDisplay.getScopeGroupId(), layout.getPlid());
 	double currentRate = CommonUtil.getCurrentRate(Long.valueOf(currencyId1));
+	String backURL = themeDisplay.getURLCurrent();
 	JSONObject autoCompleteJSON = ShoppingOrderLocalServiceUtil.getOrderAutoCompleteList(tabName);
 %>
 
@@ -74,7 +74,7 @@
 	            double totalPrice = (currentRate == 0) ? shoppingOrder.getTotalPrice() : shoppingOrder.getTotalPrice() / currentRate;
 	           	String userName = shoppingOrder.getUserName();
 	           	String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
-	           	String orderId = HConstants.HTMSD + currentYear.substring(2, 4) + shoppingOrder.getOrderId();
+	           	String orderId = HConstants.A2ZALI + currentYear.substring(2, 4) + shoppingOrder.getOrderId();
 	           	String status = CommonUtil.getOrderStatus(shoppingOrder.getOrderStatus());
 	           	String orderedDate = HConstants.DATE_FORMAT.format(shoppingOrder.getCreateDate()); 
 	            String sellerName = shoppingOrder.getSellerName();
@@ -96,13 +96,10 @@
 	            <liferay-ui:search-container-column-text name="seller-name" value="<%= sellerName %>"/>
 	            
 	            <liferay-ui:search-container-column-text name="item-title">
-	            	<portlet:renderURL var="itemDetailsURL" windowState="<%= LiferayWindowState.POP_UP.toString()  %>"> 
-	            		<portlet:param name="<%= HConstants.JSP_PAGE %>" value="/html/shoppinglist/details.jsp"/> 
-	            		<portlet:param name="<%= HConstants.ITEM_ID %>" value="<%= String.valueOf(shoppingOrder.getShoppingItemId()) %>"/>
-	            		<portlet:param name="<%= Constants.CMD %>" value="itemsDetails"/> 
-	            	</portlet:renderURL>
-	            	<% String itemsDetails = "javascript:showPopupDetails('"+itemDetailsURL+"','1200','Product Details');"; %>
-	            	<a href="<%= itemsDetails %>" ><%= itemName %></a>
+	            	<% 
+	            	String showItemDetails = "javascript:showDetailsPage('"+backURL+"','"+shoppingOrder.getShoppingItemId()+"','"+detailPlid+"');";
+	            	%>
+	            	<a onclick="<%= showItemDetails %>" href="javascript:void(0);"><%= itemName %></a> 
 	            </liferay-ui:search-container-column-text> 
 	    
 	    		<liferay-ui:search-container-column-text name="order-date" value="<%= orderedDate %>" orderable="true" orderableProperty="createDate"/>
@@ -134,33 +131,8 @@
 </div>
 
 <script>
-function showPopupDetails(url, width, title){
-	
-	AUI().use('aui-base','liferay-util-window','aui-io-plugin-deprecated',function(A){
-		  
-    	var popup = Liferay.Util.Window.getWindow(
-                {
-                    dialog: {
-                        centered: true,
-                        constrain2view: true,
-                        modal: true,
-                        resizable: false,
-                        width: width
-                    }
-                }).plug(A.Plugin.DialogIframe,
-                     {
-                     autoLoad: true,
-                     iframeCssClass: 'dialog-iframe',
-                     uri:url
-                }).render();
-    		popup.show();
-    		popup.titleNode.html(title);
-	});
-}
-
 $(function(){
 	var jsonData = <%= autoCompleteJSON %>;
-	console.info("autocomplete :"+jsonData.autocompleteData);
 	
 	$("#<portlet:namespace/>keywords").autocomplete({
 	    source: jsonData.autocompleteData
