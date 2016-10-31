@@ -218,7 +218,7 @@ public class GenerateInvoice {
 		}
 		pdftable.addCell(createLabelCellForProduct("Sub Total",Rectangle.BOTTOM|Rectangle.TOP|Rectangle.RIGHT|Rectangle.LEFT));
 		
-		double price = (currencyRate == 0) ? shoppingItem.getTotalPrice() : shoppingItem.getTotalPrice() / currencyRate;
+		double price = (currencyRate == 0) ? shoppingItem.getSellingPrice() : shoppingItem.getSellingPrice() / currencyRate;
 		double taxPrice = CommonUtil.calculateVat(shoppingOrder.getTotalPrice(), shoppingItem.getTax());
 		double subTotal = shoppingOrder.getTotalPrice() - taxPrice;
 		double totalPrice = (currencyRate == 0) ? shoppingOrder.getTotalPrice() : shoppingOrder.getTotalPrice() / currencyRate;

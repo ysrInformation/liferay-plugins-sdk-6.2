@@ -1,6 +1,5 @@
 package com.htmsd.dashboard;
 
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -79,7 +78,6 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
 public class DashboardPortlet extends MVCPortlet {
 
 	private  long smallImageId = 0;
-	
 	
 	@Override
 	public void serveResource(ResourceRequest resourceRequest,
@@ -229,9 +227,12 @@ public class DashboardPortlet extends MVCPortlet {
 		double itemWeight = ParamUtil.getDouble(uploadRequest, "itemWeight");
 		double MRP = ParamUtil.getDouble(uploadRequest, "MRP");
 		double sellingPrice = ParamUtil.getDouble(uploadRequest, HConstants.PRICE);
-		double totalPrice = ParamUtil.getDouble(uploadRequest, HConstants.TOTAL_PRICE);
 		double tax = ParamUtil.getDouble(uploadRequest, HConstants.TAX);
-		
+		double itemLength = ParamUtil.getDouble(uploadRequest, "itemLength");
+		double itemWidth = ParamUtil.getDouble(uploadRequest, "itemWidth");
+		double itemHeight = ParamUtil.getDouble(uploadRequest, "itemHeight");
+		double commission = ParamUtil.getDouble(uploadRequest, "commission");
+		double deliveryCharges = ParamUtil.getDouble(uploadRequest, "deliveryCharges");
 		String userName = ParamUtil.getString(uploadRequest, "userName");
 		String userEmail = ParamUtil.getString(uploadRequest, "emailId");
 		String currentUserName = themeDisplay.getUser().getScreenName();
@@ -297,9 +298,11 @@ public class DashboardPortlet extends MVCPortlet {
 			imageIds = saveFiles(uploadRequest, HConstants.IMAGE, HConstants.ITEM_FOLDER_NAME);
 			shoppingItem = ShoppingItemLocalServiceUtil.addItem(themeDisplay.getScopeGroupId(),
 					themeDisplay.getCompanyId(), currentUserId, currentUserName, currentUserEmail, currentUserId,
-					StringPool.BLANK, StringPool.BLANK, productCode, name, description, sellingPrice, sellingPrice, tax,
-					quantity, WorkflowConstants.STATUS_PENDING, StringUtil.merge(imageIds, StringPool.COMMA), vedioURL,
-					getSmallImageId(), StringPool.BLANK, MRP, itemWeight, itemTypeId, itemTypeDocumentId);
+					StringPool.BLANK, StringPool.BLANK, productCode, name, description, sellingPrice, tax, quantity,
+					WorkflowConstants.STATUS_PENDING, StringUtil.merge(imageIds, StringPool.COMMA), vedioURL,
+					getSmallImageId(), StringPool.BLANK, MRP, itemWeight, itemTypeId, itemTypeDocumentId, commission,
+					itemWidth, itemLength, itemHeight, deliveryCharges);
+			
 			itemId = shoppingItem.getItemId();
 			ItemHistoryLocalServiceUtil.addItemHistory(itemId, currentUserId, currentUserName, currentUserEmail, HConstants.ITEM_ADDED, StringPool.BLANK);
 			articleId = HConstants.ITEM_ADDED_TEMPLATE;
@@ -347,10 +350,12 @@ public class DashboardPortlet extends MVCPortlet {
 			//Updating items
 			imageIds = updateImages(uploadRequest, HConstants.IMAGE, HConstants.IMAGE_ID);
 			
-			shoppingItem = ShoppingItemLocalServiceUtil.updateItem(itemId,
-					themeDisplay.getScopeGroupId(), themeDisplay.getCompanyId(), userId, userName, userEmail, currentUserId, currentUserName, currentUserEmail,productCode, name,
-					description, sellingPrice, totalPrice, tax, quantity, status,
-					StringUtil.merge(imageIds, StringPool.COMMA), vedioURL, 0, remark, MRP, itemWeight, itemTypeId, itemTypeDocumentId);
+			shoppingItem = ShoppingItemLocalServiceUtil.updateItem(itemId, themeDisplay.getScopeGroupId(),
+					themeDisplay.getCompanyId(), userId, userName, userEmail, currentUserId, currentUserName,
+					currentUserEmail, productCode, name, description, sellingPrice, tax, quantity, status,
+					StringUtil.merge(imageIds, StringPool.COMMA), vedioURL, 0, remark, MRP, itemWeight, itemTypeId,
+					itemTypeDocumentId, commission, itemWidth, itemLength, itemHeight, deliveryCharges);
+			
 			ItemHistoryLocalServiceUtil.addItemHistory(itemId, currentUserId, currentUserName, currentUserEmail, status, staffRemark);
 			articleId = HConstants.ITEM_ADDED_UPDATED_TEMPLATE;
 			

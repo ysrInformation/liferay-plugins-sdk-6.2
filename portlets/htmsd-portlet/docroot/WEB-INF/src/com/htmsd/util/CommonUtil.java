@@ -463,7 +463,7 @@ public class CommonUtil {
 			shoppingBean.setQuantity(shIt_cart.getQuantity());
 			shoppingBean.setTotalPrice(shIt_cart.getTotalPrice()); 
 			shoppingBean.setItemId(shIt_cart.getItemId()); 
-			shoppingBean.setUnitPrice(shoppingItem.getTotalPrice()); 
+			shoppingBean.setUnitPrice(shoppingItem.getSellingPrice()); 
 			shoppingBean.setProductName(shoppingItem.getName());
 			shoppingBean.setImageId(Validator.isNotNull(shoppingItem)? shoppingItem.getSmallImage():0);
 			shoppingBean.setCartItemId(shIt_cart.getId());
@@ -485,12 +485,12 @@ public class CommonUtil {
 		
 		ShoppingBean shoppingBean = new ShoppingBean();
 		ShoppingItem shoppingItem = getShoppingItem(itemId);
-		double totalPrice = shoppingItem.getTotalPrice() * HConstants.INITIAL_QUANTITY;
+		double totalPrice = shoppingItem.getSellingPrice() * HConstants.INITIAL_QUANTITY;
 		shoppingBean.setItemId(itemId);
 		shoppingBean.setProductCode(shoppingItem.getProductCode());
 		shoppingBean.setProductName(shoppingItem.getName());
 		shoppingBean.setQuantity(HConstants.INITIAL_QUANTITY);
-		shoppingBean.setUnitPrice(shoppingItem.getTotalPrice()); 
+		shoppingBean.setUnitPrice(shoppingItem.getSellingPrice()); 
 		shoppingBean.setTotalPrice(totalPrice);
 		shoppingBean.setDescription((Validator.isNotNull(shoppingItem))?shoppingItem.getDescription():StringPool.BLANK); 
 		shoppingBean.setImageId(Validator.isNotNull(shoppingItem)? shoppingItem.getSmallImage():0);

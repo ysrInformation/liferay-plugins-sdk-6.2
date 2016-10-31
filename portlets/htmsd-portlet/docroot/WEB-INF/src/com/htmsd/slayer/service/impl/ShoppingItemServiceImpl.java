@@ -109,7 +109,7 @@ public class ShoppingItemServiceImpl extends ShoppingItemServiceBaseImpl {
 		
 		for (ShoppingItem shoppingItem : shoppingItems) {
 			long imageId = shoppingItem.getSmallImage();
-			double total = (currencyRate == 0) ? shoppingItem.getTotalPrice() :  shoppingItem.getTotalPrice() / currencyRate;
+			double total = (currencyRate == 0) ? shoppingItem.getSellingPrice() :  shoppingItem.getSellingPrice() / currencyRate;
 			double MRP = (currencyRate == 0) ? shoppingItem.getMRP():  shoppingItem.getMRP() / currencyRate;
 			
 			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();

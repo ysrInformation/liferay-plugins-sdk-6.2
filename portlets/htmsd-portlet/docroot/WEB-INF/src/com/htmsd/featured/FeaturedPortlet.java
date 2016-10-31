@@ -112,7 +112,7 @@ public class FeaturedPortlet extends MVCPortlet {
 			SessionErrors.add(actionRequest, "item-exist");
 		} else {
 			ShoppingItem shoppingItem = CommonUtil.getShoppingItem(itemId);
-			double totalPrice = (Validator.isNotNull(shoppingItem) ? shoppingItem.getTotalPrice():0);
+			double totalPrice = (Validator.isNotNull(shoppingItem) ? shoppingItem.getSellingPrice() : 0);
 			ShoppingItem_CartLocalServiceUtil.insertItemsToCart(HConstants.INITIAL_QUANTITY, shoppingCart.getCartId(), itemId, totalPrice);
 		}
 	}

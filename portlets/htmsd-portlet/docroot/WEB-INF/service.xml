@@ -71,7 +71,11 @@
 		<column name="sellingPrice" type="Double" />
 		<column name="MRP" type="Double"/>
 		<column name="itemWeight" type="Double"/>
-		<column name="totalPrice" type="Double" />
+		<column name="itemLength" type="Double" />
+		<column name="itemWidth" type="Double" />
+		<column name="itemHeight" type="Double" />
+		<column name="commission" type="Double" />
+		<column name="deliveryChanges" type="Double" />
 		<column name="tax" type="Double" />
 		<column name="quantity" type="long" />
 		<column name="status" type="int" />
@@ -439,7 +443,7 @@
 		</finder>
 	</entity>
 	
-	<entity name="City" local-service="true" remote-service="false">
+	<!-- <entity name="City" local-service="true" remote-service="false">
 		<column name="cityId" type="long" primary="true"/>
 		<column name="regionId" type="long"/>		
 		<column name="name" type="String"/>
@@ -490,21 +494,30 @@
 		<column name="name" type="String"/>
 	</entity>
 
-	<entity name="Price" local-service="true" remote-service="false">
+	<entity name="Price" local-service="true" remote-service="true">
 		<column name="priceId" type="long" primary="true"/>
 		<column name="categoryId" type="long"/>
 		<column name="zoneId" type="long"/>
 		<column name="priceTypeId" type="long"/>
 		<column name="weightRangeFrom" type="Double"/>
 		<column name="weightRangeTo" type="Double"/>
+		<column name="lengthRangeFrom" type="Double"/>
+		<column name="lengthRangeTo" type="Double"/>
+		<column name="heightRangeFrom" type="Double"/>
+		<column name="heightRangeTo" type="Double"/>
+		<column name="widthRangeFrom" type="Double"/>
+		<column name="widthRangeTo" type="Double"/>
 		<column name="price" type="Double"/>
 		<column name="createdDate" type="Date"/>
 		<column name="modifiedDate" type="Date"/>
-	</entity>
-	
-	<entity name="Commision" local-service="true" remote-service="false">
-		<column name="commisionId" type="long" primary="true"/>
+	</entity> -->
+
+	<entity name="Commission" local-service="true" remote-service="true">
+		<column name="commissionId" type="long" primary="true"/>
 		<column name="categoryId" type="long"/>
 		<column name="percent" type="Double"/>
+		<finder return-type="Commission" name="CategoryId">
+			<finder-column name="categoryId"/>
+		</finder>
 	</entity>
 </service-builder>

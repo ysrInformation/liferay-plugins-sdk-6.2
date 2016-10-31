@@ -9,6 +9,8 @@ import javax.portlet.PortletException;
 
 import com.htmsd.slayer.model.ItemType;
 import com.htmsd.slayer.service.CategoryLocalServiceUtil;
+import com.htmsd.slayer.service.CommisionLocalServiceUtil;
+import com.htmsd.slayer.service.CommissionLocalServiceUtil;
 import com.htmsd.slayer.service.ItemTypeLocalServiceUtil;
 import com.htmsd.util.HConstants;
 import com.itextpdf.text.log.SysoCounter;
@@ -29,9 +31,6 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  * Portlet implementation class ConfigurationPortlet
  */
 public class ConfigurationPortlet extends MVCPortlet {
- 
-	
-	
 	
 	public void addCategory(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortletException {
@@ -157,5 +156,33 @@ public class ConfigurationPortlet extends MVCPortlet {
 		actionResponse.setRenderParameter("tab1", "Item Types");
 	}
 	
+	public void saveCommison(ActionRequest actionRequest, ActionResponse actionResponse)
+			throws IOException, PortletException {
+		_log.info(" Saving Commision . . .");
+		
+		long commissionId = ParamUtil.getLong(actionRequest, "commissionId");
+		long categoryId = ParamUtil.getLong(actionRequest, "categoryId");
+		double percent = ParamUtil.getDouble(actionRequest, "percent");
+		
+		CommissionLocalServiceUtil.update(commissionId, categoryId, percent);
+		
+		actionResponse.setRenderParameter("tab1", "Commission");
+	}
+	
+	public void deleteCommission(ActionRequest actionRequest, ActionResponse actionResponse)
+			throws IOException, PortletException {
+
+		_log.info("Deleting commission");
+		
+		long commissionId = ParamUtil.getLong(actionRequest, "commissionId");
+		try {
+			CommissionLocalServiceUtil.deleteCommission(commissionId);
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		actionResponse.setRenderParameter("tab1", "Commission");
+	}
 	private Log _log = LogFactoryUtil.getLog(ConfigurationPortlet.class);
 }

@@ -1,3 +1,5 @@
+<%@page import="com.htmsd.util.CommonUtil"%>
+<%@page import="javax.portlet.PortletSession"%>
 <%@page import="com.htmsd.slayer.service.SellerLocalServiceUtil"%>
 <%@include file="/html/common/init.jsp" %>
 
@@ -52,4 +54,7 @@
 	boolean isAdmin = permissionChecker.isOmniadmin();
 	boolean isStaff = RoleLocalServiceUtil.hasUserRole(user.getUserId(), themeDisplay.getCompanyId(), HConstants.STAFF_ROLE, false);
 	boolean isSeller = SellerLocalServiceUtil.isSeller(themeDisplay.getUserId());
-%>
+	String val = (String) portletSession.getAttribute("currentCurrencyId", PortletSession.APPLICATION_SCOPE);
+	long currencyId = (Validator.isNull(val)) ?  0 : Long.valueOf(val);
+	String currSym = CommonUtil.getCurrencySymbol(currencyId);
+%>	

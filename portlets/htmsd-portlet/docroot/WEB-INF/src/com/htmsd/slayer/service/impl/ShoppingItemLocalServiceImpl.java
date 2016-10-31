@@ -64,9 +64,10 @@ public class ShoppingItemLocalServiceImpl extends ShoppingItemLocalServiceBaseIm
 	
 	public ShoppingItem addItem(long groupId, long companyId, long userId, String userName, String userEmail,
 			long updateUserId, String updateUserName, String updateEmail, String productCode, String name,
-			String description, Double sellerPrice, Double totalPrice, Double tax, long quantity, int status,
-			String imageIds, String vedioURL, long smallImage, String remark, double MRP, double itemWeight,
-			long itemTypeId, long itemTypeDocumentId) {
+			String description, double sellingPrice, double tax, long quantity, int status, String imageIds,
+			String vedioURL, long smallImage, String remark, double MRP, double itemWeight, long itemTypeId,
+			long itemTypeDocumentId, double commission, double itemWidth, double itemLength, double itemHeight,
+			double deliveryCharges) {
 
 		ShoppingItem shoppingItem = null;
 		try {
@@ -83,12 +84,11 @@ public class ShoppingItemLocalServiceImpl extends ShoppingItemLocalServiceBaseIm
 			shoppingItem.setProductCode(productCode);
 			shoppingItem.setName(name);
 			shoppingItem.setDescription(description);
-			shoppingItem.setSellingPrice(sellerPrice);
+			shoppingItem.setSellingPrice(sellingPrice);
 			shoppingItem.setMRP(MRP);
 			shoppingItem.setItemWeight(itemWeight);
 			shoppingItem.setItemTypeId(itemTypeId);
 			shoppingItem.setItemTypeDocumentId(itemTypeDocumentId);
-			shoppingItem.setTotalPrice(totalPrice);
 			shoppingItem.setTax(tax);
 			shoppingItem.setQuantity(quantity);
 			shoppingItem.setStatus(status);
@@ -99,6 +99,12 @@ public class ShoppingItemLocalServiceImpl extends ShoppingItemLocalServiceBaseIm
 			shoppingItem.setModifiedDate(new Date());
 			shoppingItem.setRemark(remark);
 			
+			shoppingItem.setItemWidth(itemWidth);
+			shoppingItem.setItemHeight(itemHeight);
+			shoppingItem.setItemLength(itemLength);
+			shoppingItem.setCommission(commission);
+			shoppingItem.setDeliveryChanges(deliveryCharges);
+			
 			addShoppingItem(shoppingItem);
 		} catch (SystemException e) {
 			e.printStackTrace();
@@ -108,9 +114,10 @@ public class ShoppingItemLocalServiceImpl extends ShoppingItemLocalServiceBaseIm
 
 	public ShoppingItem updateItem(long itemId, long groupId, long companyId, long userId, String userName,
 			String userEmail, long updateUserId, String updateUserName, String updateEmail, String productCode,
-			String name, String description, Double sellerPrice, Double totalPrice, Double tax, long quantity,
-			int status, String imageIds, String vedioURL, long smallImage, String remark, double MRP, double itemWeight,
-			long itemTypeId, long itemTypeDocumentId) {
+			String name, String description, double sellingPrice, double tax, long quantity, int status,
+			String imageIds, String vedioURL, long smallImage, String remark, double MRP, double itemWeight,
+			long itemTypeId, long itemTypeDocumentId, double commission, double itemWidth, double itemLength,
+			double itemHeight, double deliveryCharges) {
 
 		ShoppingItem shoppingItem = null;
 		try {
@@ -127,8 +134,7 @@ public class ShoppingItemLocalServiceImpl extends ShoppingItemLocalServiceBaseIm
 			shoppingItem.setProductCode(productCode);
 			shoppingItem.setName(name);
 			shoppingItem.setDescription(description);
-			shoppingItem.setSellingPrice(sellerPrice);
-			shoppingItem.setTotalPrice(totalPrice);
+			shoppingItem.setSellingPrice(sellingPrice);
 			shoppingItem.setTax(tax);
 			shoppingItem.setQuantity(quantity);
 			shoppingItem.setStatus(status);
@@ -140,7 +146,15 @@ public class ShoppingItemLocalServiceImpl extends ShoppingItemLocalServiceBaseIm
 			shoppingItem.setItemWeight(itemWeight);
 			shoppingItem.setItemTypeId(itemTypeId);
 			shoppingItem.setItemTypeDocumentId(itemTypeDocumentId);
+			
+			shoppingItem.setItemWidth(itemWidth);
+			shoppingItem.setItemHeight(itemHeight);
+			shoppingItem.setItemLength(itemLength);
+			shoppingItem.setCommission(commission);
+			shoppingItem.setDeliveryChanges(deliveryCharges);
+			
 			updateShoppingItem(shoppingItem);
+			
 		} catch (SystemException e) {
 			_log.error(e);
 		}
@@ -189,13 +203,13 @@ public class ShoppingItemLocalServiceImpl extends ShoppingItemLocalServiceBaseIm
 		return shoppingItem;
 	}
 	
-	public ShoppingItem updateTotalPrice(long itemId, Double totalPrice, long updateUserId, String updateUserName) {
+	public ShoppingItem updateTotalPrice(long itemId, double sellingPrice, long updateUserId, String updateUserName) {
 		
 		ShoppingItem shoppingItem = null;
 		try {
 			shoppingItem = fetchShoppingItem(itemId);
 			shoppingItem = setUpdateAudit(updateUserId, shoppingItem, updateUserName);
-			shoppingItem.setTotalPrice(totalPrice);
+			shoppingItem.setSellingPrice(sellingPrice);
 			updateShoppingItem(shoppingItem);
 		} catch (SystemException e) {
 			_log.error(e);

@@ -12,6 +12,11 @@
 		<field name="name" type="String" />
 		<field name="description" type="String" />
 	</model>
+	<model name="com.htmsd.slayer.model.Commission">
+		<field name="commissionId" type="long" />
+		<field name="categoryId" type="long" />
+		<field name="percent" type="Double" />
+	</model>
 	<model name="com.htmsd.slayer.model.Currency">
 		<field name="currencyId" type="long" />
 		<field name="currencyCode" type="String" />
@@ -35,6 +40,11 @@
 		<field name="action" type="int" />
 		<field name="remark" type="String" />
 	</model>
+	<model name="com.htmsd.slayer.model.ItemType">
+		<field name="itemTypeId" type="long" />
+		<field name="name" type="String" />
+		<field name="documentRequired" type="boolean" />
+	</model>
 	<model name="com.htmsd.slayer.model.Purchase">
 		<field name="purchaseId" type="long" />
 		<field name="orderId" type="long" />
@@ -46,6 +56,21 @@
 		<field name="paymentMode" type="String" />
 		<field name="paymentStatus" type="String" />
 		<field name="totalAmount" type="double" />
+	</model>
+	<model name="com.htmsd.slayer.model.Seller">
+		<field name="sellerId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="name" type="String" />
+		<field name="bankName" type="String" />
+		<field name="bankAccountNumber" type="long" />
+		<field name="ifscCode" type="String" />
+		<field name="TIN" type="String" />
+		<field name="CST" type="String" />
 	</model>
 	<model name="com.htmsd.slayer.model.ShoppingCart">
 		<field name="cartId" type="long" />
@@ -78,7 +103,11 @@
 		<field name="sellingPrice" type="Double" />
 		<field name="MRP" type="Double" />
 		<field name="itemWeight" type="Double" />
-		<field name="totalPrice" type="Double" />
+		<field name="itemLength" type="Double" />
+		<field name="itemWidth" type="Double" />
+		<field name="itemHeight" type="Double" />
+		<field name="commission" type="Double" />
+		<field name="deliveryChanges" type="Double" />
 		<field name="tax" type="Double" />
 		<field name="quantity" type="long" />
 		<field name="status" type="int" />
@@ -166,6 +195,10 @@
 		<field name="billingAddressId" type="long" />
 		<field name="mobileNumber" type="String" />
 		<field name="altNumber" type="String" />
+		<field name="firstName" type="String" />
+		<field name="lastName" type="String" />
+		<field name="email" type="String" />
+		<field name="isDeliveryAddress" type="Boolean" />
 	</model>
 	<model name="com.htmsd.slayer.model.WholeSale">
 		<field name="wholseSaleId" type="long" />

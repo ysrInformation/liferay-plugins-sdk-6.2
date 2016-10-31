@@ -31,7 +31,7 @@
 			<aui:col width="25">
 				<aui:input name="<%=HConstants.PRODUCT_CODE %>" />
 			</aui:col>
-			<c:if test="<%=isAdmin || isStaff%>">
+			<%-- <c:if test="<%=isAdmin || isStaff%>"> --%>
 				<aui:col width="25">
 					<aui:select name="<%=HConstants.PARENT_CATEGORY_ID %>" label="category"  required="true" showEmptyOption="true">
 						<c:forEach items="<%=parentCategories %>" var="parentCategory">   
@@ -44,7 +44,7 @@
 					<aui:select name="<%=HConstants.CATEGORY_ID %>" label="sub-category"  required="true" showEmptyOption="true">
 					</aui:select>
 				</aui:col>
-			</c:if>
+			<%-- </c:if> --%>
 		</aui:layout>
 		<h4><liferay-ui:message key="allowed-files" /></h4>
 		<aui:layout >
@@ -78,36 +78,6 @@
 		
 		<aui:layout>
 			<aui:column>
-				<aui:input name="MRP" label="MRP" required="true">
-					<aui:validator name="number" />
-					<aui:validator name="custom" errorMessage="Please enter a valid price">
-						function (val, fieldNode, ruleValue) {
-							var result = true;
-							if (val.length == 0 || val <= 0) {
-								result = false;
-							}
-							return result;
-						}
-					</aui:validator>
-				</aui:input>
-			</aui:column>
-			<aui:column>
-				<aui:input name="itemWeight" label="Weight" required="true">
-					<aui:validator name="number" />
-					<aui:validator name="custom" errorMessage="Please enter a valid price">
-						function (val, fieldNode, ruleValue) {
-							var result = true;
-							if (val.length == 0 || val <= 0) {
-								result = false;
-							}
-							return result;
-						}
-					</aui:validator>
-				</aui:input>
-			</aui:column>
-		</aui:layout>
-		<aui:layout>
-			<aui:column>
 				<aui:select name="itemType" label="Type" required="true" showEmptyOption="true" helpMessage="item-type-help-message">
 					<%
 						for (ItemType itemType : ItemTypeLocalServiceUtil.getItemTypes(-1, -1)) {
@@ -124,101 +94,211 @@
 				</aui:input>
 			</aui:column>
 		</aui:layout>
-		<h4><liferay-ui:message key="comission" /></h4>
-		<aui:layout>
-			<aui:column>
-				<aui:input name="<%=HConstants.PRICE %>" required="true"> 
-					<aui:validator name="number" />
-					<aui:validator name="custom" errorMessage="Please enter a valid price">
-						function (val, fieldNode, ruleValue) {
-							var result = true;
-							if (val.length == 0 || val <= 0) {
-								result = false;
-							}
-							return result;
-						}
-					</aui:validator>
-				</aui:input>
-			</aui:column>
-			<aui:column>
-				<aui:input name="<%=HConstants.TAX %>" label="Tax">
-					<aui:validator  name="custom"  errorMessage="Please enter valid Percentage" >
-						function (val, fieldNode, ruleValue) {
-							var result = false;
-							if (val.match(/^(?:\d*\.\d{1,2}|\d+)$/) || val.length == 0 ) {
-								result = true;
-							}
-							return result;
-						}
-					</aui:validator>
-				</aui:input>
-			</aui:column>
-			<aui:column>
-				<aui:input name="<%=HConstants.QUANTITY %>">
-					<aui:validator name="number" />
-					<aui:validator name="custom" errorMessage="Please enter a valid quantity">
-						function (val, fieldNode, ruleValue) {
-							var result = true;
-							if (val.length == 0 || val <= 0) {
-								result = false;
-							}
-							return result;
-						}
-					</aui:validator>
-				</aui:input>
-			</aui:column>	
-			<aui:column >
-				<aui:input name="<%=HConstants.UNILIMITED_QUANTITY %>" type="checkbox" label="unlimited-quantity" />
-			</aui:column>
-		</aui:layout>
 		
-		<aui:layout>
-			<aui:input name="<%=HConstants.WHOLESALE_DISCOUNT %>" type="checkbox"  inlineLabel="true" />
-			<div id="wholeSaleDiv" style="display:none;">
-				<%
-					for(int i = 1 ; i <= HConstants.WHOLESALE_LIMIT ; i ++) {
-						%>
-							<div class="wholesaleclass" id='<%="wholeSaleDiv" + i %>' style="display:none;">
-								<aui:row>
-									<aui:col width="20">
-										<aui:input name="<%=HConstants.WHOLESALE_QUANTITY + i %>" >
-											<aui:validator name="number" />
-										</aui:input>	
-									</aui:col>
-									<aui:col width="20">
-										<aui:input name="<%=HConstants.WHOLESALE_PRICE + i%>" >
-											<aui:validator name="number" />
-										</aui:input>
-									</aui:col>
-									<aui:col width="20">
-										<aui:button-row cssClass="add-btn-padding">
-											<%	if(i!=HConstants.WHOLESALE_LIMIT) {
-													%>
-												  		<aui:button cssClass="addclass" name='<%="addbtn" + i %>' value="add"  />
-												 	<%
-												}
-											%>
-											<%	if(i!=1) {
-													%>
-														<aui:button cssClass="removeclass" name='<%="removebtn" + i %>'  value="remove" />
-													<%
-												}
-											%>
-										</aui:button-row>
-									</aui:col>
-								</aui:row>
-								<hr/>
-							</div>
-						<%
-					}
-				%>
-			</div>
-			
-		</aui:layout>
-		<%-- <div id="tags">
-			<liferay-ui:message key="tags" />
-			<liferay-ui:asset-tags-selector className="<%=ShoppingItem.class.getName() %>" />
-		</div> --%>
+		<aui:fieldset label="product-dimensions">
+			<aui:layout>
+				<aui:column>
+					<aui:input name="itemWeight" required="true" suffix="Kgs">
+						<aui:validator name="number" />
+						<aui:validator name="custom" errorMessage="Please enter a valid Weight">
+							function (val, fieldNode, ruleValue) {
+								var result = true;
+								if (val.length == 0 || val <= 0) {
+									result = false;
+								}
+								return result;
+							}
+						</aui:validator>
+					</aui:input>
+				</aui:column>
+				<aui:column>
+					<aui:input name="itemLength" required="true" suffix="cm">
+						<aui:validator name="number" />
+						<aui:validator name="custom" errorMessage="Please enter a valid Length">
+							function (val, fieldNode, ruleValue) {
+								var result = true;
+								if (val.length == 0 || val <= 0) {
+									result = false;
+								}
+								return result;
+							}
+						</aui:validator>
+					</aui:input>
+				</aui:column>
+				<aui:column>
+					<aui:input name="itemWidth" required="true" suffix="cm">
+						<aui:validator name="number" />
+						<aui:validator name="custom" errorMessage="Please enter a valid Width">
+							function (val, fieldNode, ruleValue) {
+								var result = true;
+								if (val.length == 0 || val <= 0) {
+									result = false;
+								}
+								return result;
+							}
+						</aui:validator>
+					</aui:input>
+				</aui:column>
+				<aui:column>
+					<aui:input name="itemHeight" required="true" suffix="cm">
+						<aui:validator name="number" />
+						<aui:validator name="custom" errorMessage="Please enter a valid Height">
+							function (val, fieldNode, ruleValue) {
+								var result = true;
+								if (val.length == 0 || val <= 0) {
+									result = false;
+								}
+								return result;
+							}
+						</aui:validator>
+					</aui:input>
+				</aui:column>
+			</aui:layout>
+		</aui:fieldset>
+		<aui:fieldset label="product-pricing">
+			<h4><liferay-ui:message key="comission" /></h4>
+			<aui:layout>
+				<aui:column>
+					<aui:input name="MRP" label="MRP" required="true" prefix="<%= currSym %>">
+						<aui:validator name="number" />
+						<aui:validator name="custom" errorMessage="Please enter a valid price">
+							function (val, fieldNode, ruleValue) {
+								var result = true;
+								if (val.length == 0 || val <= 0) {
+									result = false;
+								}
+								return result;
+							}
+						</aui:validator>
+					</aui:input>
+				</aui:column>
+				<aui:column>
+					<aui:input name="<%=HConstants.TAX %>" label="Tax" suffix="%">
+						<aui:validator  name="custom"  errorMessage="Please enter valid Percentage" >
+							function (val, fieldNode, ruleValue) {
+								var result = false;
+								if (val.match(/^(?:\d*\.\d{1,2}|\d+)$/) || val.length == 0 ) {
+									result = true;
+								}
+								return result;
+							}
+						</aui:validator>
+					</aui:input>
+				</aui:column>
+				<c:if test="<%=isAdmin || isStaff%>">
+					<aui:column>
+						<aui:input name="deliveryCharges" prefix="<%= currSym %>" required="true">
+							<aui:validator name="number" />
+							<aui:validator name="custom" errorMessage="Please enter a valid price">
+								function (val, fieldNode, ruleValue) {
+									var result = true;
+									if (val.length == 0 || val <= 0) {
+										result = false;
+									}
+									return result;
+								}
+							</aui:validator>
+						</aui:input>
+					</aui:column>
+				</c:if>
+			</aui:layout>
+			<aui:layout>	
+				<aui:column>
+					<aui:input name="<%=HConstants.PRICE %>" required="true" onkeyup="calculateSellerEarning(this);" prefix="<%= currSym %>"> 
+						<aui:validator name="number" />
+						<aui:validator name="custom" errorMessage="Please enter a valid price">
+							function (val, fieldNode, ruleValue) {
+								var result = true;
+								if (val.length == 0 || val <= 0) {
+									result = false;
+								}
+								return result;
+							}
+						</aui:validator>
+					</aui:input>
+				</aui:column>
+				
+				<aui:column>
+					<aui:input name="commission" cssClass="commission" readonly="readonly" suffix="%"/>
+				</aui:column>
+				
+				<aui:column>
+					<aui:input name="earned" disabled="true" prefix="<%= currSym %>"/>
+				</aui:column>
+			</aui:layout>
+			<aui:layout>
+				<aui:input name="<%=HConstants.WHOLESALE_DISCOUNT %>" type="checkbox"  inlineLabel="true" />
+				<div id="wholeSaleDiv" style="display:none;">
+					<%
+						for(int i = 1 ; i <= HConstants.WHOLESALE_LIMIT ; i ++) {
+							%>
+								<div class="wholesaleclass" id='<%="wholeSaleDiv" + i %>' style="display:none;">
+									<aui:layout>
+										<aui:column>
+											<aui:input name="<%=HConstants.WHOLESALE_QUANTITY + i %>">
+												<aui:validator name="number" />
+											</aui:input>	
+										</aui:column>
+										<aui:column>
+											<aui:input name="<%=HConstants.WHOLESALE_PRICE + i%>" data-index = "<%= i %>" onkeyup="calculateSellerEarning(this);">
+												<aui:validator name="number" />
+											</aui:input>
+										</aui:column>
+										<aui:column>
+											<aui:input name='<%= "commission"+ i%>' cssClass="commission" label="commission" disabled="true" suffix="%"/>
+										</aui:column>
+										<aui:column>
+											<aui:input name='<%= "earned"+ i%>'  label="earned" disabled="true" prefix="<%= currSym %>"/>
+										</aui:column>
+										<aui:column>
+											<aui:button-row cssClass="add-btn-padding">
+												<%	
+													if(i!=HConstants.WHOLESALE_LIMIT) {
+														%>
+													  		<aui:button cssClass="addclass" name='<%="addbtn" + i %>' value="add"  />
+													 	<%
+													}
+												%>
+												<%	
+													if(i!=1) {
+														%>
+															<aui:button cssClass="removeclass" name='<%="removebtn" + i %>'  value="remove" />
+														<%
+													}
+												%>
+											</aui:button-row>
+										</aui:column>
+									</aui:layout>
+									<hr/>
+								</div>
+							<%
+						}
+					%>
+				</div>
+			</aui:layout>
+		</aui:fieldset>
+		
+		<aui:fieldset label="product-quantity">
+			<aui:layout>	
+				<aui:column>
+					<aui:input name="<%=HConstants.QUANTITY %>">
+						<aui:validator name="number" />
+						<aui:validator name="custom" errorMessage="Please enter a valid quantity">
+							function (val, fieldNode, ruleValue) {
+								var result = true;
+								if (val.length == 0 || val <= 0) {
+									result = false;
+								}
+								return result;
+							}
+						</aui:validator>
+					</aui:input>
+				</aui:column>
+				<aui:column>
+					<aui:input name="<%=HConstants.UNILIMITED_QUANTITY %>" type="checkbox" label="unlimited-quantity" />
+				</aui:column>
+			</aui:layout>
+		</aui:fieldset>
 		<aui:input name="terms"  type="checkbox" required="true" label="" inlineField="true" />
 		<aui:a href="/terms-and-conditions">Terms of use</aui:a>
 		And
@@ -303,6 +383,7 @@
 		var A = new AUI();
 		var categoryElem = A.one("#<portlet:namespace /><%=HConstants.CATEGORY_ID%>");
 		categoryElem.get('children').remove();
+		A.Node.create('<option value=""> -- Select -- </option>').appendTo(categoryElem);
 		for(x in data) {
 			A.Node.create('<option value='+data[x].categoryId+'>'+data[x].categoryName+'</option>').appendTo(categoryElem);
 		}
@@ -330,7 +411,7 @@
 		$('#<portlet:namespace/><%=HConstants.WHOLESALE_QUANTITY%>'+counter).val('');
 		$('#<portlet:namespace/><%=HConstants.WHOLESALE_PRICE%>'+counter).val('');
 	});
-	
+
 	function onAddItem() {
 		extractCodeFromEditor();
 	}
@@ -338,4 +419,27 @@
 	function  <portlet:namespace />initEditor() {
 	    return "";
 	}
+	
+	function calculateSellerEarning(elem) {
+		var index = $(elem).data("index");
+		var price = $(elem).val();
+		var commissionPercent = ($(".commission").val() / 100);
+		var dispStr = price+" - (" +price+" * ( "+ $(".commission").val() +" / 100) = " + (price - (price * commissionPercent));
+		if (index === undefined) {
+			$('#<portlet:namespace/>earned').val(dispStr);
+		} else {
+			$('#<portlet:namespace/>earned'+index).val(dispStr);
+		}
+	}
+	
+	$(function() {
+		var commissionPercent = 10;
+		$('#<portlet:namespace/>categoryId').on('change', function() {
+			Liferay.Service('/htmsd-portlet.commission/get-commission-percent-by-category', {
+				categoryId: $('#<portlet:namespace/>categoryId').val()
+			}, function(obj) {
+				$('.commission').val(obj);				
+			});
+		});
+	})
 </script>
