@@ -7,13 +7,10 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 
-import com.htmsd.slayer.model.ItemType;
 import com.htmsd.slayer.service.CategoryLocalServiceUtil;
-import com.htmsd.slayer.service.CommisionLocalServiceUtil;
 import com.htmsd.slayer.service.CommissionLocalServiceUtil;
 import com.htmsd.slayer.service.ItemTypeLocalServiceUtil;
 import com.htmsd.util.HConstants;
-import com.itextpdf.text.log.SysoCounter;
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -34,7 +31,8 @@ public class ConfigurationPortlet extends MVCPortlet {
 	
 	public void addCategory(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortletException {
-
+		
+		String tabs1 = ParamUtil.getString(actionRequest, "tab1");
 		String name = ParamUtil.getString(actionRequest, HConstants.NAME);
 		String description = ParamUtil.getString(actionRequest, HConstants.DESCRIPTION);
 		long parentCategoryId = ParamUtil.getLong(actionRequest, HConstants.CATEGORY_ID);
@@ -42,7 +40,7 @@ public class ConfigurationPortlet extends MVCPortlet {
 		
 		CategoryLocalServiceUtil.addCategory(themeDisplay.getScopeGroupId(), themeDisplay.getCompanyId(), themeDisplay.getUserId(), name, description, parentCategoryId);
 
-		actionResponse.setRenderParameter("tab1", "Category");
+		actionResponse.setRenderParameter("tab1", tabs1);
 	}
 	
 	public void deleteCategory(ActionRequest actionRequest,
@@ -58,10 +56,14 @@ public class ConfigurationPortlet extends MVCPortlet {
 	public void deleteCategorySet(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortletException {
 		
+		String tabs1 = ParamUtil.getString(actionRequest, "tab1");
 		String [] rowIds=ParamUtil.getParameterValues(actionRequest, "rowIds");
-		for(String rowId : rowIds) {
-			CategoryLocalServiceUtil.removeCategory(Long.valueOf(rowId));
+		if (rowIds.length > 0) {
+			for (String rowId : rowIds) {
+				CategoryLocalServiceUtil.removeCategory(Long.valueOf(rowId));
+			}
 		}
+		actionResponse.setRenderParameter("tab1", tabs1); 
 	}
 	
 	public void addTag(ActionRequest actionRequest,

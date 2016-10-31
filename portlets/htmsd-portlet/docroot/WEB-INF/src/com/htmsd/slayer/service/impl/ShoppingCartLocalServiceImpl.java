@@ -108,7 +108,7 @@ public class ShoppingCartLocalServiceImpl
 		valueTokens[0] = shoppingOrder.getUserName();
 		valueTokens[1] = orderId;
 		valueTokens[2] = (Validator.isNotNull(shoppingItem)? shoppingItem.getProductCode()+ StringPool.DASH +shoppingItem.getName():StringPool.DASH);
-		valueTokens[3] = df.format(Validator.isNotNull(shoppingItem)? shoppingItem.getTotalPrice() : 0);
+		valueTokens[3] = df.format(Validator.isNotNull(shoppingItem)? shoppingItem.getSellingPrice() : 0);
 		valueTokens[4] = String.valueOf(shoppingOrder.getQuantity());
 		valueTokens[5] = df.format(shoppingOrder.getTotalPrice());
 		valueTokens[6] = CommonUtil.getPriceInNumberFormat(shoppingOrder.getTotalPrice(), HConstants.RUPEE_SYMBOL);
