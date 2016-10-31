@@ -86,6 +86,7 @@ public interface HConstants {
 
 	public static String PENDING_STATUS = "Pending";
 	public static String DELIVERED_STATUS = "Delivered";
+	public static String A2ZALI = "A2Z";
 	public static String HTMSD = "HTMSD";
 	public static String NOT_DELIVERED_STATUS = "Not Delivered";
 	public static String SHIPPING_STATUS = "Shipping";

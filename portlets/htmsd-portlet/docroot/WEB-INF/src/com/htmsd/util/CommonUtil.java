@@ -39,6 +39,7 @@ import com.htmsd.slayer.service.ShoppingItem_CartLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingOrderItemLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
 import com.htmsd.slayer.service.UserInfoLocalServiceUtil;
+import com.liferay.portal.NoSuchLayoutException;
 import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
@@ -59,11 +60,13 @@ import com.liferay.portal.kernel.util.TextFormatter;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Address;
 import com.liferay.portal.model.Country;
+import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.Phone;
 import com.liferay.portal.model.Region;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.AddressLocalServiceUtil;
 import com.liferay.portal.service.CountryServiceUtil;
+import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.RegionServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
@@ -826,5 +829,22 @@ public class CommonUtil {
 			}
 		}
 		return shoppingItems;
+	}
+	
+	public static long getDetailPageLayoutId(long groupId, long defaultPlid) {
+		Layout detailLayout = null;
+		try {
+			detailLayout = LayoutLocalServiceUtil.getFriendlyURLLayout(groupId, false, "/detail");
+		} catch (PortalException e) {
+			_log.error("No Such layout exist {},"+e.getMessage());
+		} catch (SystemException e) {
+			_log.error("No Such layout exist {},"+e.getMessage());
+		}
+		
+		long detailPlid = defaultPlid;
+		if (Validator.isNotNull(detailLayout)) {
+			detailPlid = detailLayout.getPlid();
+		}
+		return detailPlid;
 	}
 }
