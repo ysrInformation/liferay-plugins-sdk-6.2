@@ -11,6 +11,7 @@
 	String val2 = (String) portletSession.getAttribute("currentCurrencyId", PortletSession.APPLICATION_SCOPE);
 	long currencyId1 = (Validator.isNull(val2)) ?  0 : Long.valueOf(val2);
 
+	long detailPlid = CommonUtil.getDetailPageLayoutId(themeDisplay.getScopeGroupId(), layout.getPlid());
 	double currentRate = CommonUtil.getCurrentRate(Long.valueOf(currencyId1));
 	String backURL = themeDisplay.getURLCurrent();
 %>

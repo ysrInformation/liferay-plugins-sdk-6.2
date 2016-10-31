@@ -38,17 +38,3 @@
 <%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@page import="com.liferay.portal.kernel.dao.search.ResultRow"%>
 <%@page import="com.liferay.portlet.asset.model.AssetCategory"%>
-
-<%
-	Layout detailLayout = null;
-	try {
-		detailLayout = LayoutLocalServiceUtil.getFriendlyURLLayout(themeDisplay.getScopeGroupId(), false, "/detail");
-	} catch (NoSuchLayoutException e) {
-		
-	}
-	
-	long detailPlid = layout.getPlid();
-	if (Validator.isNotNull(detailLayout)) {
-		detailPlid = detailLayout.getPlid();
-	}
-%>
