@@ -112,7 +112,7 @@
 									</td>
 									<td>
 										<div class="checkout-qty">
-											<input type="hidden" id="quantityData<%=_shpcart.getItemId() %>" value="<%= _shpcart.getCartItemId() %>" data-price="<%= shpItem.getTotalPrice() %>"/>  
+											<input type="hidden" id="quantityData<%=_shpcart.getItemId() %>" value="<%= _shpcart.getCartItemId() %>" data-price="<%= shpItem.getSellingPrice() %>"/>  
 											<select class="cart-qty checkout-quantity" name="productQuantity" data-id="<%= _shpcart.getItemId()%>">
 												<% for (int i=0; i<quantity.length; i++) { 
 													boolean isSelected = (Validator.isNotNull(_shpcart) && _shpcart.getQuantity() == quantity[i]);

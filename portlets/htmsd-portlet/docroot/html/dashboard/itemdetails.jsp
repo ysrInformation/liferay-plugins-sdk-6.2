@@ -185,7 +185,7 @@
 					</aui:col>
 					
 					<aui:col width="25">
-						<aui:select name="<%=HConstants.PARENT_CATEGORY_ID %>" label="category"  required="true" showEmptyOption="true" disabled="<%=!(isAdmin || isStaff)%>">
+						<aui:select name="<%=HConstants.PARENT_CATEGORY_ID %>" label="category"  required="true" showEmptyOption="true" disabled="<%=!(isAdmin || isStaff || isApprover)%>">
 							<%
 								
 								for(Category parentCategory : parentCategories) {
@@ -198,7 +198,7 @@
 						</aui:select>
 					</aui:col>
 					<aui:col width="25">
-						<aui:select name="<%=HConstants.CATEGORY_ID %>" label="sub-category" showEmptyOption="true" required="true" disabled="<%=!(isAdmin || isStaff)%>"></aui:select>
+						<aui:select name="<%=HConstants.CATEGORY_ID %>" label="sub-category" showEmptyOption="true" required="true" disabled="<%=!(isAdmin || isStaff || isApprover)%>"></aui:select>
 					</aui:col>
 				</aui:layout>
 				<aui:layout>
@@ -523,7 +523,7 @@
 						</aui:column>
 					</aui:layout>
 				</aui:fieldset>
-				<c:if test="<%=isAdmin || isStaff %>">
+				<c:if test="<%=isAdmin || isStaff || isApprover %>">
 					<aui:input name="<%=HConstants.STAFF_REMARKS %>" type="textarea" value="<%=item.getRemark()%>" required="true"/>
 					<aui:button type="submit" value="update" onClick="return confirmSubmit();"/>
 					<aui:button type="button" href="<%=backURL %>" value="cancel" />
@@ -538,7 +538,7 @@
 			<script>
 				$(document).ready(function(){
 					fetchCategories('<%=categoryId%>');
-					if(!<%=isAdmin%>) {
+					if(<%=!isAdmin && !isApprover%>) {
 						$('#<portlet:namespace/>itemDetailForm input,input[type=textarea],select ').attr("disabled", true);	
 					}
 				});

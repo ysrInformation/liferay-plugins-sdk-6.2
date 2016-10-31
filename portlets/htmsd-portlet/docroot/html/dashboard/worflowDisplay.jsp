@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.security.permission.PermissionThreadLocal"%>
 <%@include file="/html/dashboard/init.jsp" %>
 <style>
 	#_153_TabsBack, #_153_ctvk_null_null {
@@ -6,13 +7,9 @@
 </style>
 <%
 	long itemId = (Long) request.getAttribute("itemId");
+	String reviewUrl = themeDisplay.getURLPortal() + "/group/guest/system-admin?p_p_id=1_WAR_htmsdportlet&p_p_lifecycle=0&p_p_state=pop_up&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_1_WAR_htmsdportlet_jspPage=%2Fhtml%2Fdashboard%2Fitemdetails.jsp&_1_WAR_htmsdportlet_itemId="+itemId;
 %>
-<liferay-portlet:renderURL var="reviewUrl" portletName="1_WAR_htmsdportlet">
-	<liferay-portlet:param name="jspPage" value="/html/dashboard/itemdetails.jsp"/>
-	<liferay-portlet:param name="itemId" value="<%=String.valueOf(itemId) %>"/>
-</liferay-portlet:renderURL>
 <aui:button value="Review Item" onClick="javascript:showNewDetailPage();"/>
-
 <script>
 function showNewDetailPage() {
 	var url = '<%=reviewUrl%>';
@@ -22,7 +19,7 @@ function showNewDetailPage() {
 			dialog: {
 				centered: true,
 				modal: true,
-				width: "90%",
+				width: "95%",
 				height: 800,
 				destroyOnHide: true			
 			},
