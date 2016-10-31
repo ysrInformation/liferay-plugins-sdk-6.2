@@ -44,7 +44,7 @@
 	<table id="categoryTable" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
 		<thead>
 			<tr>
-				<th><input type="checkbox" name="<portlet:namespace/>rowIds" value=""/></th> 
+				<th><input type="checkbox" class="categoriesrowId" name="<portlet:namespace/>rowIds" value=""/></th> 
 				<th><liferay-ui:message key="no."/></th>
 				<th><liferay-ui:message key="category-name"/></th>
 				<c:if test='<%=tabs1.equals("Category")%>'>
@@ -58,7 +58,7 @@
 			<c:if test='<%= Validator.isNotNull(categories) && categories.size() > 0 %>'>
 				<% for (Category category : categories) { %>
 					<tr>
-						<td><input type="checkbox" name="<portlet:namespace/>rowIds" value="<%= category.getCategoryId() %>"/></td>
+						<td><input type="checkbox" class="categoriesrowIds" name="<portlet:namespace/>rowIds" value="<%= category.getCategoryId() %>"/></td>
 						<td><%= count++ %></td>
 						<td><%= category.getName() %></td>
 						<c:if test='<%=tabs1.equals("Category")%>'>
@@ -133,5 +133,13 @@
 <script>
 $(function(){
 	$("#categoryTable").DataTable();
+	$(".categoriesrowId").click(function(){
+		var $elem = $(this);
+		if ($elem.is(":checked")) {
+			$(".categoriesrowIds").prop("checked", true);
+		} else {
+			$(".categoriesrowIds").prop("checked", false);
+		}
+	});
 });
 </script>
