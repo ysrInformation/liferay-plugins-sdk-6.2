@@ -1093,12 +1093,6 @@ form#searchbox .button.button-small i {
 	max-width: 200px;
 }
 
-.product-image img {
-	max-height: 237px;
-	max-width: 237px !important;
-	min-height: 237px !important;
-}
-
 .featured-container .span2.leftColHeight {
 	display: flex;
 	align-items: center;

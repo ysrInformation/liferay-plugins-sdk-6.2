@@ -236,6 +236,16 @@
 	}
 }
 
+@media screen and (max-width:900px) {
+	.featured-container .swiper-slide {
+		width: 100% !important;
+	}
+	
+	.featured-container .swiper-container {
+		overflow: auto !important;
+	}
+}
+
 @media screen and (max-width:768px) {
 	.aui body {
     	padding: 0;
