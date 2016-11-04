@@ -217,13 +217,13 @@
 						</aui:validator>
 					</aui:input>
 				</aui:column>
-				
 				<aui:column>
 					<aui:input name="commission" cssClass="commission" readonly="readonly" suffix="%"/>
 				</aui:column>
-				
+			</aui:layout>
+			<aui:layout>
 				<aui:column>
-					<aui:input name="earned" disabled="true" prefix="<%= currSym %>"/>
+					<aui:input name="earned" disabled="true" cssClass="earned" prefix="<%= currSym %>"/>
 				</aui:column>
 			</aui:layout>
 			<aui:layout>
@@ -247,8 +247,10 @@
 										<aui:column>
 											<aui:input name='<%= "commission"+ i%>' cssClass="commission" label="commission" disabled="true" suffix="%"/>
 										</aui:column>
+									</aui:layout>	
+									<aui:layout>
 										<aui:column>
-											<aui:input name='<%= "earned"+ i%>'  label="earned" disabled="true" prefix="<%= currSym %>"/>
+											<aui:input name='<%= "earned"+ i%>' cssClass="earned" label="earned" disabled="true" prefix="<%= currSym %>"/>
 										</aui:column>
 										<aui:column>
 											<aui:button-row cssClass="add-btn-padding">
@@ -359,22 +361,20 @@
 			 	fullwholeSaleDiv.style.display = "none";
 		 	}
 		}); 
-		<c:if test="<%=isAdmin || isStaff%>">
-			A.one("#<portlet:namespace /><%=HConstants.PARENT_CATEGORY_ID%>").on('change',function(e){
-				var parentCategoryId =  A.one("#<portlet:namespace /><%=HConstants.PARENT_CATEGORY_ID%>").val();
-				A.io.request('<%=getCategoryURL%>', {
-					dataType: 'json',
-					data: {
-						'<portlet:namespace/>parentCategoryId' : parentCategoryId
-					   },
-					  on: {
-					   success: function() {
-						   setCategory(this.get('responseData'));
-					   }
-					  }
-					});
-			});
-		</c:if>
+		A.one("#<portlet:namespace /><%=HConstants.PARENT_CATEGORY_ID%>").on('change',function(e){
+			var parentCategoryId =  A.one("#<portlet:namespace /><%=HConstants.PARENT_CATEGORY_ID%>").val();
+			A.io.request('<%=getCategoryURL%>', {
+				dataType: 'json',
+				data: {
+					'<portlet:namespace/>parentCategoryId' : parentCategoryId
+				   },
+				  on: {
+				   success: function() {
+					   setCategory(this.get('responseData'));
+				   }
+				  }
+				});
+		});
 	});
 	function extractCodeFromEditor() {
         var x = document.<portlet:namespace />addItemForm.<portlet:namespace /><%=HConstants.DESCRIPTION%>.value = window.<portlet:namespace />editor.getHTML();

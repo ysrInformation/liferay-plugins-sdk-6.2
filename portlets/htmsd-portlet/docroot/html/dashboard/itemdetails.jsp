@@ -1,3 +1,6 @@
+<%@page import="com.htmsd.slayer.service.CommissionLocalServiceUtil"%>
+<%@page import="com.htmsd.slayer.model.Commission"%>
+<%@page import="com.htmsd.slayer.model.Commision"%>
 <%@page import="com.htmsd.slayer.service.ItemTypeLocalServiceUtil"%>
 <%@page import="com.htmsd.slayer.model.ItemType"%>
 <%@page import="com.htmsd.slayer.model.Seller"%>
@@ -87,6 +90,7 @@
  		String bankName = seller.getBankName();
  		long bankAcountNumber = seller.getBankAccountNumber();
  		String ifscCode = seller.getIfscCode();
+ 		double commission = CommonUtil.getShoppingItemCommission(item.getItemId());
  %>
 		<div class="seller-details">
 			<aui:fieldset label="seller-details">
@@ -435,16 +439,17 @@
 						</aui:column>
 						
 						<aui:column>
-							<aui:input name="commission" cssClass="commission" readonly="readonly" suffix="%" value="<%=item.getCommission() %>"/>
-						</aui:column>
-						
+							<aui:input name="commission" cssClass="commission" readonly="readonly" suffix="%" value="<%= commission  %>"/>
+						</aui:column> 
+					</aui:layout>
+					<aui:layout>
 						<aui:column>
 							<%
 								double price = item.getSellingPrice();
-								double commissionPercent = (item.getCommission() / 100);
-								String dispStr = price+" - (" +price+" * ( "+ item.getCommission() +" / 100) = " + (price - (price * commissionPercent));
+								double commissionPercent = (commission / 100);
+								String dispStr = price+" - (" +price+" * ( "+ commission +" / 100) = " + (price - (price * commissionPercent));
 							%>
-							<aui:input name="earned" disabled="true" prefix="<%= currSym %>" value="<%=dispStr %>"/>
+							<aui:input name="earned" disabled="true" prefix="<%= currSym %>" value="<%=dispStr %>" cssClass="earned" />
 						</aui:column>
 					</aui:layout>
 					<aui:layout>
@@ -456,8 +461,8 @@
 									if (wholeSaleSize >=  i) {
 										WholeSale wholeSale = wholeSales.get(i-1);
 										double whlPrice = wholeSale.getPrice();
-										double whlCommissionPercent = (item.getCommission() / 100);
-										whlDispStr = whlPrice+" - (" +whlPrice+" * ( "+ item.getCommission() +" / 100) = " + (whlPrice - (whlPrice * whlCommissionPercent));
+										double whlCommissionPercent = (commission / 100);
+										whlDispStr = whlPrice+" - (" +whlPrice+" * ( "+ commission +" / 100) = " + (whlPrice - (whlPrice * whlCommissionPercent));
 									}
 									%>
 										<div class="wholesaleclass" id='<%="wholeSaleDiv" + i %>' style='<%=wholeSaleSize >= i ? "display:block;" : "display:none;"%> '>
@@ -473,10 +478,12 @@
 													</aui:input>
 												</aui:column>
 												<aui:column>
-													<aui:input name='<%= "commission"+ i%>' cssClass="commission" label="commission" disabled="true" suffix="%" value="<%= item.getCommission() %>"/>
+													<aui:input name='<%= "commission"+ i%>' cssClass="commission" label="commission" disabled="true" suffix="%" value="<%= commission %>"/>
 												</aui:column>
+											</aui:layout>
+											<aui:layout>
 												<aui:column>
-													<aui:input name='<%= "earned"+ i%>'  label="earned" disabled="true" prefix="<%= currSym %>" value="<%=whlDispStr %>"/>
+													<aui:input name='<%= "earned"+ i%>' cssClass="earned"  label="earned" disabled="true" prefix="<%= currSym %>" value="<%=whlDispStr %>"/>
 												</aui:column>
 												<aui:column>
 													<aui:button-row cssClass="add-btn-padding">

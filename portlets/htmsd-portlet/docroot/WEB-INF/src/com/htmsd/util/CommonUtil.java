@@ -22,6 +22,7 @@ import org.apache.commons.httpclient.params.HttpMethodParams;
 
 import com.htmsd.slayer.NoSuchCategoryException;
 import com.htmsd.slayer.model.Category;
+import com.htmsd.slayer.model.Commission;
 import com.htmsd.slayer.model.Currency;
 import com.htmsd.slayer.model.Invoice;
 import com.htmsd.slayer.model.ShoppingCart;
@@ -31,6 +32,7 @@ import com.htmsd.slayer.model.ShoppingOrder;
 import com.htmsd.slayer.model.ShoppingOrderItem;
 import com.htmsd.slayer.model.UserInfo;
 import com.htmsd.slayer.service.CategoryLocalServiceUtil;
+import com.htmsd.slayer.service.CommissionLocalServiceUtil;
 import com.htmsd.slayer.service.CurrencyLocalServiceUtil;
 import com.htmsd.slayer.service.InvoiceLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingCartLocalServiceUtil;
@@ -846,5 +848,12 @@ public class CommonUtil {
 			detailPlid = detailLayout.getPlid();
 		}
 		return detailPlid;
+	}
+	
+	public static double getShoppingItemCommission(long itemId) {
+		double commission = 0.0d;
+		Category category = ShoppingItemLocalServiceUtil.getShoppingItemCategory(itemId);
+		commission = CommissionLocalServiceUtil.getCommissionPercentByCategory(category.getCategoryId());
+		return commission;
 	}
 }
