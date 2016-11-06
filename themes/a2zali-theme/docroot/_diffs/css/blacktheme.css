@@ -214,3 +214,7 @@ body.blackTheme {
 .blackTheme .cart-footer .price-text {
 	color: #333;
 }
+
+.blackTheme #loader-div {
+	color: black;
+}

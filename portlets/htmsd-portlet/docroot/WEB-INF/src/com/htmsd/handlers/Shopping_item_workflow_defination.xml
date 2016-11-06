@@ -133,12 +133,12 @@
 				<default>true</default>
 			</transition>
 			<transition>
-				<name>Reject</name>
+				<name>Resubmit</name>
 				<target>update</target>
 				<default>false</default>
 			</transition>
 			<transition>
-				<name>Permanently Reject</name>
+				<name>Reject</name>
 				<target>permanently rejected</target>
 				<default>false</default>
 			</transition>
@@ -189,12 +189,12 @@
 				<default>true</default>
 			</transition>
 			<transition>
-				<name>Reject</name>
+				<name>Resubmit</name>
 				<target>update</target>
 				<default>false</default>
 			</transition>
 			<transition>
-				<name>Permanently Reject</name>
+				<name>Reject</name>
 				<target>permanently rejected</target>
 				<default>false</default>
 			</transition>
@@ -245,12 +245,12 @@
 				<default>true</default>
 			</transition>
 			<transition>
-				<name>Reject</name>
+				<name>Resubmit</name>
 				<target>update</target>
 				<default>false</default>
 			</transition>
 			<transition>
-				<name>Permanently Reject</name>
+				<name>Reject</name>
 				<target>permanently rejected</target>
 				<default>false</default>
 			</transition>
@@ -303,12 +303,12 @@
 				<default>true</default>
 			</transition>
 			<transition>
-				<name>Reject</name>
+				<name>Resubmit</name>
 				<target>update</target>
 				<default>false</default>
 			</transition>
 			<transition>
-				<name>Permanently Reject</name>
+				<name>Reject</name>
 				<target>permanently rejected</target>
 				<default>false</default>
 			</transition>

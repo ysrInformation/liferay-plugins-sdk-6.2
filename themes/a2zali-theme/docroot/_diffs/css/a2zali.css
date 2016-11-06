@@ -1133,3 +1133,14 @@ form#searchbox .button.button-small i {
 .langPortlet .goog-te-gadget-simple {
 	padding: 2% 0;
 }
+
+.product-details h4 {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 200px;
+}
+
+.add-content-menu {
+	color: black;
+}

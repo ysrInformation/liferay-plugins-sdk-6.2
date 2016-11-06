@@ -15,7 +15,7 @@
      	</color-scheme>
 		<color-scheme id="02" name="White">
         	<css-class>whiteTheme</css-class>
-       	 	<color-scheme-images-path>${images-path}/landing_page</color-scheme-images-path>
+       	 	<color-scheme-images-path>${images-path}</color-scheme-images-path>
      	</color-scheme>
 		<layout-templates>
 	        <custom>
