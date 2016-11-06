@@ -173,7 +173,7 @@
 					</aui:input>
 				</aui:column>
 				<aui:column>
-					<aui:input name="<%=HConstants.TAX %>" label="Tax" suffix="%">
+					<aui:input name="<%=HConstants.TAX %>" label="Tax" suffix="%" onkeyup="calculateSellerEarning(this)">
 						<aui:validator  name="custom"  errorMessage="Please enter valid Percentage" >
 							function (val, fieldNode, ruleValue) {
 								var result = false;
@@ -423,8 +423,10 @@
 	function calculateSellerEarning(elem) {
 		var index = $(elem).data("index");
 		var price = $(elem).val();
-		var commissionPercent = ($(".commission").val() / 100);
-		var dispStr = price+" - (" +price+" * ( "+ $(".commission").val() +" / 100) = " + (price - (price * commissionPercent));
+		var tax = $('#<portlet:namespace/>tax').val();
+		var commissionPercent = ((parseFloat($(".commission").val()) + parseFloat(tax)) / 100);
+		console.info(commissionPercent);
+		var dispStr = price+" - (" +price+" * ( ("+ $(".commission").val() +" + "+tax+") / 100) = " + (price - (price * commissionPercent));
 		if (index === undefined) {
 			$('#<portlet:namespace/>earned').val(dispStr);
 		} else {

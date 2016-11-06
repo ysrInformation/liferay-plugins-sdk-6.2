@@ -393,7 +393,7 @@
 							</aui:input>
 						</aui:column>
 						<aui:column>
-							<aui:input name="<%=HConstants.TAX %>" label="Tax" suffix="%" value="<%=item.getTax() %>">
+							<aui:input name="<%=HConstants.TAX %>" label="Tax" suffix="%" value="<%=item.getTax() %>" onkeyup="calculateSellerEarning(this)">
 								<aui:validator  name="custom"  errorMessage="Please enter valid Percentage" >
 									function (val, fieldNode, ruleValue) {
 										var result = false;
@@ -446,8 +446,8 @@
 						<aui:column>
 							<%
 								double price = item.getSellingPrice();
-								double commissionPercent = (commission / 100);
-								String dispStr = price+" - (" +price+" * ( "+ commission +" / 100) = " + (price - (price * commissionPercent));
+								double commissionPercent = ((commission + item.getTax()) / 100);
+								String dispStr = price+" - (" +price+" * ( ("+ commission +" + "+item.getTax()+" ) / 100) = " + (price - (price * commissionPercent));
 							%>
 							<aui:input name="earned" disabled="true" prefix="<%= currSym %>" value="<%=dispStr %>" cssClass="earned" />
 						</aui:column>
@@ -461,8 +461,8 @@
 									if (wholeSaleSize >=  i) {
 										WholeSale wholeSale = wholeSales.get(i-1);
 										double whlPrice = wholeSale.getPrice();
-										double whlCommissionPercent = (commission / 100);
-										whlDispStr = whlPrice+" - (" +whlPrice+" * ( "+ commission +" / 100) = " + (whlPrice - (whlPrice * whlCommissionPercent));
+										double whlCommissionPercent = ((commission + item.getTax())/ 100);
+										whlDispStr = whlPrice+" - (" +whlPrice+" * ("+ commission +" + "+item.getTax()+" ) / 100) = " + (whlPrice - (whlPrice * whlCommissionPercent));
 									}
 									%>
 										<div class="wholesaleclass" id='<%="wholeSaleDiv" + i %>' style='<%=wholeSaleSize >= i ? "display:block;" : "display:none;"%> '>
@@ -701,8 +701,9 @@
 				function calculateSellerEarning(elem) {
 					var index = $(elem).data("index");
 					var price = $(elem).val();
-					var commissionPercent = ($(".commission").val() / 100);
-					var dispStr = price+" - (" +price+" * ( "+ $(".commission").val() +" / 100) = " + (price - (price * commissionPercent));
+					var tax = $('#<portlet:namespace/>tax').val();
+					var commissionPercent = ((parseFloat($(".commission").val()) + parseFloat(tax)) / 100);
+					var dispStr = price+" - (" +price+" * ( ("+ $(".commission").val() +" + "+tax+") / 100) = " + (price - (price * commissionPercent));
 					if (index === undefined) {
 						$('#<portlet:namespace/>earned').val(dispStr);
 					} else {
