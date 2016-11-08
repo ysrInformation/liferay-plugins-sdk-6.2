@@ -482,7 +482,7 @@
 												</aui:column>
 											</aui:layout>
 											<aui:layout>
-												<aui:column>
+												<aui:column columnWidth="50">
 													<aui:input name='<%= "earned"+ i%>' cssClass="earned"  label="earned" disabled="true" prefix="<%= currSym %>" value="<%=whlDispStr %>"/>
 												</aui:column>
 												<aui:column>
