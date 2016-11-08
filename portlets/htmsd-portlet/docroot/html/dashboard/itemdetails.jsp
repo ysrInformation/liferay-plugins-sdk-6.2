@@ -1,6 +1,5 @@
 <%@page import="com.htmsd.slayer.service.CommissionLocalServiceUtil"%>
 <%@page import="com.htmsd.slayer.model.Commission"%>
-<%@page import="com.htmsd.slayer.model.Commision"%>
 <%@page import="com.htmsd.slayer.service.ItemTypeLocalServiceUtil"%>
 <%@page import="com.htmsd.slayer.model.ItemType"%>
 <%@page import="com.htmsd.slayer.model.Seller"%>
