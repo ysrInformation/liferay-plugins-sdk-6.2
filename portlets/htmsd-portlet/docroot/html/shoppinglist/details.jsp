@@ -12,6 +12,7 @@
 	<c:when test="<%=Validator.isNotNull(shoppingItem) %>">
 		<%
 			double price = shoppingItem.getSellingPrice();
+			double mrp = shoppingItem.getMRP();
 			
 			PortletURL addItemsToCartActionURL = renderResponse.createActionURL();
 			addItemsToCartActionURL.setParameter(ActionRequest.ACTION_NAME, "addItemToCart");
@@ -23,6 +24,8 @@
 			List<WholeSale> wholeSales = WholeSaleLocalServiceUtil.getWholeSaleItem(shoppingItem.getItemId());
 			String stock = (shoppingItem.getQuantity() == -1) ? "Unlimited" : String.valueOf(shoppingItem.getQuantity());
 			String redirectURL = ParamUtil.getString(request, "backURL");
+			
+			mrp = (currentRate == 0) ? mrp :  mrp / currentRate;
 		%>
 		<c:if test='<%= cmd.equalsIgnoreCase("itemsDetails") %>'>
 			<ul class="nav nav-collapse pull-right">
@@ -100,8 +103,11 @@
 							<c:choose>
 								<c:when test='<%= Validator.isNotNull(cmd) && cmd.equalsIgnoreCase("itemsDetails") %>'>
 									<div class="add-to-cart-item-price" id="itemPrice">
-										<% price = (currentRate == 0) ? price :  price / currentRate; %>
+										<% 
+											price = (currentRate == 0) ? price :  price / currentRate;
+										%>
 										<%= CommonUtil.getPriceFormat(price, currencyId) %>
+										<span class="old-price product-price"><%= CommonUtil.getPriceFormat(mrp, currencyId) %></span>
 									</div>
 								</c:when>
 								<c:otherwise>
@@ -164,7 +170,9 @@
 		<script>
 			$(document).ready(function() {
 				var price = <%=(currentRate == 0) ? price :  price / currentRate%>;
-				$('#itemPrice').html(formatPrice(price));
+				var mrp = <%= mrp %>
+				var mrpStr = '<span class="old-price product-price">'+formatPrice(mrp)+'</span>';
+				$('#itemPrice').html(formatPrice(price) + mrpStr);
 			    $("#lightGallery").lightGallery({
 			    	mode : 'fade',
 			    	thumbnail : false
