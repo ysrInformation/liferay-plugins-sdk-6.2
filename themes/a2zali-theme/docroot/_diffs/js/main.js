@@ -111,12 +111,12 @@ $(function() {
 		$this.toggleClass('active').next('ul').toggleClass('active');
 	});
 	
-	$(window).resize(function() {
+	/*$(window).resize(function() {
 		var viewportWidth = $(window).width();
 		if (viewportWidth > 925) {
 			$("#menu").removeClass("active");
 		}
-	});
+	});*/
 	
 	$('#submit_searchbox').on('click', function() {
 		var searchParam = $('#search_query_top').val();

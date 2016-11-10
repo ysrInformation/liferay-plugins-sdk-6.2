@@ -1144,3 +1144,7 @@ form#searchbox .button.button-small i {
 .add-content-menu {
 	color: black;
 }
+
+body .modal, body .modal fieldset {
+  color: #333;
+}

@@ -79,7 +79,6 @@ span.has-subnav, span.has-subnav2 {
 		overflow: hidden;
 	}
 	.menu li a {
-		border-bottom: 1px solid #d8d8d8;
 		display: block;
 		padding-left: 15px;
 	}
@@ -89,19 +88,16 @@ span.has-subnav, span.has-subnav2 {
 	.menu li:last-child a {
 		border: none;
 	}
-	.menu li li:last-child a {
-		border-bottom: 1px solid #d8d8d8;
-	}
 	.menu li:hover {
 		background: #EDEDED;
 	}
 }
 
-@media screen and (min-width: 801px) {
-	/* nav {
+@media screen and (max-width: 980px) {
+	nav {
 	  border-top: 3px solid #00578b;
 	  border-bottom: 1px solid #a4d05e;
-	} */
+	}
 	a.menu-link {
 		display: none;
 	}
@@ -112,14 +108,14 @@ span.has-subnav, span.has-subnav2 {
 
 	/* .js .menu > ul li:hover > ul { display: flex; } */
 
-	/* .menu ul {
-	  display: flex;
-	  flex-flow: row;
+	.menu ul {
+	  /* display: flex;
+	  flex-flow: row; */
 	  height: 44px;
 	  justify-content: space-between;
 	  margin: 0;
 	  padding: 0;
-	} */
+	}
 	.menu span.has-subnav {
 		display: none;
 	}
@@ -145,9 +141,9 @@ span.has-subnav, span.has-subnav2 {
 		width: 150px;
 		z-index: 999;
 	}
-	.chrome .js .menu>ul ul {
+	/* .chrome .js .menu>ul ul {
 		top: 43px;
-	}
+	} */
 	.menu ul ul.wide {
 		width: 300px;
 	}
