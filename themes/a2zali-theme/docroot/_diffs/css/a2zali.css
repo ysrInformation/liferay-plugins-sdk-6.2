@@ -1144,3 +1144,9 @@ form#searchbox .button.button-small i {
 .add-content-menu {
 	color: black;
 }
+
+.dropdown-menu.child-menu {
+	max-height: 500px;
+	overflow-y: auto;
+	scroll-behavior: smooth;
+}
