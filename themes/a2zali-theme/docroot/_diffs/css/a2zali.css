@@ -1148,3 +1148,9 @@ form#searchbox .button.button-small i {
 body .modal, body .modal fieldset {
   color: #333;
 }
+
+.dropdown-menu.child-menu {
+	max-height: 500px;
+	overflow-y: auto;
+	scroll-behavior: smooth;
+}
