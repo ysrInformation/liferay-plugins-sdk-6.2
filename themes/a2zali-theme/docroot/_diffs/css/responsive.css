@@ -209,6 +209,10 @@
 		text-align: center;
 	}
 	
+	.signed-in #rightbar_cart, #to_top_wrap {
+		width: 33%;
+	}
+	
 	#rightbar {
 	  border-bottom: medium none;
 	  border-left: medium none;

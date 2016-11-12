@@ -522,7 +522,7 @@ li.currency select {
 
 .topHeaderWrapper.row-fluid, #search-div.row-fluid, .row-fluid.sticky .mainHeadWrapper, 
 .bg .shopListSort.row-fluid, .bg #shopping_list.row-fluid, .bg .content_wrapper, .copyRight.row-fluid, 
-.footer_wrapper, .bg .shoppingItemDetails.rowfluid, #breadcrumbs .breadcrumb {
+.footer_wrapper, .bg .shoppingItemDetails.rowfluid, #breadcrumbs .breadcrumb, .row-fluid.featured-container {
 	margin: 0 auto;
 	width: 94%;
 }
@@ -1131,6 +1131,7 @@ form#searchbox .button.button-small i {
 }
 
 .langPortlet .goog-te-gadget-simple {
+	border-radius: 2px;
 	padding: 2% 0;
 }
 
@@ -1153,4 +1154,32 @@ body .modal, body .modal fieldset {
 	max-height: 500px;
 	overflow-y: auto;
 	scroll-behavior: smooth;
+}
+
+.langPortlet .goog-te-gadget-simple img {
+	display: none;
+}
+
+.langPortlet .goog-te-menu-value {
+	margin-right: 0px;
+}
+
+.goog-te-menu-value span:first-child {
+	margin-right: 4px;
+}
+
+.langPortlet .goog-te-menu-value > span {
+	border-left: 0 none !important;
+}
+
+.langPortlet .goog-te-menu-value span:last-child {
+	background: #eeeeee; /* Old browsers */
+	background: -moz-linear-gradient(top, #eeeeee 27%, #cccccc 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top, #eeeeee 27%,#cccccc 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom, #eeeeee 27%,#cccccc 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#cccccc',GradientType=0 ); /* IE6-9 */
+	border: 1px solid !important;
+    color: #333 !important;
+    font-size: 8px;
+    padding: 10px 4px 6px 3px;
 }
