@@ -121,8 +121,8 @@
     		<th><liferay-ui:message key="no."/></th>
     		<th><liferay-ui:message key="item-title"/></th>
     		<th><liferay-ui:message key="date"/></th>
-    		<th><liferay-ui:message key="product-stock"/></th>
     		<th><liferay-ui:message key="status"/></th>
+    		<th><liferay-ui:message key="product-stock"/></th>
     		<th><liferay-ui:message key="action"/></th>
   		</tr>
   </thead>
