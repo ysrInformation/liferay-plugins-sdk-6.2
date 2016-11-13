@@ -485,10 +485,11 @@ li.currency select {
 	margin-bottom: 2%;
 }
 
-#navigation li ul.child-menu > li {
+#navigation li ul.child-menu > li.span3 {
 	display: table-cell;
 	max-width: 200px;
     min-width: 200px;
+    margin-left: 0;
 }
 
 #navigation li ul.child-menu > li a {
@@ -1183,3 +1184,12 @@ body .modal, body .modal fieldset {
     font-size: 8px;
     padding: 10px 4px 6px 3px;
 }
+
+/* .shoppingItemDetails.stickyleft .span5 {
+	position: fixed;
+	top: 123px;
+}
+
+.shoppingItemDetails.stickyleft .span7 {
+	float: right;
+} */
