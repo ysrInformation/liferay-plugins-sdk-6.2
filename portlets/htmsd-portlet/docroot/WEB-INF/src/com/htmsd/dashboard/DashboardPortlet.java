@@ -245,6 +245,7 @@ public class DashboardPortlet extends MVCPortlet {
 		String articleId = StringPool.BLANK;
 		String remark = StringPool.BLANK;
 		String addupdateMessage = (itemId == 0) ? "added" : "updated";
+		String shortDescription = ParamUtil.getString(uploadRequest, "itemShortDescription");
 		
 		List<Long> imageIds = new ArrayList<Long>();
 		ShoppingItem shoppingItem = null;
@@ -301,7 +302,7 @@ public class DashboardPortlet extends MVCPortlet {
 					StringPool.BLANK, StringPool.BLANK, productCode, name, description, sellingPrice, tax, quantity,
 					WorkflowConstants.STATUS_PENDING, StringUtil.merge(imageIds, StringPool.COMMA), vedioURL,
 					getSmallImageId(), StringPool.BLANK, MRP, itemWeight, itemTypeId, itemTypeDocumentId, commission,
-					itemWidth, itemLength, itemHeight, deliveryCharges);
+					itemWidth, itemLength, itemHeight, deliveryCharges, shortDescription);
 			
 			itemId = shoppingItem.getItemId();
 			ItemHistoryLocalServiceUtil.addItemHistory(itemId, currentUserId, currentUserName, currentUserEmail, HConstants.ITEM_ADDED, StringPool.BLANK);
@@ -354,7 +355,7 @@ public class DashboardPortlet extends MVCPortlet {
 					themeDisplay.getCompanyId(), userId, userName, userEmail, currentUserId, currentUserName,
 					currentUserEmail, productCode, name, description, sellingPrice, tax, quantity, status,
 					StringUtil.merge(imageIds, StringPool.COMMA), vedioURL, 0, remark, MRP, itemWeight, itemTypeId,
-					itemTypeDocumentId, commission, itemWidth, itemLength, itemHeight, deliveryCharges);
+					itemTypeDocumentId, commission, itemWidth, itemLength, itemHeight, deliveryCharges, shortDescription);
 			
 			ItemHistoryLocalServiceUtil.addItemHistory(itemId, currentUserId, currentUserName, currentUserEmail, status, staffRemark);
 			articleId = HConstants.ITEM_ADDED_UPDATED_TEMPLATE;
