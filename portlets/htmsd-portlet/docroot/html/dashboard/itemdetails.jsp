@@ -330,7 +330,7 @@
 								</aui:validator>
 							</aui:input>
 						</aui:column>
-						<aui:column>
+						<%-- <aui:column>
 							<aui:input name="itemLength" required="true" suffix="cm" value="<%= item.getItemLength() %>">
 								<aui:validator name="number" />
 								<aui:validator name="custom" errorMessage="Please enter a valid Length">
@@ -371,7 +371,7 @@
 									}
 								</aui:validator>
 							</aui:input>
-						</aui:column>
+						</aui:column> --%>
 					</aui:layout>
 				</aui:fieldset>
 				<aui:fieldset label="product-pricing">
@@ -481,7 +481,7 @@
 												</aui:column>
 											</aui:layout>
 											<aui:layout>
-												<aui:column columnWidth="50">
+												<aui:column columnWidth="60">
 													<aui:input name='<%= "earned"+ i%>' cssClass="earned"  label="earned" disabled="true" prefix="<%= currSym %>" value="<%=whlDispStr %>"/>
 												</aui:column>
 												<aui:column>
