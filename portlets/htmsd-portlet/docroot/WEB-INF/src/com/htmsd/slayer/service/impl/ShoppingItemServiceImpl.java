@@ -119,6 +119,7 @@ public class ShoppingItemServiceImpl extends ShoppingItemServiceBaseImpl {
 			jsonObject.put(HConstants.TOTAL_PRICE, total);
 			jsonObject.put("MRP", MRP);
 			jsonObject.put(HConstants.IMAGE, CommonUtil.getThumbnailpath(imageId, groupId, false));
+			jsonObject.put("shortDescription", StringUtil.shorten(shoppingItem.getShortDescription(), 20));
 			
 			if (DateUtil.getDaysBetween(shoppingItem.getModifiedDate(), Calendar.getInstance().getTime()) >= 2) {
 				jsonObject.put(HConstants.IS_NEW_ITEM, false);

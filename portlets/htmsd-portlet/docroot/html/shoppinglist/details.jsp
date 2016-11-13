@@ -100,6 +100,11 @@
 							<div class="add-to-cart-item-code">
 								<liferay-ui:message key="product-stock"/>: <%= stock %>
 							</div>
+							<c:if test='<%= Validator.isNotNull(shoppingItem.getShortDescription()) %>'>
+								<div class="add-to-cart-item-code">
+									<liferay-ui:message key="size"/>: <%= shoppingItem.getShortDescription() %>
+								</div>
+							</c:if>
 							<c:choose>
 								<c:when test='<%= Validator.isNotNull(cmd) && cmd.equalsIgnoreCase("itemsDetails") %>'>
 									<div class="add-to-cart-item-price" id="itemPrice">
