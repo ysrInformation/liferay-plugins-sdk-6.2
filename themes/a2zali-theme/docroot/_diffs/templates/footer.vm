@@ -16,12 +16,12 @@
 					Contact Us
 				</div>
 				<ul>
-					<li>Locaction : HTMSDPETS</li>
+					<li>Locaction : A2zali</li>
 					<li># 422, O.T.C. Road,Cottonpet</li>
 					<li>Bangalore-560 053</li>
 					<li>Phone : +91 94486 94482</li>
 					<li>+ 080-22874092</li>
-					<li>E-mail : info@brainos.in</li>
+					<li>E-mail : support@a2zali.com</li>
 				</ul>
 				<div class="row-fluid">
 					<div class="social-icons">
@@ -66,25 +66,28 @@
 					</div>
 				</div>
 			</div>
-	
 			<div class="span3">
 				<div class="footer_label">
 					Quick Links
 				</div>
 				<ul class="quick_links">
 					<li><a href="/home">Home </a></li>
+					<li><a href="/gallery">Image Gallery </a></li>
+					<li><a href="/video">Video Gallery</a></li>
 					<li><a href="/about-us">About US </a></li>
 					<li><a href="/contact-us">Contact US </a></li>
-					<li><a href="/legal-notice">Legal Notice </a></li>
-					<li><a href="/terms-and-conditions">Terms And Conditions </a></li>
-					<li><a href="/privacy-policy">Privacy Policy </a></li>
+					<li><a href="/help">Help </a></li>
 				</ul>
 			</div>
 			<div class="span3">
-				<div class="visa_card">
-					<img class="visa" src="$images_folder/cod.jpg"/>
+				<div class="footer_label">
+					Policies
 				</div>
-				
+				<ul class="quick_links">
+					<li><a href="/terms-and-conditions">Terms And Conditions </a></li>
+					<li><a href="/privacy-policy">Privacy Policy </a></li>
+					<li><a href="/legal-notice">Legal Notices </a></li>
+				</ul>
 			</div>
 		</div>
 	</div>
