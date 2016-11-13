@@ -11,14 +11,11 @@
 	checkoutURL.setParameter("jspPage", "/html/checkout/view.jsp");
 	checkoutURL.setParameter("order_step", "step3");
 	
-	PortletURL detailsURL = renderResponse.createRenderURL();
-	detailsURL.setWindowState(LiferayWindowState.POP_UP);
-	detailsURL.setParameter("jspPage", "/html/shoppinglist/details.jsp");
-	
 	String currentCurrencyid = (String) portletSession.getAttribute("currentCurrencyId", PortletSession.APPLICATION_SCOPE);
 	long currencyId2 = (Validator.isNull(currentCurrencyid)) ?  0 : Long.valueOf(currentCurrencyid);
 	String currencySymbol = CommonUtil.getCurrencySymbol(Long.valueOf(currencyId2));
 	double currentRate = CommonUtil.getCurrentRate(Long.valueOf(currencyId2));
+	long detailsPagePlid = CommonUtil.getDetailPageLayoutId(themeDisplay.getScopeGroupId(), layout.getLayoutId());
 %>
 
 <portlet:resourceURL var="updateTotalPriceURL"> 
@@ -82,7 +79,7 @@
 										<div class="checkout-product-img">
 											<c:choose>
 												<c:when test='<%= Validator.isNotNull(shpItem) && _shpcart.getImageId() > 0 %>'>
-													<a class="checkoutProductImage" href="#" data-url='<%= detailsURL.toString()+"&_8_WAR_htmsdportlet_cmd=itemsDetails&_8_WAR_htmsdportlet_itemId="+itemId %>'>
+													<a class="checkoutProductImage" href="javascript:void(0);" data-itemid='<%= itemId %>'>
 														<img width="45" height="51" src='<%= CommonUtil.getThumbnailpath(_shpcart.getImageId(), themeDisplay.getScopeGroupId(), false) %>' />
 													</a>												
 												</c:when>
@@ -162,11 +159,15 @@
 	</c:otherwise>
 </c:choose>
 
+<div id="checkoutLoaderIcon" style="display:none;text-align:center;"> 
+	<img src="<%=request.getContextPath()%>/images/loader.gif" style="width: 100px; height: 100px"/>
+</div>
+
 <script>
 $(function(){
 	$(".checkoutProductImage").click(function(){
-		var $elem = $(this), url = $elem.attr("data-url");
-		showPageInPopup(url, 800, 1200,'Product Details');
+		var $elem = $(this), itemId = $elem.attr("data-itemid");
+		showDetailsPage('<%= themeDisplay.getURLCurrent() %>', itemId, <%= detailsPagePlid %>);
 	});
 	
 	$(".cancelItemLink").click(function(){
@@ -201,14 +202,14 @@ $(function(){
 				<portlet:namespace/>itemPrice:price,
 				<portlet:namespace/>itemId:itemid
 			},
-			beforeSend : function() {
-				$('#loader-icon').show();
+ 			beforeSend : function() {
+				$('#checkoutLoaderIcon').show();
 			},
 			complete : function() {
-				$('#loader-icon').hide();
-			},
+				$('#checkoutLoaderIcon').fadeOut("slow");
+			}, 
 			success : function(data) {
-				Liferay.Portlet.refresh('#p_p_id_8_WAR_htmsdportlet_');
+				Liferay.Portlet.refresh('#p_p_id_8_WAR_htmsdportlet_');	
 			},
 			error : function() {
 				alert("Something went wrong !!Please try again..");
