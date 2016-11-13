@@ -330,6 +330,9 @@
 								</aui:validator>
 							</aui:input>
 						</aui:column>
+						<aui:column>
+							<aui:input name="itemShortDescription" helpMessage="item-short-help-message" value='<%= (Validator.isNotNull(item.getShortDescription()) ? item.getShortDescription() : StringPool.BLANK) %>'/>
+						</aui:column>
 						<%-- <aui:column>
 							<aui:input name="itemLength" required="true" suffix="cm" value="<%= item.getItemLength() %>">
 								<aui:validator name="number" />

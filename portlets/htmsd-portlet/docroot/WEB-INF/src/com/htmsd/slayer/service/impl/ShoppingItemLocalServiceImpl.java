@@ -67,7 +67,7 @@ public class ShoppingItemLocalServiceImpl extends ShoppingItemLocalServiceBaseIm
 			String description, double sellingPrice, double tax, long quantity, int status, String imageIds,
 			String vedioURL, long smallImage, String remark, double MRP, double itemWeight, long itemTypeId,
 			long itemTypeDocumentId, double commission, double itemWidth, double itemLength, double itemHeight,
-			double deliveryCharges) {
+			double deliveryCharges, String shortDescription) {
 
 		ShoppingItem shoppingItem = null;
 		try {
@@ -98,6 +98,7 @@ public class ShoppingItemLocalServiceImpl extends ShoppingItemLocalServiceBaseIm
 			shoppingItem.setCreateDate(new Date());
 			shoppingItem.setModifiedDate(new Date());
 			shoppingItem.setRemark(remark);
+			shoppingItem.setShortDescription(shortDescription); 
 			
 			shoppingItem.setItemWidth(itemWidth);
 			shoppingItem.setItemHeight(itemHeight);
@@ -117,7 +118,7 @@ public class ShoppingItemLocalServiceImpl extends ShoppingItemLocalServiceBaseIm
 			String name, String description, double sellingPrice, double tax, long quantity, int status,
 			String imageIds, String vedioURL, long smallImage, String remark, double MRP, double itemWeight,
 			long itemTypeId, long itemTypeDocumentId, double commission, double itemWidth, double itemLength,
-			double itemHeight, double deliveryCharges) {
+			double itemHeight, double deliveryCharges, String shortDescription) {
 
 		ShoppingItem shoppingItem = null;
 		try {
@@ -146,6 +147,7 @@ public class ShoppingItemLocalServiceImpl extends ShoppingItemLocalServiceBaseIm
 			shoppingItem.setItemWeight(itemWeight);
 			shoppingItem.setItemTypeId(itemTypeId);
 			shoppingItem.setItemTypeDocumentId(itemTypeDocumentId);
+			shoppingItem.setShortDescription(shortDescription); 
 			
 			shoppingItem.setItemWidth(itemWidth);
 			shoppingItem.setItemHeight(itemHeight);

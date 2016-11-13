@@ -14,6 +14,7 @@
 
 package com.htmsd.slayer.service.impl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -144,5 +145,15 @@ public class ShoppingItem_CartLocalServiceImpl
 			e.printStackTrace();
 		}
 		return shoppingItem_Cart;
+	}
+	
+	public List<ShoppingItem_Cart> getShoppingItemByCartIdAndIsSingleCheckout(long cartId, boolean isSingleCheckout) {
+		List<ShoppingItem_Cart> shoppingItem_Carts = new ArrayList<ShoppingItem_Cart>();
+		try {
+			return shoppingItem_CartPersistence.findByCartId_IsSingleCheckout(cartId, isSingleCheckout);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		return shoppingItem_Carts;
 	}
 }

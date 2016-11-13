@@ -111,6 +111,9 @@
 						</aui:validator>
 					</aui:input>
 				</aui:column>
+				<aui:column>
+					<aui:input name="itemShortDescription" helpMessage="item-short-help-message"/>
+				</aui:column>
 				<%-- <aui:column>
 					<aui:input name="itemLength" required="true" suffix="cm">
 						<aui:validator name="number" />

@@ -117,6 +117,9 @@
 		<field name="vedioURL" type="String" />
 		<field name="smallImage" type="long" />
 		<field name="remark" type="String" />
+		<field name="shortDescription" type="String">
+			<hint name="max-length">500</hint>
+		</field>
 		<field name="itemTypeId" type="long" />
 		<field name="itemTypeDocumentId" type="long" />
 	</model>
@@ -126,6 +129,7 @@
 		<field name="cartId" type="long" />
 		<field name="quantity" type="int" />
 		<field name="totalPrice" type="double" />
+		<field name="isSingleCheckout" type="boolean" />
 	</model>
 	<model name="com.htmsd.slayer.model.ShoppingOrder">
 		<field name="orderId" type="long" />
