@@ -492,6 +492,11 @@ li.currency select {
     margin-left: 0;
 }
 
+#navigation li ul.child-menu > li.span3 a {
+	font-size: 13px;
+	padding: 0;
+}
+
 #navigation li ul.child-menu > li a {
 	font-size: 14px;
 }
