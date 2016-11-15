@@ -31,6 +31,7 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.DateUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.security.ac.AccessControlled;
@@ -111,6 +112,7 @@ public class ShoppingItemServiceImpl extends ShoppingItemServiceBaseImpl {
 			long imageId = shoppingItem.getSmallImage();
 			double total = (currencyRate == 0) ? shoppingItem.getSellingPrice() :  shoppingItem.getSellingPrice() / currencyRate;
 			double MRP = (currencyRate == 0) ? shoppingItem.getMRP():  shoppingItem.getMRP() / currencyRate;
+			String shortDescription = (Validator.isNotNull(shoppingItem.getShortDescription()) ? shoppingItem.getShortDescription() : StringPool.BLANK);
 			
 			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 			jsonObject.put(HConstants.ITEM_ID, shoppingItem.getItemId());
@@ -119,7 +121,7 @@ public class ShoppingItemServiceImpl extends ShoppingItemServiceBaseImpl {
 			jsonObject.put(HConstants.TOTAL_PRICE, total);
 			jsonObject.put("MRP", MRP);
 			jsonObject.put(HConstants.IMAGE, CommonUtil.getThumbnailpath(imageId, groupId, false));
-			jsonObject.put("shortDescription", StringUtil.shorten(shoppingItem.getShortDescription(), 20));
+			jsonObject.put("shortDescription", StringUtil.shorten(shortDescription, 20));
 			
 			if (DateUtil.getDaysBetween(shoppingItem.getModifiedDate(), Calendar.getInstance().getTime()) >= 2) {
 				jsonObject.put(HConstants.IS_NEW_ITEM, false);

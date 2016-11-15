@@ -96,7 +96,7 @@ function render(data, url, namespace, plid) {
 							+'<a href="'+detailsURL+'">'
 								+ '<h4 class="item-name">' + item.name + '</h4>'
 							+'</a>'	
-							/* + '<p class="description">' + item.description + '</p>' */
+							+ '<p class="description">' + item.shortDescription + '</p>' 
 							+ '<h6 id="price">' + formatPrice(item.totalPrice)
 								+ '<span class="old-price product-price">'+ MRP +'</span>'
 							+ '</h6>'
