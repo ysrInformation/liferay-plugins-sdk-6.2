@@ -87,8 +87,8 @@
  		String cst = seller.getCST();
  		String tin = seller.getTIN();
  		String bankName = seller.getBankName();
- 		long bankAcountNumber = seller.getBankAccountNumber();
  		String ifscCode = seller.getIfscCode();
+ 		long bankAcountNumber = seller.getBankAccountNumber();
  		double commission = CommonUtil.getShoppingItemCommission(item.getItemId());
  %>
 		<div class="seller-details">
@@ -96,7 +96,10 @@
 				<div class="seller-company ">
 					<div class="row-fluid">
 						<div class="span6">
-							<div class="bank-account-number">
+							<div class="seller-name">
+								<strong><liferay-ui:message key="name" />: </strong><%=sellerUser.getFullName()%>
+							</div>
+							<div class="bank-name">
 								<strong><liferay-ui:message key="bank-name" />: </strong><%=bankName%>
 							</div>
 							<div class="bank-account-number">
@@ -105,11 +108,11 @@
 							<div class="ifsc-code">
 								<strong><liferay-ui:message key="ifsc-code" />: </strong><%=ifscCode%>
 							</div>
+						</div>
+						<div class="span6">
 							<div class="phone-number">
 								<strong><liferay-ui:message key="phone-number" />: </strong><%=sellerUser.getScreenName()%>
 							</div>
-						</div>
-						<div class="span6">
 							<div class="company-name">
 								<strong><liferay-ui:message key="company-name"/>: </strong><%= companyName %>
 							</div>
@@ -152,14 +155,14 @@
 												<%
 											}
 										%>
-										<div class="country">
-											<strong><liferay-ui:message key="country"/>:</strong><%=address.getCountry().getName() %>
-										</div>
 										<div class="city">
 											<strong><liferay-ui:message key="city"/>:</strong><%=address.getCity() %>
 										</div>
 										<div class="zip">
 											<strong><liferay-ui:message key="postal-code"/>:</strong><%=address.getZip() %>
+										</div>
+										<div class="country">
+											<strong><liferay-ui:message key="country"/>:</strong><%=address.getCountry().getName() %>
 										</div>
 									</div>
 								<%
@@ -180,15 +183,15 @@
 				
 				<aui:layout>
 					<aui:col width="25">
-						<aui:input name="<%=HConstants.NAME%>" required="true" value="<%= item.getName()%>" />
+						<aui:input name="<%=HConstants.NAME%>" required="true" value="<%= item.getName()%>" cssClass="mark-readonly"/>
 					</aui:col>
 					
 					<aui:col width="25">
-						<aui:input name="<%=HConstants.PRODUCT_CODE %>" value="<%=item.getProductCode() %>"/>
+						<aui:input name="<%=HConstants.PRODUCT_CODE %>" value="<%=item.getProductCode() %>" cssClass="mark-readonly"/>
 					</aui:col>
 					
 					<aui:col width="25">
-						<aui:select name="<%=HConstants.PARENT_CATEGORY_ID %>" label="category"  required="true" showEmptyOption="true" disabled="<%=!(isAdmin || isStaff || isApprover)%>">
+						<aui:select name="<%=HConstants.PARENT_CATEGORY_ID %>" label="category"  required="true" showEmptyOption="true" disabled="<%=!(isAdmin || isStaff || isApprover)%>" cssClass="mark-readonly">
 							<%
 								
 								for(Category parentCategory : parentCategories) {
@@ -201,7 +204,7 @@
 						</aui:select>
 					</aui:col>
 					<aui:col width="25">
-						<aui:select name="<%=HConstants.CATEGORY_ID %>" label="sub-category" showEmptyOption="true" required="true" disabled="<%=!(isAdmin || isStaff || isApprover)%>"></aui:select>
+						<aui:select name="<%=HConstants.CATEGORY_ID %>" label="sub-category" showEmptyOption="true" required="true" disabled="<%=!(isAdmin || isStaff || isApprover)%>" cssClass="mark-readonly"></aui:select>
 					</aui:col>
 				</aui:layout>
 				<aui:layout>
@@ -232,7 +235,7 @@
 											+ documentFileEntry.getUuid();
 							%>
 							<aui:column columnWidth="60" >
-								<aui:input name='<%=image%>'  type="file" label="" onChange="<%=readURL %>">
+								<aui:input name='<%=image%>'  type="file" label="" onChange="<%=readURL %>" cssClass="mark-readonly">
 								</aui:input>
 								<aui:input name="<%=imageId %>" type="hidden"  value="<%=imageEntryId%>"/>
 								<aui:input name="<%=deleteImage %>"  type="hidden"  value="false"/>
@@ -254,7 +257,7 @@
 				
 				<div>
 					<div>
-						<aui:input name="<%=HConstants.VEDIO_URL %>" value="<%=item.getVedioURL() %>">
+						<aui:input name="<%=HConstants.VEDIO_URL %>" value="<%=item.getVedioURL() %>" cssClass="mark-readonly">
 							<aui:validator name="url" />
 						</aui:input>
 					</div>
@@ -274,11 +277,11 @@
 				
 				<liferay-ui:message key="description" />
 				<liferay-ui:input-editor cssClass="editor_padding" />
-				<aui:input name="<%=HConstants.DESCRIPTION %>" value="<%=item.getDescription()%>"  type="hidden"/>
+				<aui:input name="<%=HConstants.DESCRIPTION %>" value="<%=item.getDescription()%>"  type="hidden" />
 
 				<aui:layout>
 					<aui:column>
-						<aui:select name="itemType" label="Type" required="true" showEmptyOption="true" helpMessage="item-type-help-message" >
+						<aui:select name="itemType" label="Type" required="true" showEmptyOption="true" helpMessage="item-type-help-message" cssClass="mark-readonly" >
 							<%
 								for (ItemType itemType : ItemTypeLocalServiceUtil.getItemTypes(-1, -1)) {
 									%>
@@ -290,7 +293,7 @@
 					</aui:column>
 					<aui:column>
 						<aui:input name="itemTypeDocumentId" type="hidden" value="<%= item.getItemTypeDocumentId() %>"/>
-						<aui:input name="itemTypeDocument" label="Document" type="file"
+						<aui:input name="itemTypeDocument" label="Document" type="file" cssClass="mark-readonly"
 							required='<c:choose><c:when test="<%=item.getItemTypeDocumentId() > 0%>">false</c:when><c:otherwise>true</c:otherwise></c:choose>'>
 							<aui:validator name="acceptFiles"
 								errorMessage="please-upload-image-document">'jpg,png,gif,jpeg,tif,tiff,bmp,docx,pdf'</aui:validator>
@@ -317,7 +320,7 @@
 				<aui:fieldset label="product-dimensions">
 					<aui:layout>
 						<aui:column>
-							<aui:input name="itemWeight" required="true" suffix="Kgs" value="<%= item.getItemWeight() %>">
+							<aui:input name="itemWeight" required="true" suffix="Kgs" value="<%= item.getItemWeight() %>" cssClass="mark-readonly">
 								<aui:validator name="number" />
 								<aui:validator name="custom" errorMessage="Please enter a valid Weight">
 									function (val, fieldNode, ruleValue) {
@@ -331,7 +334,7 @@
 							</aui:input>
 						</aui:column>
 						<aui:column>
-							<aui:input name="itemShortDescription" helpMessage="item-short-help-message" value='<%= (Validator.isNotNull(item.getShortDescription()) ? item.getShortDescription() : StringPool.BLANK) %>'/>
+							<aui:input name="itemShortDescription" helpMessage="item-short-help-message" value='<%= (Validator.isNotNull(item.getShortDescription()) ? item.getShortDescription() : StringPool.BLANK) %>' cssClass="mark-readonly"/>
 						</aui:column>
 						<%-- <aui:column>
 							<aui:input name="itemLength" required="true" suffix="cm" value="<%= item.getItemLength() %>">
@@ -409,7 +412,7 @@
 						</aui:column>
 						<c:if test="<%=isAdmin || isStaff%>">
 							<aui:column>
-								<aui:input name="deliveryCharges" prefix="<%= currSym %>" required="true" value="<%=item.getDeliveryChanges() %>">
+								<aui:input name="deliveryCharges" prefix="<%= currSym %>" required="true" value="<%=item.getDeliveryChanges() %>" cssClass="mark-readonly">
 									<aui:validator name="number" />
 									<aui:validator name="custom" errorMessage="Please enter a valid price">
 										function (val, fieldNode, ruleValue) {
@@ -532,12 +535,16 @@
 						</aui:column>
 					</aui:layout>
 				</aui:fieldset>
-				<c:if test="<%=isAdmin || isStaff || isApprover %>">
-					<aui:input name="<%=HConstants.STAFF_REMARKS %>" type="textarea" value="<%=item.getRemark()%>" required="true"/>
-					<aui:button type="submit" value="update" onClick="return confirmSubmit();"/>
-					<aui:button type="button" href="<%=backURL %>" value="cancel" />
-				</c:if>
-					
+				<c:choose>
+					<c:when test="<%=isAdmin || isStaff || isApprover %>">
+						<aui:input name="<%=HConstants.STAFF_REMARKS %>" type="textarea" value="<%=item.getRemark()%>" required="true"/>
+					</c:when>
+					<c:otherwise>
+						<aui:input name="<%=HConstants.STAFF_REMARKS %>" type="hidden" value='<%="Seller Update:"+user.getFullName()%>' />
+					</c:otherwise>
+				</c:choose>
+				<aui:button type="submit" value="update" onClick="return confirmSubmit();"/>
+				<aui:button type="button" href="<%=backURL %>" value="cancel" />
 				</aui:form>
 			</aui:fieldset>
 			
@@ -548,7 +555,7 @@
 				$(document).ready(function(){
 					fetchCategories('<%=categoryId%>');
 					if(<%=!isAdmin && !isApprover%>) {
-						$('#<portlet:namespace/>itemDetailForm input,input[type=textarea],select ').attr("disabled", true);	
+						$('#<portlet:namespace/>itemDetailForm .mark-readonly').attr("disabled", true);	
 					}
 				});
 				$("img").on("click",function(){

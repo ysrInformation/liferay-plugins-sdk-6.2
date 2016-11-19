@@ -711,7 +711,7 @@ public class DashboardPortlet extends MVCPortlet {
 		
 		SellerLocalServiceUtil.update(0, themeDisplay.getUserId(), themeDisplay.getScopeGroupId(),
 				themeDisplay.getCompanyId(), themeDisplay.getContact().getContactId(), bankAccountNumber, countryId,
-				regionId, ifscCode, themeDisplay.getUser().getFullName(), companyName, tin, cst, street1, street2,
+				regionId, themeDisplay.getUser().getFullName(), ifscCode, companyName, tin, cst, street1, street2,
 				street3, city, zip, bankName, serviceContext);
 
 		SessionMessages.add(actionRequest, "request_processed","Your Details have been saved Save Thank you!!");

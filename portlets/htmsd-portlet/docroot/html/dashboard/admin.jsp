@@ -59,13 +59,14 @@
 		status = HConstants.REJECT;
 	}
 	
-	int count=1, start = 0, end = ShoppingItemLocalServiceUtil.getByStatusCount(status);
+	int count=1;
 	if (isApprover) {
 		itemList = CommonUtil.getPendingApprovalItems(themeDisplay.getUserId(), themeDisplay.getCompanyId(), status);
 	} else {
-		itemList = ShoppingItemLocalServiceUtil.getByStatus(status, start, end);
+		itemList = ShoppingItemLocalServiceUtil.getByStatus(status);
 	}
 %>    	
+
 <%-- <aui:form action="<%=deletSetURL.toString() %>" name="bookListForm" method="POST"> --%>
 <aui:button name="deleteBtn" type="submit" value="delete" style="display:none"/>
 <aui:button name="approveBtn" type="button" value="approve" onClick="changeAction('approve');" style="display:none"/>
