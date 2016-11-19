@@ -520,3 +520,13 @@
 .earned {
 	width: 257% !important;
 }
+
+.product .product-details .description {
+  color: #888;
+  font-family: tahoma;
+  font-size: 12px;
+  font-weight: 400;
+  margin: 0;
+  text-transform: capitalize;
+  text-align: center;
+}

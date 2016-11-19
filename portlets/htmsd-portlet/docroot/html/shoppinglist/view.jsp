@@ -252,10 +252,14 @@
 								+ '</h6>'
 							+'</div>'
 						+'</div>'
-					+'</li>';		
+					+'</li>';	
 				$("#shopping_list").append(li);		
 			});
 		});
+		var griditems = $("#shopping_list > li");
+	    for (var i = 0; i < griditems.length; i+=4) {
+	    	griditems.slice(i, i+4).wrapAll("<ul class='row-fluid'></ul>");
+	    }
 	}
 	
 	function refresh(obj) {
