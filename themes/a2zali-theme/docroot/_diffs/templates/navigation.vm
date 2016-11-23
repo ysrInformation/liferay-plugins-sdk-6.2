@@ -39,23 +39,25 @@
 									<!--#if ($velocityCount%4 == 1)
 									<div class="row-fluid $velocityCount">
 									#end-->
-									<li class="$nav_child_css_class span3" id="layout_$nav_child.getLayoutId()" $nav_child_attr_selected role="presentation">
+									<li class="$nav_child_css_class" id="layout_$nav_child.getLayoutId()" $nav_child_attr_selected role="presentation">
 										<a aria-labelledby="layout_$nav_child.getLayoutId()" href="$nav_child.getURL()" $nav_child.getTarget() role="menuitem">$nav_child.getName()</a>
 										#if ($nav_child.hasChildren())
 											<ul class="grandchildmenu" role="menu">
-												#foreach ($nav_grandchild in $nav_child.getChildren())
-													#set ($nav_grandchild_attr_selected="")
-													#set ($nav_grandchild_css_class="lfr-nav-item")
-													#if ($nav_grandchild.isSelected())
-														#set ($nav_grandchild_attr_selected="aria selected='true'")
-														#set ($nav_grandchild_css_class="selected")
+												<li class="$nav_grandchild_css_class" id="layout_$nav_grandchild.getLayoutId()" $nav_grandchild_attr_selected role="presentation">
+													#foreach ($nav_grandchild in $nav_child.getChildren())
+														#set ($nav_grandchild_attr_selected="")
+														#set ($nav_grandchild_css_class="lfr-nav-item")
+														#if ($nav_grandchild.isSelected())
+															#set ($nav_grandchild_attr_selected="aria selected='true'")
+															#set ($nav_grandchild_css_class="selected")
+														#end
+														
+														<a aria labelledby ="layout_$nav_grandchild.getLayoutId()" href ="$nav_grandchild.getURL()" $nav_grandchild.getTarget() role=" menuitem ">
+															<span>$nav_grandchild.icon() $nav_grandchild.getName() </span>
+														</a>
+														
 													#end
-													<li class="$nav_grandchild_css_class" id="layout_$nav_grandchild.getLayoutId()" $nav_grandchild_attr_selected role="presentation">
-													<a aria labelledby ="layout_$nav_grandchild.getLayoutId()" href ="$nav_grandchild.getURL()" $nav_grandchild.getTarget() role=" menuitem ">
-														<span>$nav_grandchild.icon() $nav_grandchild.getName() </span>
-													</a>
-													</li>
-												#end
+												</li>
 											</ul>
 										#end
 									</li>
