@@ -320,7 +320,7 @@
 				<aui:fieldset label="product-dimensions">
 					<aui:layout>
 						<aui:column>
-							<aui:input name="itemWeight" required="true" suffix="Kgs" value="<%= item.getItemWeight() %>" cssClass="mark-readonly">
+							<aui:input name="itemWeight" required="true" suffix="Kgs" value="<%= item.getItemWeight() %>" >
 								<aui:validator name="number" />
 								<aui:validator name="custom" errorMessage="Please enter a valid Weight">
 									function (val, fieldNode, ruleValue) {
@@ -334,7 +334,7 @@
 							</aui:input>
 						</aui:column>
 						<aui:column>
-							<aui:input name="itemShortDescription" helpMessage="item-short-help-message" value='<%= (Validator.isNotNull(item.getShortDescription()) ? item.getShortDescription() : StringPool.BLANK) %>' cssClass="mark-readonly"/>
+							<aui:input name="itemShortDescription" helpMessage="item-short-help-message" value='<%= (Validator.isNotNull(item.getShortDescription()) ? item.getShortDescription() : StringPool.BLANK) %>' />
 						</aui:column>
 						<%-- <aui:column>
 							<aui:input name="itemLength" required="true" suffix="cm" value="<%= item.getItemLength() %>">
@@ -555,7 +555,7 @@
 				$(document).ready(function(){
 					fetchCategories('<%=categoryId%>');
 					if(<%=!isAdmin && !isApprover%>) {
-						$('#<portlet:namespace/>itemDetailForm .mark-readonly').attr("disabled", true);	
+						$('#<portlet:namespace/>itemDetailForm .mark-readonly').attr("readonly", true);	
 					}
 				});
 				$("img").on("click",function(){
