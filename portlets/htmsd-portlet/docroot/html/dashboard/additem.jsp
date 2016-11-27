@@ -254,9 +254,9 @@
 										<aui:column>
 											<aui:input name='<%= "commission"+ i%>' cssClass="commission" label="commission" disabled="true" suffix="%"/>
 										</aui:column>
-									</aui:layout>	
-									<aui:layout>
-										<aui:column columnWidth="60">
+									<%-- </aui:layout>	
+									<aui:layout> --%>
+										<aui:column>
 											<aui:input name='<%= "earned"+ i%>' cssClass="earned" label="earned" disabled="true" prefix="<%= currSym %>" helpMessage="earning-message"/>
 										</aui:column>
 										<aui:column>
