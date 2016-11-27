@@ -453,6 +453,7 @@ li.currency select {
 	perspective-origin: 50% 100px;
 	position: absolute;
 	right: 2px;
+	top: 10px;
 }
 
 #navigation ul > li .lfr-nav-child-toggle:not(.clear) {
@@ -576,8 +577,12 @@ li.langPortlet form select {
 	width: inherit;
 }
 
+.row-fluid.div-bg {
+	padding-bottom: 10px;
+}
+
 .div-bg .aboutus-btn {
-	margin-top: 8%;
+	margin-top: 3%;
 	text-align: center;
 }
 /* Navigation */
@@ -675,7 +680,11 @@ li.langPortlet form select {
 	font-size: 13px;
 	line-height: 150%;
 	text-align: center !important;
-	width: 80%;
+	/* width: 80%; */
+}
+
+.desc {
+	padding-right: 5%
 }
 
 .aui .btn-primary {
@@ -959,6 +968,10 @@ a.icon_wrap.disabled, .icon_wrap.disabled {
 	border-right: 1px solid #505050;
 	max-height: 401px;
 	min-height: 260px;
+}
+
+.homelayout .content_wrapper .portlet-column:last-child {
+	border-right: 0;
 }
 
 /* Search css */
