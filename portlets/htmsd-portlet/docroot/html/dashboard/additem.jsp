@@ -313,7 +313,7 @@
 		And
 		<aui:a href="/posting-policy">Posting Policies</aui:a>
 		<aui:button-row>
-			<aui:button type="submit" value="add-item" onClick="onAddItem();"/>
+			<aui:button type="submit" id="addItem-btn" value="add-item" onClick="onAddItem();" disabled="disabled" /> 
 			<aui:button type="reset" value="reset" />
 		</aui:button-row>
 	</aui:form>
@@ -323,6 +323,7 @@
 	
 	$( document ).ready(function() {
 		$("img[src='']").hide();
+		$("#addItem-btn").removeAttr("disabled").removeClass("disabled"); 
 	});
 	
 	function readURL(input,id) {

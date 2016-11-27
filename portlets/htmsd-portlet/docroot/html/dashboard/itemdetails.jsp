@@ -549,7 +549,7 @@
 						<aui:input name="<%=HConstants.STAFF_REMARKS %>" type="hidden" value='<%="Seller Update:"+user.getFullName()%>' />
 					</c:otherwise>
 				</c:choose>
-				<aui:button type="submit" value="update" onClick="return confirmSubmit();"/>
+				<aui:button type="submit" value="update" id="updateItem-btn" onClick="return confirmSubmit();" disabled="disabled"/>
 				<aui:button type="button" href="<%=backURL %>" value="cancel" />
 				</aui:form>
 			</aui:fieldset>
@@ -563,6 +563,7 @@
 					if(<%=!isAdmin && !isApprover%>) {
 						$('#<portlet:namespace/>itemDetailForm .mark-readonly').attr("readonly", true);	
 					}
+					$("#updateItem-btn").removeAttr("disabled").removeClass("disabled");
 				});
 				$("img").on("click",function(){
 					$("#zoomImg").attr('src',$(this).attr('src'));
