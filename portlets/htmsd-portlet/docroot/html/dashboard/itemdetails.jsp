@@ -718,7 +718,8 @@
 					var price = $(elem).val();
 					var tax = $('#<portlet:namespace/>tax').val();
 					var commissionPercent = ((parseFloat($(".commission").val()) + parseFloat(tax)) / 100);
-					var dispStr = price+" - (" +price+" * ( ("+ $(".commission").val() +" + "+tax+") / 100) = " + (price - (price * commissionPercent));
+					//var dispStr = price+" - (" +price+" * ( ("+ $(".commission").val() +" + "+tax+") / 100) = " + (price - (price * commissionPercent));
+					var dispStr = (price - (price * commissionPercent));
 					if (index === undefined) {
 						$('#<portlet:namespace/>earned').val(dispStr);
 					} else {
