@@ -28,43 +28,83 @@
 
 						#if ($nav_item.hasChildren())
 							<ul class="dropdown-menu child-menu" role="menu">
+								#set($li1 = '<li class="lfr-nav-item span3 li1" role="presentation">')
+								#set($li2 = '<li class="lfr-nav-item span3 li2" role="presentation">')
+								#set($li3 = '<li class="lfr-nav-item span3 li3" role="presentation">')
+								#set($li4 = '<li class="lfr-nav-item span3 li4" role="presentation">')
+								#set($li5 = '<li class="lfr-nav-item span3 li5" role="presentation">')
+								#set($count = 0)
 								#foreach ($nav_child in $nav_item.getChildren())
-									#set ($nav_child_attr_selected="")
-									#set ($nav_child_css_class="lfr-nav-item")
-
-									#if ($nav_child.isSelected())
-										#set ($nav_child_attr_selected="aria-selected='true'")
-										#set ($nav_child_css_class="selected")
-									#end
-									<!--#if ($velocityCount%4 == 1)
-									<div class="row-fluid $velocityCount">
-									#end-->
-									<li class="$nav_child_css_class" id="layout_$nav_child.getLayoutId()" $nav_child_attr_selected role="presentation">
-										<a aria-labelledby="layout_$nav_child.getLayoutId()" href="$nav_child.getURL()" $nav_child.getTarget() role="menuitem">$nav_child.getName()</a>
+									#if ($count == 0)
+										#set($li1 = $li1 + '<a href="' + $nav_child.getURL() + '">' + $nav_child.getName() + '</a>')
 										#if ($nav_child.hasChildren())
-											<ul class="grandchildmenu" role="menu">
-												<li class="$nav_grandchild_css_class" id="layout_$nav_grandchild.getLayoutId()" $nav_grandchild_attr_selected role="presentation">
-													#foreach ($nav_grandchild in $nav_child.getChildren())
-														#set ($nav_grandchild_attr_selected="")
-														#set ($nav_grandchild_css_class="lfr-nav-item")
-														#if ($nav_grandchild.isSelected())
-															#set ($nav_grandchild_attr_selected="aria selected='true'")
-															#set ($nav_grandchild_css_class="selected")
-														#end
-														
-														<a aria labelledby ="layout_$nav_grandchild.getLayoutId()" href ="$nav_grandchild.getURL()" $nav_grandchild.getTarget() role=" menuitem ">
-															<span>$nav_grandchild.icon() $nav_grandchild.getName() </span>
-														</a>
-														
-													#end
-												</li>
-											</ul>
+											#set($ul1 = '<ul class="grandchildmenu" role="menu">')
+											#foreach ($nav_grandchild in $nav_child.getChildren())
+												#set($childLi1 = '<li class="lfr-nav-item" role="presentation"><a role=" menuitem " tabindex="-1" href="' + $nav_grandchild.getURL() + '"><span>' + $nav_grandchild.getName() + '</span></a></li>')
+												#set($ul1 = $ul1 + $childLi1)
+											#end
+											#set($ul1 = $ul1 + '</ul>')
+											#set($li1 = $li1 + $ul1)
 										#end
-									</li>
-									<!--#if ($velocityCount%4 == 0)
-									</div> 
-									#end-->
+									#elseif ($count == 1)
+										#set($li2 = $li2 + '<a href="' + $nav_child.getURL() + '">' + $nav_child.getName() + '</a>')
+										#if ($nav_child.hasChildren())
+											#set($ul2 = '<ul class="grandchildmenu" role="menu">')
+											#foreach ($nav_grandchild in $nav_child.getChildren())
+												#set($childLi2 = '<li class="lfr-nav-item" role="presentation"><a role=" menuitem " tabindex="-1" href="' + $nav_grandchild.getURL() + '"><span>' + $nav_grandchild.getName() + '</span></a></li>')
+												#set($ul2 = $ul2 + $childLi2)
+											#end
+											#set($ul2 = $ul2 + '</ul>')
+											#set($li2 = $li2 + $ul2)
+										#end
+									#elseif ($count == 2)
+										#set($li3 = $li3 + '<a href="' + $nav_child.getURL() + '">' + $nav_child.getName() + '</a>')
+										#if ($nav_child.hasChildren())
+											#set($ul3 = '<ul class="grandchildmenu" role="menu">')
+											#foreach ($nav_grandchild in $nav_child.getChildren())
+												#set($childLi3 = '<li class="lfr-nav-item" role="presentation"><a role=" menuitem " tabindex="-1" href="' + $nav_grandchild.getURL() + '"><span>' + $nav_grandchild.getName() + '</span></a></li>')
+												#set($ul3 = $ul3 + $childLi3)
+											#end
+											#set($ul3 = $ul3 + '</ul>')
+											#set($li3 = $li3 + $ul3)
+										#end
+									#elseif ($count == 3)
+										#set($li4 = $li4 + '<a href="' + $nav_child.getURL() + '">' + $nav_child.getName() + '</a>')
+										#if ($nav_child.hasChildren())
+											#set($ul4 = '<ul class="grandchildmenu" role="menu">')
+											#foreach ($nav_grandchild in $nav_child.getChildren())
+												#set($childLi4 = '<li class="lfr-nav-item" role="presentation"><a role=" menuitem " tabindex="-1" href="' + $nav_grandchild.getURL() + '"><span>' + $nav_grandchild.getName() + '</span></a></li>')
+												#set($ul4 = $ul4 + $childLi4)
+											#end
+											#set($ul4 = $ul4 + '</ul>')
+											#set($li4 = $li4 + $ul4)
+										#end
+									#elseif ($count == 4)
+										#set($li5 = $li5 + '<a href="' + $nav_child.getURL() + '">' + $nav_child.getName() + '</a>')
+										#if ($nav_child.hasChildren())
+											#set($ul5 = '<ul class="grandchildmenu" role="menu">')
+											#foreach ($nav_grandchild in $nav_child.getChildren())
+												#set($childLi5 = '<li class="lfr-nav-item" role="presentation"><a role=" menuitem " tabindex="-1" href="' + $nav_grandchild.getURL() + '"><span>' + $nav_grandchild.getName() + '</span></a></li>')
+												#set($ul5 = $ul5 + $childLi5)
+											#end
+											#set($ul5 = $ul5 + '</ul>')
+											#set($li5 = $li5 + $ul5)
+										#end
+									#end
+									#if ($count == 4)
+										#set($count = 0)
+									#else
+										#set($count = $count + 1)
+									#end
 								#end
+								#set($li1 = $li1 + '</li>' )
+								#set($li2 = $li2 + '</li>')
+								#set($li3 = $li3 + '</li>')
+								#set($li4 = $li4 + '</li>')
+								#set($li5 = $li5 + '</li>')
+								
+								#set($lis = $li1 + $li2 + $li3 + $li4 + $li5)
+								$lis
 							</ul>
 						#end
 					</li>

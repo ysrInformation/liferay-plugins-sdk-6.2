@@ -488,8 +488,8 @@ li.currency select {
 
 #navigation li ul.child-menu > li {
 	/* display: table-cell; */
-	max-width: 200px;
-    min-width: 200px;
+	max-width: 170px;
+    min-width: 170px;
     margin-left: 0;
     float: left;
 }
@@ -500,7 +500,7 @@ li.currency select {
 }
 
 #navigation li ul.child-menu > li a {
-	font-size: 14px;
+	font-size: 12px;
 }
 
 #navigation li ul.child-menu > li a:focus {
@@ -1215,4 +1215,13 @@ body .modal, body .modal fieldset {
 
 .shoppingItemDetails.stickyleft .span7 {
 	float: right;
+}
+
+.grandchildmenu li {
+ 	display: table;
+}
+
+.grandchildmenu .more span {
+    cursor:pointer !important;
+    content: none !important;
 }
