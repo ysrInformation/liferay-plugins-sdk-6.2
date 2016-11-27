@@ -97,6 +97,7 @@
 		
 		<aui:fieldset label="product-dimensions">
 			<aui:layout>
+				<%-- hidding this field as per client's comment
 				<aui:column>
 					<aui:input name="itemWeight" required="true" suffix="Kgs">
 						<aui:validator name="number" />
@@ -111,6 +112,7 @@
 						</aui:validator>
 					</aui:input>
 				</aui:column>
+				--%>
 				<aui:column>
 					<aui:input name="itemShortDescription" helpMessage="item-short-help-message"/>
 				</aui:column>
@@ -188,6 +190,7 @@
 						</aui:validator>
 					</aui:input>
 				</aui:column>
+				<%-- 	hidding this field as per client's comment	
 				<c:if test="<%=isAdmin || isStaff%>">
 					<aui:column>
 						<aui:input name="deliveryCharges" prefix="<%= currSym %>" required="true">
@@ -203,7 +206,8 @@
 							</aui:validator>
 						</aui:input>
 					</aui:column>
-				</c:if>
+				</c:if> 
+				--%>
 			</aui:layout>
 			<aui:layout>	
 				<aui:column>
@@ -226,7 +230,7 @@
 			</aui:layout>
 			<aui:layout>
 				<aui:column>
-					<aui:input name="earned" disabled="true" cssClass="earned" prefix="<%= currSym %>"/>
+					<aui:input name="earned" disabled="true" cssClass="earned" prefix="<%= currSym %>" helpMessage="earning-message"/>
 				</aui:column>
 			</aui:layout>
 			<aui:layout>
@@ -253,7 +257,7 @@
 									</aui:layout>	
 									<aui:layout>
 										<aui:column columnWidth="60">
-											<aui:input name='<%= "earned"+ i%>' cssClass="earned" label="earned" disabled="true" prefix="<%= currSym %>"/>
+											<aui:input name='<%= "earned"+ i%>' cssClass="earned" label="earned" disabled="true" prefix="<%= currSym %>" helpMessage="earning-message"/>
 										</aui:column>
 										<aui:column>
 											<aui:button-row cssClass="add-btn-padding">
@@ -429,7 +433,8 @@
 		var tax = $('#<portlet:namespace/>tax').val();
 		var commissionPercent = ((parseFloat($(".commission").val()) + parseFloat(tax)) / 100);
 		console.info(commissionPercent);
-		var dispStr = price+" - (" +price+" * ( ("+ $(".commission").val() +" + "+tax+") / 100) = " + (price - (price * commissionPercent));
+		//var dispStr = price+" - (" +price+" * ( ("+ $(".commission").val() +" + "+tax+") / 100) = " + (price - (price * commissionPercent));
+		var dispStr = (price - (price * commissionPercent));
 		if (index === undefined) {
 			$('#<portlet:namespace/>earned').val(dispStr);
 		} else {

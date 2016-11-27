@@ -319,6 +319,7 @@
 			
 				<aui:fieldset label="product-dimensions">
 					<aui:layout>
+						<%-- hidding this field as per client's comment
 						<aui:column>
 							<aui:input name="itemWeight" required="true" suffix="Kgs" value="<%= item.getItemWeight() %>" >
 								<aui:validator name="number" />
@@ -332,7 +333,8 @@
 									}
 								</aui:validator>
 							</aui:input>
-						</aui:column>
+						</aui:column> 
+						--%>
 						<aui:column>
 							<aui:input name="itemShortDescription" helpMessage="item-short-help-message" value='<%= (Validator.isNotNull(item.getShortDescription()) ? item.getShortDescription() : StringPool.BLANK) %>' />
 						</aui:column>
@@ -410,6 +412,7 @@
 								</aui:validator>
 							</aui:input>
 						</aui:column>
+						<%-- hidding this field as per client's comment
 						<c:if test="<%=isAdmin || isStaff%>">
 							<aui:column>
 								<aui:input name="deliveryCharges" prefix="<%= currSym %>" required="true" value="<%=item.getDeliveryChanges() %>" cssClass="mark-readonly">
@@ -426,6 +429,7 @@
 								</aui:input>
 							</aui:column>
 						</c:if>
+						--%>
 					</aui:layout>
 					<aui:layout>	
 						<aui:column>
@@ -452,9 +456,10 @@
 							<%
 								double price = item.getSellingPrice();
 								double commissionPercent = ((commission + item.getTax()) / 100);
-								String dispStr = price+" - (" +price+" * ( ("+ commission +" + "+item.getTax()+" ) / 100) = " + (price - (price * commissionPercent));
+								//String dispStr = price+" - (" +price+" * ( ("+ commission +" + "+item.getTax()+" ) / 100) = " + (price - (price * commissionPercent));
+								String dispStr = String.valueOf((price - (price * commissionPercent)));
 							%>
-							<aui:input name="earned" disabled="true" prefix="<%= currSym %>" value="<%=dispStr %>" cssClass="earned" />
+							<aui:input name="earned" disabled="true" prefix="<%= currSym %>" value="<%=dispStr %>" cssClass="earned" helpMessage="earning-message"/>
 						</aui:column>
 					</aui:layout>
 					<aui:layout>
@@ -467,7 +472,8 @@
 										WholeSale wholeSale = wholeSales.get(i-1);
 										double whlPrice = wholeSale.getPrice();
 										double whlCommissionPercent = ((commission + item.getTax())/ 100);
-										whlDispStr = whlPrice+" - (" +whlPrice+" * ("+ commission +" + "+item.getTax()+" ) / 100) = " + (whlPrice - (whlPrice * whlCommissionPercent));
+										//whlDispStr = whlPrice+" - (" +whlPrice+" * ("+ commission +" + "+item.getTax()+" ) / 100) = " + (whlPrice - (whlPrice * whlCommissionPercent));
+										whlDispStr = String.valueOf((whlPrice - (whlPrice * whlCommissionPercent)));
 									}
 									%>
 										<div class="wholesaleclass" id='<%="wholeSaleDiv" + i %>' style='<%=wholeSaleSize >= i ? "display:block;" : "display:none;"%> '>
@@ -488,7 +494,7 @@
 											</aui:layout>
 											<aui:layout>
 												<aui:column columnWidth="60">
-													<aui:input name='<%= "earned"+ i%>' cssClass="earned"  label="earned" disabled="true" prefix="<%= currSym %>" value="<%=whlDispStr %>"/>
+													<aui:input name='<%= "earned"+ i%>' cssClass="earned"  label="earned" disabled="true" prefix="<%= currSym %>" value="<%=whlDispStr %>" helpMessage="earning-message"/>
 												</aui:column>
 												<aui:column>
 													<aui:button-row cssClass="add-btn-padding">
