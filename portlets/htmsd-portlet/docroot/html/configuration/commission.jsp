@@ -1,3 +1,4 @@
+<%@page import="com.htmsd.util.CommonUtil"%>
 <%@page import="com.htmsd.util.HConstants"%>
 <%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
 <%@page import="com.htmsd.slayer.model.Commission"%>
@@ -57,7 +58,7 @@
 				%>
 					<tr>
 						<td><%= count %></td>
-						<td> <%= CategoryLocalServiceUtil.getCategory(commission.getCategoryId()).getName() %> </td>
+						<td> <%= CommonUtil.getCategoryName(commission.getCategoryId())%> </td>
 						<td> <%= commission.getPercent() + " %" %></td>
 						<td>
 							<portlet:renderURL var="editCommissionURL" >
