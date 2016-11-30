@@ -183,7 +183,7 @@
 			    	thumbnail : false
 			    });
 			    $('#breadcrumbs ul li').removeClass("only");
-			    $('#breadcrumbs ul').append('<li class=""><%=shoppingItem.getName()%></li>');
+			    $('#breadcrumbs ul').append("<li><%=shoppingItem.getName()%></li>");
 			    
 			    var galleryTop = new Swiper('.swiper-container.gallery-top', {
 			    	nextButton: '.swiper-button-next',
