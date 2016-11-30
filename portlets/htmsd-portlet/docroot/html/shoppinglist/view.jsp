@@ -44,8 +44,8 @@
 			<aui:option value="createDate DESC" label="new"/>
 			<aui:option value="name ASC" label="Name(A - Z)" />
 			<aui:option value="name DESC" label="Name(Z - A)" />
-			<aui:option value="totalPrice DESC" label="Price High To Low" />
-			<aui:option value="totalPrice ASC" label="Price Low To High"/>
+			<aui:option value="sellingPrice DESC" label="Price High To Low" />
+			<aui:option value="sellingPrice ASC" label="Price Low To High"/>
 		</aui:select>
 	</div>
 	<div class="span6">
