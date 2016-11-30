@@ -257,6 +257,11 @@
     	padding: 0;
 	}
 	
+	.aui .navbar-fixed-top, .aui .navbar-fixed-bottom, .aui .navbar-static-top {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	
 	.sticky {
 		padding-left:1px;
 		.cart-btn {
@@ -284,4 +289,12 @@
 	.carousel menu {
 		display: none;
 	}	
+}
+
+@media screen and (max-width:600px) {
+
+	#order-detail-content table {
+	    display: inline-block;
+	    overflow-x: auto;
+	}
 }
