@@ -289,6 +289,14 @@
 	.carousel menu {
 		display: none;
 	}	
+	
+	.shoppingItemDetails .span7 .descriptionTabContent {
+		padding: 2%;
+	}
+	
+	.shoppingItemDetails.row-fluid .span7 {
+    	margin-left: 0;
+	}
 }
 
 @media screen and (max-width:600px) {
