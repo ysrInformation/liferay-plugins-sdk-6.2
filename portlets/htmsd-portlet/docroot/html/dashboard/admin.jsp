@@ -173,6 +173,7 @@
 			Liferay.Util.openWindow({
 				dialog: {
 				    centered: true,
+				    cssClass: 'dashboard-popup a2zali-popup',
 				    modal: true,
 				    width  : 300,
 				    height : 300,
@@ -192,6 +193,7 @@
 			Liferay.Util.openWindow({
 				dialog : {
 					centered : true,
+					cssClass: 'dashboard-popup a2zali-popup',
 					modal : true,
 					width : "90%",
 					height : 800,

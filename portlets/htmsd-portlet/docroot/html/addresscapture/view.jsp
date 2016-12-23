@@ -44,6 +44,7 @@
 		            dialog: {
 		                centered: true,
 		                modal: true,
+		                cssClass: 'dashboard-popup a2zali-popup',
 		                width : 800,
 		                height :500
 		            },

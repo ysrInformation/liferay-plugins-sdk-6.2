@@ -19,6 +19,7 @@ function showNewDetailPage() {
 			dialog: {
 				centered: true,
 				modal: true,
+				cssClass: 'dashboard-popup a2zali-popup',
 				width: "95%",
 				height: 800,
 				destroyOnHide: true			
