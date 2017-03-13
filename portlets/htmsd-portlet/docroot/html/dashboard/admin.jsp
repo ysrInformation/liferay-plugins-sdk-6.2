@@ -116,7 +116,13 @@
   					</td>
   					<td>
   						<% User seller = UserLocalServiceUtil.fetchUser(item.getUserId()); %>
-						<%= seller.getAddresses().isEmpty() ? StringPool.BLANK : seller.getAddresses().get(0).getCity() %>
+						<% 
+							if (Validator.isNotNull(seller)) { 
+								%>
+									<%= seller.getAddresses().isEmpty() ? StringPool.BLANK : seller.getAddresses().get(0).getCity() %>
+								<% 
+							}
+						%>
   					</td>
   					<c:if test='<%=tabs1.equals("Approved Items") %>'>
   						<td>
