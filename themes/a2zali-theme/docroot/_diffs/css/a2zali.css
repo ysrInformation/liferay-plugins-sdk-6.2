@@ -1030,11 +1030,25 @@ a.icon_wrap.disabled, .icon_wrap.disabled {
 }
 
 #search_block_top.quick_search_simple .search_query {
-	display: none;
+	/* display: none; */
 	position: absolute;
 	top: 4px;
 	right: 100%;
+	width: 400px;
 }
+
+/* .topHeaderWrapper .span8 {
+	text-align: right;
+}
+
+#banner.sticky {
+	padding: 0;
+}
+
+#searchbox input#search_query_top {
+	border-radius: 2px;
+	width: 280px;
+} */
 
 #search_block_top.quick_search_simple .searchbox_inner:hover .search_query,
 	#search_block_top.quick_search_simple .searchbox_inner.active .search_query {
@@ -1224,4 +1238,26 @@ body .modal, body .modal fieldset {
 .grandchildmenu .more span {
     cursor:pointer !important;
     content: none !important;
+}
+
+.topHeaderWrapper .span6 {
+	text-align: right;
+}
+
+.topHeader {
+	padding: 10px 0;
+}
+
+.signInLink {
+	padding: 5px 0;
+	text-align: center;
+}
+
+.signInLink > a {
+	color: #fff;
+	vertical-align: sub;
+}
+
+.signInLink > a span, .signInLink > a i {
+	vertical-align: sub;
 }

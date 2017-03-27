@@ -34,9 +34,12 @@
 		$theme.include($body_top_include)
 		<link rel="stylesheet" href="$css_folder/font-awesome.min.css">
 		
-		#dockbar()
+		#if($is_signed_in)
+			#dockbar()
+		#end
 		
 		<div class="container-fluid" id="wrapper">
+			##<div id="fixed_div"></div>
 			<header id="banner" role="banner">
 				<div class="topHeader">
 					<div class="topHeaderWrapper row-fluid">
@@ -50,8 +53,22 @@
 								</li>
 							</ul>
 						</div>
-						<div class="span8">
-							
+						<div class="span6">
+							<div class="search_block_mod quick_search_simple clearfix" id="search_block_top">
+								<div id="searchbox">
+									<div class="searchbox_inner">
+										<input class="search_query form-control ac_input" id="search_query_top" placeholder="Search" />
+										<a class="submit_searchbox icon_wrap" href="javascript:void(0);" id="submit_searchbox">
+											<i class="fa fa-search"></i>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="span2 signInLink">
+							<a href="$sign_in_url">
+		                        <i class="icon-user"></i> <span> Sign In </span>
+		                    </a>
 						</div>
 					</div>
 				</div>
