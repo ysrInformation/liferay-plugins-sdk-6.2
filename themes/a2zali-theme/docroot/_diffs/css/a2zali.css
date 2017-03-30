@@ -1258,7 +1258,7 @@ body .modal, body .modal fieldset {
 	vertical-align: sub;
 }
 
-.signInLink > a span, .signInLink > a i {
+.signInLink > a span, .signInLink > a i.icon-user {
 	vertical-align: sub;
 }
 
