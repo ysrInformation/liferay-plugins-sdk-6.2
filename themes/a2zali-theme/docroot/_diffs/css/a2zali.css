@@ -1261,3 +1261,12 @@ body .modal, body .modal fieldset {
 .signInLink > a span, .signInLink > a i {
 	vertical-align: sub;
 }
+
+#menu ul li a {
+	width: 90%;
+}
+
+#navigation .grandchildmenu li a::before {
+    margin-left: 8px;
+    margin-right: 4px;
+}
