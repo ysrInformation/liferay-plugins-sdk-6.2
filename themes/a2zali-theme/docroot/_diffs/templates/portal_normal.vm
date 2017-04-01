@@ -66,9 +66,11 @@
 							</div>
 						</div>
 						<div class="span2 signInLink">
-							<a href="$sign_in_url">
-		                        <i class="icon-user"></i> <span> Sign In </span>
-		                    </a>
+							#if (!$is_signed_in)
+								<a href="$sign_in_url">
+			                        <i class="icon-user"></i> <span> Sign In </span>
+			                    </a>
+		                    #end
 						</div>
 					</div>
 				</div>
