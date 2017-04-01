@@ -165,8 +165,10 @@ public class ConfigurationPortlet extends MVCPortlet {
 		long commissionId = ParamUtil.getLong(actionRequest, "commissionId");
 		long categoryId = ParamUtil.getLong(actionRequest, "categoryId");
 		double percent = ParamUtil.getDouble(actionRequest, "percent");
+		double tax = ParamUtil.getDouble(actionRequest, "tax");
+		double deliveryCharges = ParamUtil.getDouble(actionRequest, "deliveryCharges");
 		
-		CommissionLocalServiceUtil.update(commissionId, categoryId, percent);
+		CommissionLocalServiceUtil.update(commissionId, categoryId, percent, tax, deliveryCharges);
 		
 		actionResponse.setRenderParameter("tab1", "Commission");
 	}

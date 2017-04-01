@@ -10,10 +10,14 @@
 	long commissionId = ParamUtil.getLong(request, "commissionId");
 	long categoryId = 0;
 	double percent = 0;
+	double tax = 0;
+	double deliveryCharges = 0;
 	if (commissionId > 0) {
 		Commission commission = CommissionLocalServiceUtil.getCommission(commissionId);
 		categoryId = commission.getCategoryId();
 		percent = commission.getPercent();
+		tax = commission.getTax();
+		deliveryCharges = commission.getDeliveryCharges();
 	}
 	List<Category> parentCategories = CategoryLocalServiceUtil.getByChild(0);
 	List<Commission> commissions = CommissionLocalServiceUtil.getCommissions(-1, -1);
@@ -29,6 +33,8 @@
 		</c:forEach>
 	</aui:select>
 	<aui:input name="percent" required="true" suffix="%"/>
+	<aui:input name="tax" required="true" suffix="%"/>
+	<aui:input name="deliveryCharges" label="delivery-charges" required="true" /> 
 	<aui:button-row>
 		<aui:button type="submit"/>
 	</aui:button-row>
@@ -47,6 +53,12 @@
 				<liferay-ui:message key="percent"/>
 			</th>
 			<th>
+				<liferay-ui:message key="tax"/>
+			</th>
+			<th>
+				<liferay-ui:message key="delivery-charges"/>
+			</th>
+			<th>
 				<liferay-ui:message key="actions"/>
 			</th>
 		</tr>
@@ -58,8 +70,10 @@
 				%>
 					<tr>
 						<td><%= count %></td>
-						<td> <%= CommonUtil.getCategoryName(commission.getCategoryId())%> </td>
-						<td> <%= commission.getPercent() + " %" %></td>
+						<td><%= CommonUtil.getCategoryName(commission.getCategoryId())%></td>
+						<td><%= commission.getPercent() + " %" %></td>
+						<td><%= commission.getTax() + " %" %></td> 
+						<td><%= commission.getDeliveryCharges() %></td>
 						<td>
 							<portlet:renderURL var="editCommissionURL" >
 								<portlet:param name="commissionId" value="<%=String.valueOf(commission.getCommissionId()) %>"/>
@@ -91,8 +105,12 @@
 	$(function() {
 		var categoryId = <%=categoryId %>;
 		var percent = <%=percent%>;
+		var deliveryCharges = <%=deliveryCharges%>;
+		var tax = <%=tax%>;
 		$('#<portlet:namespace/>categoryId option[value='+categoryId+']').prop("selected", true);
 		$('#<portlet:namespace/>percent').val(percent);
+		$('#<portlet:namespace/>tax').val(tax);
+		$('#<portlet:namespace/>deliveryCharges').val(deliveryCharges);
 		$("#commisionTable").DataTable();
 		$('#<portlet:namespace/>categoryId').on('change', function() {
 			Liferay.Service('/htmsd-portlet.commission/get-commission-percent-by-category', {

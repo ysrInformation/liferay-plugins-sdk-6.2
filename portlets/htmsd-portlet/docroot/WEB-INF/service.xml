@@ -523,6 +523,8 @@
 		<column name="commissionId" type="long" primary="true"/>
 		<column name="categoryId" type="long"/>
 		<column name="percent" type="Double"/>
+		<column name="tax" type="Double"/>
+		<column name="deliveryCharges" type="Double"/>
 		<finder return-type="Commission" name="CategoryId">
 			<finder-column name="categoryId"/>
 		</finder>
