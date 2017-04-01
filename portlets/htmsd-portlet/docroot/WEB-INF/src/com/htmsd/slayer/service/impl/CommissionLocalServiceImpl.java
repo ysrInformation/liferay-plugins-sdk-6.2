@@ -40,7 +40,7 @@ public class CommissionLocalServiceImpl extends CommissionLocalServiceBaseImpl {
 	 * Never reference this interface directly. Always use {@link com.htmsd.slayer.service.CommissionLocalServiceUtil} to access the commission local service.
 	 */
 	
-	public Commission update(long commissionId, long categoryId, double percent) {
+	public Commission update(long commissionId, long categoryId, double percent, double tax, double deliveryCharges) {
 		Commission commission = null;
 		if (commissionId > 0) {
 			try {
@@ -58,6 +58,8 @@ public class CommissionLocalServiceImpl extends CommissionLocalServiceBaseImpl {
 		
 		commission.setCategoryId(categoryId);
 		commission.setPercent(percent);
+		commission.setTax(tax);
+		commission.setDeliveryCharges(deliveryCharges); 
 		
 		if (commissionId > 0) {
 			try {
