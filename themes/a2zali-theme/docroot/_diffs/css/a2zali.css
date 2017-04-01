@@ -1270,3 +1270,8 @@ body .modal, body .modal fieldset {
     margin-left: 8px;
     margin-right: 4px;
 }
+
+.signInLink a:hover {
+	text-decoration: none;
+	color: #01a261;
+}
