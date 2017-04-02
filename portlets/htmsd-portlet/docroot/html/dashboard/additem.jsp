@@ -21,6 +21,9 @@
 
 <aui:fieldset>
 	<aui:form action="<%=addItemURL %>" enctype="multipart/form-data" method="POST" name="addItemForm" >
+		<aui:input name="sellerEarningPriceHidden" type="hidden"/>
+		<aui:input name="<%=HConstants.TAX %>" type="hidden" cssClass="tax" />
+		<aui:input name="commission" type="hidden" cssClass="commission" />
 		<aui:layout>
 			<aui:col width="25">
 				<aui:input name="<%=HConstants.NAME%>">
@@ -178,12 +181,13 @@
 					</aui:input>
 				</aui:column>
 				<aui:column>
-					<aui:input name="<%=HConstants.TAX %>" label="Tax" suffix="%" onkeyup="calculateSellerEarning(this)">
-						<aui:validator  name="custom"  errorMessage="Please enter valid Percentage" >
+					<aui:input name="<%= HConstants.PRICE %>" label="Unit Price / Discounted Price" required="true" onkeyup="calculateSellerEarning(this);" prefix="<%= currSym %>"> 
+						<aui:validator name="number" />
+						<aui:validator name="custom" errorMessage="Please enter a valid price">
 							function (val, fieldNode, ruleValue) {
-								var result = false;
-								if (val.match(/^(?:\d*\.\d{1,2}|\d+)$/) || val.length == 0 ) {
-									result = true;
+								var result = true;
+								if (val.length == 0 || val <= 0) {
+									result = false;
 								}
 								return result;
 							}
@@ -207,26 +211,18 @@
 						</aui:input>
 					</aui:column>
 				</c:if> 
-				--%>
-			</aui:layout>
-			<aui:layout>	
-				<aui:column>
-					<aui:input name="<%=HConstants.PRICE %>" required="true" onkeyup="calculateSellerEarning(this);" prefix="<%= currSym %>"> 
-						<aui:validator name="number" />
-						<aui:validator name="custom" errorMessage="Please enter a valid price">
-							function (val, fieldNode, ruleValue) {
-								var result = true;
-								if (val.length == 0 || val <= 0) {
-									result = false;
-								}
-								return result;
+				<aui:input name="<%=HConstants.TAX %>" label="Tax" suffix="%" onkeyup="calculateSellerEarning(this)">
+					<aui:validator  name="custom"  errorMessage="Please enter valid Percentage" >
+						function (val, fieldNode, ruleValue) {
+							var result = false;
+							if (val.match(/^(?:\d*\.\d{1,2}|\d+)$/) || val.length == 0 ) {
+								result = true;
 							}
-						</aui:validator>
-					</aui:input>
-				</aui:column>
-				<aui:column>
-					<aui:input name="commission" cssClass="commission" readonly="readonly" suffix="%"/>
-				</aui:column>
+							return result;
+						}
+					</aui:validator>
+				</aui:input>
+				--%>
 			</aui:layout>
 			<aui:layout>
 				<aui:column>
@@ -251,11 +247,6 @@
 												<aui:validator name="number" />
 											</aui:input>
 										</aui:column>
-										<aui:column>
-											<aui:input name='<%= "commission"+ i%>' cssClass="commission" label="commission" disabled="true" suffix="%"/>
-										</aui:column>
-									<%-- </aui:layout>	
-									<aui:layout> --%>
 										<aui:column>
 											<aui:input name='<%= "earned"+ i%>' cssClass="earned" label="earned" disabled="true" prefix="<%= currSym %>" helpMessage="earning-message"/>
 										</aui:column>
@@ -431,15 +422,23 @@
 	function calculateSellerEarning(elem) {
 		var index = $(elem).data("index");
 		var price = $(elem).val();
-		var tax = $('#<portlet:namespace/>tax').val();
-		var commissionPercent = ((parseFloat($(".commission").val()) + parseFloat(tax)) / 100);
-		console.info(commissionPercent);
-		//var dispStr = price+" - (" +price+" * ( ("+ $(".commission").val() +" + "+tax+") / 100) = " + (price - (price * commissionPercent));
-		var dispStr = (price - (price * commissionPercent));
-		if (index === undefined) {
-			$('#<portlet:namespace/>earned').val(dispStr);
+		var categoryId = $('#<portlet:namespace/>categoryId').val();
+		if (categoryId) {
+			Liferay.Service('/htmsd-portlet.commission/get-seller-earning-price-by-category', {
+		    	price: price,
+		    	categoryId: $('#<portlet:namespace/>categoryId').val()
+			}, function(obj) {
+		    	var earnedPrice = obj;
+		    	console.log(earnedPrice);
+		    	$('#<portlet:namespace/>sellerEarningPriceHidden').val(earnedPrice);
+				if (index === undefined) {
+					$('#<portlet:namespace/>earned').val(earnedPrice);
+				} else {
+					$('#<portlet:namespace/>earned'+index).val(earnedPrice);
+				}
+		 	});
 		} else {
-			$('#<portlet:namespace/>earned'+index).val(dispStr);
+			alert("Please select the category");
 		}
 	}
 	
@@ -450,6 +449,11 @@
 				categoryId: $('#<portlet:namespace/>categoryId').val()
 			}, function(obj) {
 				$('.commission').val(obj);				
+			});
+			Liferay.Service('/htmsd-portlet.commission/get-tax-by-category', {
+				categoryId: $('#<portlet:namespace/>categoryId').val()
+			}, function(obj) {
+				$('.tax').val(obj);				
 			});
 		});
 	})

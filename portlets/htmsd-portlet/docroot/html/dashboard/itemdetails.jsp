@@ -176,6 +176,7 @@
 		<liferay-ui:header title='<%=isAdmin ? "update-item" : "view-item" %>' backLabel="go-back" backURL='<%=backURL%>'/>
 		<aui:fieldset>
 			<aui:form action="<%=updateItemURL %>" enctype="multipart/form-data" method="POST" name="itemDetailForm">
+				<aui:input name="sellerEarningPriceHidden" type="hidden"/>
 				<aui:input name="userId" type="hidden" value="<%=item.getUserId() %>" />
 				<aui:input name="userName" type="hidden" value="<%=item.getUserName() %>" />
 				<aui:input name="emailId" type="hidden" value="<%=item.getUserEmail() %>" />
@@ -400,7 +401,7 @@
 							</aui:input>
 						</aui:column>
 						<aui:column>
-							<aui:input name="<%=HConstants.TAX %>" label="Tax" suffix="%" value="<%=item.getTax() %>" onkeyup="calculateSellerEarning(this)">
+							<aui:input name="<%=HConstants.TAX %>" cssClass="tax" label="Tax" suffix="%" value="<%=item.getTax() %>" readonly="readonly">
 								<aui:validator  name="custom"  errorMessage="Please enter valid Percentage" >
 									function (val, fieldNode, ruleValue) {
 										var result = false;
@@ -433,9 +434,9 @@
 					</aui:layout>
 					<aui:layout>	
 						<aui:column>
-							<aui:input name="<%=HConstants.PRICE %>" required="true" onkeyup="calculateSellerEarning(this);" prefix="<%= currSym %>" value="<%=item.getSellingPrice() %>"> 
+							<aui:input name="<%= HConstants.PRICE %>" label="Unit Price / Discounted Price" required="true" onkeyup="calculateSellerEarning(this);" prefix="<%= currSym %>" value="<%=item.getSellingPrice() %>"> 
 								<aui:validator name="number" />
-								<aui:validator name="custom" errorMessage="Please enter a valid price">
+								<aui:validator name="custom" errorMessage="Please enter a valid price"> 
 									function (val, fieldNode, ruleValue) {
 										var result = true;
 										if (val.length == 0 || val <= 0) {
@@ -455,11 +456,9 @@
 						<aui:column>
 							<%
 								double price = item.getSellingPrice();
-								double commissionPercent = ((commission + item.getTax()) / 100);
-								//String dispStr = price+" - (" +price+" * ( ("+ commission +" + "+item.getTax()+" ) / 100) = " + (price - (price * commissionPercent));
-								String dispStr = String.valueOf((price - (price * commissionPercent)));
+								String dispStr = String.valueOf(CommonUtil.getSellerPriceByCategory(price, item.getItemId())); 
 							%>
-							<aui:input name="earned" disabled="true" prefix="<%= currSym %>" value="<%=dispStr %>" cssClass="earned" helpMessage="earning-message"/>
+							<aui:input name="earned" disabled="true" prefix="<%= currSym %>" value="<%= dispStr %>" cssClass="earned" helpMessage="earning-message"/>
 						</aui:column>
 					</aui:layout>
 					<aui:layout>
@@ -471,9 +470,7 @@
 									if (wholeSaleSize >=  i) {
 										WholeSale wholeSale = wholeSales.get(i-1);
 										double whlPrice = wholeSale.getPrice();
-										double whlCommissionPercent = ((commission + item.getTax())/ 100);
-										//whlDispStr = whlPrice+" - (" +whlPrice+" * ("+ commission +" + "+item.getTax()+" ) / 100) = " + (whlPrice - (whlPrice * whlCommissionPercent));
-										whlDispStr = String.valueOf((whlPrice - (whlPrice * whlCommissionPercent)));
+										whlDispStr = String.valueOf(CommonUtil.getSellerPriceByCategory(whlPrice, item.getItemId()));
 									}
 									%>
 										<div class="wholesaleclass" id='<%="wholeSaleDiv" + i %>' style='<%=wholeSaleSize >= i ? "display:block;" : "display:none;"%> '>
@@ -489,12 +486,7 @@
 													</aui:input>
 												</aui:column>
 												<aui:column>
-													<aui:input name='<%= "commission"+ i%>' cssClass="commission" label="commission" disabled="true" suffix="%" value="<%= commission %>"/>
-												</aui:column>
-											<%-- </aui:layout>
-											<aui:layout> --%>
-												<aui:column>
-													<aui:input name='<%= "earned"+ i%>' cssClass="earned"  label="earned" disabled="true" prefix="<%= currSym %>" value="<%=whlDispStr %>" helpMessage="earning-message"/>
+													<aui:input name='<%= "earned"+ i%>' cssClass="earned"  label="earned" disabled="true" prefix="<%= currSym %>" value="<%= whlDispStr %>" helpMessage="earning-message"/>
 												</aui:column>
 												<aui:column>
 													<aui:button-row cssClass="add-btn-padding">
@@ -691,7 +683,6 @@
 				}
 				
 				$('.addclass').click(function(){
-					
 					var id = $(this).attr('id');
 					var counter = parseInt(id.substr(id.length-1, id.length))+1;
 					$('#wholeSaleDiv'+counter).show();
@@ -703,7 +694,6 @@
 				
 				
 				$('.removeclass').click(function(){
-					
 					var id = $(this).attr('id');
 					var counter = parseInt(id.substr(id.length-1, id.length));
 					$('#wholeSaleDiv'+counter).hide();
@@ -717,14 +707,23 @@
 				function calculateSellerEarning(elem) {
 					var index = $(elem).data("index");
 					var price = $(elem).val();
-					var tax = $('#<portlet:namespace/>tax').val();
-					var commissionPercent = ((parseFloat($(".commission").val()) + parseFloat(tax)) / 100);
-					//var dispStr = price+" - (" +price+" * ( ("+ $(".commission").val() +" + "+tax+") / 100) = " + (price - (price * commissionPercent));
-					var dispStr = (price - (price * commissionPercent));
-					if (index === undefined) {
-						$('#<portlet:namespace/>earned').val(dispStr);
+					var categoryId = $('#<portlet:namespace/>categoryId').val();
+					if (categoryId) {
+						Liferay.Service('/htmsd-portlet.commission/get-seller-earning-price-by-category', {
+					    	price: price,
+					    	categoryId: $('#<portlet:namespace/>categoryId').val()
+						}, function(obj) {
+					    	var earnedPrice = obj;
+					    	console.log(earnedPrice);
+					    	$('#<portlet:namespace/>sellerEarningPriceHidden').val(earnedPrice);
+							if (index === undefined) {
+								$('#<portlet:namespace/>earned').val(earnedPrice);
+							} else {
+								$('#<portlet:namespace/>earned'+index).val(earnedPrice);
+							}
+					 	});
 					} else {
-						$('#<portlet:namespace/>earned'+index).val(dispStr);
+						alert("Please select the category");
 					}
 				}
 				
@@ -735,6 +734,11 @@
 							categoryId: $('#<portlet:namespace/>categoryId').val()
 						}, function(obj) {
 							$('.commission').val(obj);				
+						});
+						Liferay.Service('/htmsd-portlet.commission/get-tax-by-category', {
+							categoryId: $('#<portlet:namespace/>categoryId').val()
+						}, function(obj) {
+							$('.tax').val(obj);				
 						});
 					});
 				})

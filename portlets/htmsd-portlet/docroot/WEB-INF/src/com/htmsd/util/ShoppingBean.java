@@ -62,8 +62,15 @@ public class ShoppingBean {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+	public boolean isSingleCheckout() {
+		return isSingleCheckout;
+	}
+	public void setSingleCheckout(boolean isSingleCheckout) {
+		this.isSingleCheckout = isSingleCheckout;
+	}
+
 	private int quantity;
+	private boolean isSingleCheckout;
 	private long itemId;
 	private long cartId;
 	private double unitPrice;

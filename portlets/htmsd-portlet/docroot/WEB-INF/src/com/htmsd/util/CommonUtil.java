@@ -6,7 +6,6 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,9 +19,7 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 
-import com.htmsd.slayer.NoSuchCategoryException;
 import com.htmsd.slayer.model.Category;
-import com.htmsd.slayer.model.Commission;
 import com.htmsd.slayer.model.Currency;
 import com.htmsd.slayer.model.Invoice;
 import com.htmsd.slayer.model.ShoppingCart;
@@ -41,7 +38,6 @@ import com.htmsd.slayer.service.ShoppingItem_CartLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingOrderItemLocalServiceUtil;
 import com.htmsd.slayer.service.ShoppingOrderLocalServiceUtil;
 import com.htmsd.slayer.service.UserInfoLocalServiceUtil;
-import com.liferay.portal.NoSuchLayoutException;
 import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
@@ -855,5 +851,12 @@ public class CommonUtil {
 		Category category = ShoppingItemLocalServiceUtil.getShoppingItemCategory(itemId);
 		commission = CommissionLocalServiceUtil.getCommissionPercentByCategory(category.getCategoryId());
 		return commission;
+	}
+	
+	public static double getSellerPriceByCategory(double price, long itemId) {
+		double earnedPrice = 0.0d;
+		Category category = ShoppingItemLocalServiceUtil.getShoppingItemCategory(itemId);
+		earnedPrice = CommissionLocalServiceUtil.getSellerEarningPriceByCategory(price, category.getCategoryId());
+		return earnedPrice;
 	}
 }

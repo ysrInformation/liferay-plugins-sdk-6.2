@@ -41,4 +41,14 @@ public class CommissionServiceImpl extends CommissionServiceBaseImpl {
 		double percent = commissionLocalService.getCommissionPercentByCategory(categoryId);
 		return percent;
 	}
+	
+	public double getTaxByCategory(long categoryId) {
+		double tax = commissionLocalService.getTaxByCategory(categoryId);
+		return tax;
+	}
+	
+	public double getSellerEarningPriceByCategory(double price, long categoryId) {
+		double earnedPrice = commissionLocalService.getSellerEarningPriceByCategory(price, categoryId);
+		return earnedPrice;
+	}
 }
