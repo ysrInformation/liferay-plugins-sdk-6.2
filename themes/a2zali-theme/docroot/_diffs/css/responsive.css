@@ -299,6 +299,40 @@
 	}
 }
 
+@media screen and (max-width:736px) {
+	
+	.footer_wrapper {
+    	padding: 0;
+    	text-align: center;
+	}
+	
+	.social-icons ul li {
+		float: none;
+		display: inline-block;
+	}
+	
+	.aui .topHeaderWrapper.row-fluid .span6 {
+    	width: 50%;
+	}
+	
+	.aui .topHeaderWrapper.row-fluid .span4 {
+    	width: 35%;
+	}
+	
+	.aui .topHeaderWrapper.row-fluid .span2 {
+    	width: 15%;
+	}
+	
+	#search-div .span9 {
+    	width: 60%;
+	}
+	
+	#search-div #heading.span3 {
+    	width: 40%;
+	}	
+	
+}
+
 @media screen and (max-width:600px) {
 
 	#order-detail-content table {
