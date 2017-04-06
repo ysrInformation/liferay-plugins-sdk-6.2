@@ -43,7 +43,7 @@
 	int quantity = shoppingOrder.getQuantity();
 	double totalPrice = (currentRate == 0) ? shoppingOrder.getTotalPrice() :shoppingOrder.getTotalPrice() / currentRate;
 	double tax = CommonUtil.calculateVat(totalPrice, (Validator.isNotNull(shoppingItem)) ? shoppingItem.getTax() : 0);
-	double subTotal = Validator.isNotNull(shoppingItem) ? shoppingItem.getSellingPrice() - tax : 0;
+	double subTotal = Validator.isNotNull(shoppingOrder) ? shoppingOrder.getTotalPrice() - tax : 0;
 	tax = (currentRate == 0) ? tax : tax / currentRate;
 	subTotal = (currentRate == 0) ? subTotal : subTotal / currentRate;
 	String productCode = Validator.isNotNull(shoppingItem) ? shoppingItem.getProductCode() : "N/A";
