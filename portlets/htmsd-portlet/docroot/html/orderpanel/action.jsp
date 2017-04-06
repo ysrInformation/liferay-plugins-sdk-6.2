@@ -14,7 +14,7 @@
 	
 	PortletURL  viewRecieptURL = renderResponse.createRenderURL();
 	viewRecieptURL.setWindowState(LiferayWindowState.POP_UP);
-	viewRecieptURL.setParameter(HConstants.JSP_PAGE, "/html/orderpanel/reciept.jsp");
+	viewRecieptURL.setParameter(HConstants.JSP_PAGE, "/html/orderpanel/reciept2.jsp");
 	viewRecieptURL.setParameter("orderId", String.valueOf(orderId));
 	
 	PortletURL sendInvoiceURL = renderResponse.createActionURL();
