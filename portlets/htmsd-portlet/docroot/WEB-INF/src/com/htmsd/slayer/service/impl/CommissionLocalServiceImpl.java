@@ -21,6 +21,7 @@ import java.text.NumberFormat;
 
 import com.htmsd.slayer.model.Commission;
 import com.htmsd.slayer.service.base.CommissionLocalServiceBaseImpl;
+import com.htmsd.util.CommonUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -135,7 +136,7 @@ public class CommissionLocalServiceImpl extends CommissionLocalServiceBaseImpl {
 		System.out.println("Tax % ::"+tax);
 		System.out.println("Commission % ::"+commissionPercent);
 		
-		taxcalc = getAmountPercentage((float) basePrice, (float) tax);
+		taxcalc = (float) CommonUtil.calculateVat(basePrice, tax);
 		commissioncalc = getAmountPercentage((float) basePrice, (float) commissionPercent); 
 		float amountAfterTaxDeduction = (float) basePrice - taxcalc;
 		float amountAfterCommissionDeduction = amountAfterTaxDeduction - commissioncalc;
