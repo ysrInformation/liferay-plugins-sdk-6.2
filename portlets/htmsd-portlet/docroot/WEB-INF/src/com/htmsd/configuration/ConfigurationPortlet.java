@@ -170,7 +170,7 @@ public class ConfigurationPortlet extends MVCPortlet {
 		
 		CommissionLocalServiceUtil.update(commissionId, categoryId, percent, tax, deliveryCharges);
 		
-		actionResponse.setRenderParameter("tab1", "Commission");
+		actionResponse.setRenderParameter("tab1", "Profit");
 	}
 	
 	public void deleteCommission(ActionRequest actionRequest, ActionResponse actionResponse)
@@ -186,7 +186,7 @@ public class ConfigurationPortlet extends MVCPortlet {
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
-		actionResponse.setRenderParameter("tab1", "Commission");
+		actionResponse.setRenderParameter("tab1", "Profit");
 	}
 	private Log _log = LogFactoryUtil.getLog(ConfigurationPortlet.class);
 }
