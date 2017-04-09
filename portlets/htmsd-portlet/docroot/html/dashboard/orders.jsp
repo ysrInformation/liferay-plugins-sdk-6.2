@@ -74,7 +74,7 @@
 						<td><%= CommonUtil.getPriceFormat(totalPrice, currencyId1) %></td>
 						<td>
 							<portlet:renderURL var="viewReceiptURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-								<portlet:param name="<%= HConstants.JSP_PAGE %>" value="/html/orderpanel/reciept.jsp"/>
+								<portlet:param name="<%= HConstants.JSP_PAGE %>" value="/html/dashboard/sellerReciept.jsp"/>
 								<portlet:param name="orderId" value="<%= String.valueOf(shoppingOrder.getOrderId()) %>"/> 
 							</portlet:renderURL>
 							<% String viewReciept = "javascript:showPageInPopup('"+viewReceiptURL.toString()+"','500','1200','View Receipt');"; %>  
