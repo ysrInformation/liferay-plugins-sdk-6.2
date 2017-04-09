@@ -171,4 +171,34 @@ public class SellerLocalServiceImpl extends SellerLocalServiceBaseImpl {
 		}
 		return seller;
 	}
+	
+	public Seller updateSeller(long sellerId, long userId, long groupId, long companyId,
+			long bankAccountNumber, String userName, String ifscCode, String name, String TIN, String CST, String bankName) {
+		
+		Seller seller = null;
+		try {
+			seller = sellerLocalService.fetchSeller(sellerId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		seller.setUserId(userId);
+		seller.setGroupId(groupId);
+		seller.setCompanyId(companyId);
+		seller.setModifiedDate(Calendar.getInstance().getTime());
+		seller.setName(name);
+		seller.setUserName(userName);
+		seller.setBankName(bankName);
+		seller.setBankAccountNumber(bankAccountNumber);
+		seller.setIfscCode(ifscCode);
+		seller.setTIN(TIN);
+		seller.setCST(CST);
+		try {
+			sellerLocalService.updateSeller(seller);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return seller;
+	}
 }

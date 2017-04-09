@@ -19,6 +19,7 @@ import org.imgscalr.Scalr;
 
 import com.htmsd.addresscapture.AddressCapture;
 import com.htmsd.slayer.model.Category;
+import com.htmsd.slayer.model.Seller;
 import com.htmsd.slayer.model.ShoppingItem;
 import com.htmsd.slayer.model.ShoppingOrder;
 import com.htmsd.slayer.service.CategoryLocalServiceUtil;
@@ -715,6 +716,25 @@ public class DashboardPortlet extends MVCPortlet {
 				street3, city, zip, bankName, serviceContext);
 
 		SessionMessages.add(actionRequest, "request_processed","Your Details have been saved Save Thank you!!");
+	}
+	
+	public void updateSellerDetails(ActionRequest actionRequest, ActionResponse actionResponse) {
+		
+		long sellerId = ParamUtil.getLong(actionRequest, "sellerId");
+		long bankAccountNumber = ParamUtil.getLong(actionRequest, "bankAccountNumber");
+
+		String tin = ParamUtil.getString(actionRequest, "tin");
+		String cst = ParamUtil.getString(actionRequest, "cst");
+		String companyName = ParamUtil.getString(actionRequest, "companyName");
+		String ifscCode = ParamUtil.getString(actionRequest, "ifsc-code");
+		String bankName = ParamUtil.getString(actionRequest, "bankName");
+		ThemeDisplay themeDisplay  = (ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+
+		SellerLocalServiceUtil.updateSeller(sellerId, themeDisplay.getUserId(), themeDisplay.getScopeGroupId(), 
+				themeDisplay.getCompanyId(), bankAccountNumber, themeDisplay.getUser().getFullName(), 
+				ifscCode, companyName, tin, cst, bankName);
+
+		SessionMessages.add(actionRequest, "request_processed","Your Details have been updated successfully!!");
 	}
 	
 	public long getSmallImageId() {

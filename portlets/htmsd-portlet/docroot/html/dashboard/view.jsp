@@ -13,6 +13,12 @@
 		<%@include file="/html/dashboard/businessinfo.jsp" %>
 	</c:when>
 	<c:otherwise>
+		<c:if test='<%= isSeller %>'>
+			<portlet:renderURL var='updateCompnayDetailURL'> 
+				<portlet:param name="jspPage" value="/html/dashboard/mycompany.jsp"/> 
+			</portlet:renderURL>
+			<aui:button href="<%= updateCompnayDetailURL %>" value="My Company"/> 
+		</c:if> 
 		<c:choose>
 			<c:when test="<%=isAdmin || isStaff || isApprover%>">
 				<jsp:include page="/html/dashboard/admin.jsp" />
