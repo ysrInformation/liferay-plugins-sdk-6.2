@@ -1,3 +1,6 @@
+<%@page import="com.htmsd.slayer.service.CategoryLocalServiceUtil"%>
+<%@page import="com.htmsd.slayer.model.Category"%>
+<%@page import="com.htmsd.slayer.service.CommissionLocalServiceUtil"%>
 <%@page import="com.htmsd.slayer.service.SellerLocalServiceUtil"%>
 <%@page import="com.htmsd.slayer.model.Seller"%>
 <%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
@@ -33,7 +36,7 @@
 	String fullName = shoppingOrder.getShippingFirstName().concat(StringPool.SPACE).concat(shoppingOrder.getShippingLastName());
 	String altNumber = (Validator.isNotNull(shoppingOrder.getShippingAltMoble()) ? shoppingOrder.getShippingAltMoble():"N/A");
 	String mobileNumber = (Validator.isNotNull(shoppingOrder.getShippingMoble()) ? shoppingOrder.getShippingMoble():"N/A");
-	
+
 	DecimalFormat decimalFormat = new DecimalFormat("0.00");
 	ShoppingItem shoppingItem = CommonUtil.getShoppingItem(shoppingOrder.getShoppingItemId());
 	
@@ -44,15 +47,17 @@
 	double deliveryCharges = 0.0;
 	double currentRate = CommonUtil.getCurrentRate(Long.valueOf(currencyId1));
 	int quantity = shoppingOrder.getQuantity();
-	double totalPrice = (currentRate == 0) ? shoppingOrder.getTotalPrice() :shoppingOrder.getTotalPrice() / currentRate;
-	double tax = CommonUtil.calculateVat(totalPrice, (Validator.isNotNull(shoppingItem)) ? shoppingItem.getTax() : 0);
-	double subTotal = Validator.isNotNull(shoppingOrder) ? shoppingOrder.getTotalPrice() - tax : 0;
+	double unitPrice = CommonUtil.getSellerPriceByCategory(shoppingItem.getSellingPrice(), shoppingItem.getItemId()); 
+	double unitPricetax = (unitPrice * shoppingItem.getTax()) / 100;
+	double subTotalPrice = (currentRate == 0) ? (unitPrice * quantity) : (unitPrice * quantity) / currentRate;
+	double tax = (subTotalPrice * shoppingItem.getTax()) / 100;
+	double subTotal = subTotalPrice - tax;
+	double totalPrice = CommonUtil.getSellerPriceByCategory(shoppingOrder.getTotalPrice(), shoppingItem.getItemId()); 
 	tax = (currentRate == 0) ? tax : tax / currentRate;
 	subTotal = (currentRate == 0) ? subTotal : subTotal / currentRate;
 	String productCode = Validator.isNotNull(shoppingItem) ? shoppingItem.getProductCode() : "N/A";
 	String itemName = Validator.isNotNull(shoppingItem) ? shoppingItem.getName() : "N/A"; 
 	String productDetails = productCode +"<br/>"+ itemName;
-	String tinNumber = GetterUtil.getString(portletPreferences.getValue("tinNumber",  StringPool.BLANK), StringPool.BLANK); 
 %>
 
 <c:choose>
@@ -85,19 +90,13 @@
 					<div class="company-address">
 						<span><liferay-ui:message key="company-address"/></span> 
 					</div>
-					<div class="company-tin">
-						<span><liferay-ui:message key="tin"/> : <%= tinNumber %></span>
-					</div>
 				</div>
 				<div class="span6 text-right">
 					<div>
-						<span><liferay-ui:message key="bill-no"/> : <%= CommonUtil.getBillNumber(orderId) %></span>
+						<span><liferay-ui:message key="bill-no"/> : <span style="visibility: hidden;"><%= CommonUtil.getBillNumber(shoppingOrder.getOrderId()) %></span></span> 
 					</div>
 					<div>
 						<span><liferay-ui:message key="date"/> : <%= HConstants.DATE_FORMAT.format(shoppingOrder.getCreateDate()) %></span>
-					</div>
-					<div>
-						<span><liferay-ui:message key="payment-method"/> : <%= HConstants.CASH_ON_DELIVERY %></span>
 					</div>
 				</div>
 			</div>
@@ -107,7 +106,7 @@
 					<thead>
 						<tr>
 							<th><liferay-ui:message key="no"/></th>
-							<th><liferay-ui:message key="description"/></th>
+							<th><liferay-ui:message key="particulars"/></th>
 							<th><liferay-ui:message key="checkout-label-unit-price"/></th>
 							<th><liferay-ui:message key="quantity"/></th>
 							<th><liferay-ui:message key="total"/></th>
@@ -124,7 +123,7 @@
 									</div>
 								</c:if>
 							</td>
-							<td class="text-center"><%= decimalFormat.format(subTotal) %></td>
+							<td class="text-center"><%= decimalFormat.format(unitPrice - unitPricetax) %></td>
 							<td class="text-center"><%= quantity %></td>
 							<td class="text-center"><%= decimalFormat.format(subTotal) %></td>
 						</tr>
