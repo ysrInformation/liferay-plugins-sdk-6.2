@@ -382,6 +382,8 @@ public class CommonUtil {
 		
 		if (totalStock == -1 ){
 			remainingQnty = HConstants.MAX_QUANTITY;
+		} else if (totalStock < -1) {
+			remainingQnty = HConstants.INITIAL_QUANTITY;
 		} else {
 			remainingQnty = (int) totalStock;
 		}
