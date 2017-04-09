@@ -17,7 +17,9 @@
 			<portlet:renderURL var='updateCompnayDetailURL'> 
 				<portlet:param name="jspPage" value="/html/dashboard/mycompany.jsp"/> 
 			</portlet:renderURL>
-			<aui:button href="<%= updateCompnayDetailURL %>" value="My Company"/> 
+			<aui:button-row cssClass="text-right"> 
+				<aui:button cssClass="btn btn-primary" href="<%= updateCompnayDetailURL %>" value="My Company"/>
+			</aui:button-row>
 		</c:if> 
 		<c:choose>
 			<c:when test="<%=isAdmin || isStaff || isApprover%>">
