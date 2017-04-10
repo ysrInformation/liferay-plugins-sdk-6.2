@@ -1275,3 +1275,39 @@ body .modal, body .modal fieldset {
 	text-decoration: none;
 	color: #01a261;
 }
+
+/* create account css */
+
+.createAccount {
+    width: 26%;
+    margin: 0 auto;
+    padding: 1%;
+    border-radius: 4px;
+    border: 1px solid #e6e6e6;
+}
+
+.createAccount .span12 {
+    margin-left: 0 !important;
+}
+
+.createAccount input {
+    width: 335px !important;
+    max-width: 335px !important;
+}
+
+.createAccount .span8 input {
+    max-width: 236px !important;
+}
+
+.createAccount select {
+    width: 348px;
+}
+
+.createAccount #submit-btn {
+    width: 348px;
+}
+
+.createAccount .span4.otp-btn {
+    padding-top: 7%;
+    text-align: right;
+}
