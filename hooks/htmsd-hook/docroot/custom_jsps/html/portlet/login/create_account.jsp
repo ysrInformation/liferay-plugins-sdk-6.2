@@ -119,74 +119,75 @@ birthdayCalendar.set(Calendar.YEAR, 1970);
 	</c:if>
 
 	<aui:model-context model="<%= Contact.class %>" />
-
-	<aui:fieldset column="<%= true %>">
-		<aui:col width="<%= 50 %>">
-			<%@ include file="/html/portlet/login/create_account_user_name.jspf" %>
-
-			<c:if test="<%= !PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.USERS_SCREEN_NAME_ALWAYS_AUTOGENERATE) %>">
-				<aui:fieldset>
-					<aui:col span="5">
-						<aui:input model="<%= User.class %>" name="screenName" label="Phone Number">
-							 <aui:validator name="maxLength">10</aui:validator>
-							  <aui:validator name="number"/>
-						</aui:input>
-					</aui:col>
-					<aui:col span="6" cssClass="otp-btn">
-						<aui:button id="btn-send-otp" value="Send OTP"/>
-					</aui:col>
-				</aui:fieldset>
-			</c:if>
-
-			<aui:input autoFocus="<%= true %>" model="<%= User.class %>" name="emailAddress">
-				<c:if test="<%= PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.USERS_EMAIL_ADDRESS_REQUIRED) %>">
-					<aui:validator name="required" />
+	<div class="createAccount">
+		<aui:fieldset column="<%= true %>">
+			<aui:col>
+				<%@ include file="/html/portlet/login/create_account_user_name.jspf" %>
+	
+				<c:if test="<%= !PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.USERS_SCREEN_NAME_ALWAYS_AUTOGENERATE) %>">
+					<aui:fieldset>
+						<aui:col span="8">
+							<aui:input model="<%= User.class %>" name="screenName" label="Phone Number">
+								 <aui:validator name="maxLength">10</aui:validator>
+								  <aui:validator name="number"/>
+							</aui:input>
+						</aui:col>
+						<aui:col span="4" cssClass="otp-btn">
+							<aui:button id="btn-send-otp" value="Send OTP"/>
+						</aui:col>
+					</aui:fieldset>
 				</c:if>
-			</aui:input>
-		</aui:col>
-
-		<aui:col width="<%= 50 %>">
-			<c:if test="<%= PropsValues.LOGIN_CREATE_ACCOUNT_ALLOW_CUSTOM_PASSWORD %>">
-				<aui:input label="password" name="password1" size="30" type="password" value="" />
-
-				<aui:input label="enter-again" name="password2" size="30" type="password" value="">
-					<aui:validator name="equalTo">
-						'#<portlet:namespace />password1'
-					</aui:validator>
+	
+				<aui:input autoFocus="<%= true %>" model="<%= User.class %>" name="emailAddress">
+					<c:if test="<%= PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.USERS_EMAIL_ADDRESS_REQUIRED) %>">
+						<aui:validator name="required" />
+					</c:if>
 				</aui:input>
-			</c:if>
-
-			<c:choose>
-				<c:when test="<%= PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.FIELD_ENABLE_COM_LIFERAY_PORTAL_MODEL_CONTACT_BIRTHDAY) %>">
-					<aui:input name="birthday" value="<%= birthdayCalendar %>" />
-				</c:when>
-				<c:otherwise>
-					<aui:input name="birthdayMonth" type="hidden" value="<%= Calendar.JANUARY %>" />
-					<aui:input name="birthdayDay" type="hidden" value="1" />
-					<aui:input name="birthdayYear" type="hidden" value="1970" />
-				</c:otherwise>
-			</c:choose>
-
-			<c:if test="<%= PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.FIELD_ENABLE_COM_LIFERAY_PORTAL_MODEL_CONTACT_MALE) %>">
-				<aui:select label="gender" name="male">
-					<aui:option label="male" value="1" />
-					<aui:option label="female" selected="<%= !male %>" value="0" />
-				</aui:select>
-			</c:if>
-
-			<c:if test="<%= PropsValues.CAPTCHA_CHECK_PORTAL_CREATE_ACCOUNT %>">
-				<portlet:resourceURL var="captchaURL">
-					<portlet:param name="struts_action" value="/login/captcha" />
-				</portlet:resourceURL>
-
-				<liferay-ui:captcha url="<%= captchaURL %>" />
-			</c:if>
-		</aui:col>
-	</aui:fieldset>
-
-	<aui:button-row>
-		<aui:button id="submit-btn" type="submit" />
-	</aui:button-row>
+			</aui:col>
+	
+			<aui:col>
+				<c:if test="<%= PropsValues.LOGIN_CREATE_ACCOUNT_ALLOW_CUSTOM_PASSWORD %>">
+					<aui:input label="password" name="password1" size="30" type="password" value="" />
+	
+					<aui:input label="enter-again" name="password2" size="30" type="password" value="">
+						<aui:validator name="equalTo">
+							'#<portlet:namespace />password1'
+						</aui:validator>
+					</aui:input>
+				</c:if>
+	
+				<c:choose>
+					<c:when test="<%= PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.FIELD_ENABLE_COM_LIFERAY_PORTAL_MODEL_CONTACT_BIRTHDAY) %>">
+						<aui:input name="birthday" value="<%= birthdayCalendar %>" />
+					</c:when>
+					<c:otherwise>
+						<aui:input name="birthdayMonth" type="hidden" value="<%= Calendar.JANUARY %>" />
+						<aui:input name="birthdayDay" type="hidden" value="1" />
+						<aui:input name="birthdayYear" type="hidden" value="1970" />
+					</c:otherwise>
+				</c:choose>
+	
+				<c:if test="<%= PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.FIELD_ENABLE_COM_LIFERAY_PORTAL_MODEL_CONTACT_MALE) %>">
+					<aui:select label="gender" name="male">
+						<aui:option label="male" value="1" />
+						<aui:option label="female" selected="<%= !male %>" value="0" />
+					</aui:select>
+				</c:if>
+	
+				<c:if test="<%= PropsValues.CAPTCHA_CHECK_PORTAL_CREATE_ACCOUNT %>">
+					<portlet:resourceURL var="captchaURL">
+						<portlet:param name="struts_action" value="/login/captcha" />
+					</portlet:resourceURL>
+	
+					<liferay-ui:captcha url="<%= captchaURL %>" />
+				</c:if>
+			</aui:col>
+		</aui:fieldset>
+	
+		<aui:button-row>
+			<aui:button id="submit-btn" type="submit" />
+		</aui:button-row>
+	</div>
 </aui:form>
 
 <liferay-util:include page="/html/portlet/login/navigation.jsp" />
