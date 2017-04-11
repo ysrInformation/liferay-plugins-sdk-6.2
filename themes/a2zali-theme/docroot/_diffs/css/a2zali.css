@@ -478,7 +478,7 @@ li.currency select {
     width: 63%;
 }
 
-.sticky #navigation li > ul.child-menu {
+.sticky #navigation li > ul.child-menu, .signed-out .sticky #navigation li > ul.child-menu {
 	top: 50px;
 }
 
@@ -1310,4 +1310,8 @@ body .modal, body .modal fieldset {
 .createAccount .span4.otp-btn {
     padding-top: 7%;
     text-align: right;
+}
+
+.signed-out #navigation li>ul.child-menu {
+    top: 122px;
 }
