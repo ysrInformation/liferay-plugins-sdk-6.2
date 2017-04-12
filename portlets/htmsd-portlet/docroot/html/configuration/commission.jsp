@@ -78,7 +78,7 @@
 							<portlet:renderURL var="editCommissionURL" >
 								<portlet:param name="commissionId" value="<%=String.valueOf(commission.getCommissionId()) %>"/>
 								<portlet:param name="jspPage" value="/html/configuration/view.jsp"/>
-								<portlet:param name="tab1" value="Commission"/>
+								<portlet:param name="tab1" value="Profit"/>
 							</portlet:renderURL>
 							<portlet:actionURL var="deleteCommissionURL" name="deleteCommission">
 								<portlet:param name="commissionId" value="<%=String.valueOf(commission.getCommissionId()) %>"/>
